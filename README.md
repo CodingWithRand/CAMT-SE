@@ -15,5 +15,17 @@
     - [Number.java](/src/Number.java)
     - [AsciiCar.java](/src/AsciiCar.java)
 
+### Lab 4 - Quiz
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/117400)
+- Ask Stitch in Matthew to start a quiz
+
+### Lab 5 - Calculation and Variable 1
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/118177)
+- __Files__
+    - [Rectangle.java](/src/Rectangle.java)
+    - [ConvertMoney.java](/src/ConvertMoney.java)
+    - [Cylinder.java](/src/Cylinder.java)
+    - [TimeCalculator.java](/src/TimeCalculator.java)
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
