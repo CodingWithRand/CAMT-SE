@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rand's Gentlemen Hat Shop</title>
+    <meta name="keywords" content="Fedora">
+    <meta name="keywords" content="Top Hat">
+    <meta name="keywords" content="Cap">
+</head>
+<body>
+    <h1 style="text-align: center;">Rand's Gentlemen Hat Shop</h1>
+    <div style="display: flex; max-width: 900px; margin: 32px auto;">
+        <div style="width: 50%;">    
+            <figure>
+                <img src="images/product1.jpg" alt="luxurious-fedora" width="220" height="330">
+                <figcaption>Luxurious Fedora - $39.99</figcaption>
+            </figure>
+            <figure>
+                <img src="images/product2.jpg" alt="american-tophat" width="220" height="150">
+                <figcaption>American Top Hat - $15.00</figcaption>
+            </figure>
+            <figure>
+                <img src="images/product3.jpg" alt="stylish-cap" width="220" height="150">
+                <figcaption>Stylish Cap - $5.99</figcaption>
+            </figure>
+        </div>
+        <div style="width: 50%;">
+            <form action="#" method="post">
+                <h2 style="text-align: center;">Add to Cart</h2>
+                <label for="product">Product Name:</label>
+                <br>
+                <select id="product" name="product" style="width: 100%;">
+                    <option value="luxurious-fedora">Luxurious Fedora - $39.99</option>
+                    <option value="usa-tophat">American Top Hat - $15.00</option>
+                    <option value="stylish-cap">Stylish Cap - $5.99</option>
+                </select>
+                <br>
+                <label for="quantity">Quantity:</label>
+                <br>
+                <input type="number" id="quantity" name="quantity" min="1" value="1" style="width: 100%;">
+                <br>
+                <label for="color">Color:</label>
+                <br>
+                <select id="color" name="color" style="width: 100%;">
+                    <option value="f-white">White (Fedora)</option>
+                    <option value="f-black">Black (Fedora)</option>
+                    <option value="usa-none">None (Top Hat)</option>
+                    <option value="c-orange">Orange (Cap)</option>
+                    <option value="c-red">Red (Cap)</option>
+                </select>
+                <br>
+                <label for="add-note">Additional Notes:</label>
+                <br>
+                <textarea id="add-note" name="add-note" style="width: 100%;" placeholder="Any additonal notes or requests"></textarea>
+                <br>
+                <label for="email">Email:</label>
+                <br>
+                <input type="email" id="email" name="email" style="width: 100%;" placeholder="Enter your email">
+                <br>
+                <br>
+                <button type="submit">Place Order</button>
+            </form>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <iframe 
+            style="width: 560px; height: 315px; margin: 0 auto; display: block"
+            src="https://www.youtube.com/embed/wOzGv3Tliag?si=ImF8VkKkO4f_aDbx"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+        <small>Video source: The Village Hat Shop - Find the Perfect Hat Today by Village Hat Shop</small>
+    </div>
+    <div style="text-align: center;">
+        <p>Thank you for visiting our hat shop!</p>
+        <p>Follow us on social media for updates and promotions!</p>
+        <div>
+            <a href="https://www.facebook.com/thanwisit.angsachon/" target="_blank">Facebook</a>
+            |
+            <a href="https://www.instagram.com/rand0mtutorial/" target="_blank">Instagram</a>
+            |
+            <a href="https://x.com/rand0mtutorial" target="_blank">Twitter</a>
+        </div>
+    </div>
+    <footer style="text-align: center;">
+        <p>&copy; 2025 Rand's Gentlemen Hat Shop. All Rights Reserved</p>
+        <p>Contact us at <a href="mailto:info@rghshop.com">info@rghshop.com</a></p>
+    </footer>
+</body>
+</html>
