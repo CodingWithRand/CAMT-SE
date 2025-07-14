@@ -27,5 +27,13 @@
     - [Cylinder.java](/src/Cylinder.java)
     - [TimeCalculator.java](/src/TimeCalculator.java)
 
+### Lab 4.1 Calculation and Variable 2
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/119981)
+- __Files__
+    - [ComputeChange.java](/src/ComputeChange.java)
+    - [PayrollStatement.java](/src/PayrollStatement.java)
+    - [Interest.java](/src/Interest.java)
+    - [SphereVolumeAndSurface.java](/src//SphereVolumeAndSurface.java)
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
