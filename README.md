@@ -6,3 +6,6 @@ CV/Profile page of myself.
 
 ### Lab 01-2 HTML
 Product Order Page
+
+### Lab 03 CSS
+Modify existing HTML pages with CSS
