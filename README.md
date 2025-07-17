@@ -35,5 +35,12 @@
     - [Interest.java](/src/Interest.java)
     - [SphereVolumeAndSurface.java](/src//SphereVolumeAndSurface.java)
 
+### Lab 6 (ig) Orbital Velocity Equation
+- Instructions
+    1. Start a new chat with Stitch in Matthew.
+    2. Learn 3 topics from Stitch -> How to properly create variables, write comment, and Orbital Velocity equation.
+    3. Write code with comments in Java for the equation. [OrbitalVelocityEquation.java](/src/OrbitalVelocityEquation.java)
+    4. Send the code to Stitch for evaluation.
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
