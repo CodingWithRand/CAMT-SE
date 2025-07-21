@@ -42,5 +42,13 @@
     3. Write code with comments in Java for the equation. [OrbitalVelocityEquation.java](/src/OrbitalVelocityEquation.java)
     4. Send the code to Stitch for evaluation.
 
+### Lab 5.1 If-Else
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/121794)
+- __Files__
+    - [TestScore.java](/src/TestScore.java)
+    - [WeeklySalary.java](/src/WeeklySalary.java)
+    - [NumberComparison.java](/src/NumberComparison.java)
+    - [TemperatureConverter.java](/src/TemperatureConverter.java)
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
