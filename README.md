@@ -50,5 +50,11 @@
     - [NumberComparison.java](/src/NumberComparison.java)
     - [TemperatureConverter.java](/src/TemperatureConverter.java)
 
+### Lab 5.2 If-Else
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/122654)
+- __Files__
+    - [TriangleClassifier.java](/src/TriangleClassifier.java)
+    - [CLICalculator.java](/src/CLICalculator.java)
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
