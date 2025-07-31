@@ -56,5 +56,13 @@
     - [TriangleClassifier.java](/src/TriangleClassifier.java)
     - [CLICalculator.java](/src/CLICalculator.java)
 
+### Lab 6.1 If-Else
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/123916)
+- __Files__
+    - [TestBooleanOperators.java](/src/TestBooleanOperators.java)
+    - [QuadrantClassifier.java](/src/QuardrantClassifier.java)
+    - [DIYSort.java](/src/DIYSort.java)
+    - [GradingSystem.java](/src/GradingSystem.java)
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
