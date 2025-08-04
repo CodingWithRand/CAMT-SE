@@ -12,3 +12,6 @@ Modify existing HTML pages with CSS (Basic CSS such as color, background color, 
 
 ### Lab 04 CSS 2
 Modify existing HTML pages with CSS (More advance CSS such as font family, margin, padding, border, nth selector, pseudo selector, etc.)
+
+### Lab 05 CSS 3
+Modify existing HTML pages with CSS (Even more advance CSS such as display, position, media queries (responsive design), etc.)
