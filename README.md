@@ -64,5 +64,7 @@
     - [DIYSort.java](/src/DIYSort.java)
     - [GradingSystem.java](/src/GradingSystem.java)
 
+### [Midterm Exam Review (Lab)](/src/Review1.md)
+
 ## Notes
 Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
