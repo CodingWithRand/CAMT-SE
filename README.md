@@ -64,7 +64,16 @@
     - [DIYSort.java](/src/DIYSort.java)
     - [GradingSystem.java](/src/GradingSystem.java)
 
+### Lab 6.3 Switch-Case
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/124807)
+- __Files__
+    - [Calculator.java](Calculator.java)
+    - [Trigonometry.java](Trigonometry.java)
+    - [CLICalculator_v2.java](CLICalculator_v2.java)
+    - [MonthAndSeasonFinder.java](MonthAndSeasonFinder.java)
+
 ### [Midterm Exam Review (Lab)](/src/Review1.md)
 
 ## Notes
-Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
+1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
+2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
