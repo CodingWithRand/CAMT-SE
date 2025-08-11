@@ -15,3 +15,7 @@ Modify existing HTML pages with CSS (More advance CSS such as font family, margi
 
 ### Lab 05 CSS 3
 Modify existing HTML pages with CSS (Even more advance CSS such as display, position, media queries (responsive design), etc.)
+
+### Assignment 1
+- [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/124675)
+- One of the earnest things I've ever done
