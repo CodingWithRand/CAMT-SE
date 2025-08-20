@@ -726,13 +726,29 @@ ul#soft-skills {
 
 .project {
   width: 90%;
-  padding: 1rem 0;
+  padding-bottom: 1rem;
   row-gap: 0.5rem;
-  border-bottom: 1px solid darkgray;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 10px lightgray;
+  transition: all 0.25s ease-in-out;
+  /* border-bottom: 1px solid darkgray; */
+}
+
+.project:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 5px 5px 15px darkgray;
+}
+
+.project img {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background-color: black;
+  transition: all 0.25s ease-in-out;
 }
 
 .project > p {
   color: black;
+  padding: 0 0.5rem;
 }
 
 #portfolio .project:last-child, #certificates .project:last-child {

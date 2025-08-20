@@ -19,3 +19,8 @@ Modify existing HTML pages with CSS (Even more advance CSS such as display, posi
 ### Assignment 1
 - [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/124675)
 - One of the earnest things I've ever done
+
+### Revisions
+1. [Ch.1 Intro to Internet and Web Technology](/Exam%20revision/Ch.1.md)
+2. [Ch.2 Markup Language & HTML](/Exam%20revision/Ch.2.md)
+3. [Ch.3 CSS](/Exam%20revision/Ch.3.md)
