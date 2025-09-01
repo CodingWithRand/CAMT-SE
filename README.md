@@ -73,6 +73,9 @@
     - [MonthAndSeasonFinder.java](/src/MonthAndSeasonFinder.java)
 
 ### [Midterm Exam Review (Lab)](/src/Review1.md)
+- Mock: [UnitConverter.java](/src/UnitConverter.java)
+- More practices on [sololearn](https://play.google.com/store/apps/details?id=com.sololearn&pli=1) (Only available on mobile!)
+- More practices on [Programiz Pro](https://app.programiz.pro/community-challenges/java)
 
 ### Lab 7.1 While Loop
 - [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/128450)
