@@ -67,12 +67,20 @@
 ### Lab 6.3 Switch-Case
 - [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/124807)
 - __Files__
-    - [Calculator.java](Calculator.java)
-    - [Trigonometry.java](Trigonometry.java)
-    - [CLICalculator_v2.java](CLICalculator_v2.java)
-    - [MonthAndSeasonFinder.java](MonthAndSeasonFinder.java)
+    - [Calculator.java](/src/Calculator.java)
+    - [Trigonometry.java](/src/Trigonometry.java)
+    - [CLICalculator_v2.java](/src/CLICalculator_v2.java)
+    - [MonthAndSeasonFinder.java](/src/MonthAndSeasonFinder.java)
 
 ### [Midterm Exam Review (Lab)](/src/Review1.md)
+
+### Lab 7.1 While Loop
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/128450)
+- __Files__
+    - [WhileLoopExample.java](/src/WhileLoopExample.java)
+    - [InchesToCentimeters.java](/src/InchesToCentimeters.java)
+    - [FiveOrSevenFactorable.java](/src/FiveOrSevenFactorable.java)
+    - [CLICalculator_v3.java](/src/CLICalculator_v3.java)
 
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
