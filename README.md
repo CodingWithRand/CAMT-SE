@@ -85,6 +85,13 @@
     - [FiveOrSevenFactorable.java](/src/FiveOrSevenFactorable.java)
     - [CLICalculator_v3.java](/src/CLICalculator_v3.java)
 
+### Lab 7.2 While Loop
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/129493)
+- __Files__
+    - [DecimalToBinary.java](/src/DecimalToBinary.java)
+    - [BinaryToDecimal.java](/src/BinaryToDecimal.java)
+    - [FindTheHighestScore.java](/src/FindTheHighestScore.java)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
