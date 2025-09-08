@@ -92,6 +92,14 @@
     - [BinaryToDecimal.java](/src/BinaryToDecimal.java)
     - [FindTheHighestScore.java](/src/FindTheHighestScore.java)
 
+### Lab 8.1 For Loop
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/files/3996244)
+- __Files__
+    - [SumNumber.java](/src/SumNumber.java)
+    - [KGToLBTables.java](/src/KGToLBTables.java)
+    - [LeapYears.java](/src/LeapYears.java)
+    - [WhenToBeAMillionaire.java](/src/WhenToBeAMillionaire.java)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
