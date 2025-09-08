@@ -1,0 +1,39 @@
+ Part A – Peer Critique
+
+Classmate’s Name / ID: 682115047
+	1.	Strengths of the design:
+	•	Clean design. Texts are easy to read.
+
+
+	•	The color pallete makes it easy for eyes to see.
+
+
+	2.	Weaknesses of the design:
+	•	Lack of images.
+
+
+	•	Fading texts, cannot read all the content presented.
+
+
+	3.	One improvement I suggest:
+	•	Add images to the design, and make the font of the card's title bigger.
+
+
+
+⸻
+
+Part B – Reflection on Favorite Website
+	1.	Your Favorite Website URL: https://github.com/
+    2.  What makes the UI good?
+	•	The color pallette and effects gives out the vibe that attracts me to continue scrolling down the page.
+	•	The amount of effects and animations are just right. It's not too much that it can confuse and make you feel dizzy.
+	•	The animation transitions are seamless. 
+	•	Interactions with the user, e.g. 3D models that are rendered to look at the mouse cursor.
+	•	Right spacing, font size, and clean layout.
+
+	3.	How does the design support usability?
+	•	The design can clearly and briefly gives the user information base on the content, while remain the excitement of the user with the page's interactive element such as animations, and cool color pallete and effects.
+	•	The font size for each element tells its level. The header text are emphasized with bold and big text, so the user spot it first before the body text.
+	•	Click To Action element such as search bar is contrast from the background, make it easy to spot.
+
+

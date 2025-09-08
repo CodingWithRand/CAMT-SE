@@ -24,3 +24,6 @@ Modify existing HTML pages with CSS (Even more advance CSS such as display, posi
 1. [Ch.1 Intro to Internet and Web Technology](/Exam%20revision/Ch.1.md)
 2. [Ch.2 Markup Language & HTML](/Exam%20revision/Ch.2.md)
 3. [Ch.3 CSS](/Exam%20revision/Ch.3.md)
+
+### Lab 06 UI Design & Peer Review
+Modify the website to correspond the UI design rules.

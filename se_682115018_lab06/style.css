@@ -1,0 +1,145 @@
+/* Global styles */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #E6F8FA;
+  color: #333;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  /* Try adjusting padding to give more breathing space around header */
+  background: #00B4D8;
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+}
+
+header .logo {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  /* Try to work with font size and font weight to make the logo stand out */
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  /* Try to work with flexbox properties to adjust spacing */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  font-size: 1.25rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+nav a:hover {
+  color: #f0db4f;
+}
+
+main {
+  padding: 5rem 0;
+  min-height: calc(100vh - 64px - (23px + 14rem));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+
+/* Cards */
+.cards {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  /* Try adjusting gap to control spacing between cards */
+}
+
+.card {
+  background: #fff;
+  /* Try to work with padding to give more space inside the card */
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 1.25rem;
+  padding: 1rem;
+  transition: all 0.25s ease-in-out;
+  height: 225px;
+}
+
+.card h2 {
+  font-family: 'Quicksand', sans-serif;
+  margin: 0;
+}
+
+.card p {
+  font-family: 'Karla', sans-serif;
+  height: 40%;
+  overflow: hidden;
+  margin: 0;
+  mask-image: linear-gradient(to top, rgba(0,0,0,0) 5%, black 100%);
+}
+
+.card button {
+  font-family: 'Karla', sans-serif;
+  background: #00B4D8;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.card:hover {
+  transform: translateY(-1rem) scale(1.05);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.card button:hover {
+  background: #0096C7;
+}
+
+/* Footer */
+footer {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  text-align: center;
+  padding: 0.75rem;
+  /* Try to work with padding to give more space around footer text */
+  background: #0096C7;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    gap: 1rem;
+  }
+}
+
+/* Responsive example */
+@media (max-width: 600px) {
+  nav ul {
+    /* Stack navigation items vertically on small screens */
+    flex-direction: column;
+    row-gap: 0.25rem;
+    font-size: 1rem; 
+  }
+  footer {
+    font-size: 1rem;
+  }
+}
