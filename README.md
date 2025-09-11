@@ -100,6 +100,13 @@
     - [LeapYears.java](/src/LeapYears.java)
     - [WhenToBeAMillionaire.java](/src/WhenToBeAMillionaire.java)
 
+### Lab 8.2 Nested Loop
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/131234)
+- __Files__
+    - [MultiplicationTable.java](/src/MultiplicationTable.java)
+    - [Calendar.java](/src/Calendar.java)
+    - [PascalPyramid.java](/src/PascalPyramid.java)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
