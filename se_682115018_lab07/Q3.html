@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 3: Flower Image</title>
+</head>
+ <body>
+    <div id="container"></div>
+
+    <script>
+      const imageSrc =
+        "https://i.pinimg.com/originals/6b/28/d7/6b28d7fb925370efd08537f2cf29be78.png";
+      // type your code here
+      const container = document.querySelector("#container");
+      const imgElem = document.createElement("img");
+      imgElem.setAttribute("src", imageSrc);
+      imgElem.setAttribute("width", 200);
+      imgElem.setAttribute("height", 200);
+      container.appendChild(imgElem);
+    </script>
+  </body>
+</html>

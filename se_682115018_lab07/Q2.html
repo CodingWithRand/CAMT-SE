@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 2: Change Content</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+      #msg {
+        font-size: 18px;
+      }
+      .highlight {
+        color: red;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Create a <p> with id="msg" a <button> with id="changeBtn" -->
+    <p id="msg">This is the original text.</p>
+    <button id="changeBtn">Change Text + Style</button>
+    <script>
+      // select all elements with getElementById.
+      const msgP = document.getElementById("msg");
+      const changeBtn = document.getElementById("changeBtn");
+      // Change the paragraph’s textContent and Toggle a CSS class (e.g., .highlight) when the button is clicked.
+      changeBtn.addEventListener("click", () => {
+        msgP.textContent = "Updated! Nice job.";
+        msgP.classList.toggle("highlight");
+      })
+
+    </script>
+  </body>
+</html>

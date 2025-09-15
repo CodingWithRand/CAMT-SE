@@ -20,10 +20,13 @@ Modify existing HTML pages with CSS (Even more advance CSS such as display, posi
 - [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/124675)
 - One of the earnest things I've ever done
 
-### Revisions
+### Midterm Revisions
 1. [Ch.1 Intro to Internet and Web Technology](/Exam%20revision/Ch.1.md)
 2. [Ch.2 Markup Language & HTML](/Exam%20revision/Ch.2.md)
 3. [Ch.3 CSS](/Exam%20revision/Ch.3.md)
 
 ### Lab 06 UI Design & Peer Review
 Modify the website to correspond the UI design rules.
+
+### Lab 07
+Introduction to JavaScript. Utilizing functions, DOMs, DOM Events to make the page more interactive
