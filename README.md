@@ -107,6 +107,14 @@
     - [Calendar.java](/src/Calendar.java)
     - [PascalPyramid.java](/src/PascalPyramid.java)
 
+### Lab 9.1 Method
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/132061)
+- __Files__
+    - [TestMax.java](/src/TestMax.java)
+    - [TemperatureConverter2.java](/src/TemperatureConverter2.java)
+    - [DistanceBetweenTwoPoints.java](/src/DistanceBetweenTwoPoints.java)
+    - [TriangleClassifier2.java](/src/TriangleClassifier2.java)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)

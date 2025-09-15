@@ -11,7 +11,7 @@ public class TriangleClassifier {
         double side3 = input.nextDouble();
 
         // Validate a triangle from Triangle Inequality Theorem
-
+        
         // Without logic operators
         if(side1 + side2 > side3){
             if(side1 + side3 > side2){

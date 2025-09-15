@@ -29,7 +29,7 @@ public class TemperatureConverter {
 public class TemperatureConverter {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        System.out.print("Select conversion mode (C for Celsius to Fahrenheit, F for Fahrenheit to Celsius): ");
+        System.out.print("Select conversion mode (C for Fahrenheit to Celsius, F for Celsius to Fahrenheit): ");
         String mode = input.nextLine();
 
         char conversionMode = mode.charAt(0);
