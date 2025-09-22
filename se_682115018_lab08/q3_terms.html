@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Q3 – Custom JS Validation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Sign up</h1>
+  <form id="form" autocomplete="off" novalidate>
+    <label for="email">Email</label>
+    <input id="email" type="text">
+    <span class="error" id="emailErr"></span>
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="new-password">
+    <span class="error" id="pwdErr"></span>
+    <label><input id="terms" type="checkbox"> I agree to Terms</label>
+    <p><button type="submit" disabled >Create account</button></p>
+  </form>
+
+  <script>
+ // Get references to elements
+    const emailInputBox = document.getElementById('email');
+    const pwdInputBox = document.getElementById('password');
+    const emailErr = document.getElementById('emailErr');
+    const pwdErr = document.getElementById('pwdErr');
+    const form = document.getElementById('form');
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const termsCheckBox = document.getElementById('terms');
+
+    function isEmailLike(v){
+      const at = v.indexOf('@'), dot = v.lastIndexOf('.');
+      return at>0 && dot>at+1 && dot<v.length-1;
+    }
+    function validateEmail(){
+      let msg='';
+      if(!emailInputBox.value) msg='Email is required';
+      else if(!isEmailLike(emailInputBox.value)) msg='Please enter a valid email';
+      emailErr.textContent = msg;
+      // Update inline error text and toggle border classes to style green/red borders .
+      
+      if(msg){
+        emailInputBox.classList.remove('is-valid');
+        emailInputBox.classList.add('is-invalid');
+      }
+      else{
+        emailInputBox.classList.remove('is-invalid');
+        emailInputBox.classList.add('is-valid');
+      }
+
+      return !msg;
+    }
+    function validatePassword(){
+      let msg='';
+      if(!pwdInputBox.value) msg='Password is required';
+      else if(pwdInputBox.value.length<8) msg='Must be at least 8 characters';
+      else if(!/\d/.test(pwdInputBox.value)) msg='Include at least one number';
+      pwdErr.textContent = msg;
+      // Update inline error text and toggle border classes to style green/red borders.
+      
+      if(msg){
+        pwdInputBox.classList.remove('is-valid');
+        pwdInputBox.classList.add('is-invalid');
+      }
+      else{
+        pwdInputBox.classList.remove('is-invalid');
+        pwdInputBox.classList.add('is-valid');
+      }
+      
+      return !msg;
+    }
+    
+    function updateButton() {
+      const emailOK = validateEmail()
+      const pwdOK = validatePassword()
+      submitBtn.disabled = !(emailOK && pwdOK && termsCheckBox.checked)
+    }
+
+    //  Add event listeners for real-time validation
+    emailInputBox.addEventListener('input', () => {
+      validateEmail()
+      updateButton()
+    });
+    pwdInputBox.addEventListener('input', () => {
+      validatePassword()
+      updateButton()
+    });
+    termsCheckBox.addEventListener('change', updateButton);
+    form.addEventListener('submit', (e) => {
+      if(!validateEmail() || !validatePassword() || !termsCheckBox.checked){
+        e.preventDefault();
+        alert("Invalid form submission");
+      }
+    })
+
+
+  </script>
+</body>
+</html>

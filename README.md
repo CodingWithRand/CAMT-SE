@@ -28,5 +28,8 @@ Modify existing HTML pages with CSS (Even more advance CSS such as display, posi
 ### Lab 06 UI Design & Peer Review
 Modify the website to correspond the UI design rules.
 
-### Lab 07
+### Lab 07 DOM
 Introduction to JavaScript. Utilizing functions, DOMs, DOM Events to make the page more interactive
+
+### Lab 08 Form Validation
+Comparing the differences between the native form validation built-in in the browser and customize form validation with JavaScript.

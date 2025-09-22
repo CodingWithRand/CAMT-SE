@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Q1 – Native Validation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>label{display:block;margin-top:10px} input{padding:8px;width:260px}</style>
+</head>
+<body>
+  <h1>Sign in</h1>
+  <form>
+    <label>Email</label>
+    <input type="email" required>
+    <label>Password</label>
+    <input type="password" minlength="8" required>
+    <p><button type="submit">Submit</button></p>
+  </form>
+  <p><em>Try submitting empty/invalid to see native browser messages.</em></p>
+</body>
+</html>
