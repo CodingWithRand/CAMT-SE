@@ -107,7 +107,7 @@
     - [Calendar.java](/src/Lab8_2/Calendar.java)
     - [PascalPyramid.java](/src/Lab8_2/PascalPyramid.java)
 
-### Lab 9.1 Method
+### Lab 9.1 Method 1
 - [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/132061)
 - __Files__
     - [TestMax.java](/src/Lab9_1/TestMax.java)
@@ -115,11 +115,21 @@
     - [DistanceBetweenTwoPoints.java](/src/Lab9_1/DistanceBetweenTwoPoints.java)
     - [TriangleClassifier2.java](/src/Lab9_1/TriangleClassifier2.java)
 
-### Lab 9.2 Method
+### Lab 9.2 Method 2
 - [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/133054)
 - __Files__
     - [GradeCalculator.java](/src/Lab9_2/GradeCalculator.java)
     - [ShapeDrawer.java](/src/Lab9_2/ShapeDrawer.java)
+
+### Lab 10.1 Method 3
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/133841)
+- __Files__
+    - [PerfectNumber.java](/src/Lab10_1/PerfectNumber.java)
+    - [AreaCalculator.java](/src/Lab10_1/AreaCalculator.java)
+    - **Data Validation**
+        > [DataValidator.java](/src/Lab10_1/DataValidator.java) <- Logic code is in this file
+        <br>
+        > [ValidatorTest.java](/src/Lab10_1/ValidatorTest.java) <- Run this file
 
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
