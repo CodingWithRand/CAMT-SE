@@ -121,7 +121,7 @@
     - [GradeCalculator.java](/src/Lab9_2/GradeCalculator.java)
     - [ShapeDrawer.java](/src/Lab9_2/ShapeDrawer.java)
 
-### Lab 10.1 Method 3
+### Lab 10.1 Method Overload 1
 - [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/133841)
 - __Files__
     - [PerfectNumber.java](/src/Lab10_1/PerfectNumber.java)
@@ -130,6 +130,16 @@
         > [DataValidator.java](/src/Lab10_1/DataValidator.java) <- Logic code is in this file
         <br>
         > [ValidatorTest.java](/src/Lab10_1/ValidatorTest.java) <- Run this file
+
+### Lab 10.2 Method Overload 2
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/134588)
+- __Files__
+    - [NowToTime.java](/src/Lab10_2/NowToTime.java)
+    - [SimpleCalculator.java](/src/Lab10_2/SimpleCalculator.java)
+    - **Advanced Calculator**
+        > [AdvancedCalculator.java](/src/Lab10_2/AdvancedCalculator.java) <- Logic code is in this file
+        <br>
+        > [TestAdvancedCalculator.java](/src/Lab10_2/TestAdvancedCalculator.java) <- Run this file
 
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
