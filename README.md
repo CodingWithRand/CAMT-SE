@@ -141,6 +141,12 @@
         <br>
         > [TestAdvancedCalculator.java](/src/Lab10_2/TestAdvancedCalculator.java) <- Run this file
 
+### Lab 11.1 1D Array
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/135199)
+- __Files__
+    - [AnalyzeNumbers.java](/src/Lab11_1/AnalyzeNumbers.java) <- Checkpoint 1 and 2 is in this file.
+    - [StudentGradeStatistics.java](/src/Lab11_1/StudentGradeStatistics.java)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
