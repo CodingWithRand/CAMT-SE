@@ -33,3 +33,6 @@ Introduction to JavaScript. Utilizing functions, DOMs, DOM Events to make the pa
 
 ### Lab 08 Form Validation
 Comparing the differences between the native form validation built-in in the browser and customize form validation with JavaScript.
+
+### Lab 09 UI Interaction
+Modified the website to look more interesting with transition and animation. And utilizing ARIA, and dataset attribute in JavaScript for those behaviors.
