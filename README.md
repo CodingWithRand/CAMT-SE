@@ -36,3 +36,7 @@ Comparing the differences between the native form validation built-in in the bro
 
 ### Lab 09 UI Interaction
 Modified the website to look more interesting with transition and animation. And utilizing ARIA, and dataset attribute in JavaScript for those behaviors.
+
+### Assignment 2
+- [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/135403)
+- *Easy peasy~*

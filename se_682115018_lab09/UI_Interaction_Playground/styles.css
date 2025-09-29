@@ -88,7 +88,7 @@ main {
     border: 1px solid var(--muted);
     border-top: none;
     padding: 0 12px;
-    transition: max-height 225ms ease-in-out, opacity 225ms ease-in-out
+    transition: max-height 225ms ease-in-out, opacity 225ms ease-in-out;
 }
 
 .panel.open {

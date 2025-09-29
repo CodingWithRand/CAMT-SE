@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Human Test – Select All That Match</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1 id="prompt">Loading…</h1>
+
+    <div class="grid" role="group" aria-labelledby="prompt">
+      <!-- JS will render tiles here -->
+    </div>
+
+    <div class="actions">
+      <button id="submitBtn" disabled>Check</button>
+      <button id="newRoundBtn">New Round</button>
+      <span id="result" aria-live="polite" role="status"></span>
+      <span id="time" aria-live="polite" role="status"></span>
+    </div>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
