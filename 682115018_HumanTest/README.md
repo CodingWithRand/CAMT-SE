@@ -1,6 +1,6 @@
 # Implemented Features
 1. Image button grid rendering
-Loop through the topic set to create the image button according to the data in the topic, with "click" event listeners registered to the button for the tile (image button) selection. ("keydown" event listener is not required for Enter and Space key pressing to work as selection, tested on Chrome, Microsoft Edge, and Brave)
+Loop through the topic set to create the image button according to the data in the topic, with "click" event listeners registered to the button for the tile (image button) selection. ("keydown" event listener is not required for Enter and Space key pressing to work as selection, tested on Chrome, Microsoft Edge, and Brave. Still, I implemented the event listener anyway.)
 2. Toggle function for tiles selection
 - Implement adding and removing tile's index to the selected set
 - Enhance accessibility through ARIA attribute.

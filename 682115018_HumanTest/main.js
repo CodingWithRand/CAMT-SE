@@ -86,24 +86,15 @@ function render() {
       tile.appendChild(img);
       tile.addEventListener('click', () => toggle(i, tile));
       // You don't need the keydown event listener for Enter and Space key. (Tested on Chrome, Edge, and Brave)
-      // tile.addEventListener('keydown', (e) => {
-      //    if(e.key === 'Enter' || e.key === ' '){ 
-      //        toggle(i, tile)
-      //    }
-      // });
+      tile.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' '){ 
+             e.preventDefault();
+             toggle(i, tile)
+         }
+      });
       grid.appendChild(tile);
     });
     
-}
-
-function timer(params) {
-  setInterval(setTime, 1000);
-
-  function setTime() {
-    ++totalSeconds;
-    secondsLabel.innerHTML = pad(totalSeconds % 60);
-    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-  }
 }
 
 function getTimerFormat(mstime) {
@@ -196,6 +187,9 @@ function check() {
 
 // Start new round
 function newRound() {
+    clearInterval(started);
+    started = null;
+    ms = 0;
     topic = pickTopic(); // returns random topic object
     render();
 }
