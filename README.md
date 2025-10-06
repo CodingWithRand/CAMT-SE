@@ -153,6 +153,12 @@
     - [ArrayPrinter.java](/src/Lab11_2/ArrayPrinter.java)
     - [ArraySlice.java](/src/Lab11_2/ArraySlice.java)
 
+### Lab 12.1 2D Array
+- [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/136648)
+- __Files__
+    - [PassTwoDimensionalArray.java](/src/Lab12_1/PassTwoDimensionalArray.java)
+    - [MultipleChoicesExamGradingSystem.java](/src/Lab12_1/MultipleChoicesExamGradingSystem.java)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
