@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Sans+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400..700&family=Comforter+Brush&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <nav>
+        <div class="container">
+            <div class="company-name font-averia-sans-libre">Company Name</div>
+            <ul class="font-balsamiq-sans">
+                <li><a href="/#home">Home</a></li>
+                <li><a href="/#menu">Menu</a></li>
+                <li><a href="/#about-us">About Us</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header>
+        <div class="banner-img"></div>
+        <div class="fading"></div>
+        <div class="container">
+            <div id="hero">
+                <h1 id="typing-text" class="title font-comforter-brush">Cozy workplace...</h1>
+                <h2 class="subtitle font-averia-sans-libre">Designed for thinkers, creators, and remote professionals.</h2>
+                <ul id="reserve-btns" class="font-averia-sans-libre">
+                    <button class="btn">
+                        <img src="./imgs/reserve-table-icon.png" alt="reserve-table-icon" width="28" height="28">
+                        Reserve a table
+                    </button>
+                    <button class="btn">
+                        <img src="./imgs/reserve-meeting-room.png" alt="reserve-meeting-room" width="28" height="28">
+                        Reserve a meeting room
+                    </button>
+                    <button class="btn">
+                        <img src="./imgs/ordering.png" alt="order-coffee" width="28" height="28">
+                        Order Drinks
+                    </button>
+                </ul>
+            </div>
+            <div id="menu">
+                <div class="page focus">
+                    <div class="title font-comforter-brush">Menu</div>
+                    <div class="menu-list"></div>
+                </div>
+                <div class="page unfocus"></div>
+                <div class="page unfocus"></div>
+            </div>
+      </div>
+    </header>
+    <main>
+        <section id="about-us">
+            <div class="container">
+                <div class="content">
+                    <h1 class="title font-comforter-brush">About Us</h1>
+                    <img class="title-decoration" src="./imgs/Vector 1.svg" alt="" />
+                    <p class="font-caveat" style="text-indent: 4rem;">At [Your Space Name], we blend the warmth of a café with the focus of a coworking space. Whether you’re a freelancer, student, or small team, our cozy atmosphere, comfortable seating, and spacious desks are designed to help you work, connect, and create. Enjoy a quiet, productive environment with great coffee, good company, and everything you need to make your ideas thrive.</p>
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <img class="b1368a-b-1-icon" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                </div>
+            </div>
+            <div class="container">
+                <div style="width: 100%; text-align: center;">
+                    <img class="b1368a-b-1-icon" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                </div>
+                <div class="content">
+                    <h1 class="title font-comforter-brush" style="rotate: 5deg; margin-bottom: 2rem;">Not just a cafe!</h1>
+                    <p class="font-caveat">We offer you more than just snacks and drinks. Here, you’ll find high-speed Wi-Fi, comfortable seating zones, private meeting rooms, and spacious desks equipped with charging ports. Need a quick break? Enjoy our relaxing lounge corner or grab a fresh cup of coffee from our in-house café. Whether you’re working solo or collaborating with a team, we provide everything you need for focus, creativity, and comfort — all under one roof.</p>
+                </div>
+            </div>
+        </section>
+        <section id="atmosphere" class="container">
+            <h1 class="title font-comforter-brush">Place Atmosphere</h1>
+            <h2 class="subtitle font-caveat">Here are some photos taken inside our place.</h2>
+            <div class="carousel">
+                <div class="belt">
+                    <div>
+                        <!-- <div></div> -->
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                        <img class="c-img" src="./imgs/about-us-internal-atmosphere.png" alt="" />
+                    </div>
+                </div>
+                <button class="control-btn" id="prev">
+                    <img src="./imgs/chevron-backward.png" alt="prev">
+                </button>
+                <button class="control-btn" id="next">
+                    <img src="./imgs/chevron-forward.png" alt="next">
+                </button>
+            </div>
+        </section>
+        <section id="faq">
+            <h1 class="title font-comforter-brush">
+                <img src="./imgs/question-mark-in-circle.png" alt="faq icon">
+                <div>Frequently Asked Questions</div>
+            </h1>
+            <div class="container">
+                <div>
+                    <div class="question">
+                        <div class="accordion" aria-expanded="false">
+                            <h2 class="subtitle font-averia-sans-libre">Question</h2>
+                            <img src="./imgs/chevron-downward.png" alt="expand" >
+                        </div>
+                        <p class="answer hide font-caveat">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste fuga quaerat ea a laboriosam earum repudiandae, maxime quam sed quidem dolor totam facere beatae atque, sit doloremque veritatis voluptas quas? Answer</p>
+                    </div>
+                    <div class="question">
+                        <div class="accordion" aria-expanded="false">
+                            <h2 class="subtitle font-averia-sans-libre">Question</h2>
+                            <img src="./imgs/chevron-downward.png" alt="expand" >
+                        </div>
+                        <p class="answer hide font-caveat">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi eius officiis qui officia facilis eum, et distinctio illo iste, repellendus vitae suscipit quibusdam dignissimos ratione velit, exercitationem harum consectetur aliquid. Answer</p>
+                    </div>
+                    <div class="question">
+                        <div class="accordion" aria-expanded="false">
+                            <h2 class="subtitle font-averia-sans-libre">Question</h2>
+                            <img src="./imgs/chevron-downward.png" alt="expand" >
+                        </div>
+                        <p class="answer hide font-caveat">Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi tempore cumque sit necessitatibus rerum, quisquam sunt suscipit eius doloremque nobis eaque? Laborum earum officiis non eligendi tempora, commodi aperiam perspiciatis.Answer</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="question">
+                        <div class="accordion" aria-expanded="false">
+                            <h2 class="subtitle font-averia-sans-libre">Question</h2>
+                            <img src="./imgs/chevron-downward.png" alt="expand" >
+                        </div>
+                        <p class="answer hide font-caveat">Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quibusdam id et maiores veritatis, tenetur ullam. Delectus laboriosam, pariatur, praesentium, molestias totam quasi reprehenderit odit mollitia temporibus accusamus consequatur eum. Answer</p>
+                    </div>
+                    <div class="question">
+                        <div class="accordion" aria-expanded="false">
+                            <h2 class="subtitle font-averia-sans-libre">Question</h2>
+                            <img src="./imgs/chevron-downward.png" alt="expand" >
+                        </div>
+                        <p class="answer hide font-caveat">Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, consectetur cupiditate fugit at sit ab, voluptatum doloremque aut ullam velit facilis quam. Consequuntur earum modi nostrum, vero omnis a reiciendis! Answer</p>
+                    </div>
+                    <div class="question">
+                        <div class="accordion" aria-expanded="false">
+                            <h2 class="subtitle font-averia-sans-libre">Question</h2>
+                            <img src="./imgs/chevron-downward.png" alt="expand" >
+                        </div>
+                        <p class="answer hide font-caveat">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Qui in eos, aspernatur laborum neque voluptatem enim voluptatum accusantium tempore itaque quo, aliquam incidunt illo natus autem rem ipsam esse iure! Answer</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <section id="contact">
+            <div class="container">
+                <form>
+                    <h1 class="title font-comforter-brush">Contact Us</h1>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="name">Name</label>
+                        <input class="font-caveat" type="text" name="name" id="name" placeholder="Your name here">
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="email">Email</label>
+                        <input class="font-caveat" type="email" name="email" id="email" placeholder="Your email here">
+                    </div>
+                    <div class="form-item type-2">
+                        <textarea class="font-caveat" name="message" id="message" placeholder="What do you want to tell us?"></textarea>
+                    </div>
+                    <button type="submit" class="font-averia-sans-libre">Submit</button>
+                </form>
+            </div>
+            <div class="container">
+                <form>
+                    <h2 class="subtitle font-comforter-brush">Like our place? Leave some reviews and share to your friends!</h2>
+                    <div class="form-item type-3" style="border: none;">
+                        <span class="font-averia-sans-libre rating-question">How would you rate this place?</span>
+                        <div class="star-rating">
+                            <div class="container">
+                                <div class="star" data-rating-name="Absolutely Garbage">
+                                    <input type="radio" name="rating" id="1-star" value="1">
+                                    <img src="./imgs/star-empty.png" alt="star-empty">
+                                </div>
+                                <div class="star" data-rating-name="Bad">
+                                    <input type="radio" name="rating" id="2-star" value="2">
+                                    <img src="./imgs/star-empty.png" alt="star-empty">
+                                </div>
+                                <div class="star" data-rating-name="Okay">
+                                    <input type="radio" name="rating" id="3-star" value="3">
+                                    <img src="./imgs/star-empty.png" alt="star-empty">
+                                </div>
+                                <div class="star" data-rating-name="Good">
+                                    <input type="radio" name="rating" id="4-star" value="4">
+                                    <img src="./imgs/star-empty.png" alt="star-empty">
+                                </div>
+                                <div class="star" data-rating-name="Great!">
+                                    <input type="radio" name="rating" id="5-star" value="5">
+                                    <img src="./imgs/star-empty.png" alt="star-empty">
+                                </div>
+                            </div>
+                            <span class="rating-name font-caveat"></span>
+                        </div>
+                    </div>
+                    <div class="form-item type-2">
+                        <textarea class="font-caveat" name="reviews" id="reviews" placeholder="Feel free to share your thought about this place."></textarea>
+                    </div>
+                    <button type="submit" class="font-averia-sans-libre">Submit</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div>
+            <ul class="container">
+                <li class="font-balsamiq-sans">© 2025 Company Name</li>
+                <li class="font-balsamiq-sans"><a>Privacy Policy</a></li>
+                <li class="font-balsamiq-sans"><a>Term of Service</a></li>
+            </ul>
+        </div>
+        <div class="container">
+            <h1 class="font-balsamiq-sans">Social Media</h1>
+            <ul>
+                <li>
+                    <span class="font-caveat">
+                        Facebook: <a>cafeXcowork</a>
+                    </span>
+                    <img src="./imgs/fb.png" alt="facebook">
+                </li>
+                <li>
+                    <span class="font-caveat">
+                        YouTube: <a>cafeXcowork</a>
+                    </span>
+                    <img src="./imgs/yt.png" alt="youtube">
+                </li>
+                <li>
+                    <span class="font-caveat">
+                        Instagram: <a>cafeXcowork</a>
+                    </span>
+                    <img src="./imgs/ig.png" alt="instagram">
+                </li>
+            </ul>
+        </div>
+    </footer>
+    <div class="fading"></div> 
+    <script src="./script.js" type="application/javascript"></script>
+  </body>
+</html>
