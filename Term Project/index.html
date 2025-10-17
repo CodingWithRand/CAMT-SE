@@ -11,7 +11,7 @@
   <body>
     <nav>
         <div class="container">
-            <div class="company-name font-averia-sans-libre">Company Name</div>
+            <div class="company-name font-averia-sans-libre">Cafe X Cowork Inc.</div>
             <ul class="font-balsamiq-sans">
                 <li><a href="/#home">Home</a></li>
                 <li><a href="/#menu">Menu</a></li>
@@ -28,28 +28,21 @@
                 <h1 id="typing-text" class="title font-comforter-brush">Cozy workplace...</h1>
                 <h2 class="subtitle font-averia-sans-libre">Designed for thinkers, creators, and remote professionals.</h2>
                 <ul id="reserve-btns" class="font-averia-sans-libre">
-                    <button class="btn">
+                    <button class="btn" data-target-modal="reserve-table">
                         <img src="./imgs/reserve-table-icon.png" alt="reserve-table-icon" width="28" height="28">
                         Reserve a table
                     </button>
-                    <button class="btn">
+                    <button class="btn" data-target-modal="reserve-meeting-room">
                         <img src="./imgs/reserve-meeting-room.png" alt="reserve-meeting-room" width="28" height="28">
                         Reserve a meeting room
                     </button>
-                    <button class="btn">
+                    <button class="btn" data-target-modal="pickup-info">
                         <img src="./imgs/ordering.png" alt="order-coffee" width="28" height="28">
                         Order Drinks
                     </button>
                 </ul>
             </div>
-            <div id="menu">
-                <div class="page focus">
-                    <div class="title font-comforter-brush">Menu</div>
-                    <div class="menu-list"></div>
-                </div>
-                <div class="page unfocus"></div>
-                <div class="page unfocus"></div>
-            </div>
+            <div id="menu"></div>
       </div>
     </header>
     <main>
@@ -215,7 +208,7 @@
     <footer>
         <div>
             <ul class="container">
-                <li class="font-balsamiq-sans">© 2025 Company Name</li>
+                <li class="font-balsamiq-sans">© 2025 Cafe X Cowork Inc.</li>
                 <li class="font-balsamiq-sans"><a>Privacy Policy</a></li>
                 <li class="font-balsamiq-sans"><a>Term of Service</a></li>
             </ul>
@@ -244,7 +237,185 @@
             </ul>
         </div>
     </footer>
-    <div class="fading"></div> 
+    <div class="fading"></div>
+    <dialog id="bill-modal" class="modal">
+        <div class="container">
+            <span class="success font-caveat" style="display: none;">✔ Successfully place your order</span>
+            <h1 class="title font-comforter-brush">Total Bill</h1>
+            <table class="bill-item-list">
+                <thead>
+                    <tr class="font-averia-sans-libre">
+                        <th>Item Name</th>
+                        <th>Item ID</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="bill-summary">
+                <div class="order-btn">
+                    <button class="font-averia-sans-libre">Order now</button>
+                    <button class="font-averia-sans-libre">Cancel</button>
+                </div>
+                <table class="pickup">
+                    <tr>
+                        <td class="font-averia-sans-libre">Name</td>
+                        <td class="font-caveat">John Doe</td>
+                    </tr>
+                    <tr>
+                        <td class="font-averia-sans-libre">Pickup Time</td>
+                        <td class="font-caveat">Now</td>
+                    </tr>
+                    <tr>
+                        <td class="font-averia-sans-libre">Payment Method</td>
+                        <td class="font-caveat">At the counter</td>
+                    </tr>
+                </table>
+                <table class="summary">
+                    <tr>
+                        <td class="font-averia-sans-libre">Subtotal</td>
+                        <td class="font-caveat"></td>
+                    </tr>
+                    <tr>
+                        <td class="font-averia-sans-libre">Taxes</td>
+                        <td class="font-caveat"></td>
+                    </tr>
+                    <tr>
+                        <td class="font-averia-sans-libre">Tips</td>
+                        <td class="font-caveat underline">
+                            <span style="margin-right: 0.2rem;">$</span><input id="tip-amount" class="font-caveat" value="0.00">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-averia-sans-libre">Total</td>
+                        <td class="font-caveat"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </dialog>
+    <dialog id="qr-payment" class="modal">
+        <div class="container">
+            <button class="modal-close-btn font-balsamiq-sans">X</button>
+            <div class="font-caveat" id="qr-code">Placeholder QR Code</div>
+            <p class="font-caveat">
+                Scan the QR code to pay.
+                <br>
+                You have to pay $<span></span>
+            </p>
+        </div>
+    </dialog>
+    <dialog id="pickup-info" class="modal">
+        <div class="container">
+            <button class="modal-close-btn font-balsamiq-sans">X</button>
+            <h1 class="title font-comforter-brush">Pickup Info</h1>
+            <form>
+                <div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="name">Name</label>
+                        <input class="font-caveat" type="text" name="name" id="name" placeholder="Your name here" required>
+                        <label class="font-averia-sans-libre" for="tel">Tel.</label>
+                        <input class="font-caveat" type="tel" name="tel" id="tel" minlength="9" maxlength="10" placeholder="Your phone number here" required>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="pickup-time">Pickup Time</label>
+                        <select class="font-caveat" name="pickup-time" id="pickup-time" required>
+                            <option disabled selected value="">Select your pickup time</option>
+                            <option value="5">In ~5 minutes</option>
+                            <option value="10">In ~10 minutes</option>
+                            <option value="15">In ~15 minutes</option>
+                            <option value="20">In ~20 minutes</option>
+                            <option value="30">In ~30 minutes</option>
+                            <option value="45">In ~45 minutes</option>
+                            <option value="61">Over 1 hour</option>
+                        </select>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="payment-method">Payment Method</label>
+                        <select class="font-caveat" name="payment-method" id="payment-method" required>
+                            <option disabled selected value="">Select your payment method</option>
+                            <option value="mobile-banking">Mobile Banking</option>
+                            <option value="cash">Cash (At the counter)</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="font-averia-sans-libre">Confirm</button>
+            </form>
+        </div>
+    </dialog>
+    <dialog id="reserve-table" class="modal">
+        <div class="container">
+            <span class="success font-caveat" style="display: none;">✔ Successfully reserve your table</span>
+            <button class="modal-close-btn font-balsamiq-sans">X</button>
+            <h1 class="title font-comforter-brush">Reserve Table</h1>
+            <form>
+                <div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="name">Name</label>
+                        <input class="font-caveat" type="text" name="name" id="name" placeholder="Your name here" required>
+                        <label class="font-averia-sans-libre" for="tel">Tel.</label>
+                        <input class="font-caveat" type="tel" name="tel" id="tel" minlength="9" maxlength="10" placeholder="Your phone number here" required>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="table-number">Table Number</label>
+                        <select class="font-caveat" name="table-number" id="table-number" required>
+                            <option disabled selected value="">Select your table number</option>
+                            <option value="1">No. 1</option>
+                            <option value="2">No. 2</option>
+                            <option value="3">No. 3</option>
+                            <option value="4">No. 4</option>
+                            <option value="5">No. 5</option>
+                            <option value="6">No. 6</option>
+                            <option value="7">No. 7</option>
+                        </select>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="arrival-time">Arrival Time</label>
+                        <input class="font-caveat" type="datetime-local" name="arrival-time" id="arrival-time" required>
+                    </div>
+                </div>
+                <button type="submit" class="font-averia-sans-libre">Confirm</button>
+            </form>
+        </div>
+    </dialog>
+    <dialog id="reserve-meeting-room" class="modal">
+        <div class="container">
+            <span class="success font-caveat" style="display: none;">✔ Successfully reserve your meeting room</span>
+            <button class="modal-close-btn font-balsamiq-sans">X</button>
+            <h1 class="title font-comforter-brush">Reserve Meeting Room</h1>
+            <form>
+                <div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="name">Name</label>
+                        <input class="font-caveat" type="text" name="name" id="name" placeholder="Your name here" required>
+                        <label class="font-averia-sans-libre" for="tel">Tel.</label>
+                        <input class="font-caveat" type="tel" name="tel" id="tel" minlength="9" maxlength="10" placeholder="Your phone number here" required>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="meeting-room">Meeting Room</label>
+                        <select class="font-caveat" name="meeting-room" id="meeting-room" required>
+                            <option disabled selected value="">Select your meeting room</option>
+                            <option value="S1">Small 01</option>
+                            <option value="S2">Small 02</option>
+                            <option value="M1">Medium 01</option>
+                            <option value="M2">Medium 02</option>
+                        </select>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre" for="arrival-time">Arrival Time</label>
+                        <input class="font-caveat" type="datetime-local" name="arrival-time" id="arrival-time" required>
+                    </div>
+                    <div class="form-item type-1">
+                        <label class="font-averia-sans-libre">Usage Period</label>
+                        <input class="font-caveat" type="time" name="usage-period" id="up-for" required>
+                        <input class="font-caveat" type="time" name="usage-period" id="up-to" required>
+                    </div>
+                </div>
+                <button type="submit" class="font-averia-sans-libre">Confirm</button>
+            </form>
+        </div>
+    </dialog>
     <script src="./script.js" type="application/javascript"></script>
   </body>
 </html>
