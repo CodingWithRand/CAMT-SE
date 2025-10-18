@@ -39,43 +39,43 @@ const menuItems = [
         name: "Espresso",
         id: "00100121",
         description: "Rich and bold espresso shot.",
-        price: 3,
-        imgSrc: "./imgs/espresso.png"
+        price: 2,
+        imgSrc: "./imgs/menu/espresso.png"
     },
     {
         name: "Latte",
         id: "00100122",
         description: "Rich in coffee, cream and milk.",
-        price: 3,
-        imgSrc: "./imgs/latte.jpg"
+        price: 2.5,
+        imgSrc: "./imgs/menu/latte.jpg"
     },
     {
         name: "Hot Chocolate",
         id: "00100123",
         description: "Good for kids",
-        price: 3,
-        imgSrc: "./imgs/hot-choco.jpg"
+        price: 2.5,
+        imgSrc: "./imgs/menu/hot-choco.jpg"
     },
     {
         name: "Mocha",
         id: "00100124",
         description: "Blend of espresso and chocolate.",
         price: 3,
-        imgSrc: "./imgs/Mocha.jpg"
+        imgSrc: "./imgs/menu/Mocha.jpg"
     },
     {
         name: "Cappuccino",
         id: "00100125",
         description: "Rich espresso with steamed milk.",
         price: 3,
-        imgSrc: "./imgs/cappuccino.jpeg"
+        imgSrc: "./imgs/menu/cappuccino.jpeg"
     },
     {
         name: "Americano",
         id: "00100126",
         description: "Black coffee with a hint of espresso.",
-        price: 3,
-        imgSrc: "./imgs/americano.jpg"
+        price: 2.25,
+        imgSrc: "./imgs/menu/americano.jpg"
     },
 ]
 
@@ -164,28 +164,57 @@ const nextBtn = document.getElementById('next');
 let currentIndex = 1; // Start with showing the main focus image
 
 function updateCarousel() {
-    carouselItems.forEach(item => item.classList.remove('main-focus', 'non-focus'));
-    carouselItems.forEach((item, i) => {
-        if (i === currentIndex) item.classList.add('main-focus');
-        else item.classList.add('non-focus');
-    });
+    if(window.innerWidth > 640){
+        carouselItems.forEach(item => item.classList.remove('main-focus', 'non-focus'));
+        carouselItems.forEach((item, i) => {
+            if (i === currentIndex) item.classList.add('main-focus');
+            else item.classList.add('non-focus');
+        });
+    }else{
+        carouselItems.forEach(item => item.classList.remove('main-focus', 'non-focus'));
+    }
 }
 
-prevBtn.addEventListener('click', () => {
-    currentIndex = currentIndex - 1;
-    if(currentIndex === 0);
-    else if(currentIndex < 0) currentIndex = carouselBelt.childElementCount - 1;
-    else currentIndex = currentIndex % carouselBelt.childElementCount;
+function updateCarouselNavigationButtonFunctionalities() {
+    if(window.innerWidth > 640){
+        carouselBelt.style.transform = `translateX(${-33.33 * (currentIndex - 1)}%)`
+        prevBtn.onclick = () => {
+            currentIndex = currentIndex - 1;
+            if(currentIndex === 0);
+            else if(currentIndex < 0) currentIndex = carouselBelt.childElementCount - 1;
+            else currentIndex = currentIndex % carouselBelt.childElementCount;
+            updateCarousel();
+            carouselBelt.style.transform = `translateX(${-33.33 * (currentIndex - 1)}%)`;
+        };
+        
+        nextBtn.onclick = () => {
+            currentIndex = (currentIndex + 1) % carouselBelt.childElementCount;
+            updateCarousel();
+            carouselBelt.style.transform = `translateX(${-33.33 * (currentIndex - 1)}%)`;
+        };
+    }else{
+        carouselBelt.style.transform = `translateX(${-100 * (currentIndex)}%)`
+        prevBtn.onclick = () => {
+            if(currentIndex - 1 < 0) currentIndex = carouselBelt.childElementCount - 1;
+            else currentIndex = (currentIndex - 1) % carouselBelt.childElementCount;
+            updateCarousel();
+            carouselBelt.style.transform = `translateX(${-100 * (currentIndex)}%)`;
+        };
+        
+        nextBtn.onclick = () => {
+            currentIndex = (currentIndex + 1) % carouselBelt.childElementCount;
+            updateCarousel();
+            carouselBelt.style.transform = `translateX(${-100 * (currentIndex)}%)`;
+        };
+    }
+}
+
+window.addEventListener('resize', () => {
     updateCarousel();
-    carouselBelt.style.transform = `translateX(${-33.33 * (currentIndex - 1)}%)`;
+    updateCarouselNavigationButtonFunctionalities()
 })
 
-nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % carouselBelt.childElementCount;
-    updateCarousel();
-    carouselBelt.style.transform = `translateX(${-33.33 * (currentIndex - 1)}%)`;
-});
-
+updateCarouselNavigationButtonFunctionalities();
 updateCarousel();
 
 // Accordion
@@ -218,8 +247,8 @@ stars.forEach((star, i) => {
     star.addEventListener('click', () => {
         star.querySelector("input").checked = true;
         Array.from(stars).map((s, j) => {
-            if(j <= i) s.querySelector("img").src = "./imgs/star-filled.png";
-            else s.querySelector("img").src = "./imgs/star-empty.png";
+            if(j <= i) s.querySelector("img").src = "./imgs/icons/star-filled.png";
+            else s.querySelector("img").src = "./imgs/icons/star-empty.png";
         })
         ratingDescription.textContent = star.dataset.ratingName;
     });
@@ -236,7 +265,7 @@ function updateMenuLayout() {
 
     let set = 1;
     menuLists.forEach(list => {
-        if(window.innerWidth >= 1024 || window.innerWidth <= 640){
+        if(window.innerWidth > 1024 || window.innerWidth <= 640){
             let itemsInHTML = '';
             list.style.gridTemplateColumns = "100%";
             for(let i = 3*(set-1); i<3*set; i++){
@@ -270,7 +299,7 @@ function updateMenuLayout() {
             }
             list.innerHTML = itemsInHTML;
         }
-        else if(window.innerWidth < 1024){
+        else if(window.innerWidth <= 1024){
             let itemsInHTML = '';
             list.style.gridTemplateColumns = 'repeat(2, calc(50% - 0.5rem))'
             for(let i = 6*(set-1); i<6*set; i++){
@@ -456,9 +485,10 @@ pickupInfoModal.querySelector("form").addEventListener('submit', (e) => {
                 s.querySelector(`tr:nth-of-type(${i}) td:nth-of-type(2)`).textContent = `$${(subtotal*0.07).toFixed(2)}`;
                 break;
             case 4:
-                s.querySelector(`tr:nth-of-type(${i}) td:nth-of-type(2)`).textContent = `$${(subtotal*0.07 + subtotal).toFixed(2)}`;
+                total = (subtotal*0.07 + subtotal).toFixed(2)
+                s.querySelector(`tr:nth-of-type(${i}) td:nth-of-type(2)`).textContent = `$${total}`;
                 break;
-        }
+        }   
     }
     for(let i = 1; i <= s.childElementCount; i++) summary(i);
 
@@ -466,11 +496,11 @@ pickupInfoModal.querySelector("form").addEventListener('submit', (e) => {
     pickupInfoModal.close();
 })
 
-pickupInfoModal.querySelector("form .form-item.type-1 input[type='tel']").addEventListener('input', (e) => {
+document.querySelectorAll(".modal form .form-item.type-1 input[type='tel']").forEach((telInput) => telInput.addEventListener('input', (e) => {
     // Stick with the Thai mobile phone number pattern
     if(e.target.value.length === 1 && e.target.value !== "0") e.target.value = ""
     if(e.target.value.match(/([^\d])/g)) e.target.value = e.target.value.replace(/([^\d])/g, '');
-});
+}));
 
 // Bill Modal
 const billModal = document.getElementById("bill-modal")
@@ -494,6 +524,7 @@ billModal.querySelector("#tip-amount").addEventListener('input', (e) => {
 
 billModal.querySelector(".bill-summary .order-btn button:nth-of-type(1)").addEventListener('click', () => {
     // Dealing with order submission (Later)
+    console.log(JSON.parse(localStorage.getItem("Pickup Info")).payment)
     if(JSON.parse(localStorage.getItem("Pickup Info")).payment === "mobile-banking") {
         document.getElementById("qr-payment").querySelector("p span").textContent = total;
         document.getElementById("qr-payment").showModal();
@@ -524,3 +555,64 @@ reserveTableModal.querySelector("form").addEventListener('submit', (e) => {
 })
 
 // Dealing with data structure for backend later.
+
+// Contact form validation
+
+const emailInput = document.querySelector("#contact #email");
+
+emailInput.addEventListener('input', (e) => {
+    if(e.target.value === ""){
+        emailInput.classList.remove("invalid");
+        return;
+    }
+    if(e.target.value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+        emailInput.classList.remove("invalid");
+    } else {
+        emailInput.classList.add("invalid");
+    }
+})
+
+document.getElementById("contact-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if(emailInput.classList.contains("invalid")) {
+        document.getElementById("contact-fsrw").style.top = (emailInput.offsetTop + emailInput.offsetHeight)+ "px";
+        document.getElementById("contact-fsrw").style.left = emailInput.offsetLeft + "px";
+        document.getElementById("contact-fsrw").show();
+    } else {
+        alert("Your message has been sent.");
+    }
+})
+document.getElementById("review").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if(!document.getElementById("review").querySelector('input[name="rating"]:checked')){
+        document.querySelector(".star-rating").classList.add("no-rate");
+        document.getElementById("no-review-detect").style.top = (document.querySelector(".star-rating").offsetTop + document.querySelector(".star-rating").offsetHeight) + "px";
+        document.getElementById("no-review-detect").style.left = document.querySelector(".star-rating").offsetLeft + "px";
+        document.getElementById("no-review-detect").show();
+    } else {
+        alert("Thank you for review our place!");
+    }
+})
+
+document.querySelectorAll(".form-submission-req-warning").forEach((w) => w.addEventListener("focusout", (e) => {
+    if(e.target.id === "no-review-detect") document.querySelector(".star-rating").classList.remove("no-rate");
+    e.target.close()
+}));
+
+// Hamburger button
+function showHamburger() {
+    if(window.innerWidth <= 640) document.querySelector("nav .hamburger-menu-btn").style.display = "block";
+    else document.querySelector("nav .hamburger-menu-btn").style.display = "none"
+}
+window.addEventListener('resize', showHamburger);
+showHamburger();
+
+document.querySelector("nav .hamburger-menu-btn").addEventListener('click', () => {
+    document.querySelector("nav .nav-menu").classList.toggle("hidden")
+})
+
+// Miscelleneous
+document.querySelectorAll("footer ul span a").forEach((footerLink) => {
+    footerLink.addEventListener('mouseout', (e) => e.target.parentElement.parentElement.style.filter = "brightness(1)");
+    footerLink.addEventListener('mouseover', (e) => e.target.parentElement.parentElement.style.filter = "brightness(0)");
+})

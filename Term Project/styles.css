@@ -1,12 +1,21 @@
 /* @layer base */
 
+:root {
+    --default-bg-color: #fff0be
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    background-color: #fff0be;
+    background-color: var(--default-bg-color);
     position: relative;
 }
 
@@ -18,9 +27,20 @@ ul {
 a {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+a:hover {
+    color: black;
 }
 button {
     cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+input, select, textarea {
+    border: none;
+    background-color: transparent;
 }
 
 p {
@@ -62,11 +82,12 @@ nav > .container {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 .company-name{
     font-size: 32px;
 }
-nav ul {
+.nav-menu ul {
     padding: 0;
     margin: 0;
     display: flex;
@@ -103,7 +124,7 @@ header .banner-img::after {
     bottom: 0;
     height: 72px;
     width: 100%;
-    background-color: #fff0be;
+    background-color: var(--default-bg-color);
 }
 
 header > .container {
@@ -172,7 +193,6 @@ header > .fading {
 #reserve-btns button.btn {
     font-family: inherit;
     font-size: 1.5rem;
-    border: none;
     color: white;
     border-radius: 8px;
   	background-color: #b88f28;
@@ -260,13 +280,9 @@ header > .fading {
     display: flex;
     flex-direction: row;
     width: 100%;
-  	/* height: calc(30% - 0.5rem); */
     height: 100%;
-    column-gap: 1rem
-}
-
-.menu-list .item {
-  	justify-content: space-between
+    column-gap: 0.5rem;
+    justify-content: space-between
 }
 
 .menu-list .item > div:nth-of-type(1) {
@@ -331,7 +347,6 @@ header > .fading {
 }
 
 .item .order-actions .add, .item .order-actions .remove {
-    background-color: transparent;
     transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
@@ -463,6 +478,10 @@ main #atmosphere {
     transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out, opacity 0.2s ease-in-out;
 }
 
+.c-img {
+    box-shadow: 0 1rem 1rem rgba(0,0,0,0.25);
+}
+
 .c-img.main-focus {
     box-shadow: 0 0.75rem 0 -0.15rem #946114;
     transform: scale(1.25);
@@ -477,8 +496,6 @@ main #atmosphere {
 .carousel .control-btn {
     position: absolute;
     top: 0;
-    border: none;
-    background-color: transparent;
     top: calc(50% - 33px);
 }
 
@@ -600,8 +617,6 @@ form .form-item {
 
 form .form-item.type-2 textarea, form .form-item.type-1 input, form .form-item.type-1 select {
     font-size: 1.25rem;
-    background-color: transparent;
-    border: none;
 }
 
 form .form-item.type-2 textarea {
@@ -628,8 +643,7 @@ form .form-item.type-1 input:focus-visible, form .form-item.type-2 textarea:focu
 form button[type="submit"] {
     font-size: 2rem;
     border: solid 1px black;
-    background-color: transparent;
-    width: 200px;
+    width: 20vw;
     margin-top: 10px;
     transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
@@ -643,6 +657,11 @@ form button[type="submit"]:hover {
     color: #FFD650;
 }
 
+form input[type="email"].invalid {
+    border-radius: 0.25rem;
+    border: solid 1px #FF5D60;
+}
+
 #contact .rating-question {
     font-size: 2rem;
 }
@@ -653,6 +672,11 @@ form button[type="submit"]:hover {
     column-gap: 2rem;
     margin: 14px 0;
     align-items: center;
+}
+
+.star-rating.no-rate > .container {
+    border-radius: 0.25rem;
+    border: solid 1px #FF5D60;
 }
 
 .star-rating .container {
@@ -689,9 +713,23 @@ body > .fading {
     position: absolute;
     bottom: 0;
     z-index: -1;
-    background: linear-gradient(180deg, #FFF0BE 0%, #FFD650 30%, #FFD650 64%, #B88F28 100%);
+    background: linear-gradient(180deg, var(--default-bg-color) 0%, #FFD650 30%, #FFD650 64%, #B88F28 100%);
     height: 100vh;
     width: 100%;
+}
+
+dialog.form-submission-req-warning {
+    position: absolute;
+    margin: 0;
+    border-radius: 0.25rem;
+    border-width: 1px;
+    padding: 0.5rem;
+    color: #FF5D60;
+}
+
+dialog.form-submission-req-warning p {
+    color: #FF5D60;
+    font-size: 1.25rem;
 }
 
 /* Footer */
@@ -742,8 +780,11 @@ footer .container:nth-of-type(2) ul li img {
     width: 2rem;
     height: 2rem;
 }
+footer ul li {
+    transition: filter 0.2s ease-in-out;
+}
 
-/* Modal */
+/* Modals */
 dialog.modal {
     width: 80%;
     height: 80%;
@@ -764,8 +805,6 @@ dialog.modal .modal-close-btn {
     z-index: 10;
     top: 0;
     right: 0;
-    border: none;
-    background-color: transparent;
     font-size: 2rem;
 }
 
@@ -824,19 +863,24 @@ dialog.modal .title::after {
     justify-content: space-between;
     flex-grow: 1;
 }
-.bill-summary > * {
+.bill-summary .order-btn {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+}
+.bill-summary .info-n-summary {
+    display: flex;
+    flex-direction: row;
+    column-gap: 2rem;
+    align-items: flex-end;
 }
 
 .bill-summary .order-btn {
     row-gap: 0.5rem;
 }
 .order-btn button {
-    background-color: transparent;
     font-size: 2rem;
-    width: 200px;
+    width: 20vw;
     transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 .order-btn button:nth-of-type(1) {
@@ -871,7 +915,6 @@ dialog.modal .title::after {
 }
 .bill-summary table tr td:nth-of-type(2) input {
     padding: 0;
-    border: none;
     height: 100%;
     width: 40px;
 }
@@ -903,6 +946,12 @@ dialog.modal .title::after {
 }
 .modal form .form-item.type-1 label {
     min-width: auto;
+}
+.modal form .form-item.type-1 > div {
+    display: flex;
+    flex-direction: row;
+    column-gap: 0.75rem;
+    flex-grow: 1;
 }
 .modal form > * {
     width: 100%;
@@ -1031,11 +1080,12 @@ dialog#qr-payment.modal {
     #contact .rating-question,
     form .form-item.type-1 label,
     form button[type="submit"],
+    .order-btn button,
     footer .container:nth-of-type(1),
     footer .container:nth-of-type(2) h1 {
         font-size: 1.5rem;
     }
-    form .form-item.type-2 textarea, form .form-item.type-1 input, form .form-item.type-1 select {
+    form .form-item.type-2 textarea, form .form-item.type-1 input, form .form-item.type-1 select, dialog.form-submission-req-warning p {
         font-size: 1rem;
     }
     .star-rating .rating-name, footer .container:nth-of-type(2) ul li span {
@@ -1073,6 +1123,9 @@ dialog#qr-payment.modal {
     }
     .modal span.success {
         font-size: 3rem;
+    }
+    #bill-modal table.bill-item-list thead {
+        font-size: 1.5rem;
     }
 }
 
@@ -1112,10 +1165,39 @@ dialog#qr-payment.modal {
     form .form-item {
         padding: 5px 0;
     }
+    dialog.modal .title {
+        font-size: 64px;
+    }
+    #bill-modal table.bill-item-list thead {
+        font-size: 1.25rem;
+    }
+    #bill-modal table.bill-item-list tbody {
+        font-size: 1rem;
+    }
+    .bill-summary table tr td:nth-of-type(1) {
+        font-size: 1.125rem;
+    }
+    .bill-summary table tr td:nth-of-type(2), .bill-summary table tr td:nth-of-type(2) input {
+        font-size: 1rem;
+    }
+    .bill-summary .info-n-summary {
+        column-gap: 1rem;
+    }
+    dialog#qr-payment.modal {
+        width: 60%;
+    }
 }
 
 @media (max-width: 768px) {
-    #contact .rating-question, form .form-item.type-1 label, form button[type="submit"], form button[type="submit"], footer .container:nth-of-type(1), footer .container:nth-of-type(2) h1 {
+    .company-name {
+        font-size: 1.75rem;
+    }
+    #contact .rating-question, 
+    form .form-item.type-1 label, 
+    form button[type="submit"],
+    .order-btn button, 
+    footer .container:nth-of-type(1),
+    footer .container:nth-of-type(2) h1 {
         font-size: 1.25rem;
     }
     #contact > .container:nth-of-type(2) form .subtitle {
@@ -1150,6 +1232,12 @@ dialog#qr-payment.modal {
     .modal span.success {
         font-size: 2rem;
     }
+    .bill-summary .info-n-summary {
+        flex-direction: column-reverse;
+    }
+    .bill-summary .info-n-summary > table {
+        width: 100%;
+    }
 }
 
 @media (max-width: 700px) {
@@ -1159,8 +1247,36 @@ dialog#qr-payment.modal {
 }
 
 @media (max-width: 640px) {
-    .company-name {
-        font-size: 1.75rem;
+    nav .nav-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1rem;
+        row-gap: 1rem;
+    }
+    nav .nav-menu:not(.nav-menu.hidden) {
+        background-color: var(--default-bg-color);
+        border: solid 2px black;
+    }
+    .nav-menu .hamburger-menu-btn {
+        width: fit-content;
+        transition: filter 0.2s ease-in-out;
+    }
+    .nav-menu .hamburger-menu-btn:hover {
+        filter: brightness(0);
+    }
+    .nav-menu ul {
+        row-gap: 1rem;
+        flex-direction: column;
+    }
+    .nav-menu.hidden ul {
+        display: none;
+    }
+    .nav-menu.show ul {
+        display: flex;
     }
     header > .container {
         height: calc(180vh + 54px);
@@ -1193,6 +1309,23 @@ dialog#qr-payment.modal {
     .b1368a-b-1-icon {
         aspect-ratio: 3 / 2;
     }
+    .carousel .belt {
+        height: 100vh;
+    }
+    .belt > div {
+        grid-template-columns: repeat(9, calc(100% - 1rem));
+        justify-items: center;
+    }
+    .carousel .belt .c-img {
+        margin: 0 0.5rem 0 1.5rem;
+        width: 80%;
+    }
+    .control-btn#next{
+        margin-right: 0.75rem;
+    }
+    .control-btn#prev{
+        margin-left: 0.75rem;
+    }
     #faq .container {
         flex-direction: column;
     }
@@ -1218,13 +1351,215 @@ dialog#qr-payment.modal {
     }
     #contact .rating-question,
     form .form-item.type-1 label,
-    form button[type="submit"], 
+    form button[type="submit"],
+    .order-btn button, 
     footer .container:nth-of-type(1),
     footer .container:nth-of-type(2) h1 {
         font-size: 1.5rem;
     }
+    .modal form .form-item.type-1 label {
+        font-size: 1.25rem;
+    }
     .star-rating .rating-name {
-        font-size: 1.25rems;
+        font-size: 1.25rem;
+    }
+    .modal form .form-item.type-1.el-2p {
+        flex-direction: column;
+    }
+    .modal form .form-item.type-1.el-2p > :first-child {
+        padding-bottom: 5px;
+        border-bottom: solid 1px black;
+    }
+    .modal form .form-item.type-1.el-2p > :last-child {
+        padding-top: 5px;
+        padding-bottom: 0;
+    }
+
+    dialog.modal .title {
+        font-size: 48px;
+    }
+    dialog.modal {
+        padding: 1.5rem;
+    }
+    dialog.modal .modal-close-btn {
+        font-size: 1rem;
+    }
+    #bill-modal table.bill-item-list thead {
+        font-size: 1.125rem;
+    }
+    #bill-modal table.bill-item-list tbody {
+        font-size: 0.875rem;
+    }
+    .bill-summary table tr td:nth-of-type(1) {
+        font-size: 1rem;
+    }
+    .bill-summary table tr td:nth-of-type(2), .bill-summary table tr td:nth-of-type(2) input {
+        font-size: 0.75rem;
+    }
+    .order-btn button {
+        width: 25vw;
+    }
+    dialog#qr-payment.modal {
+        width: 65%;
+    }
+}
+
+@media (max-width: 525px) {
+    .carousel .belt {
+        height: 80vh;
+    }
+    .carousel .belt .c-img {
+        width: 75%;
+    }
+    dialog.modal .title {
+        font-size: 36px;
+    }
+    #contact .rating-question, 
+    form .form-item.type-1 label, 
+    form button[type="submit"],
+    .order-btn button,
+    footer .container:nth-of-type(1),
+    footer .container:nth-of-type(2) h1 {
+        font-size: 1rem;
+    }
+    form .form-item.type-2 textarea, form .form-item.type-1 input, form .form-item.type-1 select, dialog.form-submission-req-warning p {
+        font-size: 0.75rem;
+    }
+    form .form-item.type-1 label {
+        min-width: 40px;
+    }
+    .form-item.type-1 {
+        column-gap: 0.25rem;
+    }
+    .form-item.type-1.special {
+        flex-direction: column;
+        row-gap: 0.25rem;
+        text-align: center;
+    }
+    .form-item.type-1.special > * {
+        width: 100%;
+    }
+    #hero .title, #menu .title {
+        min-height: 90px;
+        font-size: 64px;
+    }
+    #hero .subtitle {
+        font-size: 24px;
+    }
+    #contact > .container:nth-of-type(2) form .subtitle {
+        font-size: 30px;
+    }
+    #faq .title img {
+        width: 56px;
+        height: 56px;
+    }
+    main section {
+        padding: 0 2rem;
+    }
+    #about-us > .container .content .title + .title-decoration {
+        width: 150px;
+    }
+    #about-us > .container .content p, #faq .question .answer, .star-rating .rating-name {
+        font-size: 1rem;
+    }
+    #faq .question .answer.show {
+        padding: 1rem;
+    }
+    #faq .question .answer.hide {
+        padding: 0 1rem;
+    }
+    form .form-item.type-2 textarea {
+        min-height: 100px;
+    }
+    .star-rating .star {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    .star-rating .container {
+        column-gap: 0.25rem;
+    }
+    .star-rating {
+        column-gap: 1rem;
+    }
+    footer .container:nth-of-type(2) h1 {
+        margin-bottom: 0.25rem;
+    }
+    footer .container:nth-of-type(2) ul {
+        row-gap: 0px;
+    }
+    footer {
+        column-gap: 0;
+    }
+    dialog.form-submission-req-warning {
+        padding: 0.25rem;
+    }
+    dialog.modal#bill-modal {
+        width: 95%;
+    }
+    #bill-modal table.bill-item-list thead {
+        font-size: 1rem;
+    }
+    #bill-modal table.bill-item-list tbody {
+        font-size: 0.75rem;
+    }
+    .bill-summary table tr td:nth-of-type(1) {
+        font-size: 0.875rem;
+    }
+    dialog#qr-payment.modal {
+        width: 85%;
+    }
+}
+
+@media (max-width: 400px) {
+    .company-name {
+        font-size: 1.5rem;
+    }
+    header > .container > #hero {
+        padding: 0 1rem;
+    }
+    .carousel .belt {
+        height: 60vh;
+    }
+    .carousel .belt .c-img {
+        width: 60%;
+    }
+    #contact > .container:nth-of-type(2) form .subtitle {
+        width: 115%;
+        left: -7.5%;
+    }
+    form button[type="submit"] {
+        width: 30vw;
+    }
+    footer {
+        flex-direction: column;
+        row-gap: 1rem;
+    }
+    footer .container:nth-of-type(2) {
+        align-items: center
+    }
+    footer .container:nth-of-type(2) ul li {
+        flex-direction: row-reverse;
+    }
+    footer .container:nth-of-type(1) {
+        flex-direction: row;
+        justify-content: space-between;
+        column-gap: 0.5rem;
+        font-size: 0.75rem;
+    }
+    footer .container:nth-of-type(2) h1 {
+        font-size: 1.5rem;
+    }
+    footer .container:nth-of-type(2) ul li span {
+        font-size: 1.25rem;
+    }
+    #bill-modal table.bill-item-list thead {
+        font-size: 0.875rem;
+    }
+    .order-btn button {
+        width: 20vw;
+    }
+    dialog#qr-payment.modal {
+        width: 95%;
     }
 }
 
@@ -1252,7 +1587,7 @@ dialog#qr-payment.modal {
 /* Responsive Design */
 
 @media (max-width: 1024px) {
-    .title:not(#hero .title):not(#menu .title) {
+    .title:not(#hero .title):not(#menu .title):not(dialog.modal .title) {
         font-size: 80px;
     }
     .subtitle:not(#hero .subtitle) {
@@ -1261,10 +1596,19 @@ dialog#qr-payment.modal {
 }
 
 @media (max-width: 865px) {
-    .title:not(#hero .title):not(#menu .title) {
+    .title:not(#hero .title):not(#menu .title):not(dialog.modal .title) {
         font-size: 64px;
     }
     .subtitle:not(#hero .subtitle) {
         font-size: 24px;
+    }
+}
+
+@media (max-width: 500px) {
+    .title:not(#hero .title):not(#menu .title):not(dialog.modal .title) {
+        font-size: 48px;
+    }
+    .subtitle:not(#hero .subtitle) {
+        font-size: 20px;
     }
 }
