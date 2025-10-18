@@ -611,6 +611,22 @@ document.querySelector("nav .hamburger-menu-btn").addEventListener('click', () =
     document.querySelector("nav .nav-menu").classList.toggle("hidden")
 })
 
+// Background music
+
+window.onload = () => {
+    const bgMusicPlayer = new window.YT.Player("bg-music");
+    document.getElementById("play-bg-music").addEventListener("click", () => {
+        bgMusicPlayer.setVolume(50);
+        if(bgMusicPlayer.isMuted()){
+            document.getElementById("play-bg-music").querySelector("img").src = "./imgs/icons/light-audio.png";
+            bgMusicPlayer.unMute();
+        } else {
+            document.getElementById("play-bg-music").querySelector("img").src = "./imgs/icons/light-muted.png";
+            bgMusicPlayer.mute();
+        }
+    })
+}
+
 // Miscelleneous
 document.querySelectorAll("footer ul span a").forEach((footerLink) => {
     footerLink.addEventListener('mouseout', (e) => e.target.parentElement.parentElement.style.filter = "brightness(1)");

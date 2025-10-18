@@ -998,6 +998,18 @@ dialog#qr-payment.modal {
     background-color: #D9D9D9;
 }
 
+/* Hide the background music yt player */
+#bg-music {
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+#play-bg-music {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 1rem;
+}
 
 /* Responsive Design */
 
