@@ -40,3 +40,8 @@ Modified the website to look more interesting with transition and animation. And
 ### Assignment 2
 - [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/135403)
 - *Easy peasy~*
+
+### Term Project
+Yay.
+- [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/136687)
+- [Visit the site](https://codingwithrand.github.io/CAMT-SE/Term%20Project/)
