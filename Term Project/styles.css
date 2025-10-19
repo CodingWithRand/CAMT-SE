@@ -34,11 +34,13 @@ a:hover {
     color: black;
 }
 button {
+    color: black;
     cursor: pointer;
     border: none;
     background-color: transparent;
 }
 input, select, textarea {
+    color: black;
     border: none;
     background-color: transparent;
 }
@@ -226,6 +228,7 @@ header > .fading {
     position: absolute;
     width: 85%;
     height: 90%;
+    max-height: 600px;
     padding: 2rem;
     row-gap: 20px;
     display: flex;
@@ -1053,7 +1056,7 @@ dialog#qr-payment.modal {
         display: flex;
         flex-direction: column;
         height: calc(200vh + 72px);
-        max-height: none;
+        max-height: 2050px;
     }
     header > .container > div {
         height: 100vh;
