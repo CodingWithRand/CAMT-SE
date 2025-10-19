@@ -546,11 +546,40 @@ const reserveMeetingRoomModal = document.getElementById("reserve-meeting-room");
 
 reserveMeetingRoomModal.querySelector("form").addEventListener('submit', (e) => {
     e.preventDefault();
+    const [fromH, fromM] = e.target.querySelector("#up-for").value.split(":");
+    const [toH, toM] = e.target.querySelector("#up-to").value.split(":");
+    const arrivalTime = new Date(e.target.querySelector("#arrival-time").value);
+    const fromTime = new Date()
+    fromTime.setHours(parseInt(fromH), parseInt(fromM));
+    fromTime.setDate(arrivalTime.getDate());
+    fromTime.setMonth(arrivalTime.getMonth());
+    fromTime.setFullYear(arrivalTime.getFullYear());
+    const toTime = new Date()
+    toTime.setHours(parseInt(toH), parseInt(toM));
+    toTime.setDate(arrivalTime.getDate());
+    toTime.setMonth(arrivalTime.getMonth());
+    toTime.setFullYear(arrivalTime.getFullYear());
+    if(fromTime.getTime() > toTime.getTime()) {
+        alert("Invalid time range (From time cannot be after To time)");
+        return;
+    } else if(arrivalTime.getTime() > fromTime.getTime()) {
+        alert("Invalid time range (Cannot book the room in the past)");
+        return;
+    }
+    if (arrivalTime.getTime() < Date.now()) {
+        alert("Arrival time cannot be in the past");
+        return;
+    }
     showSuccessAndClose(reserveMeetingRoomModal);
 })
 
 reserveTableModal.querySelector("form").addEventListener('submit', (e) => {
     e.preventDefault();
+    const arrivalTime = new Date(e.target.querySelector("#arrival-time").value);
+    if (arrivalTime.getTime() < Date.now()) {
+        alert("Arrival time cannot be in the past");
+        return;
+    }
     showSuccessAndClose(reserveTableModal);
 })
 
