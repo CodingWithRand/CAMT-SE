@@ -159,6 +159,8 @@
     - [PassTwoDimensionalArray.java](/src/Lab12_1/PassTwoDimensionalArray.java)
     - [MultipleChoicesExamGradingSystem.java](/src/Lab12_1/MultipleChoicesExamGradingSystem.java)
 
+### [Final Exam Review](/src/Final.md)
+
 ## Notes
 1. First file of each lab is usually example/try-it-out file. You learn the gist from running the file, but no submission needed.
 2. Useful tool (and probably required in some labs) is [Matthew AI](https://matthew.cmu.ac.th/)
