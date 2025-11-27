@@ -1,2 +1,3 @@
-# CAMT-SE
-Contain Labs for subject in CAMT's SE major
+# Interactive Web Dev Labs
+## Lab 01
+Environment Setup & Testing [SE261](./SE261/)
