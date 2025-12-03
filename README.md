@@ -1,4 +1,4 @@
-# JAVA Labs
+# JAVA Labs (Computer & Programming Course 953101)
 ### Lab 1 - Hello World:
 - [Instruction](https://mango-cmu.instructure.com/courses/20158/assignments/113299?module_item_id=486001)
 - [File](/src/Lab1/App.java)
