@@ -1,3 +1,5 @@
 https://github.com/CodingWithRand/CAMT-SE/tree/INTER-WEB
 
-Note: The branch & the commit message in the commit image may be different from the repo because the commit in the images are not actually pushed to this repo/branch. But the same content with different a commit message were pushed to this repo/branch, the files are located in LAB02 directory.
+Note:
+-The branch & the commit message in the commit image may be different from the repo because the commit in the images are not actually pushed to this repo/branch. But the same content with different a commit message were pushed to this repo/branch, the files are located in LAB02 directory.
+-node_modules is NOT included to the directory as it was ignore in .gitignore
