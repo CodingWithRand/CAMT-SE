@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Ann", "grade": 3.5, "isActive": true },
+  { "id": 2, "name": "Bob", "grade": 2.7, "isActive": false },
+  { "id": 3, "name": "Chen", "grade": 3.9, "isActive": true },
+  { "id": 4, "name": "Dai", "grade": 1.9, "isActive": true }
+]

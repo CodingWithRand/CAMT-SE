@@ -1,0 +1,39 @@
+Part 2
+
+a. In your own words, explain how filter is used in getActiveStudents.
+= The filter function is used to filter out the student that has property isActive = true. It works by looping through every element in the student array, and check the element property if the "isActive" property is true or not.
+
+b. In your own words, explain how reduce is used in calculateAverageGrade.
+= The reduce function is used to sum up grade of each student.
+
+c. What TypeScript error do you get if you remove isActive from one of the students in
+the array?
+= TSError: ⨯ Unable to compile TypeScript as Property 'isActive' is missing in type '{ id: number; name: string; grade: number; }' but required in type 'Student'.
+
+i. Why is this error helpful before running the code?
+= The error prevents the code from being executed as you may mistype or forget to add something to that part of the code. It will help to reduce the impact, and prevent unexpect output if that part of the code that has error will be used later.
+
+Part 3
+1. In JSON.stringify(getActiveStudents(students), null, 2), what does each argument
+mean?
+    1. First argument: JavaScript value; object or array to be converted to string.
+    2. Second argument (null): An array of strings and numbers used for filtering the first argument, in this case, "null" provided means no filter.
+    3. Third argument (2): Number of indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
+
+2. If the JSON string is missing the grade field for one student, what could happen
+when you parse and use it in TypeScript?
+= The parsing process still successfully completes. However, when the grade property is used, you'll not be able to access it through the object that you remove it, which may cause the output to change. In this case, the accumulated grade and average grade becomes "NaN"
+
+Part 5
+1. What is the difference between a JavaScript object in a .ts/.js file and JSON in a .json file?
+= JSON requires more strict syntaxes. You can use string with single quotes ('), double quotes (") or backticks (`) and include comments and trailing commas in JavaScript Object, but you can do none of that in JSON. The string has to be in double quotes (") only.
+2. Why is it better to use a specific type like Student instead of any when working with parsed
+JSON data?
+= To fix the type of data to assign the variable that it has to be in this form (Student), so trying to access property or assign property that doesn't exist to the variable will cause compile error, which prevent the code to run further and cause more problem later.
+3. What are the two main functions used to convert between JSON text and JavaScript/TypeScript
+objects?
+=   JSON.stringify() | JS/TS Object -> JSON text
+    JSON.parse() | JSON text -> JS/TS Object
+
+Part 6
+(Optional Bonus) GitHub repo link: https://github.com/CodingWithRand/CAMT-SE/tree/INTER-WEB
