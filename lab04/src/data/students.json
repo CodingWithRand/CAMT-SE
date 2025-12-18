@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Aom",
+    "major": "SE"
+  },
+  {
+    "id": 2,
+    "name": "Ben",
+    "major": "DS"
+  },
+  {
+    "id": 3,
+    "name": "Mina",
+    "major": "UX"
+  },
+  {
+    "id": 4,
+    "name": "Mina",
+    "major": "UX"
+  },
+  {
+    "id": 5,
+    "name": "Mina",
+    "major": "UX"
+  }
+]
