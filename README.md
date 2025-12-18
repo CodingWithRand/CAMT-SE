@@ -7,3 +7,6 @@ Node.js Environment Setup (Typescript) & Testing [Folder: SE261](./SE261/)
 Node.js Environment Setup (Express.js, Git) & Testing [Folder: LAB02](./LAB02/)
 ## Lab 03
 Try out some provided TypeScript + JSON integration source code to understand about it more [Folder: LAB03](./LAB03/)
+## Lab 04
+Get more used to Express.js and TypeScript (Basically copy source code and run it)
+Submission Link: https://github.com/CodingWithRand/CAMT-SE/tree/INTER-WEB/lab04
