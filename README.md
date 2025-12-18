@@ -26,3 +26,9 @@
         ![UML diagram](/src/Lab3/AggregationExample/UMLDiagram.png)
     2. [StringManipulator.java](/src/Lab3/StringManipulator.java)
     3. [WrapperDemo.java](/src/Lab3/WrapperDemo.java)
+### Lab 4 - Predefined Class and Methods
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/157571)
+- __File__
+    - [Lab4_Math.java](/src/Lab4/Lab4_Math.java)
+    - [Lab4_Strings.java](/src/Lab4/Lab4_Strings.java)
+    - [Lab4_Arrays.java](/src/Lab4/Lab4_Arrays.java)
