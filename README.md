@@ -10,3 +10,8 @@ Try out some provided TypeScript + JSON integration source code to understand ab
 ## Lab 04
 Get more used to Express.js and TypeScript (Basically copy source code and run it)
 Submission Link: https://github.com/CodingWithRand/CAMT-SE/tree/INTER-WEB/lab04
+## Lab 05
+Two micro project, implementing API.
+- [JokeProject](./Lab05/JokeProject/)
+- [WeatherProject](./Lab05/WeatherProject/)
+- [answer.md](./Lab05/answer.md)

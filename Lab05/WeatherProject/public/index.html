@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather Project</title>
+  </head>
+  <body>
+    <h1>Weather</h1>
+    <form id="weatherForm">
+      <label for="cityInput">City:</label>
+      <input id="cityInput" name="city" type="text" placeholder="Chiang Mai" />
+      <button type="submit">Get Weather</button>
+    </form>
+    <p id="status"></p>
+    <h2 id="cityName">-</h2>
+    <p>Temp: <span id="temp">-</span> °C</p>
+    <p>Description: <span id="desc">-</span></p>
+    <img id="icon" alt="weather icon" />
+    <h3>Air Pollution</h3>
+    <p>AQI: <span id="aqi">-</span></p>
+    <p>PM2.5: <span id="pm25">-</span></p>
+    <p>PM10: <span id="pm10">-</span></p>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
