@@ -22,7 +22,7 @@
     1. Aggregation
         - Class: [Address.java](/src/Lab3/AggregationExample/Address.java), [Student.java](/src/Lab3/AggregationExample/Student.java)
         - Execution: [TestAggregation.java](/src/Lab3/AggregationExample/TestAggregation.java)
-        - Diagram
+        - Diagram<br>
         ![UML diagram](/src/Lab3/AggregationExample/UMLDiagram.png)
     2. [StringManipulator.java](/src/Lab3/StringManipulator.java)
     3. [WrapperDemo.java](/src/Lab3/WrapperDemo.java)
@@ -32,3 +32,14 @@
     - [Lab4_Math.java](/src/Lab4/Lab4_Math.java)
     - [Lab4_Strings.java](/src/Lab4/Lab4_Strings.java)
     - [Lab4_Arrays.java](/src/Lab4/Lab4_Arrays.java)
+### Lab 5 - Encapsulation
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/159130)
+- __File__
+    1. Stock
+        - Class: [Stock.java](/src/Lab5/Stock/Stock.java)
+        - Execution: [StockTest.java](/src/Lab5/Stock/StockTest.java)
+        - Diagram<br>
+        ![UML diagram 2](/src/Lab5/Stock/UMLDiagram2.png)
+    2. Counter
+        - Class: [Counter.java](/src/Lab5/Counter/Counter.java)
+        - Execution: [CounterTest.java](/src/Lab5/Counter/CounterTest.java)
