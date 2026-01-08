@@ -15,3 +15,6 @@ Two micro project, implementing API.
 - [JokeProject](./Lab05/JokeProject/)
 - [WeatherProject](./Lab05/WeatherProject/)
 - [answer.md](./Lab05/answer.md)
+## Lab 06
+Working with EJS. So, this is SSR...
+Project directory: [Click Here](./Lab06/EJSBasics/)

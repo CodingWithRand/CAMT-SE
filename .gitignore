@@ -1,3 +1,4 @@
 /bin
+/*/**/*.class
 /*/**/node_modules
 /*/**/.env
