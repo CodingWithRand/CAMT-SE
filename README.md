@@ -43,3 +43,10 @@
     2. Counter
         - Class: [Counter.java](/src/Lab5/Counter/Counter.java)
         - Execution: [CounterTest.java](/src/Lab5/Counter/CounterTest.java)
+### Lab 6 - Inheritance
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/160967)
+- __File__
+    1. [Bank](/src/Lab6/Bank/)
+    2. [University](/src/Lab6/Uni/)
+    3. Diagram<br>
+    ![UML diagram 3](/src/Lab6/UMLDiagram3.png)
