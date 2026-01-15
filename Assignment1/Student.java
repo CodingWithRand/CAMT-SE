@@ -13,6 +13,10 @@ public class Student {
         System.out.println(this.sid + " " + this.fname + this.lname);
     }
 
+    public String getSID() {
+        return this.sid;
+    }
+
     public String getFName() {
         return this.fname;
     }

@@ -36,13 +36,14 @@ public class Main {
 
         sc.close();
 
-        argOptSort(students, opt);
+        sort(students, opt);
 
     }
 
-    public static void sortAlphabetically(Vector<Student> sv, String opt) {
+    public static void sort(Vector<Student> sv, String opt) {
         Vector<String> studentNames = new Vector<String>();
         for(Student student: sv) studentNames.add(
+            opt.equals("-n") ? student.getSID() :
             opt.equals("-f") ? student.getFName() : 
             opt.equals("-l") ? student.getLName() :
             ""
@@ -52,6 +53,7 @@ public class Main {
         for(String name: sn) {
             for(Student student: sv) {
                 if(
+                    opt.equals("-n") && student.getSID().equals(name) ||
                     opt.equals("-f") && student.getFName().equals(name) || 
                     opt.equals("-l") && student.getLName().equals(name)
                 ){
@@ -59,21 +61,6 @@ public class Main {
                     break;
                 }
             }
-        }
-    }
-
-    public static void argOptSort(Vector<Student> students, String opt) {
-        switch (opt) {
-            case "-n":
-                // Ids are already sorted numerically
-                for(Student student: students) student.printInfo();
-                break;
-            case "-f":
-                sortAlphabetically(students, opt);
-                break;
-            case "-l":
-                sortAlphabetically(students, opt);
-                break;
         }
     }
 }
