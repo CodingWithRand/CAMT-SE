@@ -18,3 +18,6 @@ Two micro project, implementing API.
 ## Lab 06
 Working with EJS. So, this is SSR...
 Project directory: [Click Here](./Lab06/EJSBasics/)
+## Lab 07
+Another API fetch GET + POST methods, and tailwind CSS.
+Project directory: [Click Here](./Lab07/)
