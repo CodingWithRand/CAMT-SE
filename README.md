@@ -21,3 +21,6 @@ Project directory: [Click Here](./Lab06/EJSBasics/)
 ## Lab 07
 Another API fetch GET + POST methods, and tailwind CSS.
 Project directory: [Click Here](./Lab07/)
+## Assignment 1
+Blog project. This is actually useful. I might publish/deploy this on [gh-pages](https://github.com/CodingWithRand/CAMT-SE/tree/gh-pages) branch
+Project directory: [Click Here](./Blog/)

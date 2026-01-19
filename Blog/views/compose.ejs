@@ -1,0 +1,10 @@
+<%- include("partials/header") %>
+<h1 class="text-4xl font-bold">Compose</h1>
+<form id="blog-composing-form" class="flex flex-col my-4 gap-2" action="/compose" method="post">
+    <h2 class="text-lg">Title</h2>
+    <input class="p-2 bg-gray-200 rounded-md" name="postTitle" id="title" type="text" placeholder="Title">
+    <h2 class="text-lg">Message</h2>
+    <textarea class="p-2 bg-gray-200 rounded-md" name="postBody" rows="8" placeholder="Write your post here..."></textarea>
+    <button type="submit" class="cursor-pointer my-4 p-4 max-w-64 rounded-md bg-black text-white hover:bg-gray-200 hover:text-black transition-colors" id="publish">Publish</button>
+</form>
+<%- include("partials/footer") %>
