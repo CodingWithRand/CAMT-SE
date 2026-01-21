@@ -1,3 +1,8 @@
 /bin
 /*/**/*.class
 /*/**/.env
+*.class
+
+# Big files
+/Assignment2/input_half.txt
+/Assignment2/training.1600000.processed.noemoticon.csv

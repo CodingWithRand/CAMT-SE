@@ -50,3 +50,5 @@
     2. [University](/src/Lab6/Uni/)
     3. Diagram<br>
     ![UML diagram 3](/src/Lab6/UMLDiagram3.png)
+### [Midterm Review](./src/Midterm.java)
+- **Topics excluded:** UML Diagram, Class Relationships, Built-in Classes
