@@ -38,12 +38,12 @@ public class Sort {
     public static void SelectionSort(int[] arr, String opt) {
         long startTime = System.nanoTime();
         int op = 0;
-        // My version - less op, but more memory usage
+        // My version - slightly less op, but more memory usage (not worth it)
         // for (int i = 0; i < arr.length - 1; i++) {
         //     int thisElem = arr[i];
         //     int toBeSwapped = arr[i+1];
         //     int toBeSwappedIndex = i;
-        //     for (int j = i + 2; j < arr.length - 2; j++) {
+        //     for (int j = i + 2; j < arr.length; j++) {
         //         if (arr[j] < toBeSwapped) {
         //             toBeSwapped = arr[j];
         //             toBeSwappedIndex = j;
@@ -82,7 +82,7 @@ public class Sort {
                     arr[j] = arr[j-1];
                     arr[j-1] = temp;
                 } 
-                else if(arr[j] > arr[j-1]) break; //optional to optimization
+                else if(arr[j] >= arr[j-1]) break; //optional to optimization
             }
         }
 
@@ -92,21 +92,40 @@ public class Sort {
     }
 
     // Not relate to sorting, but can show the recursion idea. (Tower of Hanoi)
-    public static void moveDisks(int count, int needle1, int needle3, int needle2) {
+    /*
+     * Idea: (First layer. In the next layer, it's basically plugging in var in <> with previous call args)
+     * Next n (in the recursive call of (1))
+     * (1) Move the n-1 disk from <source> to <destination>
+     * (2) Move the n disk from <source> to <auxiliary>
+     * (3) Move the n-1 disk from <destination> to <auxiliary>
+     * 
+     * Start n
+     * (1) Move the n-1 disk from <source> to <auxiliary>
+     * (2) Move the n disk from <source> to <destination>
+     * (3) Move the n-1 disk from <auxiliary> to <destination>
+     * 
+     * Next n (in the recursive call of (3))
+     * (1) Move the n-1 disk from <auxiliary> to <source>
+     * (2) Move the n disk from <auxiliary> to <destination>
+     * (3) Move the n-1 disk from <source> to <destination>
+     * 
+     * Start n andd Next n alternate in the recursive call until hit the base case. (n=1)
+     */
+    public static void moveDisks(int count, char source, char destination, char auxiliary) {
         if (count > 0) {
-            moveDisks(count - 1, needle1, needle2, needle3);
+            moveDisks(count - 1, source, auxiliary, destination);       // (1)
             System.out.println("Move disk " + count + " from needle "
-            + needle1 + " to needle "
-            + needle3 + ". ");
-            moveDisks(count - 1, needle2, needle3, needle1);
+            + source + " to needle "
+            + destination + ". ");                                      // (2)
+            moveDisks(count - 1, auxiliary, destination, source);       // (3)
             /** Output
-             * d 1 n 1 -> n 3
-             * d 2 n 1 -> n 2
-             * d 1 n 3 -> n 2
-             * d 3 n 1 -> n 3
-             * d 1 n 2 -> n 1
-             * d 2 n 2 -> n 3
-             * d 1 n 1 -> n 3
+             * d 1 n S -> n D
+             * d 2 n S -> n A
+             * d 1 n D -> n A
+             * d 3 n S -> n D
+             * d 1 n A -> n S
+             * d 2 n A -> n D
+             * d 1 n S -> n D
              */
         }
     }
@@ -114,7 +133,7 @@ public class Sort {
     public static void MergeSort(int[] arr, String opt) {
         long startTime = System.nanoTime();
         MergeSort ms = new MergeSort(arr, opt);
-        show(arr);
+        show(ms.getSortedArr());
         if(opt.equals("op")) ms.showOP();
         long endTime = System.nanoTime();
         if(opt.equals("time")) System.out.println("Time taken: " + (endTime - startTime)/1_000_000.0 + "ms");
@@ -123,7 +142,7 @@ public class Sort {
     public static void QuickSort(int[] arr, String opt) {
         long startTime = System.nanoTime();
         QuickSort qs = new QuickSort(arr, opt);
-        show(arr);
+        show(qs.getSortedArr());
         if(opt.equals("op")) qs.showOP();
         long endTime = System.nanoTime();
         if(opt.equals("time")) System.out.println("Time taken: " + (endTime - startTime)/1_000_000.0 + "ms");
@@ -147,21 +166,25 @@ class MergeSort {
         if (left < right) {                         // Base case: stop when subarray has 1 element
             if(opt.equals("op")) this.op++;
             int mid = (left + right) / 2;
-            mergeSort(left, mid);                   // Recursively sort LEFT half
-            mergeSort(mid + 1, right);              // Recursively sort RIGHT half
+            mergeSort(left, mid);                   // Recursively LEFT half partitioning
+            mergeSort(mid + 1, right);              // Recursively RIGHT half partitioning
             merge(left, mid, right);                // Merge the two sorted halves
         }
     }
 
     private void merge(int left, int mid, int right) {
         if (this.opt.equals("op")) this.op++;
-        int i = left;
-        int j = mid + 1;
-        int k = left; // index for temp
+        int i = left;       // First index of the left half
+        int j = mid + 1;    // First index of the right half
+        int k = left;       // index for temp
 
         // Compare and merge while both subarrays have elements
+        // Loop until i (first index left half) hit mid (last index of left half)
+        // AND
+        // Loop until j (first index right half) hit right (last index of right half)
         while (i <= mid && j <= right) {
-            if (this.opt.equals("op")) op++;
+            if (this.opt.equals("op")) this.op++;
+            // Organize the merged subarray, compare each element one by one (e.g. left[0] <= right[0], left[1] <= right[1], ...)
             if (this.arr[i] <= this.arr[j]) {
                 this.temp[k++] = this.arr[i++];     // Take from left if smaller
             } else {
@@ -169,20 +192,25 @@ class MergeSort {
             }
         }
 
+        // In case both subarrays have elements left (e.g. [1,2,3] + [4,5,6])
+
         // Copy remaining elements from left (if any)
         while (i <= mid) {
-            if (this.opt.equals("op")) op++;
+            if (this.opt.equals("op")) this.op++;
             this.temp[k++] = this.arr[i++];
         }
 
         // Copy remaining elements from right (if any)
         while (j <= right) {
-            if (this.opt.equals("op")) op++;
+            if (this.opt.equals("op")) this.op++;
             this.temp[k++] = this.arr[j++];
         }
 
         // Copy sorted elements back to original array
-        this.arr = this.temp;
+        for (i = left; i <= right; i++) {
+            if (this.opt.equals("op")) this.op++;
+            this.arr[i] = this.temp[i];
+        }
     }
 
     /** Visualization
@@ -240,6 +268,10 @@ class MergeSort {
         Result: [3, 27, 38, 43]
      */
 
+    public int[] getSortedArr() {
+        return this.arr;
+    }
+
     public void showOP() {
         System.out.println("Operation count: " + this.op);
     }
@@ -277,7 +309,7 @@ class QuickSort {
     }
 
     private int partition(int left, int right) {
-        int x = this.arr[left];
+        int x = this.arr[left]; // set the first element as the pivot
         int i = left-1, j = right+1;
         while (true) {
             if (this.opt.equals("op")) this.op++;
@@ -306,6 +338,10 @@ class QuickSort {
             }
             
         }
+    }
+
+    public int[] getSortedArr() {
+        return this.arr;
     }
 
     public void showOP() {
