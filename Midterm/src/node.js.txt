@@ -1,0 +1,137 @@
+Alright, let's talk about Node.js and how to set things up first.
+Node.js is a javascript run time. Previously, you can only run JavaScript on web browser.
+But with Node.js, now you can run it on your PC.
+
+Anyway, the different of javascript here is we cannot access to DOM.
+Like it's not even here to begin with. Also, dealing with DOM is frontend work.
+But Node.js is for a BACKEND server. It's backend work.
+Instead, you can meddle in file system, network, APIs, other stuff.
+To avoid confusion with the language, we'll use TypeScript for the backend, and JavaScript for the frontend. K?
+
+Comparison with other technology for server
+**Node.js**
+Strength: Real-time, high-concurrency, APIs.
+Ecosystem: NPM, (way too) many libs.
+Best for: SPAs + APIs, microservices, real-time apps.
+Note: Not ideal for CPU-heavy tasks
+**Traditional PHP**
+Strength: Classic server-rendered sites and CMS (Content Management System).
+Ecosystem: Mature CMS and hosting ecosystem.
+Best for: Content-heavy sites, blogs, simple web apps.
+**Java Spring**
+Strength: Large, enterprise-grade systems.
+Ecosystem: Robust enterprise tooling and frameworks.
+Best for: Complex, mission-critical business applications.
+
+Node.js comes with npm (node package manager).
+You can install 3rd party packages/libraries with `npm` command in terminal, e.g. npm install express.
+
+Terminologies
+PACKAGE.JSON
+• In your project, it helps in maintaining 'dependencies' of external packages and other related project.
+• It is the package configuration file describing information such as package name, author name, entry point, list of dependencies
+• package.json = list of packages + scripts
+Packages:
+• A chunk of code that can be reused/installed
+• Node.js uses NPM to install and update the package
+• Conclusion: a library/project you can install with npm
+Dependencies:
+• Once you install an external packages, you have included them into your project
+• Your development/production is depended on the existing of packages.
+• Two groups: dependencies vs devDependencies
+• The relationship when one module imports another module
+Module:
+• a file (or set of files) that exports reusable code (functions/types/objects)
+• Other modules import what they need
+
+Now, come for the project setup part. Find a folder you wish to create project on, open terminal on that folder.
+It should be something like this.
+
+C:\...\> 
+
+Type `npm init -y` to create a package.json file with default settings.
+Then, install required packages with `npm install`/`npm i` command, follow with the package names.
+
+For normal typescript project.
+Minimum dependencies installation
+-> npm install -D typescript ts-node @types/node
+-> npm install -D nodemon # optional
+
+Set up tsconfig.json
+-> npx tsc --init
+In tsconfig.json, you check for these properties.
+If they don't match the properties below, change them.
+```json
+{
+    ...
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "commonjs",           // this course preference
+    "target": "es2020",             // this course preference
+    "types": ["node"],              // provided type here
+    "verbatimModuleSyntax": false,  // to allow 'import' in commonjs (normally, you need esmodule)
+    "esModuleInterop": true,        // easier default imports from many npm packages (CommonJS)
+    ...
+}
+```
+
+In package.json, set up some script for handy use.
+```json
+{
+    ...
+    "scripts": {
+        "dev": "nodemon --exec ts-node src/yourtypescriptcodehere.ts",      // Server auto-restart (when saved) run.
+        "build": "tsc",                                                     // Build for production (Compile TS -> JS)
+        "start": "node dist/compiled.js",                                   // Run the compiled code.
+        ...
+    },
+    ...
+}
+```
+
+For express project, do the typescript part and add below.
+-> npm install express
+-> npm install -D @types/express
+
+For express project with ejs, do the express part and add below.
+-> npm install ejs
+
+If your project requires environment variables, install `dotenv`
+-> npm install dotenv
+
+Note:
+"-D" flag means the installed package will be in "devDependencies"
+Without this flag, it will be in "dependencies"
+
+devDependencies 
+-> packages use on startup phase
+-> they're needed to start the server
+-> Startup Def: Node loads your files and prepares the app (imports + routes)
+vs 
+dependencies 
+-> packages use on runtime
+-> they're needed to keep the server's functionality running.
+-> Runtime Def: Node waits for requests and runs the matching handler function
+
+What does each package do?
+`typescript`, `express`, `ejs` - self explanatory
+`ts-node` - run typescript (TypeScript is compiled to JavaScript and stored in the memory, then run the javascript.)
+`@types/node`, `@types/express` - provide types in the packages for TypeScript linting.
+`nodemon` - Automatically restarts the server when files change useful during development.
+
+Useful terminal command
+`cd`: go into different directory in current directory (if existed), e.g.
+C:\Users\> cd Folder1
+C:\Users\Folder1\>
+C:\Users\Folder1\> cd ..
+C:\Users\>
+`ls`/`dir`: show list of directory & files in current directory.
+`mkdir`: create new directory, e.g.
+mkdir Folder1 # Created Folder1 directory.
+
+Q: Where does your `.ts` code belong?
+A: in `src` folder.
+
+Node.js is non-blocking (I/O):
+While waiting for DB/API results, the server can handle other requests.
+You still use await per request (it doesn’t freeze the whole server).
