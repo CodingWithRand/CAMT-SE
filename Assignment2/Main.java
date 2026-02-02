@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
     // Hard code for today. Will optimize later.
@@ -19,11 +20,14 @@ public class Main {
         int nChars = 0;
         int lines = 0;
 
+        int nEmoticons = 0;
+        final Pattern EMOJI = Pattern.compile("(?<!&\\w{1,45}|\\w{1,45})(?:(?<![)\\]}])[:;=8xX](?:[-^'\\\"*_])?[)(#LEDPpOo3/|\\[\\]{}]|(?<![\\[({](?:[\\w\\W]{0,45})|\\w{1,45})[)(#LDPpOo3/\\\\|\\[\\]{}](?:[-^'\\\"*_])?[:;=8xX](?!:)|(?>(?:[oO0;TXxv+~!*@?][-_^.]+[?@*!~;vXxToO0+])|TT|[.-=]_++[.-=]|[-=]\\.++[-=]|\\.-\\.|[*T]++[on_^.-][*T]++|=?\\^[-.o0]\\^=?)|(?:X:|:X))(?!\\w+)");
+        int nTokens = 0;
+
         int nPalindromes = 0;
 
         int longestWordLength = 0;
         int accumulatedLength = 0;
-        int nTokens = 0;
 
         while (sc.hasNextLine()) {
             String thisLine = sc.nextLine();
@@ -40,6 +44,20 @@ public class Main {
                     // Which means, single character is automatically a palindrome
                     if(token.isEmpty()) continue;
 
+                    // Regex construction process (3) I'm done (for today at least.)
+                    if(EMOJI.matcher(token).matches()){
+                        // try (BufferedWriter writer = new BufferedWriter(new FileWriter("emoticon.txt", true))) { // true for append mode
+                            nEmoticons++;
+                            // writer.write(thisColumn);
+                            // writer.newLine(); // Adds a new line
+                            // writer.write(token);
+                            // writer.newLine();
+                        // } catch (IOException e) {
+                            // System.err.println("Error writing to file: " + e.getMessage());
+                            // e.printStackTrace();
+                        // }
+                    }
+                    
                     int left = 0;
                     int right = token.length() - 1;
                     boolean isPalindrome = true;
@@ -82,13 +100,18 @@ public class Main {
 
         sc.close();
 
-        System.out.println(nChars);
-        System.out.println(nPalindromes);
-        System.out.println(lines);
+        System.out.println("Total # Character count: " + nChars);
+        System.out.println("Total # Palindrome found: " +nPalindromes);
+        System.out.println("Total Number of tokens: " + nTokens);
+        System.out.println("Total Number of emoticon: " + nEmoticons);
+        System.out.println("Total # of new line: " + lines);
         
-        System.out.println(longestWordLength + " " + (accumulatedLength / (double) nTokens));
+        System.out.println("The longest and average token size token: " + (longestWordLength + " " + (accumulatedLength / (double) nTokens)));
 
         long endTime = System.nanoTime();
-        System.out.println((endTime - startTime)/1_000_000_000.0 + "s");
+        System.out.println("Total time to execute this program: " + ((endTime - startTime)/1_000_000_000.0) + "secs");
+
+        System.out.println();
+        System.out.println("Program terminated properly!");
     }
 }
