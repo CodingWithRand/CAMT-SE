@@ -2,6 +2,13 @@ textarea {
     resize: none;
 }
 
+#evolve {
+    position: fixed;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, calc(-100% - 6rem));
+}
+
 ::-webkit-scrollbar {
     width: 0.35rem;
     height: 0.35rem;

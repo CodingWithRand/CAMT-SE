@@ -2,6 +2,7 @@
 *.class
 /*/**/*.class
 /node_modules
+/*/**/node_modules
 .env
 
 # Large files
