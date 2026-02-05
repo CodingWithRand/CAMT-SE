@@ -22,7 +22,8 @@ Project directory: [Click Here](./Lab06/EJSBasics/)
 Another API fetch GET + POST methods, and tailwind CSS.
 Project directory: [Click Here](./Lab07/)
 ## Assignment 1
-Blog project. This is actually useful. I might publish/deploy this on ~~[gh-pages](https://github.com/CodingWithRand/CAMT-SE/tree/gh-pages) branch~~ nah netlify, gh-pages only support static site. One day, man. One day.
+Blog project. This is actually useful. I might publish/deploy this on ~~[gh-pages](https://github.com/CodingWithRand/CAMT-SE/tree/gh-pages) branch~~ nah netlify, gh-pages only support static site. One day, man. One day.<br>
+IT'S LIVE NOW [HERE](https://camt-se.onrender.com/blog) (In the end, I settled with Render.)<br>
 Project directory: [Click Here](./Blog/)
 ## [Midterm Revision](./Midterm/)
 Everything is written down in each files in `src` folder there
