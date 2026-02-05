@@ -47,8 +47,14 @@
 - [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/160967)
 - __File__
     1. [Bank](/src/Lab6/Bank/)
-    2. [University](/src/Lab6/Uni/)
-    3. Diagram<br>
+    2. [University](/src/Lab6/Uni/) (Diagram Below) <br>
     ![UML diagram 3](/src/Lab6/UMLDiagram3.png)
 ### [Midterm Review](./src/Midterm.java)
 - **Topics excluded:** UML Diagram, Class Relationships, Built-in Classes
+### Lab 7 - Polymorphism
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/165971)
+- __File__
+    - [Publishing.java](/src/Lab7/Publishing.java) (Diagram Below) <br>
+    ![UML diagram 4](/src/Lab7/UMLDiagram4.png)
+    - [Calculator.java](/src/Lab7/Calculator.java)
+    - [AnimalNDog.java](/src/Lab7/AnimalNDog.java)
