@@ -58,3 +58,11 @@
     ![UML diagram 4](/src/Lab7/UMLDiagram4.png)
     - [Calculator.java](/src/Lab7/Calculator.java)
     - [AnimalNDog.java](/src/Lab7/AnimalNDog.java)
+### Lab 8 - Abstract Class & Interface
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/166633)
+- __File__
+    - Task1: [Triangle.java](/src/Lab8/Triangle.java)
+    - Task2: [SortArrayList.java](/src/Lab8/SortArrayList.java)
+    - Task3: [ComparableCircle.java](/src/Lab8/ComparableCircle.java)
+    - Task4: [InterfacePractice.java](/src/Lab8/InterfacePractice.java)
+    ![UML 5](./src/Lab8/UMLdiagram5.png)
