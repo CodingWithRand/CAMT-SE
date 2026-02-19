@@ -29,3 +29,5 @@ Project directory: [Click Here](./Blog/)
 Everything is written down in each files in `src` folder there
 ## Lab 08
 File based DB implementation, basically my [discord bot](https://github.com/CodingWithRand/RandoBot) `/chatbot` history XP (It's not recommended)
+## Lab 09
+Reorganized Lab 08 in the MVC concept + GitHub Collaboration.

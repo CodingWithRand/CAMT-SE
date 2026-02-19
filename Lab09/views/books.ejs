@@ -1,0 +1,7 @@
+<%- include("partials/header") %>
+<h1>Book List</h1>
+<div id="book-list">
+<% books.forEach(b => { %>
+<div><%= b.bookNo %>. <%= b.bookName %></div>
+<% }) %>
+</div>

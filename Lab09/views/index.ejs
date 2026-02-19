@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+<h1>Book Management</h1>
+
+<!-- TODO 11: Set action + method to POST /books/add -->
+<h2>Add Book</h2>
+<form action="/books/add" method="post">
+<!-- TODO 12: input name must be "bookName" -->
+<input type="text" name="bookName" placeholder="Book name" required />
+<button type="submit">Add</button>
+</form>
+<h2>Delete Book</h2>
+<form action="/books/delete" method="post">
+<input type="text" name="bookName" placeholder="Book name" required />
+<button type="submit">Delete</button>
+</form>
+
+<div class="book-search">
+<h1>Book List</h1>
+<form method="get" action="/books/search">
+    <input type="text" name="name" placeholder="Book name" required />
+    <button type="submit">Search</button>
+</form>
+</div>
+<a href="/books">View all books</a>
+    <!-- </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html> -->
