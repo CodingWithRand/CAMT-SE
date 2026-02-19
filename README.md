@@ -66,3 +66,8 @@
     - Task3: [ComparableCircle.java](/src/Lab8/ComparableCircle.java)
     - Task4: [InterfacePractice.java](/src/Lab8/InterfacePractice.java)
     ![UML 5](./src/Lab8/UMLdiagram5.png)
+### Lab 9 - Generics
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/168451)
+- __File__
+    - [GenericStack.java](/src/Lab9/GenericStack.java)
+    - [ArrayListMethods.java](/src/Lab9/ArrayListMethods.java)
