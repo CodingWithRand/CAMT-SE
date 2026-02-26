@@ -71,3 +71,9 @@
 - __File__
     - [GenericStack.java](/src/Lab9/GenericStack.java)
     - [ArrayListMethods.java](/src/Lab9/ArrayListMethods.java)
+### Lab 10 - Exceptions
+- [Instruction](https://mango-cmu.instructure.com/courses/25143/assignments/170143)
+- __File__
+    - [InputMismatchException.java](/src/Lab10/InputMismatchException.java)
+    - [ArrayIndexOutOfBoundsException.java](/src/Lab10/ArrayIndexOutOfBoundsException.java)
+    - [IllegalTriangleException.java](/src/Lab10/IllegalTriangleException.java)
