@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToDoList Login</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="container auth-page">
+    <header style="text-align:center;">
+      <h1>Welcome to the ToDoList App</h1>
+      <p>Login to manage your tasks</p>
+    </header>
+
+    <% if (error) { %>
+      <p style="color:#b00020; text-align:center;"><%= error %></p>
+    <% } %>
+
+    <div class="auth-options" style="display:flex; justify-content:center;">
+      <div class="login">
+        <h3>Login</h3>
+        <form action="/login" method="post">
+          <input type="text" name="username" placeholder="Username" required />
+          <input type="password" name="password" placeholder="Password" required />
+          <button id="login-button" type="submit">Login</button>
+        </form>
+        <p style="font-size:0.9em; opacity:0.8;">
+          Seed users: user1/password1, user2/password2
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

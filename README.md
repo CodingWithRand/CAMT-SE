@@ -31,3 +31,5 @@ Everything is written down in each files in `src` folder there
 File based DB implementation, basically my [discord bot](https://github.com/CodingWithRand/RandoBot) `/chatbot` history XP (It's not recommended)
 ## Lab 09
 Reorganized Lab 08 in the MVC concept + GitHub Collaboration.
+## Lab 10
+Learn about simple authetication (session-based)

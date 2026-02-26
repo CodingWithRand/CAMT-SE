@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToDoList</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div style="max-width: 760px; margin: 0 auto; padding: 16px 12px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div>
+        <strong>Hello, <%= username %></strong>
+      </div>
+      <form action="/logout" method="post" style="margin:0;">
+        <button id="logout-button" type="submit">Log out</button>
+      </form>
+    </div>
