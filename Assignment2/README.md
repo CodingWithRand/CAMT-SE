@@ -5,7 +5,7 @@
 
 ## How to compile your program:
 0. extract folder
-1. open terminal, `cd` to Assignment1 folder
+1. open terminal, `cd` to Assignment2 folder
 2. compile Main.java to with javac (Student.java will be compiled automatically together.)
 ```bash
 C:\...> cd Assignment2 # Point the terminal to Assignment2 folder
