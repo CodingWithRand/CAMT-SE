@@ -1,15 +1,16 @@
 # Interactive Web Dev Labs
 *Note: every node_modules folder will be deleted before changing branch* <br>
 *I mean, you won't see node_modules in the repo. So, you may run `npm install` to install everything again.*
-## Lab 01
+## 
 Node.js Environment Setup (Typescript) & Testing [Folder: SE261](./SE261/)
 ## Lab 02
 Node.js Environment Setup (Express.js, Git) & Testing [Folder: LAB02](./LAB02/)
 ## Lab 03
 Try out some provided TypeScript + JSON integration source code to understand about it more [Folder: LAB03](./LAB03/)
 ## Lab 04
-Get more used to Express.js and TypeScript (Basically copy source code and run it)
-Submission Link: https://github.com/CodingWithRand/CAMT-SE/tree/INTER-WEB/lab04
+Get more used to Express.js and TypeScript (Basically copy source code and run it)<br>
+Submission Link: https://github.com/CodingWithRand/CAMT-SE/tree/INTER-WEB/lab04<br>
+[Folder: lab04](./lab04/)
 ## Lab 05
 Two micro project, implementing API.
 - [JokeProject](./Lab05/JokeProject/)
@@ -28,8 +29,10 @@ Project directory: [Click Here](./Blog/)
 ## [Midterm Revision](./Midterm/)
 Everything is written down in each files in `src` folder there
 ## Lab 08
-File based DB implementation, basically my [discord bot](https://github.com/CodingWithRand/RandoBot) `/chatbot` history XP (It's not recommended)
+File based DB implementation, basically my [discord bot](https://github.com/CodingWithRand/RandoBot) `/chatbot` history XP (It's not recommended). [Folder: Lab8_resouorce](./Lab8_resource/)
 ## Lab 09
-Reorganized Lab 08 in the MVC concept + GitHub Collaboration.
+Reorganized Lab 08 in the MVC concept + GitHub Collaboration. [Folder: Lab09](./Lab09/)
 ## Lab 10
-Learn about simple authetication (session-based)
+Learn about simple authetication (session-based) [Folder: LAB10_resources](./LAB10_resources/)
+## Lab 11
+Last lab. Learn about MongoDB Atlas for auth & deployment in Render [Folder: lab11](./lab11) 

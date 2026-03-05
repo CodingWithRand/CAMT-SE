@@ -3,8 +3,11 @@
 /*/**/*.class
 /*/**/node_modules
 /*/**/.env
+/*/**/dist
 node_modules
 .env
+*.txt
+
 
 # Large files
 /Assignment2/input_half.txt

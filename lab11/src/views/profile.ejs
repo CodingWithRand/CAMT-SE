@@ -1,0 +1,16 @@
+// profile.ejs
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Profile (Protected)</h1>
+    <p>UserId: <%= user.userId %>
+    </p>
+    <p>Email: <%= user.email %>
+    </p>
+    <form method="POST" action="/logout">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+
+</html>
