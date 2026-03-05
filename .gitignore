@@ -5,6 +5,7 @@
 /node_modules
 /*/**/node_modules
 *.class
+*.txt
 
 # Big files
 /Assignment2/input_half.txt
