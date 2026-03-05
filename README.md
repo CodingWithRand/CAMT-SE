@@ -35,4 +35,4 @@ Reorganized Lab 08 in the MVC concept + GitHub Collaboration. [Folder: Lab09](./
 ## Lab 10
 Learn about simple authetication (session-based) [Folder: LAB10_resources](./LAB10_resources/)
 ## Lab 11
-Last lab. Learn about MongoDB Atlas for auth & deployment in Render [Folder: lab11](./lab11) 
+Last lab. Learn about MongoDB Atlas for auth & deployment in Render. Half-assedly vibe coded the UI and thanks to `express-rate-limit` package for rate limit implementation. [Folder: lab11](./lab11) 

@@ -1,24 +1,48 @@
-// login.ejs
+
 <!DOCTYPE html>
 <html>
-
+<head>
+    <title>Login</title>
+    <meta charset="utf-8" />
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:0; background:#fafafa; color:#333; }
+        a { color:#336699; text-decoration:none; }
+        nav { background:#eef2f5; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
+        nav span { line-height:1.5; }
+        #error { color:#c33; text-align:center; margin:10px; }
+        .container { padding:20px; max-width:400px; margin:40px auto; background:#fff; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+        h1 { text-align:center; }
+        input, button { display:block; width:100%; margin:8px 0; padding:10px; border-radius:4px; border:1px solid #ccc; box-sizing:border-box; }
+        button { background:#336699; color:#fff; border:none; cursor:pointer; }
+        button:hover { background:#285a8f; }
+    </style>
+</head>
 <body>
-    <h1>Login</h1>
-    <% if (err) { %>
-    <p style="color:red;">Invalid email or password</p>
-    <% } %>
-    <form method="POST" action="/login">
-        <input name="email" placeholder="email" />
-        <input name="password" type="password" placeholder="password" />
-        <button type="submit">Login</button>
-    </form>
-    <hr />
-    <p>Need a test user?</p>
-    <form method="POST" action="/register">
-        <input name="email" placeholder="email" />
-        <input name="password" type="password" placeholder="password" />
-        <button type="submit">Register (for testing)</button>
-    </form>
+    <nav>
+        <span><strong>My App</strong></span>
+        <span style="float:right">
+            <% if (user) { %>
+                Logged in as <%= user.email %> | <a href="/logout">Logout</a>
+            <% } else { %>
+                <a href="/login">Login</a>
+            <% } %>
+        </span>
+    </nav>
+    <div id="error"><%= err ? err : '' %></div>
+    <div class="container">
+        <h1>Login</h1>
+        <form method="POST" action="/login">
+            <input name="email" placeholder="email" />
+            <input name="password" type="password" placeholder="password" />
+            <button type="submit">Login</button>
+        </form>
+        <hr />
+        <p>Need a test user?</p>
+        <form method="POST" action="/register">
+            <input name="email" placeholder="email" />
+            <input name="password" type="password" placeholder="password" />
+            <button type="submit">Register (for testing)</button>
+        </form>
+    </div>
 </body>
-
 </html>

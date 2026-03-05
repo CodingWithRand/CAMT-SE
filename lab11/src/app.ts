@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./db";
 import authRoutes from "./routes/authRoutes";
 import pageRoutes from "./routes/pageRoutes";
+
 const app = express();
 // important behind Render proxy
 app.set("trust proxy", 1);

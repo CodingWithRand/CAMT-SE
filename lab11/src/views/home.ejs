@@ -1,11 +1,35 @@
-// home.ejs
+
 <!DOCTYPE html>
 <html>
-
+<head>
+    <title>Home</title>
+    <meta charset="utf-8" />
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:0; background:#fafafa; color:#333; }
+        a { color:#336699; text-decoration:none; }
+        nav { background:#eef2f5; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
+        nav span { line-height:1.5; }
+        #error { color:#c33; text-align:center; margin:10px; }
+        .container { padding:20px; max-width:600px; margin:30px auto; background:#fff; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+        h1 { text-align:center; }
+        p { text-align:center; }
+    </style>
+</head>
 <body>
-    <h1>Home</h1>
-    <p><a href="/login">Login</a></p>
-    <p><a href="/profile">Profile (protected)</a></p>
+    <nav>
+        <span><strong>My App</strong></span>
+        <span style="float:right">
+            <% if (user) { %>
+                Logged in as <%= user.email %> | <a href="/logout">Logout</a>
+            <% } else { %>
+                <a href="/login">Login</a>
+            <% } %>
+        </span>
+    </nav>
+    
+    <div class="container">
+        <h1>Home</h1>
+        <p><a href="/profile">Profile (protected)</a></p>
+    </div>
 </body>
-
 </html>

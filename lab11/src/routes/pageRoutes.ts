@@ -1,10 +1,14 @@
 import { Router, Request, Response } from "express";
 import { requireAuth } from "../middleware/auth";
+
 const router = Router();
-router.get("/", (req: Request, res: Response) => res.render("home"));
+router.get("/", (req: Request, res: Response) => {
+  // make current user available to views for nav bar
+  res.render("home", { user: (req as any).user });
+});
 router.get("/login", (req: Request, res: Response) => {
   const err = req.query.err;
-  res.render("login", { err });
+  res.render("login", { err, user: (req as any).user });
 });
 router.get("/profile", requireAuth, (req: Request, res: Response) => {
   res.render("profile", { user: (req as any).user });
