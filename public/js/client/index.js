@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     productCards.forEach((card) => {
+      if(card.classList.contains("no-game-found")) return;
       const cardPlatforms = (card.getAttribute("data-platform") || "").toLowerCase();
       const match =
         selectedPlatform === "all" ||

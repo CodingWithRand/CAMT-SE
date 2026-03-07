@@ -142,10 +142,12 @@
   background-color: var(--transparent-bg);
   border-radius: 16px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   /* this needs to change for responsive */
   gap: 10px;
   align-content: start;
+}
+.orders-and-actions-container {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 /* 1. Create a container for image + title so they stay together */

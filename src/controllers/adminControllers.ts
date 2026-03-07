@@ -12,10 +12,12 @@ import {
 import { getUser } from "../services/personalization";
 
 export const loadProducts = (req: Request, res: Response) => {
-  res.render("admin/index", { games: searchGames(req.query['search-product'] as string) });
+  const search = (req.query["search-product"] as string) || "";
+  res.render("admin/index", { games: searchGames(req.query['search-product'] as string), search });
 };
 export const loadOrders = (req: Request, res: Response) => {
-  res.render("admin/orders", { orders: searchOrders(req.query['search-order'] as string) });
+  const search = (req.query["search-order"] as string) || "";
+  res.render("admin/orders", { orders: searchOrders(req.query['search-order'] as string), search });
 };
 export const loadProfile = (req: Request, res: Response) => {
   res.render("admin/profile", { admin: getUser(req.session.userId as string) });

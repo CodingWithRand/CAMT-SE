@@ -53,7 +53,7 @@
   </div>
 </div>
 
-<div class="products-container">
+<div class="products-container <%= (typeof games !== "undefined" && games && games.length > 0) ? "" : "one-item" %>">
   <% if (typeof games !== "undefined" && games && games.length > 0) { %>
     <% games.forEach(game => { %>
       <a
@@ -84,7 +84,7 @@
       </a>
     <% }) %>
   <% } else { %>
-    <div class="product-card" style="justify-content:center; text-align:center;">
+    <div class="product-card no-game-found" style="justify-content:center; text-align:center;">
       <div style="opacity:.9;">
         No games found.
         <% if (currentSearch) { %>

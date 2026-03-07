@@ -47,6 +47,10 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  button, select {
+    cursor: pointer;
+  }
 }
 
 @layer components {
@@ -175,10 +179,14 @@
 }
 
 @utility pcbxl {
-  grid-template-columns: 1fr !important;
+  grid-template-columns: 1fr;
 }
 @utility pcxl {
-  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.products-container.one-item {
+  grid-template-columns: 1fr;
 }
 
 /* Mobile adjustments to hide the span we added */

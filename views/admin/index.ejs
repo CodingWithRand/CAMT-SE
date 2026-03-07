@@ -19,7 +19,7 @@
  </button>
 <div class="search-product-container">
   <form action="/admin" method="get">  
-    <input name="search-product" type="search" id="search-product"  placeholder="Search" />
+    <input name="search-product" type="search" id="search-product" value="<%= typeof search === "string" ? search : "" %>" placeholder="Search" />
     <button type="submit" id="search_product" class="exception search_button"><img src="/assets/search-icon.svg" alt="search" width="25px"></button>
   </form>
 </div>

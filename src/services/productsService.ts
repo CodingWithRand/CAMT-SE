@@ -24,7 +24,7 @@ export const searchGames = (q?: string, id?: string): Game[] => {
   if (!q) return getAllGames();
   const games = getAllGames();
   return games.filter((g) =>
-    g.title.toLowerCase().match(q.toLowerCase() as string),
+    g.title.toLowerCase().match(JSON.stringify(q).toLowerCase() as string),
   );
 };
 

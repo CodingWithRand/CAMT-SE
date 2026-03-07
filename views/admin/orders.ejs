@@ -1,4 +1,4 @@
-<%-include ("../partials/admin-header.ejs") %>
+<%-include ("../partials/admin-header.ejs"), { title: "Order Management" } %>
 
 <div class="categories-and-search">
   <div class="filter-container">
@@ -16,9 +16,10 @@
         type="search"
         id="search-order"
         placeholder="Search"
+        value="<%= typeof search === "string" ? search : "" %>"
         required
       />
-      <button class="search_button" type="submit"><img src="/assets/search-icon.svg" alt="search" width="25px"></button>
+      <button class="search_button exception" type="submit"><img src="/assets/search-icon.svg" alt="search" width="25px"></button>
     </form>
   </div>
 </div>
