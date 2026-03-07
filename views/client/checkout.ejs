@@ -1,4 +1,4 @@
-<%- include("../partials/client-header.ejs") %>
+<%- include("../partials/client-header.ejs", { title: "My Cart" }) %>
 
 <%
   const items = Array.isArray(cartItem) ? cartItem : [];

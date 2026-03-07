@@ -1,9 +1,9 @@
-<%- include("../partials/admin-header.ejs") %>
+<%- include("../partials/admin-header.ejs", { title: "Add or edit game" }) %>
 <div class="product-edit-container">
 <%
 // Determine if we are editing or adding
 const isEdit = typeof game !== 'undefined' && game !== null;
-const formTitle = isEdit ? `Edit: ${game.title}` : "Add New Product";
+const formTitle = isEdit ? `Edit: ${game.title}` : "Add new game";
 const actionUrl = isEdit ? `/admin/product/edit/${game.id}` : "/admin/product/add";
 %>
   <form class="edit-form" action="<%= actionUrl %>" method="POST">

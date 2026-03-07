@@ -110,7 +110,7 @@
     overflow: auto;
   }
 
-  .checkout-page {
+  .checkout-page, .product-detail-layout {
     overflow: auto;
   }
 

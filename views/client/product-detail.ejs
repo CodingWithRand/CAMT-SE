@@ -2,7 +2,7 @@
 
 <%
   const hasGame = typeof game !== "undefined" && game;
-  const availability = hasGame && typeof game.availability === "string" ? game.availability : "";
+  const availability = hasGame && typeof game.availability === "string" ? game.availability.toLowerCase() : "";
   const isComingSoon = availability === "coming_soon";
   const isDelisted = availability === "delisted";
   const isOutOfStock = hasGame && game.stock === 0;
@@ -63,7 +63,20 @@
         <% } %>
       </div>
 
-      <p class="product-detail-desc"><%= game.description || "" %></p>
+      <% 
+        let charPos = 0;
+        let chunk = game.description || "";
+        let newLinePos
+        while (chunk.length > 0) { 
+          newLinePos = chunk.indexOf("\n") !== -1 ? chunk.indexOf("\n") : chunk.length;
+      %>
+          <p class="product-detail-desc">
+            <%= chunk.slice(charPos, newLinePos)%>
+          </p>
+          <br>
+          <% chunk = chunk.slice(newLinePos + 1);
+          %>
+      <% } %>
 
       <div class="product-detail-meta">
         <div><strong>Genres:</strong> <%= (game.genres || []).join(", ") %></div>

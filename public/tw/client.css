@@ -229,6 +229,9 @@
   }
 
   .tag-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100px;
     text-align: center;
     padding: 0.35rem 0.75rem;
@@ -259,7 +262,7 @@
   }
 
   .small-note {
-    margin-top: 0.9rem;
+    margin: 0.9rem 0;
     font-size: 0.85rem;
     opacity: 0.75;
     line-height: 1.4;

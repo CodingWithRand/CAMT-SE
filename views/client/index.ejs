@@ -70,9 +70,9 @@
           </div>
           <div class="product-actions">
             <p class="product-price">$<%= game.price %></p>
-            <% if (game.availability === "coming_soon") { %>
+            <% if (game.availability.toLowerCase() === "coming_soon") { %>
               <span class="tag-pill subtle">Coming Soon</span>
-            <% } else if (game.availability === "delisted") { %>
+            <% } else if (game.availability.toLowerCase() === "delisted") { %>
               <span class="tag-pill subtle">Delisted</span>
             <% } else if (game.stock === 0) { %>
               <span class="tag-pill subtle">Out of Stock</span>

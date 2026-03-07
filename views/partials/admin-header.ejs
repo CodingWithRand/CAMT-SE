@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/orderModal.css">
    <script src="/js/admin/index.js" defer></script>
  <script src="/js/admin/toaster.js" defer></script>
-    <title>admin</title>
+    <title><%= typeof title === "string" && title.trim() ? title : "Indie Realm" %></title>
   </head>
   <body>
     <div class="container">
