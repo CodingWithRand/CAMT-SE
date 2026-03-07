@@ -53,7 +53,14 @@
 
 <% }) %>
   <% } else { %>
-    <p>No games found in the database.</p>
+     <div class="product-card no-game-found" style="justify-content:center; text-align:center;">
+      <div style="opacity:.9;">
+        No games found.
+        <% if (search) { %>
+          <div style="opacity:.75; margin-top:.25rem;">Try a different keyword.</div>
+        <% } %>
+      </div>
+    </div>
   <% } %>
 </div>
 

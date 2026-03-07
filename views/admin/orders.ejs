@@ -25,7 +25,7 @@
 </div>
 <div class="orders-and-actions-container">
   <div class="orders-container">
-<% if (typeof orders !== undefined || orders.length<=0) { %>
+<% if (typeof orders !== undefined && orders.length>0) { %>
 <%orders.forEach(order=>{ %>
     <div class="order-card status-<%= order.status.toLowerCase()%> "  data-status="<%= order.status%>""  data-orderId='<%= 
       order.id
@@ -53,7 +53,14 @@
     </div>
     <%  }) %>
    <%  }  else {%>
-    <p>No orders yet.</p>
+   <div class="product-card no-game-found" style="justify-content:center; text-align:center;">
+      <div style="opacity:.9;">
+        No orders found.
+        <% if (search) { %>
+          <div style="opacity:.75; margin-top:.25rem;">Try a different keyword.</div>
+        <% } %>
+      </div>
+    </div>
      <%  }%>
 
 
