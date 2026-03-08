@@ -699,7 +699,7 @@
     padding: 2rem;
     flex-grow: 1;
     display: grid;
-    grid-template-columns: 1.15fr 1fr;
+    /* grid-template-columns: 1.15fr 1fr; */
     gap: 16px;
     align-content: start;
   }

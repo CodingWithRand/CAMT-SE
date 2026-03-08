@@ -1,7 +1,9 @@
 import express from "express";
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
 import session from "express-session";
 import path from "path";
+import mongoose from "mongoose";
 import {
   createNewGame,
   deleteGame,
@@ -34,6 +36,7 @@ import {
   requireAdminCredentials,
 } from "./middlewares/requireLogin";
 import { removeProductFromCart } from "./services/productsService";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -61,7 +64,12 @@ app.use(
 );
 
 app.get("/", loadHome);
-app.post("/login", loginController);
+app.post("/login", rateLimit({
+  windowMs: 30 * 60 * 1000,
+  max: 20,
+  message: "Too many requests, please try again later.", 
+  handler: (req, res) => res.redirect("/?q=You have reached rate limit! Please try again in 30 minutes.")
+}), loginController);
 app.post("/logout", requireLogin, logoutController);
 
 /* ------------------ ADMIN ROUTES ----------------- */
@@ -126,6 +134,8 @@ app.post(
   updateOrdersStatus,
 );
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await mongoose.connect(process.env.MONGODB_URI!);
+  console.log("✅ MongoDB connected");
   console.log(`Access the server at http://localhost:${PORT}`);
 });

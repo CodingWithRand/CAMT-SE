@@ -27,7 +27,7 @@
 
 </div>
 </div>
-<div class="products-container" >
+<div class="products-container <%= (typeof games !== "undefined" && games && games.length > 0) ? "" : "one-item" %>" >
 <% if (typeof games !== 'undefined' && games.length > 0) { %>
 <% games.forEach(game=>{ %>
 <div class="product-card" data-platform="<%= game.platforms %>">

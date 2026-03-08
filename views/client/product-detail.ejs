@@ -84,7 +84,10 @@
       </div>
 
       <div class="product-detail-buybox">
-        <div class="product-detail-price">$<%= game.price %></div>
+        <div class="product-detail-price"><%=
+            (game.availability.toLowerCase() === "coming_soon" && game.price === 0) ? "N/A" :
+            game.price === 0 ? "Free" : `$${game.price}`
+          %></div>
 
         <% if (isPurchased) { %>
           <!-- Optional: Install action (Not implemented for now) -->

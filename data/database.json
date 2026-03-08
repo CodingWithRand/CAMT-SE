@@ -389,7 +389,7 @@
       "currency": "$",
       "thumbnailUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1150690/ss_219463835487a7205f0af93fb02d2c84855c667b.1920x1080.jpg?t=1671584768",
       "description": "Explore a strange world full of colorful friends and foes. Navigate through the vibrant and the mundane in order to uncover a forgotten past. When the time comes, the path you’ve chosen will determine your fate... and perhaps the fate of others as well.\r\n\r\nWarning: This game contains depictions of depression, anxiety, and suicide, and may not be suitable for all audiences. It also contains bright flashing imagery that may cause discomfort and/or seizures for those with photosensitive epilepsy. Viewer discretion is advised.",
-      "stock": 53,
+      "stock": 52,
       "isPreOrder": false
     },
     {
@@ -443,5 +443,21 @@
       "cart": []
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "id": "ord_1",
+      "userId": "u2",
+      "items": [
+        {
+          "gameId": "1772771859796",
+          "title": "Omori",
+          "thumbnailUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1150690/ss_219463835487a7205f0af93fb02d2c84855c667b.1920x1080.jpg?t=1671584768",
+          "priceAtPurchase": 19.99
+        }
+      ],
+      "totalAmount": 19.99,
+      "status": "paid",
+      "dateCreated": "2026-03-07T15:57:11.086Z"
+    }
+  ]
 }

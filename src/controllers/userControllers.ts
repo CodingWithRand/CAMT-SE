@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { getData } from "../services/util";
-import { User } from "../models/user.model";
+// import { getData } from "../services/util";
+import bcrypt from "bcrypt";
+import { User, UserModel, UserRole } from "../models/user.model";
 export const loadHome = (req: Request, res: Response) => {
   if(req.session.userId) return res.redirect(req.session.role == "admin" ? "/admin" : "/customer");
   const error =
@@ -8,17 +9,17 @@ export const loadHome = (req: Request, res: Response) => {
 
   res.render("landing-page", { error });
 };
-export const loginController = (req: Request, res: Response) => {
-  const seedUsers = getData().users;
+export const loginController = async (req: Request, res: Response) => {
+  // const seedUsers = getData().users;
   const username = (req.body.username ?? "").toString().trim();
   const password = (req.body.password ?? "").toString();
-  const user = seedUsers.find(
-    (u: User) => u.username === username && u.password === password,
-  );
-  if (!user) return res.redirect("/?q=invalid");
+  const user = await UserModel.findOne({ username });
+  if (!user) return res.redirect("/?q=Invalid username");
+  const authenticated = await bcrypt.compare(password, user.ph);
+  if (!authenticated) return res.redirect("/?q=Invalid password");
   req.session.userId = user.id;
   req.session.username = user.username;
-  req.session.role = user.role;
+  req.session.role = user.role as UserRole;
   //   route logi here
   res.redirect(user.role == "admin" ? "/admin" : "/customer");
 };

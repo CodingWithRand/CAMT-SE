@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
-import { getData } from "./util";
+import { User, UserModel } from "../models/user.model";
+// import { getData } from "./util";
 
-export const getUser = (uid: string) => getData().users.find((u: User) => u.id === uid);
+export const getUser = async (uid: string) => await UserModel.findOne({ id: uid })

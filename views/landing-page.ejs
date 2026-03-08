@@ -6,6 +6,57 @@
   <title>IndieRealm</title>
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <link rel="stylesheet" href="/css/login.css" />
+  <style>
+      @keyframes slide-in-right {
+        0% { transform: translateX(100%); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes progress-drain {
+        0% { width: 100%; }
+        100% { width: 0%; }
+      }
+
+      .glass-toast {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 9999999;
+        min-width: 280px;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background: #064e3b;
+        border: 1px solid #10b981;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        color: #ecfdf5;
+        animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        overflow: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .toast-error {
+        background: #7f1d1d !important;
+        border-color: #f43f5e !important;
+      }
+
+      .toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: #10b981;
+        animation: progress-drain 1.5s linear forwards;
+      }
+
+      .progress-error {
+        background: #f43f5e !important;
+      }
+
+      .toast-hidden {
+        opacity: 0 !important;
+        transform: translateX(30px);
+      }
+    </style>
 </head>
 <body>
   <div class="auth-page">
@@ -23,7 +74,7 @@
         <form action="/login" method="post">
           <input type="text" name="username" placeholder="Username" required />
           <input type="password" name="password" placeholder="Password" required />
-          <button id="login-button" class="exception" type="submit">Login</button>
+          <button id="login-button" class="" type="submit">Login</button>
         </form>
         <p style="font-size:0.9em; opacity:0.8;">
       Seed users :
@@ -37,5 +88,6 @@
       </div>
     </div>
   </div>
+  <script src="/js/admin/toaster.js" defer></script>
 </body>
 </html>

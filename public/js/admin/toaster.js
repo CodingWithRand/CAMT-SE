@@ -50,9 +50,15 @@ window.addEventListener("load", () => {
   // for invalid form submits
   if (urlParams.has("error")) {
     // Call your toast function with a red/error theme
-    showGlassToast("Invalid Data: Price must be > 0 and Stock >= 0", "error");
-
+    showGlassToast(`Invalid Data: ${urlParams.get("error")}`, "error");
+    
     // Clean URL
+    localStorage.removeItem("realmNotification");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+  if (urlParams.has("q")) {
+    showGlassToast(`Login failed: ${urlParams.get("q")}`, "error");
     localStorage.removeItem("realmNotification");
     window.history.replaceState({}, document.title, window.location.pathname);
     return;
@@ -84,6 +90,8 @@ document.addEventListener("click", (e) => {
         val.includes("new")
       ) {
         text = "Successfully added the game to the list!";
+      } else if (val.includes("login")) {
+        text = "Successfully logged in!"
       }
 
       localStorage.setItem("realmNotification", text);

@@ -69,7 +69,12 @@
             <p><%= (game.genres || []).join(", ") %></p>
           </div>
           <div class="product-actions">
-            <p class="product-price">$<%= game.price %></p>
+            <p class="product-price">
+              <%= 
+                (game.availability.toLowerCase() === "coming_soon" && game.price === 0) ? "N/A" :
+                game.price === 0 ? "Free" : `$${game.price}` 
+              %>
+            </p>
             <% if (game.availability.toLowerCase() === "coming_soon") { %>
               <span class="tag-pill subtle">Coming Soon</span>
             <% } else if (game.availability.toLowerCase() === "delisted") { %>

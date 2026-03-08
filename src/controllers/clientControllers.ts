@@ -10,23 +10,23 @@ import {
 } from "../services/productsService";
 import { getUser } from "../services/personalization";
 
-export const loadCustomerHomePage = (req: Request, res: Response) => {
+export const loadCustomerHomePage = async (req: Request, res: Response) => {
   const search = (req.query["search-product"] as string) || "";
   const sort = (req.query["sort"] as string) || "";
 
-  let games = searchGames(search);
+  let games = await searchGames(search);
 
   if (sort === "price_asc") {
-    games = games.sort((a, b) => a.price - b.price);
+    games = games!.sort((a, b) => a.price - b.price);
   } else if (sort === "price_desc") {
-    games = games.sort((a, b) => b.price - a.price);
+    games = games!.sort((a, b) => b.price - a.price);
   }
 
   res.render("client/index", { games, search, sort, alert: req.query.alert as string });
 };
 
-export const loadProductDetail = (req: Request, res: Response) => {
-  const game = getOneProduct(req, res);
+export const loadProductDetail = async (req: Request, res: Response) => {
+  const game = await getOneProduct(req, res);
 
   if (!game) {
     return res.render("client/product-detail", { game: null, isPurchased: false });
@@ -34,7 +34,7 @@ export const loadProductDetail = (req: Request, res: Response) => {
 
   const userId = req.session.userId as string;
 
-  const orders = getUserOrder(userId) || [];
+  const orders = await getUserOrder(userId) || [];
   const isPurchased = orders.some((order: any) =>
     (order.items || []).some((it: any) =>
       String(it.gameId ?? it.productId ?? it.id) === String(game.id)
@@ -44,28 +44,28 @@ export const loadProductDetail = (req: Request, res: Response) => {
   return res.render("client/product-detail", { game, isPurchased });
 };
 
-export const loadOrder = (req: Request, res: Response) => {
-  res.render("client/orders", { orders: getUserOrder(req.session.userId as string) });
+export const loadOrder = async (req: Request, res: Response) => {
+  res.render("client/orders", { orders: await getUserOrder(req.session.userId as string) });
 };
 
-export const loadCheckout = (req: Request, res: Response) => {
+export const loadCheckout = async (req: Request, res: Response) => {
   res.render("client/checkout", {
-    cartItem: getUserCartItem(req.session.userId as string),
+    cartItem: await getUserCartItem(req.session.userId as string),
     errorMsg: req.query.error ? String(req.query.msg || "Checkout failed.") : "",
   });
 };
 
-export const loadCustomerProfile = (req: Request, res: Response) => {
-  res.render("client/profile", { user: getUser(req.session.userId as string) });
+export const loadCustomerProfile = async (req: Request, res: Response) => {
+  res.render("client/profile", { user: await getUser(req.session.userId as string) });
 };
 
-export const addToCart = (req: Request, res: Response) => {
-  addProductToCart(req, res);
+export const addToCart = async (req: Request, res: Response) => {
+  await addProductToCart(req, res);
 };
-export const removeFromCart = (req: Request, res: Response) => {
-  removeProductFromCart(req, res);
+export const removeFromCart = async (req: Request, res: Response) => {
+  await removeProductFromCart(req, res);
 }
-export const getCustomerOrderDetail = (req: Request, res: Response) => {
+export const getCustomerOrderDetail = async (req: Request, res: Response) => {
 
   const userId = req.session.userId as string;
   const orderId = req.params.id as string;
@@ -74,7 +74,7 @@ export const getCustomerOrderDetail = (req: Request, res: Response) => {
     return res.status(400).json({ message: "Order id is required" });
   }
 
-  const orderDetail = getOrderDetail(userId, orderId);
+  const orderDetail = await getOrderDetail(userId, orderId);
 
   if (!orderDetail) {
     return res.status(404).json({ message: "Order not found!" });

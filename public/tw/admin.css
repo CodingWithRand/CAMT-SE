@@ -175,7 +175,7 @@
 .product-price {
   font-weight: bold;
   min-width: 60px;
-  text-align: left;
+  text-align: right;
 }
 
 /* 3. Group the action icons */

@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/camt-pathathai/953261-953202-term-project-cwr-team#readme",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/express-rate-limit": "^6.0.2",
     "@types/express-session": "^1.18.2",
     "@types/node": "^25.3.0",
     "nodemon": "^3.1.14",
@@ -32,10 +34,14 @@
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.2.1",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.3.0",
     "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.4",
     "tailwindcss": "^4.2.1"
   }
 }
