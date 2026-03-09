@@ -72,10 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (window.location.pathname === "/admin") {
+  if (window.location.pathname.includes("/admin")) {
     categoryButtons.forEach((button) => button.addEventListener("click", cb));
     cb();
-  } else if (window.location.pathname === "/admin/orders") {
+  } else if (window.location.pathname.includes("/admin/orders")) {
     document.querySelectorAll(".status-button").forEach((btn) => {
       btn.addEventListener("click", () => {
         document
