@@ -263,6 +263,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-family: "Goudy Bookletter 1911", serif;
+  }
+  .indie-realm-font {
+    font-family: "Germania One", system-ui;
   }
   button {
     cursor: pointer;
@@ -317,7 +321,7 @@
   .login form input {
     border-image: linear-gradient(to left, black, black);
     border-image-slice: 5 5 5 5;
-    transition: border-image .25s ease-in-out;
+    transition: border-image 0.25s ease-in-out;
     animation: rainbow 2s linear infinite forwards;
     width: 100%;
     border-radius: var(--radius-md);
@@ -335,7 +339,7 @@
   .login form input:focus-visible {
     outline: none;
     animation-play-state: running;
-    border-image: linear-gradient(to left, var(--rainbow-color-1), var(--rainbow-color-2), var(--rainbow-color-3), var(--rainbow-color-4), var(--rainbow-color-5), var(--rainbow-color-6), var(--rainbow-color-7));
+    border-image: linear-gradient( to left, var(--rainbow-color-1), var(--rainbow-color-2), var(--rainbow-color-3), var(--rainbow-color-4), var(--rainbow-color-5), var(--rainbow-color-6), var(--rainbow-color-7) );
     border-image-slice: 5 5 5 5;
   }
   @property --rainbow-color-1 {
