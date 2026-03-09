@@ -187,7 +187,7 @@ export const addProductToCart = async (req: Request, res: Response) => {
     return res.redirect(`${back}${join}error=1&msg=${encodeURIComponent("This game is out of stock!")}`);
   }
 
-  if (pickedGame.availability === "delisted") {
+  if (pickedGame.availability.toLowerCase() === "delisted") {
     return res.redirect(
       `${back}${join}error=1&msg=${encodeURIComponent(
         "This game has been delisted, you can no longer add it to your cart.",
@@ -257,6 +257,7 @@ export const checkout = async (req: Request, res: Response) => {
 
   const outOfStockGames: string[] = [];
   const delistedGames: string[] = [];
+  const comingSoonGames: string[] = [];
 
   for (const item of cart) {
     const thegame = await searchGames(undefined, String(item.gameId));
@@ -264,14 +265,16 @@ export const checkout = async (req: Request, res: Response) => {
 
     if (!g) continue;
     if (g.stock === 0) outOfStockGames.push(g.title);
-    if (g.availability === "delisted") delistedGames.push(g.title);
+    if (g.availability.toLowerCase() === "delisted") delistedGames.push(g.title);
+    if (g.availability.toLowerCase() === "coming_soon") comingSoonGames.push(g.title);
   }
 
   // FIX: if there ARE invalid items, block checkout
-  if (outOfStockGames.length > 0 || delistedGames.length > 0) {
+  if (outOfStockGames.length > 0 || delistedGames.length > 0 || comingSoonGames.length > 0) {
     const parts: string[] = [];
     if (outOfStockGames.length > 0) parts.push(`Out of stock: ${outOfStockGames.join(", ")}`);
     if (delistedGames.length > 0) parts.push(`Delisted: ${delistedGames.join(", ")}`);
+    if (comingSoonGames.length > 0) parts.push(`Coming soon: ${comingSoonGames.join(", ")}`);
 
     return res.redirect(`${back}${join}error=1&msg=${encodeURIComponent(parts.join(" | "))}`);
   }
