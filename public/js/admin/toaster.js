@@ -51,7 +51,7 @@ window.addEventListener("load", () => {
   if (urlParams.has("error")) {
     // Call your toast function with a red/error theme
     showGlassToast(`Invalid Data: ${urlParams.get("error")}`, "error");
-    
+
     // Clean URL
     localStorage.removeItem("realmNotification");
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -59,6 +59,18 @@ window.addEventListener("load", () => {
   }
   if (urlParams.has("q")) {
     showGlassToast(`Login failed: ${urlParams.get("q")}`, "error");
+    localStorage.removeItem("realmNotification");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+  if (urlParams.has("login")) {
+    showGlassToast("Successfully logged in!", "success");
+    localStorage.removeItem("realmNotification");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+   if (urlParams.has("logout")) {
+    showGlassToast("Successfully logged out!", "success");
     localStorage.removeItem("realmNotification");
     window.history.replaceState({}, document.title, window.location.pathname);
     return;
@@ -90,9 +102,10 @@ document.addEventListener("click", (e) => {
         val.includes("new")
       ) {
         text = "Successfully added the game to the list!";
-      } else if (val.includes("login")) {
-        text = "Successfully logged in!"
       }
+      // } else if (val.includes("login")) {
+      //   text = "Successfully logged in!"
+      // }
 
       localStorage.setItem("realmNotification", text);
     }
@@ -111,10 +124,6 @@ document.addEventListener("click", (e) => {
       return;
     }
 
-    localStorage.setItem(
-      "realmNotification",
-      "Successfully deleted the item!"
-    );
+    localStorage.setItem("realmNotification", "Successfully deleted the item!");
   }
-  
 });

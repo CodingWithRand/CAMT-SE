@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User, UserModel, UserRole } from "../models/user.model";
 export const loadHome = (req: Request, res: Response) => {
-  if(req.session.userId) return res.redirect(req.session.role == "admin" ? "/admin" : "/customer");
+  if (req.session.userId)
+    return res.redirect(req.session.role == "admin" ? "/admin" : "/customer");
   const error =
     req.query.q === "invalid" ? "Invalid username or password" : null;
 
@@ -21,8 +22,10 @@ export const loginController = async (req: Request, res: Response) => {
   req.session.username = user.username;
   req.session.role = user.role as UserRole;
   //   route logi here
-  res.redirect(user.role == "admin" ? "/admin" : "/customer");
+  res.redirect(
+    user.role == "admin" ? "/admin/?login=success" : "/customer/?login=success",
+  );
 };
 export const logoutController = (req: Request, res: Response) => {
-  req.session.destroy(() => res.redirect("/"));
+  req.session.destroy(() => res.redirect("/?logout=success"));
 };

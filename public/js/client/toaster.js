@@ -30,7 +30,12 @@ window.addEventListener("load", () => {
     window.history.replaceState({}, document.title, window.location.pathname);
     return;
   }
-
+  if (urlParams.has("login")) {
+    showGlassToast("Successfully logged in!", "success");
+    localStorage.removeItem("realmNotification");
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
   if (urlParams.has("error")) {
     const msg = urlParams.get("msg") || "Something went wrong.";
     showGlassToast(msg, "error");
