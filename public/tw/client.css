@@ -8,7 +8,6 @@
    ========================= */
 
 @layer components {
-
   #sortForm select
 
   /* ---------- Page helpers ---------- */
@@ -55,12 +54,15 @@
     gap: 0.75rem;
   }
 
-  .sort-label, .category-button, #sortForm select, #search-product {
+  .sort-label,
+  .category-button,
+  #sortForm select,
+  #search-product {
     @apply text-sm sm:text-base;
   }
 
   .category-button {
-    @apply py-2 px-5
+    @apply py-2 px-5;
   }
 
   /* Sort */
@@ -179,7 +181,7 @@
     flex-grow: 1;
 
     display: grid;
-    grid-template-columns: 1.15fr 1fr;
+
     gap: 16px;
     align-content: start;
   }
@@ -210,8 +212,12 @@
   }
 
   .product-detail-desc {
+    font-family: "Balsamiq Sans", sans-serif;
+
+    font-style: normal;
+
     line-height: 1.5;
-    opacity: 0.92;
+    opacity: 0.8;
   }
 
   .product-detail-meta {
@@ -295,11 +301,11 @@
     grid-template-columns: 1fr auto auto;
     gap: 12px;
     align-items: center;
-
   }
   .order-hint {
     padding: 0.5rem;
-    opacity:.75; font-size:.9rem;
+    opacity: 0.75;
+    font-size: 0.9rem;
   }
 
   .order-card-wrapper:hover {
@@ -420,7 +426,9 @@
     white-space: nowrap;
     width: 200px;
   }
-  .checkout-item-right, .cart-remove-btn, .checkout-item-title {
+  .checkout-item-right,
+  .cart-remove-btn,
+  .checkout-item-title {
     @apply text-sm sm:text-base;
   }
 }
@@ -431,23 +439,22 @@
     align-items: stretch;
     padding: 1rem;
   }
-  
+
   .search-product-container input {
     min-width: 0;
     width: 100%;
   }
-  
+
   .sort-container {
     justify-content: space-between;
   }
 }
 
-
 /* --- Checkout: price + remove button on right --- */
 .checkout-item-right {
   display: flex;
   flex-direction: row;
-  align-items: center;   /* right edge */
+  align-items: center; /* right edge */
   justify-content: center;
   gap: 8px;
 }
@@ -485,7 +492,6 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-
   .product-detail-layout {
     grid-template-columns: 1fr;
   }
@@ -493,7 +499,6 @@
   .checkout-grid {
     grid-template-columns: 1fr;
   }
-
 }
 
 @media (max-width: 640px) {
@@ -531,8 +536,11 @@
   .sort-container {
     flex-direction: column;
   }
-  #sortForm, #sortForm select, #search-product, .search-product-container, .search-product-container form {
+  #sortForm,
+  #sortForm select,
+  #search-product,
+  .search-product-container,
+  .search-product-container form {
     width: 100%;
   }
-
 }
