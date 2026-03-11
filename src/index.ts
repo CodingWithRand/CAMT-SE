@@ -42,6 +42,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /* --- 1. EJS Setup --- */
+app.set("trust proxy", 1);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 

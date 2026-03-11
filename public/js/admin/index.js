@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryButtons = document.querySelectorAll(".category-button");
   const productCards = document.querySelectorAll(".product-card");
 
-  if (window.location.pathname.includes("/admin")) {
+  if (window.location.pathname.includes("/admin") && !window.location.pathname.includes("/admin/orders")) {
     function cb(e = undefined) {
       // console.log(localStorage.getItem("adminCurrentProductSelectedCategory"));
       const c =
