@@ -37,42 +37,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryButtons = document.querySelectorAll(".category-button");
   const productCards = document.querySelectorAll(".product-card");
 
-  function cb(e = undefined) {
-    // console.log(localStorage.getItem("adminCurrentProductSelectedCategory"));
-    const c =
-      localStorage.getItem("adminCurrentProductSelectedCategory") || "all";
-    let button;
-    if (!e)
-      button = document.querySelector(`.category-button[data-category=${c}]`);
-    else button = e.target;
-    // 1. Manage Active Class UI
-    categoryButtons.forEach((btn) => btn.classList.remove("active"));
-    button.classList.add("active");
-
-    // 2. Get the filter value
-    const selectedPlatform = button.getAttribute("data-category");
-    localStorage.setItem(
-      "adminCurrentProductSelectedCategory",
-      selectedPlatform,
-    );
-
-    // 3. Filter the cards
-    productCards.forEach((card) => {
-      // Get platform from the data attribute we added in step 1
-      const cardPlatforms = card.getAttribute("data-platform");
-
-      if (
-        selectedPlatform === "all" ||
-        cardPlatforms.includes(selectedPlatform)
-      ) {
-        card.style.display = "flex"; // Show
-      } else {
-        card.style.display = "none"; // Hide
-      }
-    });
-  }
-
   if (window.location.pathname.includes("/admin")) {
+    function cb(e = undefined) {
+      // console.log(localStorage.getItem("adminCurrentProductSelectedCategory"));
+      const c =
+        localStorage.getItem("adminCurrentProductSelectedCategory") || "all";
+      let button;
+      if (!e)
+        button = document.querySelector(`.category-button[data-category=${c}]`);
+      else button = e.target;
+      // 1. Manage Active Class UI
+      categoryButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+  
+      // 2. Get the filter value
+      const selectedPlatform = button.getAttribute("data-category");
+      localStorage.setItem(
+        "adminCurrentProductSelectedCategory",
+        selectedPlatform,
+      );
+  
+      // 3. Filter the cards
+      productCards.forEach((card) => {
+        // Get platform from the data attribute we added in step 1
+        const cardPlatforms = card.getAttribute("data-platform");
+  
+        if (
+          selectedPlatform === "all" ||
+          cardPlatforms.includes(selectedPlatform)
+        ) {
+          card.style.display = "flex"; // Show
+        } else {
+          card.style.display = "none"; // Hide
+        }
+      });
+    }
     categoryButtons.forEach((button) => button.addEventListener("click", cb));
     cb();
   } else if (window.location.pathname.includes("/admin/orders")) {

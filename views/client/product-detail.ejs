@@ -111,8 +111,10 @@
         <a class="btn-secondary" href="/customer">Back to Store</a>
       <% } else if (isComingSoon) { %>
         <p class="small-note">This game is coming soon. Add to cart is disabled until release.</p>
+        <a class="btn-secondary" href="/customer">Back to Store</a>
       <% } else if (isOutOfStock) { %>
         <p class="small-note">This game is currently out of stock.</p>
+        <a class="btn-secondary" href="/customer">Back to Store</a>
       <% } else if (isPurchased) { %>
         <p class="small-note">You already own this game. You can install it from your library.</p>
       <% } %>
