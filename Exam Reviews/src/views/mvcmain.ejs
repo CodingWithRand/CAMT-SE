@@ -1,0 +1,38 @@
+<!-- 
+ Frontend views (View)
+ The ejs-based html structure to render data to the user when getting it from the backend. (Express server)
+-->
+
+<%- include("partials/header", { title: "MVC Main Page" }) %>
+
+<h1>Say hello to MVC main page</h1>
+<p>This page will demo you about json-based database</p>
+
+<h2>Add tower</h2>
+<form method="post" action="/mvc/tower/add">
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="acronym" placeholder="Acronym">
+    <input type="number" name="floorCount" placeholder="Floor count">
+    <input type="text" name="difficulty" placeholder="Difficulty">
+    <button type="submit">Submit</button>
+</form>
+<form method="get" action="/mvc">
+    <input type="text" name="search" placeholder="Search tower with name">
+    <button type="submit">Search</button>
+</form>
+
+<% if(!towers || towers.length == 0) { %>
+<strong style="display: block; width: 100%; text-align: center;">No tower in database</strong>
+<% } else { %>
+<ol>
+    <% towers.forEach((t) => { %>
+    <li>
+        <ul>
+            <li>Tower name: <%= t.name %> (<%= t.acronym %>)</li>
+            <li>Floor count: <%= t.floorCount %></li>
+            <li>Difficulty: <%= t.difficulty %></li>
+        </ul>
+    </li>
+    <% }) %>
+</ol>
+<% } %>

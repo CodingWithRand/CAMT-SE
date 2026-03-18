@@ -1,0 +1,25 @@
+<%- include("partials/header", { title: "Delulu Story" }) %>
+
+<h1>Hello <%= username %>! You're currently on a super secret page that only logged in users can see</h1>
+<p>Good job for cracking the password and username to get it here. It's not impressive at all tho 🥀</p>
+
+<form action="/auth/logout" method="post"><button type="submit">Logout</button></form>
+<form action="/mvc/story/add" method="post">
+    <label for="title">Title</label>
+    <input name="title" type="text" placeholder="Title">
+    <label for="author">Author</label>
+    <input name="author" type="text" placeholder="Author">
+    <label for="content">Content</label>
+    <textarea name="content" placeholder="Content"></textarea>
+    <button type="submit">Add new story</button>
+</form>
+
+<% if(stories && stories.length != 0) { %>
+    <% stories.forEach(s => { %>
+        <h2><%= s.title %></h2>
+        <h3>by <%= s.author %> - <%= s.publishDate %></h3>
+        <% s.content.split("\n").forEach(l => { %>
+        <p><%= l %></p>
+        <% }) %>
+    <% }) %>
+<% } %>

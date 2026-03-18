@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "ts": "ts-node src/typescript.ts",
-    "express": "nodemon --exec ts-node src/express.ts",
+    "express": "nodemon --exec ts-node --files src/express.ts",
     "build": "tsc",
     "start": "node dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,14 +16,18 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.10",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@types/express-session": "1.17.0"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3"
   }
 }
