@@ -1,6 +1,12 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -345,6 +351,87 @@ class ImTiredException extends Exception {
     }
 }
 
+/** I/O
+ * In java, performing Input and Output is done through "stream" (a sequence of data)
+ * But before jumping right in, let's see what we can do about I/O here.
+ * 1. Create file, store data in file.
+ * 2. Network communication between device. (Really?)
+ * 3. Communication with user through console. Take user input, and print output.
+ * 
+ * Stream is categorized into 2 groups: Byte and Character
+ * - Byte stream manage raw 8-bits byte data, often work with writing/reading image/audio/video data.
+ * Data to write and data to read need to be both byte.
+ * InputStream and OutputStream are the abstract super class for all the byte stream class in java.
+ * - Character stream manage 16-bits unicode character data, often work with writing/reading text data.
+ * Reader and Writer are the abstract super class for all the character stream class in java.
+ * 
+ * Examples of stream subclasses
+ * - FileInputStream, FileOutputStream, FileReader, FileWriter: Deal with File data.
+ * - DataInputStream, DataOutputStream, DataReader, DataWriter: Deal with java primitive data type.
+ * - BufferedInputStream, BufferedOutputStream, BufferedReader, BufferedWriter: Read/Write data in bulk to improve performance (reduce disk access operations).
+ * - PrintStream, PrintWriter: Deal with output through print() and println()
+ * - InputStream, OutputStream: Super class for all byte stream
+ * - InputStreamReader, InputStreamWriter: Convert from byte stream to character stream.
+ * 
+ * Java provided 3 standard streams: System.in (Input), System.out (Output), System.err (Error)
+ * These stream are "Data stream" - the source/destination of data.
+ * While "Processing stream" manipulate the data in stream, it may change the format or buffer it
+ * Example is BufferedReader, which offers a way to read data line by line instead of just one character.
+ */
+class IO {
+    // Note: there are many different ways to implement reading and writing data. These are just the examples in slide.
+    public static void readAndWriteInConsole() throws IOException {
+        // Don't use scanner here 
+        /* Use buffer reader.
+         * Note: System.in type = InputStream -> Byte Stream
+         *       BufferedReader -> Character stream
+         * Hence, conversion needed. Wrap System.in with InputStreamReader to convert it to Character stream
+         */
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // Now System.in is a character stream and linked with buffer reader.
+        // Use print writer to print out data
+        /* Clarification
+         * Normal System.out is fine for debugging purpose.
+         * But for production, print writer is more preferred.
+         */
+        PrintWriter autoflush_pw = new PrintWriter(System.out, true); // Now System.out is linked with print writer
+        PrintWriter pw = new PrintWriter(System.out);
+        int adata = br.read(); // Read a single character from console (data is integer, -1 if EOL/EOF)
+        pw.println("Data in integer: " + adata); // Print the read data right away
+        pw.flush(); // If autoFlush is false or not set, you need to manually flush the print writer with flush() to get the output on the console.
+        /* Clarification
+         * This work like the buffer stream. When writing to stream, it keeps the data in stream but not send to the console yet to wait for more possible incoming data.
+         * Calling flush() signal it to send the data to console.
+         */
+        pw.println("This message will not show until flush() is called.");
+        pw.println("When tho?");
+        // pw.flush();
+        autoflush_pw.println("Data in character: " + (char) adata); // Convert to a character first. (The ASCII table)
+    }
+
+    public static void readAndWriteInFile() throws IOException, FileNotFoundException {
+        // 1 way to read - FileInputStream.
+        FileInputStream fis = new FileInputStream("random.txt");
+        // 2 way to write - FileOutputStream and PrintWriter. If file does not exist, it will be created.
+        FileOutputStream fos = new FileOutputStream("new_random.txt");
+        PrintWriter pw = new PrintWriter("new_random.txt");
+        // Check for EOL, continue printing until it hits.
+        while(fis.read() != -1) System.out.print((char) fis.read()); // Don't expect the print out data to match the data in the file. We use it wrong anyway. (Byte stream for text what are you talking about??)
+        // fos.write("Rand0MTutoriaL".getBytes()); // Data to be written need to be in byte, use getBytes()
+        pw.print("ZzzZZz..."); // Write string directly
+        pw.flush(); // Don't forget to flush the print writer
+
+        // Don't forget to close streams to prevent memory leak. (Unused resources are still allocated.)
+        pw.close();
+        fis.close();
+        fos.close();
+
+        // As so many forget, Java since JDK 7 provide this auto-close feature.
+        try(FileInputStream fis2 = new FileInputStream("new_random.txt")) {
+            while(fis2.read() != -1) System.out.print((char) fis2.read());
+        }
+    }
+}
+
 public class Final {
     public static void exampleUnhandledUncheckedException() /* The "throws" is not required, however if left unhandled, the program terminate. */ {
         int[] arr = {1,3,44,5,543,4};
@@ -515,6 +602,16 @@ public class Final {
             System.out.println(ite.getMessage());
         } finally {
             System.out.println("At last, all is well that ends well.");
+        }
+        System.out.println();
+
+        // I/O
+        System.out.println("-- I/O --");
+        try {
+            IO.readAndWriteInConsole();
+            IO.readAndWriteInFile();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
