@@ -4,6 +4,8 @@
 *.class
 .env
 /node_modules
+/*/**/.txt
+*.txt
 
 # Large files
 /Assignment2/input_half.txt
