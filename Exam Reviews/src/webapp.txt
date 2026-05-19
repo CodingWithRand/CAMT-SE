@@ -1,0 +1,89 @@
+Web application = A web application is a software program that runs on a remote server and is accessed through a web browser over the
+internet.
+
+Why we need it?
+- Business Functions -> registration, subscription, authentication, dashboard, booking system etc.
+- Dynamic page may be required for above functions which web app can provide
+- Communication between Client and Server and Database
+- Persistent data in database. (It's data-driven)
+
+Client = Us, end user who use computer, laptop, phone, tablet.
+Server = Server.
+
+Communication life cycle
+
+User -> Web page -> request for something -> send the request to server
+-> fetch data from database/apis -> send back to web browser -> show to user.
+
+Frontend: Dealing with website page, UI
+Backend: Dealing with Server, Database, APIs
+Full Stack = Frontend + Backend
+
+HTTP basic
+Methods:
+POST - Create
+GET - Read
+PUT - Update
+DELETE - Delete
+-> CRUD framework.
+
+Status code:
+2xx: Success e.g. 200 = OK, 201 = Created, 204 = No content
+3xx: Redirect e.g. 302 = Found
+4xx: Client Error e.g. 400 = Bad Request, 404 = Not Found
+5xx: Server Error e.g. 500 = Internal Server Error, 502 = Bad gateway
+
+JSON as universal data format.
+
+API -> Application Programming Interface
+It is a set of commands, functions, objects and protocols that two different computers or applications can communicate with each other.
+
+API vs Web Service
+- Web service is a subset of API, it mainly focuses on communication between website/web app through internet.
+"Web service facilitates interaction between two machines over a network."
+So, it requires internet.
+- Web service often use 3 architecture -> SOAP, REST, and XML-RPC for communication
+- While API is a broader term, it may not need internet to communicate.
+- And may use any architecture for communication
+
+REST
+- REpresentational State Transfer
+- Achrictecture for web service API
+- Allow interoperability between computer systems over the Internet.
+- Request from Web/App calling REST API endpoint, Respond in JSON/XML/HTML
+
+REST Characteristic
+Stateless: Each request is independent; the server doesn’t store client session data.
+Resource-Based: Uses nouns (e.g., /tasks, /tasks/{id}) rather than actions (/getTasks).
+Use HTTP Methods: GET (Read), POST (Create), PUT (Update), DELETE (Remove).
+Use JSON for Data Exchange: Standard format for request/response.
+Consistent URIs: Use meaningful resource paths.
+
+API Endpoints, Paths, Parameters
+Endpoint - the link to call api (only protocol://subdomain.domain/, no path included) e.g. https://api.kanye.rest/
+Path - after the absolute link e.g. https://v2.jokeapi.dev/joke/Any
+-> https://v2.jokeapi.dev/ = Endpoint
+-> /joke/Any = Path
+Parameter - searchParams e.g. https://v2.jokeapi.dev/joke/Programming?type=twopart&amount=2
+-> https://v2.jokeapi.dev/ = Endpoint
+-> /joke/Programming = Path
+-> ?type=twopart&amount=2 = Parameters (type = twopart, amount = 2)
+Path and Parameter are used to filter resource/data for the query
+
+Think of it like, Endpoint is a computer, Path is file/folder path in your PC, and Parameter is the file name (?)
+
+API Authentication
+• A technique to identify programmer making an API call
+• Different types of authorization -> API keys, Basic Auth, HMAC, OAuth
+• Most APIs require you to sign up for an API key in order to use the API.
+• The API key is usually a long series of numbers and letters that you either include in the request header or request URL.
+
+API Playground tools -> Postman, Talend API Tester - Free Version
+
+Note: 
+Frontend should never hold secrets.
+• If an API requires a secret key → call it from your server.
+• If you need data integrity, user accounts, audit/logging →
+go through your server.
+• Direct browser→external is fine for public, low-risk, read-
+only data.

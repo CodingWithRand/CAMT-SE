@@ -1,0 +1,21 @@
+Authentication vs Authorization
+
+Authentication: Verifying user identity before granting access to system.
+Authorization: User permission to do things.
+
+Why web needs auth?
+-> To protect sensitive/personal data/actions (E.g. admin account, profile data)
+-> Personalized Experience
+-> Auditing purpose (Checking user action log)
+
+Term:
+Encode -> Rewrite the text in different format, without input key; universal method e.g. Base64, URI Encode. Easy to decode
+Encrypt -> Encode with key. Preserve confidentiality as to access the data, you need a specific key to decrypt.
+Hash/Salt -> One-way encode. You cannot decode back. Use for integrity check -> hashing fingerprint, password, then compare.
+
+Credentials -> Proofs to verify user identity
+- Physical Document
+- Digital: E.g. username, uid
+- Factors: Used to identify association with the credentials, e.g. password, pin
+
+
