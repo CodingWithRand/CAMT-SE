@@ -1,0 +1,334 @@
+<%- include("../partials/header", { pageTitle: "Write Your Story - Whiskey" }) %>
+
+<% const m = typeof mode !== 'undefined' ? mode : null; %>
+<!-- 
+    TODO:
+    - Change the codeblock select to just a button  ✓
+    - Find a way and style language select in the codeblock ✓
+    - Increase express body limit ✓
+    - Sanitize html in the server before save ❌ Done by saving as delta (json) instead.
+    - Change the logic to add image to the blog, by saving it to the db first then get url and add it to the blog ✓
+-->
+
+<link rel="stylesheet" href="/css/compose.css">
+
+<section class="relative pt-20 sm:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12 sm:mb-16 animate-fadeInDown">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-300 dark:to-white bg-clip-text text-transparent mb-6 leading-tight flex items-center justify-center gap-3">
+                <i class="mdi size-var mdi-pencil text-4xl sm:text-5xl lg:text-6xl"></i>Write Your Story
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Share your thoughts, ideas, and experiences with our community.
+            </p>
+        </div>
+    </div>
+</section>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <form id="blog-composing-form" class="space-y-6" action="/api/compose" method="post">
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950">
+            <!-- Blog Title -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">Blog Title*</label>
+                <input 
+                    class="w-full px-4 py-3 text-lg rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500" 
+                    name="blogTitle" 
+                    id="title" 
+                    type="text" 
+                    placeholder="Give your blog a compelling title..."
+                    value="<%= m === 'edit' ? blogData.title : '' %>"
+                    required
+                >
+            </div>
+            
+            <!-- Blog Description -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">Blog Description</label>
+                <textarea 
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none" 
+                    name="blogDescription"
+                    id="description"
+                    rows="3" 
+                    placeholder="Describe your blog briefly to help readers know what to expect..."
+                ><%= m === 'edit' ? blogData.description : '' %></textarea>
+            </div>
+
+            <!-- Rich Text Editor Label -->
+            <div class="mb-3">
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white">Your Story*</label>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Use the toolbar below to format your text, add images, and embed links.</p>
+            </div>
+
+            <!-- Quill Editor Toolbar -->
+            <div id="editor-toolbar" class="bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-t-lg p-3 flex flex-wrap gap-2 items-center border-b-0">
+                <!-- Text Formatting -->
+                <div class="flex gap-1 border-r border-slate-300 dark:border-slate-600 pr-2">
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="bold" title="Bold (Ctrl+B)">
+                        <i class="mdi mdi-format-bold"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="italic" title="Italic (Ctrl+I)">
+                        <i class="mdi mdi-format-italic"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="underline" title="Underline (Ctrl+U)">
+                        <i class="mdi mdi-format-underline"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="strike" title="Strikethrough">
+                        <i class="mdi mdi-format-strikethrough"></i>
+                    </button>
+                </div>
+
+                <!-- Text Color & Highlight -->
+                <div class="flex gap-1 border-r border-slate-300 dark:border-slate-600 pr-2">
+                    <!-- Text Color Picker -->
+                    <div class="relative group">
+                        <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="text-color-btn" title="Text Color">
+                            <i class="mdi mdi-format-color-text"></i>
+                        </button>
+                        <div id="text-color-picker" class="hidden absolute top-10 left-0 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-3 z-50 w-56">
+                            <p class="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Preset Colors</p>
+                            <div class="grid grid-cols-6 gap-2 mb-3">
+                                <button type="button" class="color-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition" style="background-color: #1e293b;" data-color="#1e293b"></button>
+                                <button type="button" class="color-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition" style="background-color: #3b82f6;" data-color="#3b82f6"></button>
+                                <button type="button" class="color-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition" style="background-color: #ef4444;" data-color="#ef4444"></button>
+                                <button type="button" class="color-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition" style="background-color: #10b981;" data-color="#10b981"></button>
+                                <button type="button" class="color-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition" style="background-color: #f59e0b;" data-color="#f59e0b"></button>
+                                <button type="button" class="color-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition" style="background-color: #8b5cf6;" data-color="#8b5cf6"></button>
+                            </div>
+                            <div class="flex gap-2 items-center">
+                                <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Custom:</label>
+                                <input type="color" id="text-color-input" class="w-12 h-8 rounded cursor-pointer border border-slate-200 dark:border-slate-600" value="#1e293b">
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Recently used colors:</p>
+                            <div id="recent-text-colors" class="flex gap-2 mt-2"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Highlight Picker -->
+                    <div class="relative group">
+                        <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="text-highlight-btn" title="Text Highlight">
+                            <i class="mdi mdi-format-color-highlight"></i>
+                        </button>
+                        <div id="text-highlight-picker" class="hidden absolute top-10 left-0 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-3 z-50 w-56">
+                            <p class="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Preset Colors</p>
+                            <div class="grid grid-cols-6 gap-2 mb-3">
+                                <button type="button" class="highlight-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition border border-slate-300" style="background-color: #fef08a;" data-color="#fef08a"></button>
+                                <button type="button" class="highlight-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition border border-slate-300" style="background-color: #fecaca;" data-color="#fecaca"></button>
+                                <button type="button" class="highlight-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition border border-slate-300" style="background-color: #bfdbfe;" data-color="#bfdbfe"></button>
+                                <button type="button" class="highlight-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition border border-slate-300" style="background-color: #a7f3d0;" data-color="#a7f3d0"></button>
+                                <button type="button" class="highlight-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition border border-slate-300" style="background-color: #ddd6fe;" data-color="#ddd6fe"></button>
+                                <button type="button" class="highlight-option w-8 h-8 rounded hover:ring-2 ring-slate-400 transition border border-slate-300" style="background-color: #f3e8ff;" data-color="#f3e8ff"></button>
+                            </div>
+                            <div class="flex gap-2 items-center">
+                                <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Custom:</label>
+                                <input type="color" id="text-highlight-input" class="w-12 h-8 rounded cursor-pointer border border-slate-200 dark:border-slate-600" value="#fef08a">
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Recently used colors:</p>
+                            <div id="recent-highlight-colors" class="flex gap-2 mt-2"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" id="clear-format-btn" title="Clear Formatting">
+                        <i class="mdi mdi-format-clear"></i>
+                    </button>
+                </div>
+
+                <!-- Text Alignment -->
+                <div class="flex gap-1 border-r border-slate-300 dark:border-slate-600 pr-2">
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="align" data-value="" title="Align Left">
+                        <i class="mdi mdi-format-align-left"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="align" data-value="center" title="Align Center">
+                        <i class="mdi mdi-format-align-center"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="align" data-value="right" title="Align Right">
+                        <i class="mdi mdi-format-align-right"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="align" data-value="justify" title="Justify">
+                        <i class="mdi mdi-format-align-justify"></i>
+                    </button>
+                </div>
+
+                <!-- Heading Levels -->
+                <div class="flex gap-1 border-r border-slate-300 dark:border-slate-600 pr-2">
+                    <select class="w-36 toolbar-select px-3 py-2 rounded border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition text-sm bg-white dark:bg-slate-900 text-slate-900 dark:text-white" data-format="header" title="Heading">
+                        <option value="">Normal</option>
+                        <option value="1">Heading 1</option>
+                        <option value="2">Heading 2</option>
+                        <option value="3">Heading 3</option>
+                    </select>
+                </div>
+
+                <!-- Lists & Quotes -->
+                <div class="flex gap-1 border-r border-slate-300 dark:border-slate-600 pr-2">
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="list" data-value="ordered" title="Ordered List">
+                        <i class="mdi mdi-format-list-numbered"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="list" data-value="bullet" title="Bullet List">
+                        <i class="mdi mdi-format-list-bulleted"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="blockquote" title="Quote">
+                        <i class="mdi mdi-format-quote-open"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-format="code-block" title="Code Block">
+                        <span class="mdi mdi-xml"></span>
+                    </button>
+                </div>
+
+                <!-- Media & Links -->
+                <div class="flex gap-1">
+                    <button type="button" id="insert-image-btn" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Insert Image">
+                        <i class="mdi mdi-image-plus"></i>
+                    </button>
+                    <button type="button" id="insert-link-btn" class="toolbar-btn p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Insert Link">
+                        <i class="mdi mdi-link-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quill Editor Container -->
+            <div id="editor" data-mode="<%= m ?? 'compose' %>" data-editing-content="<%= m === 'edit' ? JSON.stringify(blogData.content) : '' %>" class="w-full rounded-b-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus-within:ring-2 focus-within:ring-blue-200 dark:focus-within:ring-blue-900 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" style="min-height: 300px;"></div>
+            
+            <!-- Hidden input to store editor content -->
+            <input type="hidden" id="content" name="blogBody" required>
+
+            <p class="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-3"><i class="mdi mdi-lightbulb"></i> Tip: Format your text with the toolbar above. You can add images, links, and code blocks to make your story more engaging.</p>
+        </div>
+        
+        <!-- Blog Visibility -->
+        <div class="flex flex-col gap-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950">
+            <div>
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">Blog Visibility</label>
+                <select 
+                    id="visibility" 
+                    name="visibility" 
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                >
+                    <option value="2" <%= m === 'edit' && blogData.visibility === 2 ? 'selected' : '' %>>Public</option>
+                    <option value="1" <%= m === 'edit' && blogData.visibility === 1 ? 'selected' : '' %>>Unlisted</option>
+                    <option value="0" <%= m === 'edit' && blogData.visibility === 0 ? 'selected' : '' %>>Private</option>
+                </select>
+                <ul class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                    <li><span class="font-semibold">Public:</span> Anyone can see and search for your blog.</li>
+                    <li><span class="font-semibold">Unlisted:</span> Only people with the link can view.</li>
+                    <li><span class="font-semibold">Private:</span> Only you can see this blog.</li>
+                </ul>
+            </div>
+            <div class="flex items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <label class="font-semibold text-sm text-slate-900 dark:text-white transition-all duration-300">Allow Comments</label>
+                <% if (ap && ap.default_allow_post_comments === false) { %>
+                    <p class="text-xs text-red-600 dark:text-red-400">Your account settings currently disable comments on all your blogs. Change this in your <a href="/account/preferences" class="text-blue-600 dark:text-blue-400 hover:underline">preferences</a>.</p>
+                </div>
+                <% } else { %>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 transition-all duration-300">Set whether you let readers comment on your posts or not</p>
+                </div>
+                <input type="checkbox" name="allow-comments" class="<%= ap && ap.default_allow_post_comments === false ? 'hidden' : '' %> w-5 h-5 text-blue-600 rounded" <%= m === 'edit' && blogData.allow_comments ? 'checked' : m === 'edit' && !blogData.allow_comments ? '' : 'checked' %> />
+                <% } %>
+            </div>
+        </div>
+
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-between">
+            <a href="/" class="px-6 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-lg hover:border-slate-400 dark:hover:border-slate-500 dark:hover:bg-slate-700 transition-all duration-300 text-center">
+                Cancel
+            </a>
+            <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 flex justify-center items-center gap-2" id="publish">
+                <i class="mdi mdi-upload"></i><%= m === 'edit' ? 'Update Blog' : 'Publish Blog' %>
+            </button>
+        </div>
+    </form>
+    
+    <div class="mt-12 bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700 rounded-xl p-6 sm:p-8">
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2"><i class="mdi mdi-note-text"></i>Tips for Great Blogs</h3>
+        <ul class="space-y-2 text-slate-600 dark:text-slate-300 text-sm">
+            <li class="flex items-center gap-2"><i class="mdi mdi-check text-green-600 dark:text-green-400"></i>Write a clear, engaging title</li>
+            <li class="flex items-center gap-2"><i class="mdi mdi-check text-green-600 dark:text-green-400"></i>Use formatting to highlight key points and improve readability</li>
+            <li class="flex items-center gap-2"><i class="mdi mdi-check text-green-600 dark:text-green-400"></i>Add images and links to make your story more interactive</li>
+            <li class="flex items-center gap-2"><i class="mdi mdi-check text-green-600 dark:text-green-400"></i>Break up long sections with headings and quotes</li>
+            <li class="flex items-center gap-2"><i class="mdi mdi-check text-green-600 dark:text-green-400"></i>Share authentic experiences and insights</li>
+            <li class="flex items-center gap-2"><i class="mdi mdi-check text-green-600 dark:text-green-400"></i>Proofread before publishing</li>
+        </ul>
+    </div>
+
+    <!-- Image Upload Modal -->
+    <div id="image-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-slate-950 max-w-md sm:max-w-lg w-full p-6">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Insert Image</h3>
+            <div class="space-y-4">
+                <!-- Tab Navigation -->
+                <div class="flex gap-2 border-b border-slate-200 dark:border-slate-700">
+                    <button type="button" id="image-tab-url" class="px-4 py-2 border-b-2 border-blue-500 text-blue-600 dark:text-blue-400 font-medium transition">URL</button>
+                    <button type="button" id="image-tab-upload" class="px-4 py-2 border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-medium transition">Upload</button>
+                </div>
+
+                <!-- URL Tab -->
+                <div id="image-url-tab" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Image URL</label>
+                        <input type="text" id="image-url" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Alt Text (for accessibility)</label>
+                        <input type="text" id="image-alt" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500" placeholder="Describe the image...">
+                    </div>
+                </div>
+
+                <!-- Upload Tab -->
+                <div id="image-upload-tab" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Select Image File</label>
+                        <div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-3 text-center hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition cursor-pointer" id="image-drop-zone">
+                            <div id="previews" class="flex flex-row gap-4 flex-wrap mb-2"></div>
+                            <i class="mdi mdi-cloud-upload text-4xl text-slate-400 dark:text-slate-500 mb-2 px-3"></i>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 px-3">Drag and drop your image here</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 px-3 pb-3">or click to select</p>
+                            <input type="file" id="image-file-input" class="hidden" accept="image/*">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Alt Text (for accessibility)</label>
+                        <input type="text" id="image-alt-upload" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500" placeholder="Describe the image...">
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" id="image-cancel" class="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700">
+                        Cancel
+                    </button>
+                    <button type="button" id="image-insert" class="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                        Insert
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Insert Modal -->
+    <div id="link-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-slate-950 max-w-md sm:max-w-lg w-full p-6">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Insert Link</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Link Text</label>
+                    <input type="text" id="link-text" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500" placeholder="Enter link text...">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">URL</label>
+                    <input type="url" id="link-url" class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500" placeholder="https://example.com">
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" id="link-cancel" class="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700">
+                        Cancel
+                    </button>
+                    <button type="button" id="link-insert" class="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                        Insert
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>
+<!-- <script src="/js/compose.js" type="module"></script> -->

@@ -1,0 +1,134 @@
+#editor > .ql-editor {
+    min-height: 300px;
+} 
+
+#editor > .ql-editor:focus-visible {
+    outline: none;
+}
+ 
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-fadeInDown {
+    animation: fadeInDown 0.6s ease-out;
+}
+
+/* Quill Editor Customization */
+.ql-toolbar {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.ql-container {
+    /* border: none !important; */
+    font-family: inherit;
+}
+
+.ql-editor {
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #1e293b;
+}
+
+.dark .ql-editor {
+    color: #e2e8f0;
+}
+
+.ql-editor.ql-blank::before {
+    color: #cbd5e1;
+    font-style: italic;
+}
+
+.dark .ql-editor.ql-blank::before {
+    color: #64748b;
+}
+
+#editor.dark\:border-slate-600 {
+    &:where(.dark, .dark *) {
+        border-color: var(--color-slate-600);
+    }
+}
+
+.ql-editor h1 { font-size: 2em; font-weight: bold; margin: 0.67em 0; }
+.ql-editor h2 { font-size: 1.5em; font-weight: bold; margin: 0.75em 0; }
+.ql-editor h3 { font-size: 1.17em; font-weight: bold; margin: 0.83em 0; }
+.ql-editor blockquote { border-left: 4px solid #3b82f6; padding-left: 1em; margin: 1em 0; color: #64748b; }
+.dark .ql-editor blockquote { color: #94a3b8; }
+.ql-editor pre { background: #f1f5f9; padding: 1em; border-radius: 0.5em; overflow-x: auto; }
+.dark .ql-editor pre { background: #1e293b; color: #e2e8f0; }
+.ql-editor code { background: #f1f5f9; padding: 0.2em 0.4em; border-radius: 0.3em; font-family: 'Courier New', monospace; }
+.dark .ql-editor code { background: #1e293b; color: #f1f5f9; }
+
+.ql-code-block-container {
+    padding-top: 25px !important;
+}
+
+.ql-code-block-container select.ql-ui {
+    width: 150px;
+}
+
+.toolbar-btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+}
+
+.dark .toolbar-btn {
+    color: #cbd5e1;
+}
+
+.toolbar-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.dark .toolbar-btn:hover {
+    background-color: #334155;
+}
+
+.toolbar-btn.active {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.dark .toolbar-btn.active {
+    background-color: #2563eb;
+}
+
+.toolbar-select {
+    cursor: pointer;
+    color: #475569;
+}
+
+.dark .toolbar-select {
+    color: #cbd5e1;
+    background-color: #1e293b;
+    border-color: #475569;
+}
+
+/* Color Input Styling */
+#text-color, #text-highlight {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+/* Image drop zone styling */
+#image-drop-zone {
+    position: relative;
+}
+
+#image-drop-zone i {
+    display: block;
+}

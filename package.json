@@ -5,30 +5,43 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src --ext ts --exec ts-node src/app.ts",
-    "build": "tsc",
-    "start": "node dist/app.js"
+    "dev": "nodemon --watch src --ext ts --exec ts-node --files src/app.ts",
+    "build": "NODE_ENV=production tsc && node src/esbuild.js",
+    "start": "node dist/app.js",
+    "bundle": "node src/esbuild.js",
+    "bundle:watch": "nodemon --watch src/frontend --ext js --exec node src/esbuild.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "cookie-parser": "^1.4.7",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.3",
+    "@types/nodemailer": "^8.0.0",
+    "crypto": "^1.0.1",
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
-    "lodash": "^4.17.21",
+    "i18next": "^26.3.1",
+    "i18next-fs-backend": "^2.6.6",
+    "i18next-http-middleware": "^3.9.7",
+    "multer": "^2.1.1",
+    "nodemailer": "^8.0.9",
     "path": "^0.12.7",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "postgres": "^3.4.9",
+    "prismjs": "^1.30.0",
+    "quill-delta-to-html": "^0.12.1",
+    "three": "^0.184.0"
   },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
-    "@types/lodash": "^4.17.23",
+    "@types/multer": "^2.1.0",
     "@types/node": "^25.0.9",
     "@types/pg": "^8.16.0",
-    "nodemon": "^3.1.11",
+    "esbuild": "^0.28.0",
+    "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

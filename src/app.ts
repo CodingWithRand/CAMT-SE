@@ -1,24 +1,63 @@
-// Work according to the minimum requirements
-// Follow the instructions & the example UI design.
-// No text content modification
+/**
+ * Blog Platform - Express Application
+ * MVC Architecture with middleware and error handling
+ */
 
-import express, { Request, Response } from "express";
-import lodash from "lodash";
+import express, { Request, Response, NextFunction } from "express";
 import path from "path";
-import cookieParser from "cookie-parser";
-import { c, connect } from "./db";
 import "dotenv/config";
 
-const homeStartingContent =
-  "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
-const aboutContent =
-  "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
-const contactContent =
-  "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
+// Middleware
+import { requestLogger } from "./middleware/requestLogger";
+import { errorHandler, asyncHandler } from "./middleware/errorHandler";
 
+// Routes
+import authRoutes from "./routes/authRoutes";
+import blogRoutes from "./routes/blogRoutes";
+import commentRoutes from "./routes/commentRoutes";
+import userRoutes from "./routes/userRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
+import pageRoutes from "./routes/pageRoutes";
+
+import i18next from 'i18next';
+import FilesystemBackend from 'i18next-fs-backend';
+import i18nextMiddleware from 'i18next-http-middleware';
+
+// Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
-let posts: { id: string; title: string; body: string; likes: number }[] = [];
+
+// ===========================
+// LANGUAGE PREFERENCE
+// ===========================
+
+i18next
+  .use(FilesystemBackend) // Allows reading JSON files
+  .use(i18nextMiddleware.LanguageDetector) // Automatically checks cookies, headers, and query strings
+  .init({
+    // debug: true,
+    ignoreJSONStructure: false,
+    fallbackLng: 'en', // Default language if detection fails
+    preload: ['th', 'en'], // Languages to load into server memory
+    backend: {
+      loadPath: path.join(__dirname, '..', '/locales/{{lng}}.json') // Path to your files
+    },
+    detection: {
+      order: ['querystring', 'cookie', 'header'], // Look at URL (?lng=th), then cookies, then browser settings
+      caches: ['cookie'] // Save preference in a cookie
+    }
+  });
+
+app.use(i18nextMiddleware.handle(i18next));
+
+app.use((req, res, next) => {
+    res.locals.req = req;
+    next();
+});
+
+// ===========================
+// VIEW ENGINE CONFIGURATION
+// ===========================
 
 // Tell Express to use EJS
 app.set("view engine", "ejs");
@@ -26,91 +65,62 @@ app.set("view engine", "ejs");
 // Important: make views folder work after compiling to /dist
 app.set("views", path.join(__dirname, "..", "views"));
 
-app.use(express.urlencoded({ extended: true }));
+
+// ===========================
+// GLOBAL MIDDLEWARE
+// ===========================
+
+// Request logging
+app.use(requestLogger);
+
+// Body parsing middleware
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+// Static files
 app.use(express.static("public"));
-app.use(express.json());
-app.use(cookieParser());
 
-app.get("/", (req: Request, res: Response) => {
-  // Focusing on "blog" for now
-  res.redirect("/blog");
-})
+// ===========================
+// ROUTES
+// ===========================
 
-// WRITE YOUR CODE HERE
-app.get("/blog", async (req: Request, res: Response) => {
-  let displayingPosts;
-  if(req.cookies.evolve && JSON.parse(req.cookies.evolve)) {
-    const queriedPosts = await c.query("SELECT BlogID, Title, Content, Likes FROM Blogs");
-    displayingPosts = queriedPosts.rows.map((p) => ({
-      id: p.blogid,
-      title: p.title,
-      body: p.content,
-      likes: p.likes
-    }))
-  }
-  else displayingPosts = posts;
-  res.render("blog/home", { homeStartingContent, displayingPosts })
-})
-app.get("/blog/contact", (req: Request, res: Response) => {
-  res.render("blog/contact", { contactContent })
-})
-app.get("/blog/about", (req: Request, res: Response) => {
-  res.render("blog/about", { aboutContent })
-})
-app.get("/blog/compose", (req: Request, res: Response) => {
-  res.render("blog/compose")
-})
-app.post("/blog/compose", async (req: Request, res: Response) => {
-  // console.log(req.body);
-  if(req.cookies.evolve && JSON.parse(req.cookies.evolve)) {
-    // Use "CodingWithRand" user for now, until account registration is implemented
-    // Also, don't forget to sanitize user input
-    await c.query(`INSERT INTO Blogs (Title, Content, AuthorID) VALUES ('${req.body.postTitle}', '${req.body.postBody}', 'c9c668e7-4aa1-44bb-b75c-4c395f70b79d')`);
-  } else {
-    posts.push({
-      id: lodash.uniqueId(),
-      title: req.body.postTitle,
-      body: req.body.postBody,
-      likes: 0
-    })
-  }
-  // console.log(posts)
-  res.redirect("/blog")
-})
+// Blog routes (includes home page, compose, blog view)
+app.use("/", blogRoutes);
 
-app.get("/blog/post/:postName", async (req: Request, res: Response) => {
-  // console.log(req.params.postName)
-  // TODO: Handle 404 case
-  let displayingPosts;
-  if(req.cookies.evolve && JSON.parse(req.cookies.evolve)) {
-    const queriedPost = await c.query(`SELECT Title, Content FROM Blogs WHERE LOWER(Blogs.Title) = LOWER('${req.params.postName?.toString()}')`);
-    displayingPosts = {
-      title: queriedPost.rows[0].title,
-      body: queriedPost.rows[0].content
-    }
-  } else displayingPosts = posts.find((p) => lodash.lowerCase(p.title) === lodash.lowerCase(req.params.postName?.toString()));
-  res.render("blog/post", { post: displayingPosts })
-})
+// Auth routes (login, register, logout, OAuth)
+app.use("/", authRoutes);
 
-app.post("/blog/api/posts/:id/like", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  if(req.cookies.evolve && JSON.parse(req.cookies.evolve)) {
-    const queriedPost = await c.query(`SELECT BlogID, Likes FROM Blogs WHERE Blogs.BlogID = ${id}`);
-    if(queriedPost.rows.length === 0) return res.status(404).json({ error: "Post not found" });
-    const post = queriedPost.rows[0];
-    post.likes += 1;
-    await c.query(`UPDATE Blogs SET Likes = ${post.likes} WHERE Blogs.BlogID = ${id}`);
-    return res.json({ id: post.blogid, likes: post.likes });
-  } else {
-    const post = posts.find(p => p.id === id);
-    if (!post) return res.status(404).json({ error: "Post not found" });
-    post.likes += 1;
-    return res.json({ id: post.id, likes: post.likes });
-  }
+// Comment routes
+app.use("/", commentRoutes);
+
+// User routes (account, profile)
+app.use("/", userRoutes);
+
+// Upload routes
+app.use("/", uploadRoutes);
+
+// Page routes (about, contact)
+app.use("/", pageRoutes);
+
+// ===========================
+// 404 NOT FOUND HANDLER
+// ===========================
+
+app.use((req: Request, res: Response) => {
+  res.status(404).render("error", { pageTitle: "Page Not Found" });
 });
+
+// ===========================
+// GLOBAL ERROR HANDLER MIDDLEWARE
+// ===========================
+
+app.use(errorHandler);
+
+// ===========================
+// SERVER START
+// ===========================
 
 app.listen(PORT, async () => {
   console.log(`Server is listening on port ${PORT}`);
-  console.log(`http://localhost:${PORT}`)
-  await connect();
+  console.log(`http://localhost:${PORT}`);
 });

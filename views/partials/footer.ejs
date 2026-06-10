@@ -1,0 +1,68 @@
+
+</div> 
+</main>
+
+  <!-- Footer - Seamlessly integrated -->
+  <footer class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-50 mt-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <!-- Footer Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <!-- Brand Section -->
+        <div class="flex flex-col gap-4 justify-between">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center">
+                <img class="w-8 h-8" src="/logo1024.png" alt="Branding Logo" />
+              </div>
+              <span class="text-sm font-bold uppercase tracking-[0.35em]">WHISKEY</span>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              <%= req.t('footer.description') %>
+            </p>
+          </div>
+          <a class="text-sm text-blue-500 leading-relaxed" href="/media"><%= req.t('footer.media_attribution') %></a>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-[0.25em] text-slate-100 mb-4"><%= req.t('footer.quick_links') %></h3>
+          <ul class="space-y-2 text-sm text-slate-300">
+            <li><a href="/" class="hover:text-blue-300 transition-colors duration-300"><%= req.t('nav.home') %></a></li>
+            <li><a href="/about" class="hover:text-blue-300 transition-colors duration-300"><%= req.t('nav.about') %></a></li>
+            <li><a href="/contact" class="hover:text-blue-300 transition-colors duration-300"><%= req.t('nav.contact') %></a></li>
+            <li><a href="/compose" class="hover:text-blue-300 transition-colors duration-300"><%= req.t('sidebar.start_writing') %></a></li>
+          </ul>
+        </div>
+
+        <!-- Social & CTA -->
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-[0.25em] text-slate-100 mb-4"><%= req.t('footer.get_started') %></h3>
+          <p class="text-sm text-slate-300 mb-4">
+            <%= req.t('footer.ready_to_share') %>
+          </p>
+          <a href="/compose" class="inline-block px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50">
+            <%= req.t('sidebar.start_writing') %>
+          </a>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-8"></div>
+
+      <!-- Bottom Section -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-slate-400">
+          © <%= new Date().getFullYear() %> Whiskey. <%= req.t('footer.all_rights_reserved') %>
+        </p>
+        <p class="text-xs text-slate-400">
+          <%= req.t('footer.created_by') %> <img class="w-4 h-4 inline rounded-lg ml-1 mb-1" src="/CodingWithRand.png" alt="owner">
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- Quill Editor JS via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script src="/dist/src/frontend/main.js"></script>
+</body>

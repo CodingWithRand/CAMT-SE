@@ -1,0 +1,67 @@
+<%- include("../partials/header", { pageTitle: "Contact - Whiskey" }) %>
+
+<section class="relative pt-20 sm:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12 sm:mb-16 animate-fadeInDown">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-300 dark:to-white bg-clip-text text-transparent mb-6 leading-tight">
+                <%= req.t('contact.title') %>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                <%= req.t('contact.subtitle') %>
+            </p>
+        </div>
+    </div>
+</section>
+
+<div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 sm:p-10 shadow-sm dark:shadow-slate-950">
+        <form class="space-y-6">
+            <div>
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('contact.labels.name') %>
+                </label>
+                <input type="text" placeholder="<%= req.t('contact.placeholders.name') %>" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('contact.labels.email') %>
+                </label>
+                <input type="email" placeholder="<%= req.t('contact.placeholders.email') %>" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('contact.labels.subject') %>
+                </label>
+                <input type="text" placeholder="<%= req.t('contact.placeholders.subject') %>" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('contact.labels.message') %>
+                </label>
+                <textarea rows="6" placeholder="<%= req.t('contact.placeholders.message') %>" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
+                <%= req.t('contact.send_button') %>
+            </button>
+        </form>
+    </div>
+    
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <div class="text-3xl mb-3 dark:text-white"><i class="mdi mdi-email"></i></div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-2">
+                <%= req.t('contact.info.email_title') %>
+            </h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">support@dailyjournal.com</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <div class="text-3xl mb-3 dark:text-white"><i class="mdi mdi-web"></i></div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-2">
+                <%= req.t('contact.info.website_title') %>
+            </h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">dailyjournal.com</p>
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>

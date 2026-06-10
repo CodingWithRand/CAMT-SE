@@ -1,0 +1,433 @@
+<%- include("../../partials/header", { pageTitle: "Account Settings - Whiskey" }) %>
+
+<%
+
+function isURL(str) {
+    try {
+        new URL(str);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+%>
+
+<section class="relative pt-20 sm:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12 sm:mb-16 animate-fadeInDown">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-300 dark:to-white bg-clip-text text-transparent mb-6 leading-tight flex items-center justify-center gap-3">
+                <i class="mdi mdi-lock text-4xl sm:text-5xl lg:text-6xl"></i>Account Settings
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Manage your account security and personal information
+            </p>
+        </div>
+    </div>
+</section>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <!-- Settings Sections Grid -->
+    <div class="space-y-8">
+        
+        <!-- Profile Information -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950 animate-fadeInUp">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-account text-4xl text-slate-900 dark:text-white"></i>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Profile Information</h2>
+            </div>
+            
+            <form id="account-profile-form" class="space-y-6">
+                <!-- Avatar -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">Profile Picture</label>
+                    <div class="flex items-center gap-6">
+                        <% if(isURL(user?.avatar)) { %>
+                            <img class="pfp w-24 h-24 rounded-full bg-white " src="<%= user?.avatar %>" alt="User Avatar">
+                        <% } else { %>
+                            <div class="pfp w-24 h-24 rounded-full bg-gradient-to-br <%= user?.avatar %> flex items-center justify-center text-white text-2xl font-bold">
+                                <%= user?.username.charAt(0).toUpperCase() || "U" %>
+                            </div>
+                        <% } %>
+                        <div>
+                            <input type="file" id="avatar-input" class="hidden" accept="image/*" />
+                            <button type="button" onclick="document.getElementById('avatar-input').click()" class="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 text-sm font-medium">
+                                Change Picture
+                            </button>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">JPG, PNG or GIF. Max 10MB</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Name -->
+                <div>
+                    <div class="flex justify-between items-center">
+                        <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Display Name</label>
+                        <span class="text-xs text-slate-500 mb-2">3-30 characters.</span>
+                    </div>
+                    <input 
+                        type="text" 
+                        name="display-name"
+                        placeholder="John Doe" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                        value="<%= user.display_name %>"
+                    />
+                </div>
+
+                <!-- Username -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Username</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3.5 text-slate-600 text-sm">@</span>
+                        <input 
+                            type="text" 
+                            name="username"
+                            placeholder="johndoe" 
+                            class="w-full pl-8 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 cursor-not-allowed"
+                            value="<%= user.username %>"
+                            disabled
+                        />
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div>
+                    <div class="flex justify-between items-center">
+                        <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Bio</label>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 mb-2">Max 1000 characters. Characters Left: <%= 1000 - user.bio.length %></span>
+                    </div>
+                    <textarea 
+                        name="bio"
+                        placeholder="Tell us about yourself..." 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none"
+                        rows="5"
+                    ><%= user.bio %></textarea>
+                </div>
+
+                <!-- Website URL -->
+                <!-- <div>
+                    <label class="block text-sm font-semibold text-slate-900 mb-2">Personal Website</label>
+                    <input 
+                        type="url" 
+                        name="website"
+                        placeholder="https://yourwebsite.com" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all duration-300 bg-white text-slate-900 placeholder-slate-400"
+                    />
+                </div> -->
+
+                <!-- 
+                TODO: 
+                - Add banner image 
+                - Other info, e.g. social media.
+                -->
+
+                <div class="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 text-sm flex items-center gap-2">
+                        <i class="mdi mdi-check"></i>Save Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Email & Verification -->
+        <!-- TODO: (After MVP), email verification -->
+        <!-- <div class="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm animate-fadeInUp" style="animation-delay: 100ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-email text-4xl"></i>
+                <h2 class="text-2xl font-bold text-slate-900">Email & Verification</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <% // Primary Email %>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-semibold text-slate-900">Primary Email Address</label>
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-green-600 bg-green-50 rounded-full border border-green-200 flex items-center gap-1"><i class="mdi mdi-check"></i> Verified</span>
+                    </div>
+                    <input 
+                        type="email" 
+                        value="<%= user.email %>"
+                        disabled
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-600 cursor-not-allowed"
+                    />
+                    <p class="text-xs text-slate-500 mt-2">To change your email, contact support</p>
+                </div>
+
+                <% // Email Verification Status %>
+                <div class="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                    <p class="text-sm text-blue-900 font-medium mb-2 flex items-center gap-1"><i class="mdi mdi-check"></i>Email Verified</p>
+                    <p class="text-xs text-blue-700">Your email address has been verified. You can now enjoy all features.</p>
+                </div>
+
+                <% // Resend Verification (hidden if already verified) %>
+                <div class="hidden">
+                    <button type="button" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all duration-300 text-sm font-medium">
+                        Resend Verification Email
+                    </button>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Password Security -->
+        <!-- TODO: Update password, Reset password (Maybe after MVP) -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950 animate-fadeInUp" style="animation-delay: 200ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-key text-4xl dark:text-white"></i>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Password & Security</h2>
+            </div>
+            
+            <form class="space-y-6" id="password-form">
+                <!-- Current Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Current Password</label>
+                    <input 
+                        type="password" 
+                        name="current-password"
+                        placeholder="Enter your current password" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">If you signed in with Google and never changed your password, leave this blank</p>
+                </div>
+
+                <!-- New Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">New Password</label>
+                    <input 
+                        type="password" 
+                        name="new-password"
+                        id="new-password"
+                        placeholder="Enter a strong new password" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>  
+
+                <!-- Password Requirements -->
+                <div class="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-lg p-4 space-y-2">
+                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-3">Password requirements:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-300 dark:bg-red-700 text-red-600 dark:text-red-200" id="length-icon">✗</span>
+                            <span id="length-text" class="text-red-600 dark:text-red-400">At least 8 characters</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-300 dark:bg-red-700 text-red-600 dark:text-red-200" id="uppercase-icon">✗</span>
+                            <span id="uppercase-text" class="text-red-600 dark:text-red-400">One uppercase letter</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-300 dark:bg-red-700 text-red-600 dark:text-red-200" id="number-icon">✗</span>
+                            <span id="number-text" class="text-red-600 dark:text-red-400">One number</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-300 dark:bg-red-700 text-red-600 dark:text-red-200" id="special-icon">✗</span>
+                            <span id="special-text" class="text-red-600 dark:text-red-400">One special character (!@#$%)</span>
+                        </div>
+                    </div>
+                </div>   
+
+                <!-- Confirm Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Confirm New Password</label>
+                    <input 
+                        type="password" 
+                        name="confirm-password"
+                        placeholder="Confirm your new password" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>
+
+                <div class="flex-col custom-500:flex-row flex justify-between items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-sm flex items-center gap-2">
+                        <i class="mdi mdi-refresh"></i>Update Password
+                    </button>
+                    <div class="text-slate-400 dark:text-slate-500">
+                        Forgot password?
+                        <button id="forget-password" class="text-base sm:text-md text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">Reset here</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Two-Factor Authentication -->
+        <!-- <div class="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm animate-fadeInUp" style="animation-delay: 300ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-shield text-3xl"></i>
+                <h2 class="text-2xl font-bold text-slate-900">Two-Factor Authentication (2FA)</h2>
+            </div>
+            
+            <div class="bg-slate-50 rounded-lg p-4 mb-6">
+                <p class="text-sm text-slate-700 mb-4">
+                    Add an extra layer of security to your account by requiring a second form of verification when logging in.
+                </p>
+                <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 text-sm font-medium">
+                    Enable 2FA with Authenticator App
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-xs font-semibold text-slate-900 uppercase tracking-wide">Trusted Devices</p>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-3 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-3">
+                            <i class="mdi mdi-laptop text-lg"></i>
+                            <div>
+                                <p class="text-sm font-medium text-slate-900">Chrome on Windows</p>
+                                <p class="text-xs text-slate-500">Last used: Today at 10:30 AM</p>
+                            </div>
+                        </div>
+                        <button class="text-xs text-red-600 hover:text-red-700 font-medium">Remove</button>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-3">
+                            <i class="mdi mdi-phone text-lg"></i>
+                            <div>
+                                <p class="text-sm font-medium text-slate-900">Safari on iPhone</p>
+                                <p class="text-xs text-slate-500">Last used: Yesterday at 3:45 PM</p>
+                            </div>
+                        </div>
+                        <button class="text-xs text-red-600 hover:text-red-700 font-medium">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Active Sessions -->
+        <!-- <div class="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm animate-fadeInUp" style="animation-delay: 400ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-lock text-3xl"></i>
+                <h2 class="text-2xl font-bold text-slate-900">Active Sessions</h2>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-4 rounded-lg border border-slate-200 bg-blue-50">
+                    <div class="flex items-center gap-3">
+                        <i class="mdi mdi-circle text-lg text-green-500"></i>
+                        <div>
+                            <p class="text-sm font-medium text-slate-900">Current Session</p>
+                            <p class="text-xs text-slate-500">Chrome on Windows • IP: 192.168.1.1</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium text-slate-600">Active</span>
+                </div>
+                <div class="flex items-center justify-between p-4 rounded-lg border border-slate-200">
+                    <div class="flex items-center gap-3">
+                        <i class="mdi mdi-circle-outline text-lg text-slate-400"></i>
+                        <div>
+                            <p class="text-sm font-medium text-slate-900">Safari on iPad</p>
+                            <p class="text-xs text-slate-500">Last active: 2 hours ago • IP: 192.168.1.50</p>
+                        </div>
+                    </div>
+                    <button class="text-xs text-red-600 hover:text-red-700 font-medium">Sign Out</button>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-slate-200">
+                <button type="button" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-300 text-sm font-medium border border-red-200">
+                    Sign Out All Other Sessions
+                </button>
+            </div>
+        </div> -->
+
+        <!-- Danger Zone -->
+        <!-- TODO: Delete account -->
+        <div class="bg-red-50 dark:bg-red-950/20 rounded-xl border-2 border-red-200 dark:border-red-900/50 p-6 sm:p-8 shadow-sm dark:shadow-red-950/50 animate-fadeInUp" style="animation-delay: 500ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-alert text-3xl text-red-700 dark:text-red-400"></i>
+                <h2 class="text-2xl font-bold text-red-700 dark:text-red-400">Danger Zone</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Delete Account -->
+                <div class="p-4 rounded-lg bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/50">
+                    <p class="text-sm font-medium text-slate-900 dark:text-white mb-2">Delete Your Account</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">
+                        Permanently delete your account and all associated data. This action cannot be undone.
+                    </p>
+                    <button type="button" id="account-delete" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 text-sm font-medium">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="flex justify-center gap-3 pt-6 animate-fadeInUp" style="animation-delay: 600ms;">
+            <a href="/" class="px-8 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300">
+                Back to Feed
+            </a>
+        </div>
+    </div>
+    <!-- Password Reset Modal -->
+    <div id="password-reset-modal" class="hidden fixed inset-0 top-[4.5rem] h-[calc(100%-4.5rem)] bg-black/50 flex items-center justify-center px-4 z-50 animate-fadeIn">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-lg dark:shadow-slate-950 w-full max-w-md sm:max-w-lg">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Reset Password</h2>
+                <button class="close-reset-modal text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 text-2xl transition-colors">
+                    <i class="mdi mdi-close text-2xl"></i>
+                </button>
+            </div>
+
+            <p class="text-slate-600 dark:text-slate-400 mb-6">Enter your email address and we'll send you a link to reset your password.</p>
+
+            <!-- Reset Form -->
+            <form id="password-reset-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="reset-email" 
+                        placeholder="you@example.com" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 dark:hover:shadow-blue-900/50 transition-all duration-300">
+                    Send Reset Link
+                </button>
+            </form>
+
+            <!-- Success Message (hidden by default) -->
+            <div id="reset-success-message" class="hidden mt-6 p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/50 rounded-lg text-center">
+                <p class="text-green-700 dark:text-green-400 font-semibold">Password reset link sent!</p>
+                <p class="text-green-600 dark:text-green-400 text-sm mt-1">Check your email for instructions.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Delete Modal -->
+    <div id="account-delete-modal" class="hidden fixed inset-0 top-[4.5rem] h-[calc(100%-4.5rem)] bg-black/50 flex items-center justify-center px-4 z-50 animate-fadeIn">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-lg dark:shadow-slate-950 w-full max-w-md sm:max-w-lg">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Delete Account</h2>
+                <button class="close-reset-modal text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 text-2xl transition-colors">
+                    <i class="mdi mdi-close text-2xl"></i>
+                </button>
+            </div>
+
+            <p class="text-slate-600 dark:text-slate-400 mb-6">To confirm you would like to delete your account, enter your password below.</p>
+
+            <!-- Reset Form -->
+            <form id="account-delete-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">Your password</label>
+                    <input 
+                        type="password" 
+                        id="account-delete-confirm-password" 
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-red-500/50 dark:hover:shadow-red-900/50 transition-all duration-300">
+                    Submit and Delete My Account
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include("../../partials/footer") %>
+
+

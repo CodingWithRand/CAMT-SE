@@ -1,0 +1,175 @@
+<%
+
+function isURL(str) {
+    try {
+        new URL(str);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function getTimeAgo(stamp) {
+    const now = new Date().getTime();
+    const publishedDate = new Date(stamp).getTime();
+    const diffInSeconds = Math.floor((now - publishedDate) / 1000);
+    if (diffInSeconds < 60) {
+        return diffInSeconds + ` second${diffInSeconds === 1 ? '' : 's'} ago`;
+    } else if (diffInSeconds < (60 * 60)) {
+        const minutes = Math.floor(diffInSeconds / (60));
+        return minutes + ` minute${minutes === 1 ? '' : 's'} ago`;
+    } else if (diffInSeconds < (60 * 60 * 24)) {
+        const hours = Math.floor(diffInSeconds / (60 * 60));
+        return hours + ` hour${hours === 1 ? '' : 's'} ago`;
+    } else if (diffInSeconds < (60 * 60 * 24 * 30)) {
+        const days = Math.floor(diffInSeconds / (60 * 60 * 24));
+        return days + ` day${days === 1 ? '' : 's'} ago`;
+    } else if (diffInSeconds < (60 * 60 * 24 * 30 * 12)) {
+        const months = Math.floor(diffInSeconds / (60 * 60 * 24 * 30));
+        return months + ` month${months === 1 ? '' : 's'} ago`;
+    } else {
+        const years = Math.floor(diffInSeconds / (60 * 60 * 24 * 30 * 12));
+        return years + ` year${years === 1 ? '' : 's'} ago`;
+    }
+}
+
+// TODO: Find a way to render nested comments. [DONE]
+// TODO 2: 
+// - Implement liking comments functionality [DONE]
+// - Show total number of comments (include replies) [DONE]
+// - Webpack (later) [DONE with esbuild]
+// TODO 3:
+// - Edit comment
+// - Delete comment
+
+%>
+
+<!-- Comment -->
+<div class="comment-item flex flex-col gap-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 sm:p-5 hover:shadow-sm dark:hover:shadow-slate-900 transition-all duration-300" data-comment-id="<%= ocap.cid %>">
+    <div class="flex gap-4">
+        <% if(ocap.profiles && ((ocap.profiles.user_preferences && ocap.profiles.user_preferences.visible_profile) || user?.uid === ocap.profiles.uid)) { %>
+            <% if(isURL(ocap.profiles.avatar)) { %>
+                <img class="w-10 h-10 rounded-full bg-white " referrerpolicy="no-referrer" src="<%= ocap.profiles.avatar %>" alt="User Avatar">
+            <% } else { %>
+                <div class="w-10 h-10 shrink-0 aspect-square rounded-full bg-gradient-to-br <%= ocap.profiles.avatar %> flex items-center justify-center text-white font-bold">
+                    <%= ocap.profiles.username.charAt(0).toUpperCase() || "U" %>
+                </div>
+            <% } %>
+        <% } else { %>
+            <div class="w-10 h-10 shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
+                <i class="mdi mdi-account"></i>
+            </div>
+        <% } %>
+        <div class="flex-1">
+            <div class="flex items-center justify-between gap-2 mb-1 relative">
+                <div class="flex items-center gap-2 min-w-0">
+                    <h4 class="font-semibold text-slate-900 dark:text-white truncate">
+                        <% if (user?.uid === ocap.profiles.uid) { %>
+                            <%= ocap.profiles.display_name %>
+                        <% } else { %>
+                            <%= ocap.profiles && ocap.profiles.user_preferences && ocap.profiles.user_preferences.visible_profile ? ocap.profiles.display_name : 
+                                ocap.profiles && ocap.profiles.user_preferences && !ocap.profiles.user_preferences.visible_profile ? req.t('comments.anonymous_user') : 
+                                !ocap.profiles ? req.t('comments.deleted_account') : req.t('comments.unknown') %>
+                        <% } %>
+                    </h4>
+                    <% if(user?.uid === ocap.profiles.uid || (ocap.profiles && ocap.profiles.user_preferences && ocap.profiles.user_preferences.visible_profile)) { %>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">@<%= ocap.profiles.username %></span>
+                    <% } %>
+                    <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap"><%= getTimeAgo(ocap.createdat) %></span>
+                </div>
+                <% if((user && ocap.profiles) && user.uid === ocap.profiles.uid && !ocap.locked) { %>
+                    <button class="comment-menu-btn text-slate-400 hover:text-slate-600 relative group flex-shrink-0">
+                        <i class="mdi mdi-dots-vertical text-lg"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="comment-menu hidden absolute right-6 top-0 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 w-48 z-[10] flex-col">
+                        <button class="edit-comment-btn w-full text-left p-4 rounded-t-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2">
+                            <i class="mdi mdi-pencil" style="margin-top: 0.125rem;"></i>
+                            <%= req.t('comments.edit_comment') %>
+                        </button>
+                        <hr class="border-slate-200 dark:border-slate-600" />
+                        <button class="delete-comment-btn w-full text-left p-4 rounded-b-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 flex items-center gap-2">
+                            <i class="mdi mdi-delete" style="margin-top: 0.125rem;"></i>
+                            <%= req.t('comments.delete_comment') %>
+                        </button>
+                    </div>
+                <% } %>
+            </div>
+            <!-- Comment Text (View Mode) -->
+            <p class="comment-text text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                <%= ocap.comment %>
+            </p>
+            <% if((user && ocap.profiles) && user.uid === ocap.profiles.uid) { %>
+                <!-- Edit Form (Hidden by default) -->
+                <div class="edit-form hidden flex flex-col gap-2 mb-3">
+                    <textarea class="edit-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm"><%= ocap.comment %></textarea>
+                    <div class="flex gap-2 justify-end">
+                        <button class="cancel-edit px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
+                            Cancel
+                        </button>
+                        <button class="submit-edit px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 text-sm">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            <% } %>
+            <div class="flex gap-4 text-sm text-slate-600 dark:text-slate-400">
+                <% if(user) { %>
+                    <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" data-id="<%= ocap.cid %>">
+                        <i class="mdi mdi-heart"></i>
+                        <span><%= ocap.likedBy?.length || 0 %></span>
+                    </button>
+                    <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn">
+                        <i class="mdi mdi-reply"></i>
+                        Reply
+                    </button>
+                <% } else { %>
+                    <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" disabled title="Sign in to reply">
+                        <i class="mdi mdi-heart"></i>
+                        <span><%= ocap.likedBy?.length || 0 %></span>
+                    </button>
+                    <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" disabled title="Sign in to reply">
+                        <i class="mdi mdi-reply"></i>
+                        Reply
+                    </button>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex flex-col gap-4 sub-comments-list ml-14 hidden">
+    </div>
+    <!-- Reply Form (Hidden) -->
+    <% if(user) { %>
+        <div class="reply-form hidden ml-14 pt-4 border-t border-slate-100 dark:border-slate-700">
+            <div class="flex gap-3">
+                <% if(isURL(user.avatar)) { %>
+                    <img class="w-8 h-8 rounded-full bg-white " referrerpolicy="no-referrer" src="<%= user.avatar %>" alt="User Avatar">
+                <% } else { %>
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br <%= user.avatar %> flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                        <%= user.username.charAt(0).toUpperCase() || "U" %>
+                    </div>
+                <% } %>
+                <div class="flex-1">
+                    <textarea placeholder="Write a reply..." class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
+                    <div class="flex gap-2 mt-2 justify-end">
+                        <button class="cancel-reply px-4 py-2 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
+                            Cancel
+                        </button>
+                        <button class="submit-reply px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-sm">
+                            Reply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <% if(ocap.hasReplies) { %>
+        <!-- Load More Replies -->
+        <div class="load-replies ml-14 text-center">
+            <button class="min-h-auto load-replies-btn text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-300 flex items-center justify-center gap-2">
+                <i class="mdi mdi-chevron-down"></i>Load More Replies
+            </button>
+        </div>
+    <% } %>
+</div>

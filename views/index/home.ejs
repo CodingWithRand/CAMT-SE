@@ -1,0 +1,89 @@
+<%- include("../partials/header", { pageTitle: null }) %>
+
+<link rel="stylesheet" href="/css/home.css">
+
+<div class="flex flex-col lg:flex-row min-h-screen bg-gradient-to-b relative dark:w-[calc(100%+2rem)] dark:-left-4 dark:sm:w-[calc(100%+3rem)] dark:sm:-left-6 dark:lg:w-[calc(100%+4rem)] dark:lg:-left-8 from-slate-50 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    
+    <%- include("../partials/sidebar", { selected: "feed" }) %>
+    
+    <main class="flex-1 pt-20 sm:pt-24 pb-12 px-4 sm:px-6 lg:px-8 lg:overflow-x-auto lg:overflow-y-auto lg:h-screen">
+        <div id="search-bar-container" class="w-[calc(100%+2rem)] px-4 -translate-x-4 pt-4 pb-12 sticky top-18 lg:-top-24 z-40 backdrop-blur-sm flex justify-center" style="mask-image: linear-gradient(to bottom, black 80%, transparent);">
+            <div class="w-[42rem] max-w-[42rem] relative">
+                <form id="search-form" class="bg-white dark:bg-slate-800 rounded-full border border-slate-300 dark:border-slate-700 shadow-sm dark:shadow-slate-950 p-1 flex items-center gap-3 hover:shadow-md dark:hover:shadow-slate-900 transition-all duration-300">
+                    <input 
+                        type="text" 
+                        placeholder="<%= req.t('home.search_placeholder') %>" 
+                        class="search-box ml-4 flex-1 py-3 pr-4 bg-transparent outline-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                        id="search-input"
+                        name="q"
+                    />
+                    <button type="submit" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-400 mr-3 transition-colors">
+                        <i class="mdi mdi-magnify text-xl"></i>
+                    </button>
+                </form>
+                
+                <div id="search-results" class="hidden absolute top-[calc(100%+0.5rem)] w-full max-w-[42rem] max-h-[55vh] overflow-hidden bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-lg dark:shadow-slate-950 z-50">
+                    <div class="border-b border-slate-200 dark:border-slate-700 max-h-[35vh] overflow-auto">
+                        <div class="px-4 pb-3 relative">
+                            <p class="sticky z-10 top-0 left-0 py-3 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="mdi mdi-book-open"></i><%= req.t('home.tab_posts') %>
+                            </p>
+                            <div id="search-posts" class="space-y-2">
+                                <p class="text-xs text-slate-500 py-2"><%= req.t('home.type_posts') %></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="max-h-[20vh] overflow-auto">
+                        <div class="px-4 pb-3 relative">
+                            <p class="sticky z-10 top-0 left-0 py-3 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i class="mdi mdi-account-multiple"></i><%= req.t('home.tab_people') %>
+                            </p>
+                            <div id="search-people" class="space-y-2">
+                                <p class="text-xs text-slate-500 py-2"><%= req.t('home.type_people') %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mx-auto max-w-2xl">
+
+            <section id="feed" class="mb-12">
+                <div class="mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2"><%= req.t('home.feed_title') %></h2>
+                    <p class="text-slate-600 dark:text-slate-400"><%= req.t('home.feed_subtitle') %></p>
+                </div>
+
+                <div id="blogs-container" class="space-y-6">
+                    <% if (blogs.length > 0) { %>
+                        <% blogs.forEach((blog, index) => { %>
+                            <%- include("../partials/saves/postcard-v2", { blog, author: authors[index], cc: commentCounts[index] }) %>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="text-center py-8">
+                            <p class="nopost text-slate-600 dark:text-slate-400"><%= req.t('home.no_posts') %></p>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="mt-8 text-center opacity-0 pointer-events-none">
+                    <button id="load-blog" class="px-8 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-900 transition-all duration-300">
+                        <%= req.t('home.load_more') %>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="lg:hidden fixed bottom-6 left-6 z-80">
+        <button id="mobile-menu-btn" class="w-14 h-14 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg dark:shadow-blue-900/50 hover:shadow-xl dark:hover:shadow-blue-800/50 transition-all duration-300 flex items-center justify-center">
+            <i class="mdi mdi-menu text-2xl"></i>
+        </button>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>
+
+

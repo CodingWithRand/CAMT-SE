@@ -1,0 +1,113 @@
+<!-- Featured Post Card 1 -->
+<%
+
+function getInitialLetter(name) {
+    return name.charAt(0).toUpperCase();
+}
+
+function getTimeAgo(stamp) {
+    const now = new Date().getTime();
+    const publishedDate = new Date(stamp).getTime();
+    const diffInSeconds = Math.floor((now - publishedDate) / 1000);
+    if (diffInSeconds < 60) {
+        return diffInSeconds + ` ${req.t('getTimeAgo.second')}${diffInSeconds === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60)) {
+        const minutes = Math.floor(diffInSeconds / (60));
+        return minutes + ` ${req.t('getTimeAgo.minute')}${minutes === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60 * 24)) {
+        const hours = Math.floor(diffInSeconds / (60 * 60));
+        return hours + ` ${req.t('getTimeAgo.hour')}${hours === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60 * 24 * 30)) {
+        const days = Math.floor(diffInSeconds / (60 * 60 * 24));
+        return days + ` ${req.t('getTimeAgo.day')}${days === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60 * 24 * 30 * 12)) {
+        const months = Math.floor(diffInSeconds / (60 * 60 * 24 * 30));
+        return months + ` ${req.t('getTimeAgo.month')}${months === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else {
+        const years = Math.floor(diffInSeconds / (60 * 60 * 24 * 30 * 12));
+        return years + ` ${req.t('getTimeAgo.year')}${years === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    }
+}
+
+function isURL(str) {
+    try {
+        new URL(str);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+%>
+
+<article data-blog-id="<%= blog.blogid %>" data-blog-slug="<%= blog.title.toLowerCase().replace(/\s+/g, "-") %>" class="post relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 group">
+    <div class="p-6 sm:p-8">
+        <!-- Post Header -->
+        <div class="flex items-center gap-4 mb-4">
+            <% if(isURL(author?.avatar)) { %>
+                <img class="author-avatar w-16 h-16 text-xl sm:text-base sm:w-12 sm:h-12 rounded-full bg-white " referrerpolicy="no-referrer" src="<%= author?.avatar %>" alt="User Avatar">
+            <% } else { %>
+                <div class="author-avatar w-16 h-16 text-xl sm:text-base sm:w-12 sm:h-12 rounded-full bg-gradient-to-br <%= author?.avatar %> flex items-center justify-center text-white font-bold">
+                    <%= author?.username.charAt(0).toUpperCase() || "U" %>
+                </div>
+            <% } %>
+            <div class="flex-1 flex flex-col gap-1 sm:gap-0 min-w-0">
+                <div class="flex flex-col sm:flex-row sm:gap-2 sm:items-center">
+                    <h3 class="author-name font-semibold text-slate-900 dark:text-white truncate"><%= author.display_name %></h3>
+                    <span class="author-username text-xs text-slate-500 dark:text-slate-400 truncate">@<%= author.username %></span>
+                </div>
+                <p class="text-xs text-slate-400 dark:text-slate-500"><%= getTimeAgo(blog.postedon) %></p>
+            </div>
+            <% if(user?.uid === author.uid) { %>
+                <button class="post-menu-btn text-slate-400 hover:text-slate-600 relative group">
+                    <i class="mdi mdi-dots-vertical text-xl"></i>
+                </button>
+                <!-- Dropdown Menu -->
+                <div class="post-menu hidden absolute right-6 sm:right-8 top-20 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 w-48 z-[1] flex-col">
+                    <button class="edit-post-btn w-full text-left p-4 rounded-t-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2">
+                        <i class="mdi mdi-pencil" style="margin-top: 0.125rem;"></i>
+                        <%= req.t('posts.edit_post') %>
+                    </button>
+                    <hr class="border-slate-200 dark:border-slate-600" />
+                    <button class="delete-post-btn w-full text-left p-4 rounded-b-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 flex items-center gap-2">
+                        <i class="mdi mdi-delete" style="margin-top: 0.125rem;"></i>
+                        <%= req.t('posts.delete_post') %>
+                    </button>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Post Content -->
+        <h4 class="post-title text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+            <a href="/blogs/<%= blog.blogid %>/<%= blog.title.toLowerCase().replace(/s+/g, "-") %>"><%= blog.title %></a>
+        </h4>
+        <p class="post-desc text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            <% if(!blog.description) { %>
+                <%= req.t('posts.no_description_see') %>
+            <% } else { %>
+                <%= blog.description.slice(0, 297) %><%= blog.description.length > 300 ? "..." : "" %>
+            <% } %>
+        </p>
+
+        <!-- Badge -->
+        <!-- <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 mb-4">
+            ✨ Featured
+        </div> -->
+
+        <!-- Post Footer -->
+        <div class="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm">
+            <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
+                <i class="mdi mdi-heart text-lg"></i>
+                <span><%= blog.likedBy?.length || 0 %></span>
+            </button>
+            <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
+                <i class="mdi mdi-comment text-lg"></i>
+                <span><%= cc %></span>
+            </button>
+            <button class="save-post flex items-center gap-1 <%= user?.saved_blogs?.includes(blog.blogid) ? 'text-blue-600 dark:text-blue-400' : '' %> hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300">
+                <i class="mdi mdi-bookmark text-lg"></i>
+                <span><%= user?.saved_blogs?.includes(blog.blogid) ? req.t('posts.saved') : req.t('posts.save') %></span>
+            </button>
+        </div>
+    </div>
+</article>

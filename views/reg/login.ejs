@@ -1,0 +1,134 @@
+<%- include("../partials/header", { pageTitle: "Log In - Whiskey" }) %>
+
+<section class="relative min-h-[calc(100vh-200px)] flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800">
+    <div class="w-full max-w-md sm:max-w-lg">
+        <div class="text-center mb-10 animate-fadeInDown">
+            <h1 class="text-4xl sm:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-300 dark:to-white bg-clip-text text-transparent mb-3">
+                <%= req.t('auth.login.title') %> 
+            </h1>
+            <p class="text-slate-600 dark:text-slate-400">
+                <%= req.t('auth.login.subtitle') %> 
+            </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-8 shadow-sm dark:shadow-slate-950 mb-6">
+            <form id="login-form" class="space-y-5" action="/api/login/email" method="post">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                        <%= req.t('auth.login.email_label') %>
+                    </label>
+                    <input 
+                        type="email" 
+                        name="email"
+                        placeholder="<%= req.t('auth.login.email_placeholder') %>"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                        <%= req.t('auth.login.password_label') %>
+                    </label>
+                    <input 
+                        type="password"
+                        name="password"
+                        placeholder="<%= req.t('auth.login.password_placeholder') %>"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <!-- <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" class="w-4 h-4 rounded border-slate-300" />
+                        <span class="text-slate-600">Remember me</span>
+                    </label> -->
+                    <button type="button" id="forget-password" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
+                        <%= req.t('auth.login.forgot_password') %>
+                    </button>
+                </div>
+
+                <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
+                    <%= req.t('auth.login.sign_in') %>
+                </button>
+            </form>
+
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-slate-300 dark:border-slate-600"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                        <%= req.t('auth.login.or_continue_with') %>
+                    </span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button type="button" id="sign-in-w-google" class="w-full flex items-center justify-center gap-3 px-6 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-lg hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300">
+                    <i class="mdi mdi-google text-xl"></i>
+                    <%= req.t('auth.login.continue_google') %>
+                </button>
+
+                <a href="/register" class="w-full flex items-center justify-center gap-3 px-6 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-lg hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300">
+                    <i class="mdi mdi-account-plus text-xl"></i>
+                    <%= req.t('auth.login.create_account') %>
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center text-slate-600 dark:text-slate-400">
+            <%= req.t('auth.login.no_account') %>
+            <a href="/register" class="text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300">
+                <%= req.t('auth.login.signup_here') %>
+            </a>
+        </p>
+    </div>
+
+    <div id="password-reset-modal" class="hidden fixed inset-0 top-[4.5rem] h-[calc(100%-4.5rem)] bg-black/50 flex items-center justify-center px-4 z-50 animate-fadeIn">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-lg dark:shadow-slate-950 w-full max-w-md sm:max-w-lg">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
+                    <%= req.t('auth.login.reset_title') %>
+                </h2>
+                <button class="close-reset-modal text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 text-2xl transition-colors">
+                    <i class="mdi mdi-close text-2xl"></i>
+                </button>
+            </div>
+
+            <p class="text-slate-600 dark:text-slate-400 mb-6">
+                <%= req.t('auth.login.reset_description') %> 
+            </p>
+
+            <form id="password-reset-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                        <%= req.t('auth.login.email_label') %>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="reset-email"
+                        placeholder="<%= req.t('auth.login.email_placeholder') %>"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+                    />
+                </div>
+
+                <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
+                    <%= req.t('auth.login.send_reset_link') %>
+                </button>
+            </form>
+
+            <div id="reset-success-message" class="hidden mt-6 p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50 rounded-lg text-center">
+                <p class="text-green-700 dark:text-green-400 font-semibold">
+                    <%= req.t('auth.login.reset_success') %>
+                </p>
+                <p class="text-green-600 dark:text-green-500 text-sm mt-1">
+                    <%= req.t('auth.login.reset_check_email') %>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    </section>
+
+<%- include("../partials/footer") %>
+

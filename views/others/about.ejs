@@ -1,0 +1,60 @@
+
+<%- include("../partials/header", { pageTitle: "About Whiskey" }) %>
+
+<section class="relative pt-20 sm:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="mx-auto max-w-4xl">
+        <div class="mb-12 sm:mb-16 animate-fadeInDown">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-300 dark:to-white bg-clip-text text-transparent mb-6 leading-tight">
+                <%= req.t('about.title') %>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                <%= req.t('about.mission') %>
+            </p>
+        </div>
+    </div>
+</section>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="prose prose-sm sm:prose max-w-none">
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-4">
+                <%= req.t('about.our_story') %>
+            </h2>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                <%= aboutContent || req.t('about.default_story') %>
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center hover:shadow-lg dark:hover:shadow-slate-900 transition-all duration-300">
+                <div class="text-4xl mb-3 dark:text-white"><i class="mdi mdi-pencil"></i></div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('about.features.write_title') %>
+                </h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">
+                    <%= req.t('about.features.write_desc') %>
+                </p>
+            </div>
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center hover:shadow-lg dark:hover:shadow-slate-900 transition-all duration-300">
+                <div class="text-4xl mb-3 dark:text-white"><i class="mdi mdi-book-open"></i></div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('about.features.discover_title') %>
+                </h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">
+                    <%= req.t('about.features.discover_desc') %>
+                </p>
+            </div>
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center hover:shadow-lg dark:hover:shadow-slate-900 transition-all duration-300">
+                <div class="text-4xl mb-3 dark:text-white"><i class="mdi mdi-handshake"></i></div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                    <%= req.t('about.features.connect_title') %>
+                </h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">
+                    <%= req.t('about.features.connect_desc') %>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>

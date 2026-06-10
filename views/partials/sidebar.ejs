@@ -1,0 +1,93 @@
+<%
+
+function isURL(str) {
+    try {
+        new URL(str);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+%>
+
+<!-- Sidebar Navigation -->
+<aside id="sidebar-nav" class="hidden shadow-lg lg:shadow-none lg:flex min-w-64 lg:flex-col border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 lg:sticky fixed lg:relative right-0 z-50 lg:right-auto top-[4.5rem] h-[calc(100vh-4.5rem)] overflow-y-auto" data-show="false">
+    <nav class="flex-col space-y-2">
+        <!-- user Section -->
+        <div class="mb-8 pb-8 border-b border-slate-200 dark:border-slate-700">
+            <a href="/people/<%= user?.username.toLowerCase().trim() %>" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300 group">
+                <% if(isURL(user?.avatar)) { %>
+                    <img class="w-12 h-12 rounded-full bg-white " referrerpolicy="no-referrer" src="<%= user?.avatar %>" alt="User Avatar">
+                <% } else { %>
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br <%= user?.avatar %> flex items-center justify-center text-white font-bold">
+                        <%= user?.username.charAt(0).toUpperCase() || "U" %>
+                    </div>
+                <% } %>
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-slate-900 truncate group-hover:text-blue-600 dark:text-white transition-colors duration-300"><%= user?.display_name %></p>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 truncate">@<%= user?.username.toLowerCase().trim() %></p>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex flex-col">
+            <!-- Navigation Links -->
+            <% 
+                const selectedAppearance = "flex items-center gap-3 px-4 py-2 rounded-lg bg-blue-50 border border-blue-200 dark:bg-slate-700 dark:border-blue-600 text-blue-600 font-medium transition-all duration-300 truncate";
+                const defaultAppearance = "flex items-center gap-3 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 truncate";
+            %>
+
+            <%
+                const feedSelectedAppearance = selected === "feed" ? selectedAppearance : defaultAppearance;
+                const feedLink = selected === "feed" ? "#feed" : "/";
+            %>
+            <a href='<%= feedLink %>' class='<%= feedSelectedAppearance %>'>
+                <i class="mdi mdi-chart-box text-xl"></i>
+                <%= req.t('sidebar.feed') %>
+            </a>
+
+            <% 
+                const savePostLink = selected === "saved-posts" ? "#" : `/blogs/saves`; 
+                const savePostAppearance = selected === "saved-posts" ? selectedAppearance : defaultAppearance;
+            %>
+            <a href="<%= savePostLink %>" class="<%= savePostAppearance %>">
+                <i class="mdi mdi-bookmark text-xl"></i>
+                <%= req.t('sidebar.saved_posts') %>
+            </a>
+
+            <a href="#followers" class="truncate flex items-center gap-3 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300">
+                <i class="mdi mdi-account-multiple text-xl"></i>
+                <%= req.t('sidebar.followers') %>
+            </a>
+            
+            <!-- Start Writing Button -->
+            <div class="mt-6 mb-8">
+                <a href="/compose" class="truncate w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-center block flex items-center justify-center gap-2">
+                    <i class="mdi mdi-pencil"></i><%= req.t('sidebar.start_writing') %>
+                </a>
+            </div>
+        </div>
+
+
+        <!-- Settings Section -->
+        <div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700 space-y-2">
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest px-4"><%= req.t('sidebar.settings') %></p>
+
+            <a href="/account/preferences" class="truncate flex items-center gap-3 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300">
+                <i class="mdi mdi-cog text-xl"></i>
+                <%= req.t('sidebar.preferences') %>
+            </a>
+
+            <a href="/account" class="truncate flex items-center gap-3 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300">
+                <i class="mdi mdi-information text-xl"></i>
+                <%= req.t('sidebar.account') %>
+            </a>
+
+            <button id="signout" class="truncate cursor-pointer w-full flex items-center gap-3 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-left">
+                <i class="mdi mdi-logout text-xl"></i>
+                <%= req.t('sidebar.sign_out') %>
+            </button>
+        </div>
+    </nav>
+</aside>

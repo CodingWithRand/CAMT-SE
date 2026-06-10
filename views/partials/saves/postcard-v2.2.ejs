@@ -1,0 +1,49 @@
+<!-- Featured Post Card 2 -->
+<article class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 group">
+    <div class="p-6 sm:p-8">
+        <!-- Post Header -->
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                M
+            </div>
+            <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-slate-900 truncate\"><%= req.t('demo.mike_creator') %></h3>
+                <p class="text-xs text-slate-600\"><%= req.t('demo.hours_ago') %></p>
+            </div>
+            <button class="text-slate-400 hover:text-slate-600">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Post Content -->
+        <h4 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+            <%= req.t('demo.habit_title') %>
+        </h4>
+        <p class="text-slate-600 leading-relaxed mb-4">
+            <%= req.t('demo.habit_desc') %>
+        </p>
+
+        <!-- Badge -->
+        <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 mb-4">
+            <%= req.t('posts.trending') %>
+        </div>
+
+        <!-- Post Footer -->
+        <div class="flex items-center gap-6 pt-4 border-t border-slate-100 text-slate-600 text-sm">
+            <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
+                <span class="text-lg">❤️</span>
+                <span>289</span>
+            </button>
+            <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
+                <span class="text-lg">💬</span>
+                <span>47</span>
+            </button>
+            <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
+                <span class="text-lg">🔖</span>
+                <span><%= req.t('posts.save') %></span>
+            </button>
+        </div>
+    </div>
+</article>

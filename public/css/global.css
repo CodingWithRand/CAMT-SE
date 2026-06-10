@@ -1,0 +1,634 @@
+textarea {
+    resize: none;
+}
+
+#evolve {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+    /* width: 0.35rem; */
+}
+  
+html::-webkit-scrollbar-track {
+    background: transparent
+}
+  
+html::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+  
+html::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+.dark html::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 9999px;
+}
+  
+.dark html::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+} 
+
+/* ============================================
+   ENHANCED BLOG HOME STYLES
+   ============================================ */
+
+/* Body & Background */
+body {
+    background: linear-gradient(to bottom, #fafbfc 0%, #f0f4f8 100%);
+}
+
+.dark body {
+    background: var(--color-slate-900);
+}
+
+/* Hero Section Animations */
+.hero-section {
+    animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Post Card Animations & Hover Effects */
+.post-card {
+    animation: fadeInUp 0.5s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.dark .post-card::before {
+    background: linear-gradient(90deg, transparent, rgba(51, 65, 85, 0.3), transparent);
+}
+
+.post-card:hover::before {
+    left: 100%;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Like Button Styling with Animations */
+.like-btn {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    user-select: none;
+}
+
+.like-btn:hover {
+    transform: translateY(-2px);
+}
+
+.like-btn:active {
+    transform: scale(0.95);
+}
+
+.like-btn:disabled, .save-post:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Text Gradient */
+.text-transparent {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Card Shadow Elevation */
+.post-card {
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.post-card:hover {
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+}
+
+.dark .post-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark .post-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.post-list-item {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.post-list-item:hover {
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.dark .post-list-item {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dark .post-list-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* CTA Section Animations */
+.cta-section {
+    animation: fadeIn 0.8s ease-out 0.3s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Navbar Integration */
+header {
+    animation: slideDown 0.4s ease-out;
+}
+
+/* Smooth Navigation Links */
+a[href*="/"] {
+    position: relative;
+    text-decoration: none;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Mobile Optimization */
+@media (max-width: 640px) {
+    body {
+        font-size: 14px;
+    }
+
+    .post-card {
+        border-radius: 12px;
+    }
+
+    .post-list-item {
+        border-radius: 8px;
+    }
+
+    h1:not(.user-profile-display-name, .status-code) {
+        font-size: 1.875rem !important;
+        line-height: 1.2;
+    }
+
+    h1.text-4xl {
+        font-size: var(--text-4xl) !important;
+    }
+
+    h2 {
+        font-size: 1.5rem !important;
+    }
+
+    h2.text-3xl {
+        font-size: var(--text-3xl) !important;
+    }
+
+    section {
+        overflow-x: hidden;
+    }
+
+    .post-card p {
+        font-size: 13px;
+    }
+
+    button {
+        font-size: 13px;
+        min-height: 40px;
+    }
+
+    button#close-bio-modal.text-2xl {
+        font-size: 1.5rem;
+    }
+
+    button.min-h-auto {
+        min-height: auto;
+    }
+
+    button.text-base {
+        font-size: var(--text-base);
+    }
+
+    /* Stack buttons vertically on mobile */
+    .flex-col.sm\:flex-row:not(.profile-info-card) {
+        flex-direction: column !important;
+    }
+
+    .w-full:not(.profile-info-card .w-full, #open-scene .w-full) {
+        width: 100% !important;
+    }
+}
+
+/* Tablet Optimization */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .post-card {
+        border-radius: 16px;
+    }
+
+    h1:not(.user-profile-display-name, .status-code) {
+        font-size: 2.25rem;
+    }
+
+    h1.sm\:text-6xl {
+        font-size: var(--text-6xl) !important;
+    }
+
+    h2 {
+        font-size: 1.875rem;
+    }
+
+    h2.text-3xl {
+        font-size: var(--text-3xl) !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    header nav.show {
+        left: 0;
+    }
+
+    header nav {
+        left: -50%;
+    }
+    header nav {
+        transition: left 0.3s ease-in-out;
+    }
+
+    header nav::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(var(--blur-md));
+    }
+}
+
+/* Desktop Optimization */
+@media (min-width: 1025px) {
+    .post-card {
+        border-radius: 20px;
+    }
+
+    h1:not(.user-profile-display-name, .status-code) {
+        font-size: 3.75rem;
+    }
+
+    h2 {
+        font-size: 2.25rem;
+    }
+
+    h2.text-3xl {
+        font-size: var(--text-3xl) !important;
+    }
+
+    /* 3-column grid on desktop */
+    .grid {
+        grid-auto-flow: dense;
+    }
+}
+
+/* ++ */
+@media (min-width: 500px) {
+    .custom-500\:flex-row {
+        flex-direction: row;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus States */
+a:focus-visible,
+button:focus-visible,
+input:not(.search-box):focus-visible {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: more) {
+    .post-card {
+        border-width: 2px;
+    }
+
+    .like-btn, .like-btn-list {
+        border: 1px solid currentColor;
+    }
+    
+    .dark .post-card {
+        border-color: #cbd5e1;
+    }
+}
+
+/* ============================================
+   TRANSITIONS & EFFECTS
+   ============================================ */
+
+/* Smooth Transitions */
+*:not(.transition-all, .duration-300) {
+    transition-property: color, background-color, border-color, box-shadow, transform;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions for animations */
+.animate-fadeInDown,
+.animate-fadeInUp {
+    transition: none;
+}
+
+/* Button Ripple Effect */
+button, a.group {
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   LOADING & STATE INDICATORS
+   ============================================ */
+
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* ============================================
+   FORM STYLING
+   ============================================ */
+
+input[type="text"]:not(.search-box),
+input[type="email"],
+input[type="password"],
+textarea {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="text"]:not(.search-box):focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #3B82F6;
+}
+
+/* ============================================
+   DASHBOARD STYLES
+   ============================================ */
+
+/* Sidebar Navigation */
+aside {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+aside::-webkit-scrollbar {
+    width: 6px;
+}
+
+aside::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Dark mode sidebar scrollbar */
+.dark aside {
+    scrollbar-color: #475569 transparent;
+}
+
+.dark aside::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 3px;
+}
+
+.dark aside::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Dashboard Layout Breakpoints */
+@media (max-width: 1024px) {
+    aside {
+        display: none;
+    }
+}
+
+/* Featured Post Cards Animation */
+article {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+article:nth-child(2) {
+    animation-delay: 100ms;
+}
+
+article:nth-child(3) {
+    animation-delay: 200ms;
+}
+
+/* Search Bar Sticky Position */
+.sticky.top-20 {
+    top: 80px;
+}
+
+@media (max-width: 640px) {
+    .sticky.top-20 {
+        top: 60px;
+    }
+}
+
+/* ============================================
+   AUTHENTICATION PAGE STYLES
+   ============================================ */
+
+/* Auth Form Cards */
+.bg-white.rounded-2xl.border {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.dark .bg-white.rounded-2xl.border {
+    background-color: #1e293b;
+    border-color: #475569;
+}
+
+/* OAuth Button Styling */
+button[type="button"] {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button[type="button"]:hover {
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    header, footer, #evolve, .like-btn, .like-btn-list, aside {
+        display: none;
+    }
+
+    .post-card, article {
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+    }
+}
+
+/* ============================================
+   MISCELLANEOUS
+   ============================================ */
+   
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.2); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.15); }
+    70% { transform: scale(1); }
+}
+
+@keyframes countPulse {
+    0% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.like-btn:disabled, .like-btn-list:disabled {
+    opacity: 0.6;
+}
+
+select {
+    &, &::picker(select) {
+        appearance: base-select;
+        border-radius: 0.25rem;
+    }
+    & option {
+        padding: 0.5rem
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeInDown {
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.animate-scaleIn {
+    animation: scaleIn 0.3s ease-out;
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+.err-msg {
+    display: block;
+}

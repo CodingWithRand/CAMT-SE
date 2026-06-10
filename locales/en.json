@@ -1,0 +1,296 @@
+{
+    "nav": {
+        "home": "HOME",
+        "about": "ABOUT",
+        "contact": "CONTACT",
+        "register": "REGISTER",
+        "sign_in": "SIGN IN"
+    },
+    "sidebar": {
+        "feed": "Feed",
+        "saved_posts": "Saved Posts",
+        "followers": "Followers",
+        "start_writing": "Start Writing",
+        "settings": "Settings",
+        "preferences": "Preferences",
+        "account": "Account",
+        "sign_out": "Sign Out"
+    },
+    "comments": {
+        "anonymous_user": "Anonymous User",
+        "deleted_account": "[Deleted Account]",
+        "unknown": "Unknown",
+        "edit_comment": "Edit Comment",
+        "delete_comment": "Delete Comment"
+    },
+    "posts": {
+        "featured": "Featured",
+        "trending": "🌟 Trending",
+        "travel": "✈️ Travel",
+        "read_more": "Read More",
+        "read": "Read",
+        "edit_post": "Edit Post",
+        "delete_post": "Delete Post",
+        "no_description": "This blog has no description",
+        "no_description_see": "This blog has no description. Click the title to see it.",
+        "save": "Save",
+        "saved": "Saved"
+    },
+    "getTimeAgo:":{
+        "second": "second",
+        "minute": "minute",
+        "hour": "hour",
+        "day": "day",
+        "month": "month",
+        "year": "year",
+        "englishPlural": "s",
+        "punctuation": " ",
+        "ago": "ago"
+    },
+    "footer": {
+        "description": "A space for stories, ideas, and inspiration. Share your voice with our community.",
+        "media_attribution": "Media Attributions",
+        "quick_links": "Quick Links",
+        "get_started": "Get Started",
+        "ready_to_share": "Ready to share your story?",
+        "start_writing": "Start Writing",
+        "all_rights_reserved": "All rights reserved.",
+        "created_by": "Created by Rand"
+    },
+    "media_attribution": {
+        "globe_model": "Globe model",
+        "credit_to": "credit to",
+        "coworking_space": "Coworking space with people graphic by Freepik"
+    },
+    "demo": {
+        "habit_title": "Building Habits That Last: My 30-Day Challenge",
+        "habit_desc": "Starting a new habit is easy, but maintaining it is the real challenge. I took on a 30-day challenge to build consistency and here's what I learned about myself and the process...",
+        "tokyo_title": "Travel Stories: My Week in Tokyo",
+        "tokyo_desc": "Tokyo has been an incredible experience. From the bustling streets of Shibuya to the serene temples of Kyoto, I've captured moments that will stay with me forever. Here are my favorite discoveries...",
+        "mike_creator": "Mike Creator",
+        "sarah_inspiration": "Sarah Inspiration",
+        "hours_ago": "6 hours ago",
+        "day_ago": "1 day ago"
+    },
+    "auth": {
+        "register": {
+            "title": "Join Our Community",
+            "subtitle": "Create an account and start sharing your stories",
+            "username_label": "Username",
+            "username_placeholder": "John Doe",
+            "email_label": "Email Address",
+            "email_placeholder": "you@example.com",
+            "password_label": "Password",
+            "password_placeholder": "Create a strong password",
+            "password_requirements": "Password requirements:",
+            "password_min_length": "At least 8 characters",
+            "password_uppercase": "One uppercase letter",
+            "password_number": "One number",
+            "password_special": "One special character (!@#$%)",
+            "confirm_password_label": "Confirm Password",
+            "confirm_password_placeholder": "Confirm your password",
+            "terms_agreement": "I agree to the",
+            "terms_of_service": "Terms of Service",
+            "privacy_policy": "Privacy Policy",
+            "create_account": "Create Account",
+            "or_signup_with": "Or sign up with",
+            "signup_google": "Sign up with Google",
+            "have_account": "Already have an account?",
+            "signin_here": "Sign in here"
+        },
+        "login": {
+            "title": "Welcome Back",
+            "subtitle": "Sign in to your account to continue",
+            "email_label": "Email Address",
+            "email_placeholder": "you@example.com",
+            "password_label": "Password",
+            "password_placeholder": "Enter your password",
+            "forgot_password": "Forgot password?",
+            "sign_in": "Sign In",
+            "or_continue_with": "Or continue with",
+            "continue_google": "Continue with Google",
+            "create_account": "Create Account",
+            "no_account": "Don't have an account?",
+            "signup_here": "Sign up here",
+            "reset_title": "Reset Password",
+            "reset_description": "Enter your email address and we'll send you a link to reset your password.",
+            "send_reset_link": "Send Reset Link",
+            "reset_success": "Password reset link sent!",
+            "reset_check_email": "Check your email for instructions."
+        }
+    },
+    "about": {
+        "title": "About Whiskey",
+        "mission": "Our mission is to create a vibrant community where writers and readers connect.",
+        "our_story": "Our Story",
+        "default_story": "Whiskey started as a passion project to empower creators. We believe in the power of storytelling and the importance of having a platform where voices can be heard. Today, we are proud to serve a growing community of writers and readers from around the world.",
+        "features": {
+            "write_title": "Write Freely",
+            "write_desc": "Express yourself without limits on our open platform.",
+            "discover_title": "Discover Stories",
+            "discover_desc": "Find inspiration from diverse creators worldwide.",
+            "connect_title": "Connect",
+            "connect_desc": "Build relationships with fellow writers and readers."
+        }
+    },
+    "contact": {
+        "title": "Get In Touch",
+        "subtitle": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+        "labels": {
+            "name": "Name",
+            "email": "Email",
+            "subject": "Subject",
+            "message": "Message"
+        },
+        "placeholders": {
+            "name": "Your name",
+            "email": "your@email.com",
+            "subject": "What's this about?",
+            "message": "Your message..."
+        },
+        "send_button": "Send Message",
+        "info": {
+            "email_title": "Email",
+            "website_title": "Website"
+        }
+    },
+    "landing": {
+        "badge": "Welcome to your creative space",
+        "description_p1": "Explore inspiring articles, insightful perspectives, and creative thoughts from our thriving community, and share your own unique stories!",
+        "description_p2": "Find your next favorite read or start your own story.",
+        "btn_write": "Write a Blog",
+        "btn_explore": "Explore Blogs",
+        "popular_title": "Popular blog",
+        "popular_subtitle_p1": "Check out top favorite posts.",
+        "popular_subtitle_p2": "Perhaps, you'll take a like to one of them.",
+        "latest_title": "Latest Blogs",
+        "latest_subtitle": "Check out recent posts on the platform.",
+        "empty_title": "No posts yet",
+        "empty_desc": "Be the first to share your thoughts!",
+        "empty_cta": "Create First Post",
+        "cta_box_title": "Ready to inspire others?",
+        "cta_box_desc_p1": "Join our community and share your unique voice.",
+        "cta_box_desc_p2": "Your story matters and can inspire someone today.",
+        "cta_box_btn": "Start Writing Now",
+        "redirecting": "Redirecting...",
+        "auth_wait": "Please wait while we complete your authentication"
+    },
+    "home": {
+        "search_placeholder": "Search posts, people, topics...",
+        "tab_posts": "Posts",
+        "tab_people": "People",
+        "type_posts": "Start typing to search posts...",
+        "type_people": "Start typing to search people...",
+        "feed_title": "Your Feed",
+        "feed_subtitle": "Discover featured blogs from the community",
+        "no_posts": "No posts at the moment.",
+        "load_more": "Load More Posts"
+    },
+    "auth_flows": {
+        "titles": {
+            "reset": "Reset Password - Whiskey",
+            "verify": "Verify Email - Whiskey",
+            "tfa": "Two-Factor Authentication - Whiskey",
+            "default": "Authentication - Whiskey"
+        },
+        "invalid": {
+            "title": "Invalid Request",
+            "desc": "This request is invalid or has expired.",
+            "msg": "The authentication request could not be verified. Please try again.",
+            "btn_login": "Go to Login",
+            "btn_home": "Back to Home"
+        },
+        "reset_pwd": {
+            "title": "Reset Password",
+            "desc": "Enter your new password to reset your account password",
+            "label_new": "New Password",
+            "placeholder_new": "Enter new password",
+            "requirements_title": "Password requirements:",
+            "req_length": "At least 8 characters",
+            "req_uppercase": "One uppercase letter",
+            "req_number": "One number",
+            "req_special": "One special character (!@#$%)",
+            "label_confirm": "Confirm Password",
+            "placeholder_confirm": "Confirm your password",
+            "btn_submit": "Reset Password",
+            "success_title": "Password reset successfully!",
+            "success_desc": "Redirecting to login...",
+            "remember_pwd": "Remember your password?",
+            "signin_here": "Sign in here"
+        },
+        "email_verify": {
+            "title": "Verify Email",
+            "desc": "Enter the verification code sent to your email",
+            "label_code": "Verification Code",
+            "placeholder_code": "000000",
+            "hint": "Enter the 6-digit code from your email",
+            "btn_submit": "Verify Email",
+            "btn_resend": "Resend Code",
+            "success_title": "Email verified successfully!",
+            "success_desc": "Redirecting to login...",
+            "already_verified": "Already verified?",
+            "go_to_login": "Go to login"
+        },
+        "tfa_flow": {
+            "title": "Two-Factor Authentication",
+            "desc": "Enter the code from your authenticator app",
+            "label_code": "Authenticator Code",
+            "placeholder_code": "000000",
+            "hint": "Enter the 6-digit code from your authenticator app",
+            "btn_submit": "Verify Code",
+            "success_title": "Authentication successful!",
+            "success_desc": "Redirecting...",
+            "no_code": "Don't have your code?",
+            "backup_link": "Use a backup code"
+        }
+    },
+    "errors": {
+        "titles": {
+            "error": "Error"
+        },
+        "statuses": {
+            "400": {
+                "title": "Bad Request",
+                "message": "The request could not be understood by the server. Please check your input and try again.",
+                "tip": "Make sure all required fields are filled correctly and the format is valid."
+            },
+            "401": {
+                "title": "Unauthorized",
+                "message": "You need to be authenticated to access this resource. Please log in first.",
+                "tip": "If you don't have an account, you can create one on the registration page."
+            },
+            "403": {
+                "title": "Forbidden",
+                "message": "You don't have permission to access this resource.",
+                "tip": "If you believe you should have access, please contact the administrator."
+            },
+            "404": {
+                "title": "Page Not Found",
+                "message": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+                "tip": "Check the URL for typos or try navigating back to the homepage."
+            },
+            "500": {
+                "title": "Internal Server Error",
+                "message": "Something went wrong on our servers. Our team has been notified and is looking into it.",
+                "tip": "Please try reloading the page in a few moments, or contact support if the issue persists."
+            },
+            "503": {
+                "title": "Service Unavailable",
+                "message": "The server is temporarily unable to handle the request due to maintenance or capacity overload.",
+                "tip": "We'll be back online shortly. Thank you for your patience."
+            },
+            "default": {
+                "title": "Unexpected Error",
+                "message": "An error occurred while processing your request.",
+                "tip": "Please return to safety or try your request again later."
+            }
+        },
+        "labels": {
+            "error_code": "Error Code",
+            "what_happened": "What happened?",
+            "suggested_tip": "Suggested Tip",
+            "btn_home": "Back to Home",
+            "btn_login": "Go to Login"
+        }
+    }
+}

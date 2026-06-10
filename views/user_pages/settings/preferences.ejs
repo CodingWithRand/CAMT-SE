@@ -1,0 +1,317 @@
+<%- include("../../partials/header", { pageTitle: "Preferences - Whiskey" }) %>
+
+<%
+/*
+new table -> themes
+
+main_theme: text | sub_theme: text | typography: table | privacy: table
+
+new table -> typography
+
+font_family | base_font_size | line_spacing
+
+new table -> privacy
+
+public_profile: boolean | allow_comments: boolean | share_btn: boolean
+
+TODO: implements functionality for all the uncommented elements and modify data structure above
+
+Decision + Research:
+- How to customize font, font-size, and line spacing? -> Edit/Extend ql-editor class.
+- What's the scope of font, font-size, and line spacing customization? -> Maybe just in the blog content as it's easy to implement and that's prolly the whole point of it. -> Decided to apply globally anyway lel.
+- Value for each line spacing.
+
+Font family 
+System Default -> Maybe scrap (use modern sans instead.)
+Modern sans (default) -> --font-sans
+Classic serif -> --font-serif
+Monospace (Code) -> --font-mono
+Rounded & Friendly -> (In research, after MVP)
+
+How to set: class + style in the html tag.
+
+Last TODO (I think, no.)
+Figure out & Decide what to do with setting public profile -> Just hide the profile to other, or include setting every user post to private too?
+
+Last preference: Language (Thai and English, which one is the default language...)
+Last TODO: Improve landing page.
+*/
+%>
+
+<section class="relative pt-20 sm:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12 sm:mb-16 animate-fadeInDown">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-300 dark:to-white bg-clip-text text-transparent mb-6 leading-tight flex items-center justify-center gap-3 transition-all duration-300">
+                <i class="mdi mdi-cog text-4xl sm:text-5xl lg:text-6xl"></i>Preferences
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Customize your reading and writing experience
+            </p>
+        </div>
+    </div>
+</section>
+
+<% preferences = preferences[0] %>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <!-- Settings Sections Grid -->
+    <form id="preference-settings" class="space-y-8">
+        
+        <!-- Theme Customization -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950 animate-fadeInUp transition-all duration-300">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-palette text-4xl text-slate-900 dark:text-white"></i>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white transition-all duration-300">Theme & Appearance</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Light/Dark/Auto Mode -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-all duration-300">Display Mode</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="theme-mode" value="light" class="hidden w-4 h-4 text-blue-600" <%= preferences?.theme === 'light' ? 'checked' : '' %> />
+                            <span class="text-sm font-medium flex items-center gap-1 text-slate-900 dark:text-slate-200 transition-all duration-300"><i class="mdi text-lg mdi-white-balance-sunny"></i> Light</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="theme-mode" value="dark" class="hidden w-4 h-4 text-blue-600" <%= preferences?.theme === 'dark' ? 'checked' : '' %> />
+                            <span class="text-sm font-medium flex items-center gap-1 text-slate-900 dark:text-slate-200 transition-all duration-300"><i class="mdi text-lg mdi-moon-waning-crescent"></i> Dark</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="theme-mode" value="auto" class="hidden w-4 h-4 text-blue-600" <%= preferences?.theme === 'auto' ? 'checked' : '' %> />
+                            <span class="text-sm font-medium flex items-center gap-1 text-slate-900 dark:text-slate-200 transition-all duration-300"><i class="mdi text-lg mdi-refresh"></i> Auto</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Language -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-all duration-300">Language</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="lang" value="th" class="hidden w-4 h-4 text-blue-600" <%= preferences?.lang === 'th' ? 'checked' : '' %> />
+                            <span class="text-sm font-medium flex items-center gap-1 text-slate-900 dark:text-slate-200 transition-all duration-300">TH Thai</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="lang" value="en" class="hidden w-4 h-4 text-blue-600" <%= preferences?.lang === 'en' ? 'checked' : '' %> />
+                            <span class="text-sm font-medium flex items-center gap-1 text-slate-900 dark:text-slate-200 transition-all duration-300">EN English</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Accent Color (After MVP) -->
+                <!-- <div>
+                    <label class="block text-sm font-semibold dark:text-white text-slate-900 mb-3">Accent Color</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="flex items-center justify-center w-12 h-12 rounded-lg border-3 border-blue-500 cursor-pointer transition-all duration-300 hover:scale-110 bg-blue-500" title="Blue">
+                            <input type="radio" name="accent-color" value="blue" class="hidden" checked />
+                        </label>
+                        <label class="flex items-center justify-center w-12 h-12 rounded-lg border-3 border-slate-300 cursor-pointer transition-all duration-300 hover:scale-110 bg-indigo-500" title="Indigo">
+                            <input type="radio" name="accent-color" value="indigo" class="hidden" />
+                        </label>
+                        <label class="flex items-center justify-center w-12 h-12 rounded-lg border-3 border-slate-300 cursor-pointer transition-all duration-300 hover:scale-110 bg-purple-500" title="Purple">
+                            <input type="radio" name="accent-color" value="purple" class="hidden" />
+                        </label>
+                        <label class="flex items-center justify-center w-12 h-12 rounded-lg border-3 border-slate-300 cursor-pointer transition-all duration-300 hover:scale-110 bg-teal-500" title="Teal">
+                            <input type="radio" name="accent-color" value="teal" class="hidden" />
+                        </label>
+                        <label class="flex items-center justify-center w-12 h-12 rounded-lg border-3 border-slate-300 cursor-pointer transition-all duration-300 hover:scale-110 bg-emerald-500" title="Emerald">
+                            <input type="radio" name="accent-color" value="emerald" class="hidden" />
+                        </label>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950 animate-fadeInUp transition-all duration-300" style="animation-delay: 100ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-note-text text-4xl text-slate-900 dark:text-white"></i>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white transition-all duration-300">Typography</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Font Family -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-all duration-300">Font Family</label>
+                    <select name="font-family" class="w-full sm:w-64 px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                        <!-- <option value="system">System Default</option> -->
+                        <option value="sans" class="font-sans" <%= preferences?.font_family === 'sans' ? 'selected' : '' %>>Modern Sans (default)</option>
+                        <option value="serif" class="font-serif" <%= preferences?.font_family === 'serif' ? 'selected' : '' %>>Classic Serif</option>
+                        <option value="mono" class="font-mono" <%= preferences?.font_family === 'mono' ? 'selected' : '' %>>Monospace (Code)</option>
+                        <!-- <option value="rounded">Rounded & Friendly</option> -->
+                    </select>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 transition-all duration-300">Choose the font style for your reading experience</p>
+                </div>
+
+                <!-- Base Font Size -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-all duration-300">Base Font Size</label>
+                    <div class="flex items-center gap-4">
+                        <input type="range" name="font-size" min="12" max="20" value="<%= preferences?.font_size || 16 %>" class="w-full sm:w-64 h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500 transition-all duration-300" />
+                        <span id="font-size-display" class="text-sm font-medium text-slate-900 dark:text-white min-w-fit transition-all duration-300"><%= preferences?.font_size || 16 %>px</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 transition-all duration-300">Adjust the default text size for better readability</p>
+                </div>
+
+                <!-- Line Spacing (after mvp) -->
+                <!-- <div>
+                    <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-all duration-300">Line Spacing</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="line-spacing" value="compact" class="hidden w-4 h-4 text-blue-600" />
+                            <span class="text-sm font-medium text-slate-900 dark:text-slate-200 transition-all duration-300">Compact</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="line-spacing" value="normal" class="hidden w-4 h-4 text-blue-600" checked />
+                            <span class="text-sm font-medium text-slate-900 dark:text-slate-200 transition-all duration-300">Normal</span>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all duration-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-slate-700 dark:has-[:checked]:border-blue-400">
+                            <input type="radio" name="line-spacing" value="relaxed" class="hidden w-4 h-4 text-blue-600" />
+                            <span class="text-sm font-medium text-slate-900 dark:text-slate-200 transition-all duration-300">Relaxed</span>
+                        </label>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <!-- <div class="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm animate-fadeInUp" style="animation-delay: 200ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-bell text-3xl"></i>
+                <h2 class="text-2xl font-bold text-slate-900">Notifications</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <% // Email Notifications %>
+                <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="notify-email" class="w-5 h-5 text-blue-600 rounded" checked />
+                        <div>
+                            <p class="font-medium text-slate-900">Email Notifications</p>
+                            <p class="text-xs text-slate-500">Get notified about likes, comments, and followers</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-email text-xl"></i>
+                </label>
+
+                <% // Comment Notifications %>
+                <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="notify-comments" class="w-5 h-5 text-blue-600 rounded" checked />
+                        <div>
+                            <p class="font-medium text-slate-900">Comment Notifications</p>
+                            <p class="text-xs text-slate-500">Get notified when someone comments on your posts</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-comment text-xl"></i>
+                </label>
+
+                <% // Follow Notifications %>
+                <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="notify-followers" class="w-5 h-5 text-blue-600 rounded" checked />
+                        <div>
+                            <p class="font-medium text-slate-900">Follower Notifications</p>
+                            <p class="text-xs text-slate-500">Get notified when someone follows you</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-account-multiple text-xl"></i>
+                </label>
+
+                <% // Weekly Digest %>
+                <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="notify-digest" class="w-5 h-5 text-blue-600 rounded" />
+                        <div>
+                            <p class="font-medium text-slate-900">Weekly Digest</p>
+                            <p class="text-xs text-slate-500">Receive a weekly summary of popular posts</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-newspaper text-xl"></i>
+                </label>
+            </div>
+        </div> -->
+
+        <!-- Privacy & Sharing -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950 animate-fadeInUp transition-all duration-300" style="animation-delay: 300ms;">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="mdi mdi-lock text-3xl text-slate-900 dark:text-white"></i>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white transition-all duration-300">Privacy & Sharing</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Profile Visibility -->
+                <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="public-profile" class="w-5 h-5 text-blue-600 rounded" <%= preferences?.visible_profile ? 'checked' : '' %> />
+                        <div>
+                            <p class="font-medium text-slate-900 dark:text-white transition-all duration-300">Public Profile</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 transition-all duration-300">Allow anyone to view your profile and posts</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-account text-xl text-slate-400 dark:text-slate-500 transition-all duration-300"></i>
+                </label>
+
+                <!-- Allow Comments (This should in compose/edit blog page too.)-->
+                <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="allow-comments" class="w-5 h-5 text-blue-600 rounded" <%= preferences?.default_allow_post_comments ? 'checked' : '' %> />
+                        <div>
+                            <p class="font-medium text-slate-900 dark:text-white transition-all duration-300">Allow Comments by Default</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 transition-all duration-300">Set whether you let readers comment on your posts by default or not</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-comment-multiple text-xl text-slate-400 dark:text-slate-500 transition-all duration-300"></i>
+                </label>
+
+                <!-- Social Media Sharing -->
+                <!-- <label class="flex items-center justify-between p-4 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="social-sharing" class="w-5 h-5 text-blue-600 rounded" />
+                        <div>
+                            <p class="font-medium text-slate-900">Social Media Share Buttons</p>
+                            <p class="text-xs text-slate-500">Show share buttons for social media platforms</p>
+                        </div>
+                    </div>
+                    <i class="mdi mdi-upload text-xl"></i>
+                </label> -->
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex gap-3 pt-4 animate-fadeInUp" style="animation-delay: 400ms;">
+            <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 flex items-center gap-2">
+                <i class="mdi mdi-check"></i>Save Preferences
+            </button>
+            <a href="/" class="px-8 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300 inline-block">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<%- include("../../partials/footer") %>
+
+<style>
+
+    /* Update font size display */
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(to right, #3B82F6, #6366F1);
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(to right, #3B82F6, #6366F1);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+</style>

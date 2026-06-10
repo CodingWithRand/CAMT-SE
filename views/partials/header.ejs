@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="<%= req.language %>" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle || "Whiskey" %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css" />
+    <style type="text/tailwindcss">
+      @custom-variant dark (&:where(.dark, .dark *));
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    <!-- Header / Navbar - Seamlessly integrated -->
+    <header class="sticky h-[4.5rem] md:w-full top-0 z-100 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100/50 dark:border-slate-700/50 transition-all duration-300">
+        <div class="w-full h-full flex md:items-center justify-between flex-col md:flex-row">
+          <!-- Brand -->
+          <div
+            id="branding"
+            class="py-5 px-6 lg:px-8 group flex items-center gap-2 w-1/2 sm:w-[40%] md:w-auto text-xs uppercase tracking-[0.35em] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-300"
+          >
+            <a href="/" class="min-w-8 w-8 h-8 rounded-lg flex items-center justify-center">
+              <img class="w-8 h-8" src="/logo1024.png" alt="Branding Logo" />
+            </a>
+            WHISKEY
+          </div>
+
+          <!-- Nav -->
+          <nav class="fixed w-[40%] sm:w-[30%] h-screen mt-[4.5rem] bg-white/80 dark:bg-slate-800/80 md:bg-transparent md:dark:bg-transparent md:relative md:mt-0 md:h-full md:w-auto">
+            <ul
+              class="h-full flex flex-col md:flex-row items-center md:gap-8 text-xs uppercase tracking-[0.35em] text-slate-600 dark:text-slate-400"
+            >
+              <li class="w-full text-center md:w-auto"><a href="/" class="block w-full text-center md:inline md:w-auto p-6 md:p-0 text-slate-600 dark:text-slate-300 md:text-transparent md:bg-clip-text bg-gradient-to-r md:from-slate-600 md:to-slate-600 hover:from-blue-600/80 hover:to-indigo-600/80 hover:text-white dark:hover:text-slate-100 md:hover:text-transparent md:hover:from-blue-600 md:hover:to-indigo-600 dark:md:hover:from-blue-400 dark:md:hover:to-indigo-400 transition-colors duration-300 relative group">
+                <%= req.t('nav.home') %>
+              </a></li>
+              <li class="w-full text-center md:w-auto"><a href="/about" class="block w-full text-center md:inline md:w-auto p-6 md:p-0 text-slate-600 dark:text-slate-300 md:text-transparent md:bg-clip-text bg-gradient-to-r md:from-slate-600 md:to-slate-600 hover:from-blue-600/80 hover:to-indigo-600/80 hover:text-white dark:hover:text-slate-100 md:hover:text-transparent md:hover:from-blue-600 md:hover:to-indigo-600 dark:md:hover:from-blue-400 dark:md:hover:to-indigo-400 transition-colors duration-300 relative group">
+                <%= req.t('nav.about') %>
+              </a></li>
+              <li class="w-full text-center md:w-auto">
+                <a href="/contact" class="block w-full text-center md:inline md:w-auto p-6 md:p-0 text-slate-600 dark:text-slate-300 md:text-transparent md:bg-clip-text bg-gradient-to-r md:from-slate-600 md:to-slate-600 hover:from-blue-600/80 hover:to-indigo-600/80 hover:text-white dark:hover:text-slate-100 md:hover:text-transparent md:hover:from-blue-600 md:hover:to-indigo-600 dark:md:hover:from-blue-400 dark:md:hover:to-indigo-400 transition-colors duration-300 relative group">
+                  <%= req.t('nav.contact') %>
+                </a>
+              </li>
+              <li class="h-full w-full md:w-auto flex flex-col md:flex-row md:justify-center gap-x-6 items-center md:px-6 bg-slate-200 dark:bg-slate-700">
+                <a href="/register" class="relative z-[2] block w-full text-center md:inline md:w-auto p-6 md:p-0 text-slate-600 dark:text-slate-300 md:text-transparent md:bg-clip-text bg-gradient-to-r md:from-slate-600 md:to-slate-600 hover:from-blue-600/80 hover:to-indigo-600/80 hover:text-white dark:hover:text-slate-100 md:hover:text-transparent md:hover:from-blue-600 md:hover:to-indigo-600 dark:md:hover:from-blue-400 dark:md:hover:to-indigo-400 transition-colors duration-300 relative group">
+                  <%= req.t('nav.register') %>
+                </a>
+                <a href="/login" class="relative z-[2] block w-full text-center md:inline md:w-auto p-6 md:p-0 text-slate-600 dark:text-slate-300 md:text-transparent md:bg-clip-text bg-gradient-to-r md:from-slate-600 md:to-slate-600 hover:from-blue-600/80 hover:to-indigo-600/80 hover:text-white dark:hover:text-slate-100 md:hover:text-transparent md:hover:from-blue-600 md:hover:to-indigo-600 dark:md:hover:from-blue-400 dark:md:hover:to-indigo-400 transition-colors duration-300 relative group">
+                  <%= req.t('nav.sign_in') %>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <!-- <script src="/js/navbar.js" type="application/javascript"></script> -->
+    </header>
+    <main class="flex-1">
+      <div class="mx-auto px-4 sm:px-6 lg:px-8 py-0 sm:py-0">
+

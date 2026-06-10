@@ -1,0 +1,171 @@
+<%- include("../partials/header", { pageTitle: null }) %>
+
+<%
+
+function isURL(str) {
+    try {
+        new URL(str);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function getTimeAgo(stamp) {
+    const now = new Date().getTime();
+    const publishedDate = new Date(stamp).getTime();
+    const diffInSeconds = Math.floor((now - publishedDate) / 1000);
+    if (diffInSeconds < 60) {
+        return diffInSeconds + ` ${req.t('getTimeAgo.second')}${diffInSeconds === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60)) {
+        const minutes = Math.floor(diffInSeconds / (60));
+        return minutes + ` ${req.t('getTimeAgo.minute')}${minutes === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60 * 24)) {
+        const hours = Math.floor(diffInSeconds / (60 * 60));
+        return hours + ` ${req.t('getTimeAgo.hour')}${hours === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60 * 24 * 30)) {
+        const days = Math.floor(diffInSeconds / (60 * 60 * 24));
+        return days + ` ${req.t('getTimeAgo.day')}${days === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else if (diffInSeconds < (60 * 60 * 24 * 30 * 12)) {
+        const months = Math.floor(diffInSeconds / (60 * 60 * 24 * 30));
+        return months + ` ${req.t('getTimeAgo.month')}${months === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    } else {
+        const years = Math.floor(diffInSeconds / (60 * 60 * 24 * 30 * 12));
+        return years + ` ${req.t('getTimeAgo.year')}${years === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
+    }
+}
+
+%>
+
+<link rel="stylesheet" href="/css/home.css">
+
+<!-- Profile Container -->
+<div class="flex flex-col lg:flex-row min-h-screen bg-gradient-to-b from-slate-50 via-slate-50 to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    
+    <% if(currentUser) { %>
+        <%- include("../partials/sidebar", { selected: "my-profile" }) %>
+    <% } %>
+
+    <!-- Main Content -->
+    <main class="flex-1 pt-20 sm:pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl">
+            
+            <!-- Profile Header Section -->
+            <section class="mb-12 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm dark:shadow-slate-950">
+                <!-- Cover Section (Placeholder) -->
+                <div class="h-36 sm:h-48 bg-gradient-to-r <%= profile.banner %>"></div>
+                
+                <!-- Profile Info -->
+                <div class="px-6 sm:px-8 pb-8" data-uid="<%= profile.uid %>">
+                    <div class="profile-info-card flex flex-col sm:flex-row items-start sm:items-end gap-4 sm:gap-6 -mt-12 sm:-mt-4 sm:-mt-8 mb-6">
+                        <!-- Profile Picture -->
+                        <div class="flex-shrink-0">
+                            <% if(isURL(profile.avatar)) { %>
+                                <img class="w-26 h-26 sm:w-32 sm:h-32 bg-white rounded-full border-4 border-white shadow-lg " referrerpolicy="no-referrer" src="<%= profile.avatar %>" alt="Profile Avatar">
+                            <% } else { %>
+                                <div class="w-26 h-26 sm:w-32 sm:h-32 rounded-full border-4 border-white bg-gradient-to-br <%= profile.avatar %> flex items-center justify-center text-white font-bold text-4xl sm:text-5xl shadow-lg">
+                                    <%= profile.username.charAt(0).toUpperCase() || "U" %>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Profile Details -->
+                        <div class="flex-1 min-w-0 pt-2 sm:pt-4">
+                            <h1 class="user-profile-display-name text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-1 truncate">
+                                <%= profile.display_name %>
+                            </h1>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4">
+                                @<%= profile.username %>
+                            </p>
+                        </div>
+
+                        <!-- Follow/Edit Button -->
+                        <div class="flex-shrink-0 w-full sm:w-auto">
+                            <% if(currentUser && currentUser.uid === profile.uid) { %>
+                                <a href="/account" class="w-full sm:w-auto px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-center block">
+                                    Edit Profile
+                                </a>
+                            <% } else { %>
+                                <button class="follow-btn w-full sm:w-auto px-6 py-2 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200 transition-all duration-300">
+                                    Follow
+                                </button>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Stats Section -->
+                    <div class="flex gap-8 pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <div class="text-center">
+                            <p class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white"><%= stats.postCount %></p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Posts</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white"><%= stats.followerCount %></p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Followers</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white"><%= stats.followingCount %></p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Following</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bio Section -->
+            <% if(profile.bio) { %>
+                <section class="mb-12 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                        <i class="mdi mdi-information-outline text-blue-500"></i>About
+                    </h2>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        <%= profile.bio %>
+                    </p>
+                </section>
+            <% } %>
+
+            <!-- Posts Section -->
+            <section class="mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-8"><%= currentUser && currentUser.uid === profile.uid ? "Your" : "Their" %> Posts</h2>
+                
+                <% if(blogs.length === 0) { %>
+                    <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8 text-center">
+                        <p class="text-slate-600 dark:text-slate-400">No posts yet</p>
+                    </div>
+                <% } else { %>
+                    <div id="blogs-container" class="space-y-6">
+                        <% blogs.forEach((blog, index) => { %>
+                            <%- include("../partials/saves/postcard-v2", { blog, author: profile, cc: commentCounts[index] }) %>
+                        <% }) %>
+                    </div>
+                    <!-- Load More Button -->
+                    <div class="mt-8 text-center opacity-0 pointer-events-none">
+                        <button id="load-blog" class="px-8 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-900 transition-all duration-300">
+                            Load More Posts
+                        </button>
+                    </div>
+                <% } %>
+            </section>
+        </div>
+    </main>
+
+    <% if(currentUser) { %>
+        <!-- Mobile Sidebar Menu Button -->
+        <div class="lg:hidden fixed bottom-6 left-6 z-80">
+            <button id="mobile-menu-btn" class="w-14 h-14 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center">
+                <i class="mdi mdi-menu text-2xl"></i>
+            </button>
+        </div>
+    <% } %>
+</div>
+
+<%- include("../partials/footer") %>
+
+<script>
+    // Follow button functionality (to be implemented)
+    document.querySelectorAll('.follow-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // TODO: Implement follow functionality
+            console.log('Follow clicked');
+        });
+    });
+</script>

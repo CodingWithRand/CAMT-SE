@@ -1,0 +1,101 @@
+/* Overwrite Prism */
+
+html.dark :not(pre) > code[class*=language-], html.dark pre[class*=language-] {
+    background: var(--color-slate-900)
+}
+
+/* End */
+
+.ql-editor pre[data-language] code {
+    background-color: transparent !important;
+}
+
+.ql-container {
+    font-family: inherit;
+    font-size: inherit;
+    margin: auto;
+}
+
+.ql-editor {
+    padding: 1.5rem;
+}
+
+.ql-editor ul li {
+    list-style-type: disc !important;
+    margin-left: 1.5rem;
+}
+
+.ql-editor ol li {
+    list-style-type: decimal !important;
+}
+
+@media (min-width: 640px) {
+    .ql-editor {
+        padding: 2.5rem;
+    }
+}
+
+.ql-container.ql-snow {
+    border: none
+}
+
+#like-save-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#like-save-section > div {
+    justify-content: flex-end;
+    width: 250px;
+}
+
+
+@media (max-width: 550px) {
+    #like-save-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    #like-save-section > div {
+        justify-content: center;
+        width: 100%;
+    }
+
+    #like-save-section .btn-group {
+        flex-grow: 1;
+        justify-content: space-evenly;
+    }
+}
+
+
+#bio-modal .bio-content {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+#bio-modal .bio-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+#bio-modal .bio-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#bio-modal .bio-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+#bio-modal .bio-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.dark #bio-modal .bio-content::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+.dark #bio-modal .bio-content::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
