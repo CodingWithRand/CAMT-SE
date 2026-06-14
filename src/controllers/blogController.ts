@@ -14,6 +14,9 @@ import { UnauthorizedError, NotFoundError, ValidationError } from '../utils/erro
 import { PAGINATION, STATIC_CONTENT } from '../utils/constants';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { storageController } from './storageController';
+import notf_lang from '../locales';
+
+const t = (req: Request, c: string, fn?: number | string) => notf_lang(req, 'blog', c, fn)
 
 export const blogController = {
   /**
@@ -89,19 +92,19 @@ export const blogController = {
     let blog;
     try {
       blog = await BlogModel.getBlogById(parseInt(blogid as string));
-      if (blog.visibility === 0) throw new UnauthorizedError('This blog is private');
+      if (blog.visibility === 0) throw new UnauthorizedError(t(req, 'viewBlog', 1));
     } catch (error) {
       if (error instanceof NotFoundError) {
         return res.status(404).render('error', {
           errorCode: 404,
-          customMessage: "The blog you're looking for doesn't exist or has been deleted.",
-          customTip: "Please check the URL or return to the homepage.",
+          customMessage: t(req, 'not_found'),
+          customTip: t(req, 'check_url'),
         });
       } else if (error instanceof UnauthorizedError) {
         return res.status(401).render('error', {
           errorCode: 401,
           customMessage: error.message,
-          customTip: "This blog is private by the author. You may contact them to request access.",
+          customTip: t(req, 'viewBlog', 4),
         });
       }
       console.error(error)
@@ -177,7 +180,7 @@ export const blogController = {
 
       res.status(201).json({ blogid: result.blogid });
     } else if (req.method === 'PUT') {
-      if (!blogid) throw new ValidationError('Blog ID is required for update');
+      if (!blogid) throw new ValidationError(t(req, 'composeBlog', 1));
       validateBlogData({ blogTitle, blogDescription });
 
       await BlogModel.updateBlog(parseInt(blogid), { 
@@ -189,7 +192,7 @@ export const blogController = {
       });
       res.status(200).send();
     } else {
-      throw new ValidationError('Invalid request type');
+      throw new ValidationError(t(req, 'composeBlog', 2));
     }
   }),
 
@@ -213,19 +216,19 @@ export const blogController = {
     let blogData;
     try {
       blogData = await BlogModel.getBlogById(parseInt(req.params.blogid as string));
-      blogController.validateBlogOwnership(blogData, req.userId);
+      blogController.validateBlogOwnership(req, blogData, req.userId);
     } catch (error) {
       if (error instanceof NotFoundError) {
         return res.status(404).render('error', {
           errorCode: 404,
-          customMessage: "The blog you're looking for doesn't exist or has been deleted.",
-          customTip: "Please check the URL or return to the homepage.",
+          customMessage: t(req, 'not_found'),
+          customTip: t(req, 'check_url'),
         });
       } else if (error instanceof UnauthorizedError) {
         return res.status(401).render('error', {
           errorCode: 401,
-          customMessage: "You are not authorized to edit this blog.",
-          customTip: "This blog belongs to someone else. If you believe this is a mistake, please contact support.",
+          customMessage: t(req, 'renderEditPage', 3),
+          customTip: t(req, 'renderEditPage', 4),
         }) 
       }
     }
@@ -318,22 +321,22 @@ export const blogController = {
     let blogData;
     try {
       blogData = await BlogModel.getBlogById(parseInt(req.params.id as string));
-      blogController.validateBlogOwnership(blogData, req.userId);
+      blogController.validateBlogOwnership(req, blogData, req.userId);
     } catch (error) {
       console.log(error);
-      if (error instanceof NotFoundError) return res.status(404).json({ message: "The blog you're looking for doesn't exist or has been deleted." });
-      else if (error instanceof UnauthorizedError) return res.status(401).json({ message: "You are not authorized to delete this blog." }); 
+      if (error instanceof NotFoundError) return res.status(404).json({ message: t(req, "not_found")});
+      else if (error instanceof UnauthorizedError) return res.status(401).json({ message: t(req, "deleteBlog", "unauthorized_delete") }); 
     }
     
     await storageController.deleteBlogImages(blogData.blogid);
     await BlogModel.deleteBlog(blogData.blogid);
-    res.status(200).json({ message: 'Blog deleted successfully' });
+    res.status(200).json({ message: t(req, "deleteBlog", "delete_success") });
   }),
 
   /**
    * Miscellaneous functions
    */
-  validateBlogOwnership: (blogData: any, userId: string) => {
-    if (blogData.authorid !== userId) throw new UnauthorizedError('You are not allowed to edit other user\'s blog');
+  validateBlogOwnership: (req: Request, blogData: any, userId: string) => {
+    if (blogData.authorid !== userId) throw new UnauthorizedError(t(req, "validateBlogOwnership", 1));
   }
 };

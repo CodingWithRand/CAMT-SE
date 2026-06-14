@@ -21,7 +21,14 @@
         "deleted_account": "[Deleted Account]",
         "unknown": "Unknown",
         "edit_comment": "Edit Comment",
-        "delete_comment": "Delete Comment"
+        "delete_comment": "Delete Comment",
+        "edit_cancel": "Cancel",
+        "edit_save": "Save",
+        "reply_btn": "Reply",
+        "reply_cancel": "Cancel",
+        "reply_send": "Reply",
+        "reply_placeholder": "Write a reply...",
+        "reply_load": "Load More Replies"
     },
     "posts": {
         "featured": "Featured",
@@ -36,7 +43,7 @@
         "save": "Save",
         "saved": "Saved"
     },
-    "getTimeAgo:":{
+    "getTimeAgo":{
         "second": "second",
         "minute": "minute",
         "hour": "hour",
@@ -58,6 +65,7 @@
         "created_by": "Created by Rand"
     },
     "media_attribution": {
+        "page_title": "Media Attributions",
         "globe_model": "Globe model",
         "credit_to": "credit to",
         "coworking_space": "Coworking space with people graphic by Freepik"
@@ -134,6 +142,7 @@
         }
     },
     "contact": {
+        "page_title": "Contact Us",
         "title": "Get In Touch",
         "subtitle": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
         "labels": {
@@ -292,5 +301,217 @@
             "btn_home": "Back to Home",
             "btn_login": "Go to Login"
         }
+    },
+    "blog_view": {
+        "labels": {
+            "likes": "likes",
+            "author": "Author",
+            "comments_heading": "Comments",
+            "saved": "Saved",
+            "save": "Save"
+        },
+        "placeholders": {
+            "sign_in_to_action": "Sign in to like and save this blog",
+            "sign_in_to_comment": "Sign in to leave comments on this blog",
+            "comments_disabled": "Comments are disabled for this blog",
+            "no_comments": "This blog has no comments",
+            "share_thoughts": "Share your thoughts...",
+            "no_bio": "This author hasn't added a bio yet."
+        },
+        "actions": {
+            "enjoyed_title": "Enjoyed this blog?",
+            "cancel": "Cancel",
+            "post_comment": "Post Comment",
+            "load_more_comments": "Load More Comments",
+            "back_to_feed": "Back to feed",
+            "view_profile": "View Full Profile"
+        },
+        "modals": {
+            "about_author": "About Author",
+            "bio_tooltip": "Click to see author bio"
+        }
+    },
+    "saves": {
+        "title": "Saved Posts",
+        "subtitle": "Your collection of bookmarked posts",
+        "no_saved": "No saved posts yet",
+        "no_saved_recommendations": "Bookmark posts to read them later"
+    },
+    "people": {
+        "buttons": {
+            "edit_profile": "Edit Profile",
+            "follow": "Follow"
+        },
+        "profile_labels": {
+            "followers": "Followers",
+            "following": "Following",
+            "posts": "Posts"
+        },
+        "about": "About",
+        "no_posts": "No posts yet",
+        "your_posts": "Your Posts",
+        "their_posts": "Their Posts"
+    },
+    "compose_actions": {
+        "titles": {
+            "write_your_story": "Write Your Story",
+            "tips_header": "Tips for Great Blogs",
+            "insert_image": "Insert Image",
+            "insert_link": "Insert Link"
+        },
+        "labels": {
+            "blog_title": "Blog Title*",
+            "blog_description": "Blog Description",
+            "your_story": "Your Story*",
+            "blog_visibility": "Blog Visibility",
+            "allow_comments": "Allow Comments",
+            "image_url": "Image URL",
+            "alt_text": "Alt Text (for accessibility)",
+            "select_image_file": "Select Image File",
+            "link_text": "Link Text",
+            "url": "URL"
+        },
+        "placeholders": {
+            "title_placeholder": "Give your blog a compelling title...",
+            "description_placeholder": "Describe your blog briefly to help readers know what to expect...",
+            "image_url_placeholder": "https://example.com/image.jpg",
+            "describe_image_placeholder": "Describe the image...",
+            "link_text_placeholder": "Enter link text...",
+            "url_placeholder": "https://example.com"
+        },
+        "options": {
+            "normal": "Normal",
+            "heading_1": "Heading 1",
+            "heading_2": "Heading 2",
+            "heading_3": "Heading 3",
+            "public": "Public",
+            "unlisted": "Unlisted",
+            "private": "Private"
+        },
+        "descriptions": {
+            "toolbar_tip": "Use the toolbar below to format your text, add images, and embed links.",
+            "lightbulb_tip": "Tip: Format your text with the toolbar above. You can add images, links, and code blocks to make your story more engaging.",
+            "public_desc": "Anyone can see and search for your blog.",
+            "unlisted_desc": "Only people with the link can view.",
+            "private_desc": "Only you can see this blog.",
+            "disable_comments_warning": "Your account settings currently disable comments on all your blogs. Change this in your ",
+            "preferences_link_text": "preferences",
+            "set_comments_desc": "Set whether you let readers comment on your posts or not",
+            "drag_drop": "Drag and drop your image here",
+            "click_select": "or click to select",
+            "subtitle": "Share your thoughts, ideas, and experiences with our community."
+        },
+        "buttons": {
+            "cancel": "Cancel",
+            "update_blog": "Update Blog",
+            "publish_blog": "Publish Blog",
+            "url_tab": "URL",
+            "upload_tab": "Upload",
+            "insert": "Insert"
+        },
+        "tooltips": {
+            "bold": "Bold (Ctrl+B)",
+            "italic": "Italic (Ctrl+I)",
+            "underline": "Underline (Ctrl+U)",
+            "strikethrough": "Strikethrough",
+            "text_color": "Text Color",
+            "preset_colors": "Preset Colors",
+            "custom": "Custom:",
+            "recently_used": "Recently used colors:",
+            "text_highlight": "Text Highlight",
+            "clear_formatting": "Clear Formatting",
+            "align_left": "Align Left",
+            "align_center": "Align Center",
+            "align_right": "Align Right",
+            "justify": "Justify",
+            "heading": "Heading",
+            "ordered_list": "Ordered List",
+            "bullet_list": "Bullet List",
+            "quote": "Quote",
+            "code_block": "Code Block",
+            "insert_image": "Insert Image",
+            "insert_link": "Insert Link"
+        },
+        "tips_list": [
+            "Write a clear, engaging title",
+            "Use formatting to highlight key points and improve readability",
+            "Add images and links to make your story more interactive",
+            "Break up long sections with headings and quotes",
+            "Share authentic experiences and insights",
+            "Proofread before publishing"
+        ]
+    },
+    "account_settings": {
+        "title": "Account Settings",
+        "meta_description": "Manage your account security and personal information",
+        "profile_information": "Profile Information",
+        "profile_picture": "Profile Picture",
+        "change_picture_btn": "Change Picture",
+        "picture_requirements": "JPG, PNG or GIF. Max 10MB",
+        "display_name_label": "Display Name",
+        "display_name_hint": "3-30 characters.",
+        "username_label": "Username",
+        "bio_label": "Bio",
+        "bio_max_characters": "Max 1000 characters.",
+        "bio_characters_left": "Characters Left:",
+        "save_profile_btn": "Save Profile",
+        "password_security": "Password & Security",
+        "current_password_label": "Current Password",
+        "current_password_placeholder": "Enter your current password",
+        "current_password_hint": "If you signed in with Google and never changed your password, leave this blank",
+        "new_password_label": "New Password",
+        "new_password_placeholder": "Enter a strong new password",
+        "password_requirements_title": "Password requirements:",
+        "req_length": "At least 8 characters",
+        "req_uppercase": "One uppercase letter",
+        "req_number": "One number",
+        "req_special": "One special character (!@#$%)",
+        "confirm_new_password_label": "Confirm New Password",
+        "confirm_new_password_placeholder": "Confirm your new password",
+        "update_password_btn": "Update Password",
+        "forgot_password_txt": "Forgot password?",
+        "reset_here_btn": "Reset here",
+        "danger_zone_title": "Danger Zone",
+        "delete_account_title": "Delete Your Account",
+        "delete_account_desc": "Permanently delete your account and all associated data. This action cannot be undone.",
+        "delete_account_btn": "Delete Account",
+        "back_to_feed_btn": "Back to Feed",
+        "reset_password_modal_title": "Reset Password",
+        "reset_password_modal_desc": "Enter your email address and we'll send you a link to reset your password.",
+        "email_address_label": "Email Address",
+        "send_reset_link_btn": "Send Reset Link",
+        "reset_success_title": "Password reset link sent!",
+        "reset_success_desc": "Check your email for instructions.",
+        "delete_account_modal_title": "Delete Account",
+        "delete_account_modal_desc": "To confirm you would like to delete your account, enter your password below.",
+        "your_password_label": "Your password",
+        "submit_delete_account_btn": "Submit and Delete My Account"
+    },
+    "preferences": {
+        "page_title": "Preferences",
+        "meta_description": "Customize your reading and writing experience",
+        "theme_appearance": "Theme & Appearance",
+        "display_mode": "Display Mode",
+        "mode_light": "Light",
+        "mode_dark": "Dark",
+        "mode_auto": "Auto",
+        "language_label": "Language",
+        "lang_th": "Thai",
+        "lang_en": "English",
+        "typography": "Typography",
+        "font_family_label": "Font Family",
+        "font_sans": "Modern Sans (default)",
+        "font_serif": "Classic Serif",
+        "font_mono": "Monospace (Code)",
+        "font_hint": "Choose the font style for your reading experience",
+        "base_font_size": "Base Font Size",
+        "font_size_hint": "Adjust the default text size for better readability",
+        "privacy_sharing": "Privacy & Sharing",
+        "public_profile_label": "Public Profile",
+        "public_profile_hint": "Allow anyone to view your profile and posts",
+        "allow_comments_label": "Allow Comments by Default",
+        "allow_comments_hint": "Set whether you let readers comment on your posts by default or not",
+        "save_preferences_btn": "Save Preferences",
+        "cancel_btn": "Cancel"
     }
 }

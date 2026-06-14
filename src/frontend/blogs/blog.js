@@ -1,5 +1,6 @@
 import { showToast, isURL, getTimeAgo } from "../utils/misc.js";
 import Prism from "prismjs";
+import notf_lang from "../locales.js"
 
 require("prismjs/components/prism-java.js");
 require("prismjs/components/prism-c.js");
@@ -13,6 +14,8 @@ require("prismjs/components/prism-ruby.js");
 require("prismjs/components/prism-rust.js");
 require("prismjs/components/prism-sql.js");
 
+// Scope-narrowing translation helper function to lock context onto this file's namespace
+const notfmsg = (fn, notfId) => notf_lang("blog", fn, notfId);
 
 async function commentHTML(d, sub=false) {
     let profilePic1 = !d.comment_author ?
@@ -24,7 +27,7 @@ async function commentHTML(d, sub=false) {
     isURL(d.comment_author.avatar) ? `<img class="${sub ? "w-8 h-8" : "w-10 h-10"} rounded-full bg-white " referrerpolicy="no-referrer" src="${d.comment_author.avatar}" alt="User Avatar">` : 
     `
     <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full bg-gradient-to-br ${d.comment_author.avatar} flex items-center justify-center text-white font-bold">
-        ${d.comment_author.username.charAt(0).toUpperCase() || "U"}
+        ${d.comment_author.username.charAt(0).toUpperCase() || notfmsg("placeholders", "u")}
     </div>
     `
 
@@ -60,21 +63,21 @@ async function commentHTML(d, sub=false) {
         profilePic2 = isURL(currentUserAvatar) ? `<img class="w-8 h-8 rounded-full bg-white" referrerpolicy="no-referrer" src="${currentUserAvatar}" alt="User Avatar">` : 
         `
         <div class="w-8 h-8 shrink-0 aspect-square rounded-full bg-gradient-to-br ${currentUserAvatar} flex items-center justify-center text-white font-bold">
-            ${currentUserUsername.charAt(0).toUpperCase() || "U"}
+            ${currentUserUsername.charAt(0).toUpperCase() || notfmsg("placeholders", "u")}
         </div>
         `
-        if (currentUserUid !== d.comment_author.uid && (d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile)) {
+        if (currentUserUid !== d.comment_author?.uid && (d.comment_author?.user_preferences && !d.comment_author.user_preferences.visible_profile)) {
             profilePic1 = `
                 <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
                     <i class="mdi mdi-account"></i>
                 </div>
             `
         }
-    } else if (d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile) {
+    } else if (d.comment_author?.user_preferences && !d.comment_author.user_preferences.visible_profile) {
         profilePic1 = `
             <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
-                <i class="mdi mdi-account"></i>
-            </div>
+                    <i class="mdi mdi-account"></i>
+                </div>
         `
     }
 
@@ -86,40 +89,39 @@ async function commentHTML(d, sub=false) {
                     <div class="flex items-center justify-between gap-2 mb-1 relative">
                         <div class="flex items-center gap-2 min-w-0">
                             ${(() => {
-                                if(uid.user?.uid === d.comment_author.uid) {
+                                if(uid.user?.uid === d.comment_author?.uid) {
                                     return `<h4 class="font-semibold text-slate-900 dark:text-white truncate">
                                         ${d.comment_author.display_name}
                                     </h4>`
                                 } else {
                                     return `<h4 class="font-semibold text-slate-900 dark:text-white truncate">
                                         ${d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile ? d.comment_author.display_name : 
-                                          d.comment_author && d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile ? "Annonymous User" :
-                                          !d.comment_author ? "[Deleted Account]" : "Unknown"
+                                          d.comment_author && d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile ? notfmsg("placeholders", "anonymous_user") :
+                                          !d.comment_author ? notfmsg("placeholders", "deleted_account") : notfmsg("placeholders", "unknown_user")
                                         }
                                     </h4>`
                                 }
                             })()}
                             ${(() => {
-                                if(uid.user?.uid === d.comment_author.uid || (d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile)) {
+                                if(uid.user?.uid === d.comment_author?.uid || (d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile)) {
                                     return `<span class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">@${d.comment_author.username}</span>`
                                 } else return ""
                             })()}
                             <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">${getTimeAgo(d.comment.createdat)}</span>
                         </div>
-                        ${(signedIn && d.comment_author ) && d.comment_author.uid === uid.user.uid ? `
+                        ${(signedIn && d.comment_author ) && d.comment_author?.uid === uid.user.uid ? `
                         <button class="comment-menu-btn text-slate-400 hover:text-slate-600 relative group flex-shrink-0">
                             <i class="mdi mdi-dots-vertical text-lg"></i>
                         </button>
-                        <!-- Dropdown Menu -->
                         <div class="comment-menu hidden absolute right-6 top-0 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 w-48 z-[10] flex-col">
                             <button class="edit-comment-btn w-full text-left p-4 rounded-t-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2">
                                 <i class="mdi mdi-pencil" style="margin-top: 0.125rem;"></i>
-                                Edit Comment
+                                ${notfmsg("buttons", "edit_comment")}
                             </button>
                             <hr class="border-slate-200 dark:border-slate-600" />
                             <button class="delete-comment-btn w-full text-left p-4 rounded-b-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 flex items-center gap-2">
                                 <i class="mdi mdi-delete" style="margin-top: 0.125rem;"></i>
-                                Delete Comment
+                                ${notfmsg("buttons", "delete_comment")}
                             </button>
                         </div>
                         ` : ""}
@@ -128,15 +130,14 @@ async function commentHTML(d, sub=false) {
                         ${d.comment.comment}
                     </p>
                     ${(signedIn && d.comment_author) && d.comment_author.uid === uid.user.uid ? `
-                    <!-- Edit Form (Hidden by default) -->
                     <div class="edit-form hidden flex flex-col gap-2 mb-3">
                         <textarea class="edit-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm">${d.comment.comment}</textarea>
                         <div class="flex gap-2 justify-end">
                             <button class="cancel-edit px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                                Cancel
+                                ${notfmsg("buttons", "cancel")}
                             </button>
                             <button class="submit-edit px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 text-sm">
-                                Save
+                                ${notfmsg("buttons", "save")}
                             </button>
                         </div>
                     </div>
@@ -148,7 +149,7 @@ async function commentHTML(d, sub=false) {
                         </button>
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" data-comment-id="${d.comment.commentid}">
                             <i class="mdi mdi-reply"></i>
-                            Reply
+                            ${notfmsg("buttons", "reply")}
                         </button>
                     </div>
                 </div>
@@ -157,18 +158,17 @@ async function commentHTML(d, sub=false) {
                     
             </div>
             ${ signedIn ? `
-                <!-- Reply Form (Hidden) -->
                 <div class="reply-form hidden pt-4 border-t border-slate-100 dark:border-slate-700 ${sub ? "ml-12" : "ml-14"}">
                     <div class="flex gap-3">
                         ${profilePic2}
                         <div class="flex-1">
-                            <textarea placeholder="Write a reply..." class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
+                            <textarea placeholder="${notfmsg("placeholders", "write_reply")}" class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
                             <div class="flex gap-2 mt-2 justify-end">
                                 <button class="cancel-reply px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                                    Cancel
+                                    ${notfmsg("buttons", "cancel")}
                                 </button>
                                 <button class="submit-reply px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-sm">
-                                    Reply
+                                    ${notfmsg("buttons", "reply")}
                                 </button>
                             </div>
                         </div>
@@ -176,10 +176,9 @@ async function commentHTML(d, sub=false) {
                 </div>
             ` : "" }
             ${ d.comment.hasReplies ? `
-                <!-- Load More Replies -->
                 <div class="load-replies ml-14 text-center">
                     <button class="min-h-auto load-replies-btn text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-300 flex items-center justify-center gap-2">
-                        <i class="mdi mdi-chevron-down"></i>Load More Replies
+                        <i class="mdi mdi-chevron-down"></i>${notfmsg("buttons", "load_more_replies")}
                     </button>
                 </div>
             `: "" } 
@@ -306,7 +305,7 @@ function setupCommentMenuListeners(commentItem) {
             const newContent = editTextarea.value.trim();
             
             if (!newContent) {
-                showToast('Comment cannot be empty.', 'error');
+                showToast(notfmsg("toasts", "empty_comment_error"), 'error');
                 return;
             }
 
@@ -326,11 +325,11 @@ function setupCommentMenuListeners(commentItem) {
                     // showToast('Comment updated successfully.', 'success');
                 } else {
                     return res.json().then(err => {
-                        throw new Error(err.error || 'Failed to update comment.');
+                        throw new Error(err.error || notfmsg("toasts", "edit_failed_error"));
                     });
                 }
             })
-            .catch(err => showToast(`Error updating comment: ${err.message}`, 'error'));
+            .catch(err => showToast(`${notfmsg("toasts", "edit_error")}${err.message}`, 'error'));
         });
     }
 
@@ -339,7 +338,7 @@ function setupCommentMenuListeners(commentItem) {
     if (deleteBtn) {
         deleteBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+            if (confirm(notfmsg("toasts", "confirm_delete"))) {
                 fetch(`/api/comments/${commentId}/delete`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
@@ -352,15 +351,15 @@ function setupCommentMenuListeners(commentItem) {
                         commentItem.style.transition = 'all 0.3s ease-out';
                         setTimeout(() => {
                             commentItem.remove();
-                            showToast('Comment deleted successfully.', 'success');
+                            showToast(notfmsg("toasts", "delete_success"), 'success');
                         }, 300);
                     } else {
                         return res.json().then(err => {
-                            throw new Error(err.error || 'Failed to delete comment.');
+                            throw new Error(err.error || notfmsg("toasts", "delete_failed_error"));
                         });
                     }
                 })
-                .catch(err => showToast(`Error deleting comment: ${err.message}`, 'error'));
+                .catch(err => showToast(`${notfmsg("toasts", "delete_error")}${err.message}`, 'error'));
             }
         });
     }
@@ -428,17 +427,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             if (!response.ok) {
                 const error = await response.json();
-                showToast(error.error || 'An error occurred while saving the post. Please try again.');
+                showToast(error.error || notfmsg("toasts", "save_post_error"));
                 return;
             }
 
             savePostBtn.classList.toggle('text-blue-600');
             if(document.documentElement.classList.contains("dark")) savePostBtn.classList.toggle('dark:text-slate-400');
             else savePostBtn.classList.toggle('text-slate-600');
-            savePostBtn.querySelector('span').textContent = savePostBtn.querySelector('span').textContent === "Save" ? "Saved" : "Save";
+            savePostBtn.querySelector('span').textContent = savePostBtn.querySelector('span').textContent === notfmsg("buttons", "save") ? notfmsg("buttons", "saved") : notfmsg("buttons", "save");
         
         } catch (error) {
-            showToast('An error occurred while saving the post. Please try again.', 'error');
+            showToast(notfmsg("toasts", "save_post_error"), 'error');
         }
 
         savePostBtn.removeAttribute('disabled');
@@ -476,13 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Prism?.highlightAll();
     
 
-    if(document.querySelector(".ql-editor")) document.querySelector(".ql-editor").innerHTML = document.querySelector(".ql-editor").innerHTML.replace(`<!-- 
-            
-                <p class="text-slate-700 leading-relaxed text-base sm:text-lg mb-4">
-                    
-                </p>
-            
-         -->`, "").trim();
+    if(document.querySelector(".ql-editor")) document.querySelector(".ql-editor").innerHTML = document.querySelector(".ql-editor").innerHTML.replace(``, "").trim();
 
     function cancelComment() {
         document.getElementById("comment-content").value = "";
@@ -610,6 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     registerEvents(commentItem, csred)
                     subCommentsList.insertAdjacentElement('beforeend', commentItem)
                 } catch (err) {
+                    console.error(err)
                     showToast(err);
                     return;
                 }

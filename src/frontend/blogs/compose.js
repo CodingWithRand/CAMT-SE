@@ -1,3 +1,6 @@
+const { showToast } = require("../utils/misc.js")
+const { default: notf_lang } = require("../locales.js");
+
 // Initialize Quill Editor
 const rawEditor = document.getElementById('editor')
 if(!rawEditor) return;
@@ -8,7 +11,7 @@ const quill = new Quill('#editor', {
         syntax: true,
         toolbar: false
     },
-    placeholder: 'Write your blog here. Share your thoughts, ideas, and experiences...',
+    placeholder: notf_lang('compose', 'quill_placeholder'),
 });
 
 if(rawEditor.dataset.mode === 'edit') {
@@ -468,7 +471,10 @@ document.getElementById('blog-composing-form').addEventListener('submit', async 
             })
         });
         const fromDraftedResponse = await draftedResponse.json();
-        if(!draftedResponse.ok) return console.error(draftedResponse.error);
+        if(!draftedResponse.ok) {
+            showToast(error.error || notf_lang('compose', 'default_error'));
+            return console.error(draftedResponse.error);
+        }
         targetBlogId = fromDraftedResponse.blogid;
     }
 
@@ -505,7 +511,7 @@ document.getElementById('blog-composing-form').addEventListener('submit', async 
     if (updatedResponse.ok) window.location.href = `/`
     else {
         const error = await updatedResponse.json();
-        // showToast(error.error || 'An error occurred while composing the blog. Please try again.');
+        showToast(error.error || notf_lang('compose', 'default_error'));
         console.error(error);
     }
 });

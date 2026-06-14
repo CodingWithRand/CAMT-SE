@@ -12,6 +12,10 @@
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
       for (let key of __getOwnPropNames(from))
@@ -28,10 +32,16 @@
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
   // src/frontend/locales.js
-  function notf_lang(file, fn, id) {
-    return notfs[document.documentElement.lang.slice(0, 2)][file][fn][id];
+  var locales_exports = {};
+  __export(locales_exports, {
+    default: () => notf_lang2
+  });
+  function notf_lang2(file, fn, id = void 0) {
+    if (id) return notfs[document.documentElement.lang.slice(0, 2)][file][fn][id];
+    else return notfs[document.documentElement.lang.slice(0, 2)][file][fn];
   }
   var notfs;
   var init_locales = __esm({
@@ -137,6 +147,60 @@
             "errors": {
               "logout_failed": "An error occurred while logging out. Please try again."
             }
+          },
+          "blog": {
+            "placeholders": {
+              "u": "U",
+              "anonymous_user": "Anonymous User",
+              "deleted_account": "[Deleted Account]",
+              "unknown_user": "Unknown",
+              "write_reply": "Write a reply..."
+            },
+            "buttons": {
+              "edit_comment": "Edit Comment",
+              "delete_comment": "Delete Comment",
+              "cancel": "Cancel",
+              "save": "Save",
+              "reply": "Reply",
+              "load_more_replies": "Load More Replies",
+              "saved": "Saved"
+            },
+            "toasts": {
+              "empty_comment_error": "Comment cannot be empty.",
+              "edit_failed_error": "Failed to update comment.",
+              "edit_error": "Error updating comment: ",
+              "confirm_delete": "Are you sure you want to delete this comment? This action cannot be undone.",
+              "delete_success": "Comment deleted successfully.",
+              "delete_failed_error": "Failed to delete comment.",
+              "delete_error": "Error deleting comment: ",
+              "save_post_error": "An error occurred while saving the post. Please try again."
+            }
+          },
+          "compose": {
+            "quill_placeholder": "Write your blog here. Share your thoughts, ideas, and experiences...",
+            "default_error": "An error occurred while publishing the blog. Please try again."
+          },
+          "preferences": {
+            "success": "Successfully saved your preference settings!",
+            "error": "Failed to save your preference settings."
+          },
+          "account": {
+            "bio_max_chars": "Max 1000 characters. Characters Left:",
+            "profileForm": {
+              "saveSuccess": "Profile updated successfully!"
+            },
+            "passwordForm": {
+              "passwordRequirements": "Password must have 8+ characters, uppercase, lowercase, number, and symbol",
+              "saveSuccess": "Password updated successfully!"
+            },
+            "deleteModal": {
+              "emptyPassword": "Please enter your password to confirm account deletion.",
+              "fallbackError": "Failed to delete account.",
+              "networkError": "An error occurred. Please try again."
+            }
+          },
+          wip: {
+            follow: "Follow is not implemented yet. Please keep up with the new updates in the future. Sorry for the inconvenience."
           }
         },
         th: {
@@ -238,6 +302,60 @@
             "errors": {
               "logout_failed": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14\u0E02\u0E13\u0E30\u0E25\u0E07\u0E0A\u0E37\u0E48\u0E2D\u0E2D\u0E2D\u0E01\u0E32\u0E01\u0E23\u0E23\u0E30\u0E1A\u0E1A \u0E01\u0E23\u0E38\u0E13\u0E32\u0E25\u0E2D\u0E07\u0E43\u0E2B\u0E21\u0E48\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
             }
+          },
+          "blog": {
+            "placeholders": {
+              "u": "U",
+              "anonymous_user": "\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49\u0E17\u0E35\u0E48\u0E44\u0E21\u0E48\u0E23\u0E30\u0E1A\u0E38\u0E15\u0E31\u0E27\u0E15\u0E19",
+              "deleted_account": "[\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E35\u0E48\u0E16\u0E39\u0E01\u0E25\u0E1A]",
+              "unknown_user": "\u0E44\u0E21\u0E48\u0E23\u0E39\u0E49\u0E08\u0E31\u0E01",
+              "write_reply": "\u0E40\u0E02\u0E35\u0E22\u0E19\u0E01\u0E32\u0E23\u0E15\u0E2D\u0E1A\u0E01\u0E25\u0E31\u0E1A..."
+            },
+            "buttons": {
+              "edit_comment": "\u0E41\u0E01\u0E49\u0E44\u0E02\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19",
+              "delete_comment": "\u0E25\u0E1A\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19",
+              "cancel": "\u0E22\u0E01\u0E40\u0E25\u0E34\u0E01",
+              "save": "\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01",
+              "reply": "\u0E15\u0E2D\u0E1A\u0E01\u0E25\u0E31\u0E1A",
+              "load_more_replies": "\u0E42\u0E2B\u0E25\u0E14\u0E01\u0E32\u0E23\u0E15\u0E2D\u0E1A\u0E01\u0E25\u0E31\u0E1A\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21",
+              "saved": "\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E41\u0E25\u0E49\u0E27"
+            },
+            "toasts": {
+              "empty_comment_error": "\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19\u0E15\u0E49\u0E2D\u0E07\u0E44\u0E21\u0E48\u0E27\u0E48\u0E32\u0E07\u0E40\u0E1B\u0E25\u0E48\u0E32",
+              "edit_failed_error": "\u0E44\u0E21\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E2D\u0E31\u0E1B\u0E40\u0E14\u0E15\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19\u0E44\u0E14\u0E49",
+              "edit_error": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14\u0E43\u0E19\u0E01\u0E32\u0E23\u0E2D\u0E31\u0E1B\u0E40\u0E14\u0E15\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19: ",
+              "confirm_delete": "\u0E04\u0E38\u0E13\u0E41\u0E19\u0E48\u0E43\u0E08\u0E2B\u0E23\u0E37\u0E2D\u0E44\u0E21\u0E48\u0E27\u0E48\u0E32\u0E15\u0E49\u0E2D\u0E07\u0E01\u0E32\u0E23\u0E25\u0E1A\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19\u0E19\u0E35\u0E49? \u0E01\u0E32\u0E23\u0E14\u0E33\u0E40\u0E19\u0E34\u0E19\u0E01\u0E32\u0E23\u0E19\u0E35\u0E49\u0E44\u0E21\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E22\u0E49\u0E2D\u0E19\u0E01\u0E25\u0E31\u0E1A\u0E44\u0E14\u0E49",
+              "delete_success": "\u0E25\u0E1A\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19\u0E40\u0E23\u0E35\u0E22\u0E1A\u0E23\u0E49\u0E2D\u0E22\u0E41\u0E25\u0E49\u0E27",
+              "delete_failed_error": "\u0E44\u0E21\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E25\u0E1A\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19\u0E44\u0E14\u0E49",
+              "delete_error": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14\u0E43\u0E19\u0E01\u0E32\u0E23\u0E25\u0E1A\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14\u0E40\u0E2B\u0E47\u0E19: ",
+              "save_post_error": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14\u0E02\u0E13\u0E30\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E42\u0E1E\u0E2A\u0E15\u0E4C \u0E01\u0E23\u0E38\u0E13\u0E32\u0E25\u0E2D\u0E07\u0E43\u0E2B\u0E21\u0E48\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
+            }
+          },
+          "compose": {
+            "quill_placeholder": "\u0E40\u0E02\u0E35\u0E22\u0E19\u0E1A\u0E25\u0E47\u0E2D\u0E01\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E17\u0E35\u0E48\u0E19\u0E35\u0E48 \u0E41\u0E1A\u0E48\u0E07\u0E1B\u0E31\u0E19\u0E04\u0E27\u0E32\u0E21\u0E04\u0E34\u0E14 \u0E44\u0E2D\u0E40\u0E14\u0E35\u0E22 \u0E1B\u0E23\u0E30\u0E2A\u0E1A\u0E01\u0E32\u0E23\u0E13\u0E4C\u0E15\u0E48\u0E32\u0E07\u0E46\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13...",
+            "default_error": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14\u0E02\u0E13\u0E30\u0E40\u0E1C\u0E22\u0E41\u0E1E\u0E23\u0E48\u0E1A\u0E25\u0E47\u0E2D\u0E01 \u0E01\u0E23\u0E38\u0E13\u0E32\u0E25\u0E2D\u0E07\u0E43\u0E2B\u0E21\u0E48\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
+          },
+          "preferences": {
+            "success": "\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E01\u0E32\u0E23\u0E15\u0E31\u0E49\u0E07\u0E04\u0E48\u0E32\u0E43\u0E0A\u0E49\u0E07\u0E32\u0E19\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E2A\u0E33\u0E40\u0E23\u0E47\u0E08",
+            "error": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14\u0E43\u0E19\u0E01\u0E32\u0E23\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E01\u0E32\u0E23\u0E15\u0E31\u0E49\u0E07\u0E04\u0E48\u0E32\u0E43\u0E0A\u0E49\u0E07\u0E32\u0E19\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13"
+          },
+          "account": {
+            "bio_max_chars": "\u0E2A\u0E39\u0E07\u0E2A\u0E38\u0E14 1000 \u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23 \u0E40\u0E2B\u0E25\u0E37\u0E2D:",
+            "profileForm": {
+              "saveSuccess": "\u0E2D\u0E31\u0E1B\u0E40\u0E14\u0E15\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E2A\u0E33\u0E40\u0E23\u0E47\u0E08\u0E41\u0E25\u0E49\u0E27!"
+            },
+            "passwordForm": {
+              "saveSuccess": "\u0E40\u0E1B\u0E25\u0E35\u0E48\u0E22\u0E19\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E2A\u0E33\u0E40\u0E23\u0E47\u0E08\u0E41\u0E25\u0E49\u0E27!",
+              "passwordRequirements": "\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 8 \u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E02\u0E36\u0E49\u0E19\u0E44\u0E1B \u0E21\u0E35\u0E15\u0E31\u0E27\u0E1E\u0E34\u0E21\u0E1E\u0E4C\u0E43\u0E2B\u0E0D\u0E48 \u0E15\u0E31\u0E27\u0E1E\u0E34\u0E21\u0E1E\u0E4C\u0E40\u0E25\u0E47\u0E01 \u0E15\u0E31\u0E27\u0E40\u0E25\u0E02 \u0E41\u0E25\u0E30\u0E2A\u0E31\u0E0D\u0E25\u0E31\u0E01\u0E29\u0E13\u0E4C"
+            },
+            "deleteModal": {
+              "emptyPassword": "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E01\u0E23\u0E2D\u0E01\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E01\u0E32\u0E23\u0E25\u0E1A\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49",
+              "fallbackError": "\u0E44\u0E21\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E25\u0E1A\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49\u0E44\u0E14\u0E49",
+              "networkError": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14 \u0E01\u0E23\u0E38\u0E13\u0E32\u0E25\u0E2D\u0E07\u0E43\u0E2B\u0E21\u0E48\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
+            }
+          },
+          wip: {
+            follow: "\u0E02\u0E13\u0E30\u0E19\u0E35\u0E49\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E21\u0E35\u0E23\u0E30\u0E1A\u0E1A\u0E01\u0E32\u0E23\u0E15\u0E34\u0E14\u0E15\u0E32\u0E21 \u0E42\u0E1B\u0E23\u0E14\u0E15\u0E34\u0E14\u0E15\u0E32\u0E21\u0E01\u0E32\u0E23\u0E2D\u0E31\u0E1B\u0E40\u0E14\u0E15\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E43\u0E19\u0E2D\u0E19\u0E32\u0E04\u0E15 \u0E02\u0E2D\u0E2D\u0E20\u0E31\u0E22\u0E43\u0E19\u0E04\u0E27\u0E32\u0E21\u0E44\u0E21\u0E48\u0E2A\u0E30\u0E14\u0E27\u0E01"
           }
         }
       };
@@ -264,7 +382,7 @@
       currentUserUid = await currentUserUidResponse?.json();
       currentUserSavedBlogs = await currentUserSavedBlogs?.json();
       if (currentUserSavedBlogs.user.saved_blogs?.includes(data.blog.blogid)) data.blog.isSaved = true;
-    } catch (error2) {
+    } catch (error3) {
     }
     if (currentUserUid && currentUserUid.user.uid === data.blog.authorid) {
       postMenu = `
@@ -336,8 +454,8 @@
           credentials: "include"
         });
         if (!response.ok) {
-          const error2 = await response.json();
-          showToast(error2.error || notfmsg("toasts", "save_error"));
+          const error3 = await response.json();
+          showToast(error3.error || notfmsg("toasts", "save_error"));
           return;
         }
         if (document.documentElement.classList.contains("dark")) {
@@ -348,7 +466,7 @@
           savePostBtn.classList.remove("dark:text-blue-400");
         }
         savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === notfmsg("actions", "save") ? notfmsg("actions", "saved") : notfmsg("actions", "save");
-      } catch (error2) {
+      } catch (error3) {
         showToast(notfmsg("toasts", "save_error"), "error");
       }
       savePostBtn.removeAttribute("disabled");
@@ -475,7 +593,7 @@
       init_misc();
       init_home();
       init_locales();
-      notfmsg = (fn, notfId) => notf_lang("load_blog", fn, notfId);
+      notfmsg = (fn, notfId) => notf_lang2("load_blog", fn, notfId);
       cooled_down = true;
       document.addEventListener("DOMContentLoaded", () => {
         if (window.location.pathname === "/blogs/saves" || window.location.pathname.startsWith("/people")) {
@@ -507,7 +625,7 @@
       init_misc();
       init_load_blog();
       init_locales();
-      notfmsg2 = (fn, notfId) => notf_lang("home", fn, notfId);
+      notfmsg2 = (fn, notfId) => notf_lang2("home", fn, notfId);
       blogsData = [];
       authorsData = [];
       addSearchData = (card) => {
@@ -558,8 +676,8 @@
           try {
             const response = await fetch("/api/logout", { method: "POST", credentials: "include" });
             if (!response.ok) {
-              const error2 = await response.json();
-              showToast(error2.error || notfmsg2("errors", "logout_failed"));
+              const error3 = await response.json();
+              showToast(error3.error || notfmsg2("errors", "logout_failed"));
               return;
             }
             localStorage.removeItem("theme");
@@ -567,7 +685,7 @@
             localStorage.removeItem("font-size");
             localStorage.removeItem("preferences_applied");
             window.location.href = "/login";
-          } catch (error2) {
+          } catch (error3) {
             showToast(notfmsg2("errors", "logout_failed"));
           }
         });
@@ -695,8 +813,8 @@
               document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="dark:text-slate-400 text-slate-600">${notfmsg2("search_results", "search_query_empty_html").replace("{{query}}", searchQuery)}</p></div>`;
             }
             window.history.pushState({ search: searchQuery }, "", `?search=${encodeURIComponent(searchQuery)}`);
-          } catch (error2) {
-            console.error("Search error:", error2);
+          } catch (error3) {
+            console.error("Search error:", error3);
             document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="text-red-600">${notfmsg2("search_results", "search_error")}</p></div>`;
           }
         });
@@ -726,6 +844,14 @@
   });
 
   // src/frontend/utils/misc.js
+  var misc_exports = {};
+  __export(misc_exports, {
+    applyPreferences: () => applyPreferences,
+    getTimeAgo: () => getTimeAgo,
+    isURL: () => isURL,
+    showToast: () => showToast,
+    wait: () => wait
+  });
   function setCookie(cname, cvalue, exdays = void 0, p = "/") {
     const allCookies = decodeURIComponent(document.cookie);
     if (allCookies.search(`${cname}=${cvalue}`) === -1) {
@@ -837,7 +963,7 @@
       "use strict";
       init_home();
       init_locales();
-      text = (notfId) => notf_lang("misc", "getTimeAgo", notfId);
+      text = (notfId) => notf_lang2("misc", "getTimeAgo", notfId);
       document.addEventListener("DOMContentLoaded", () => {
         applyPreferences();
       });
@@ -2175,7 +2301,7 @@
         var STATUS_LOADED = "loaded";
         var STATUS_FAILED = "failed";
         var SELECTOR = "pre[data-src]:not([" + STATUS_ATTR + '="' + STATUS_LOADED + '"]):not([' + STATUS_ATTR + '="' + STATUS_LOADING + '"])';
-        function loadFile(src, success, error2) {
+        function loadFile(src, success, error3) {
           var xhr = new XMLHttpRequest();
           xhr.open("GET", src, true);
           xhr.onreadystatechange = function() {
@@ -2184,9 +2310,9 @@
                 success(xhr.responseText);
               } else {
                 if (xhr.status >= 400) {
-                  error2(FAILURE_MESSAGE(xhr.status, xhr.statusText));
+                  error3(FAILURE_MESSAGE(xhr.status, xhr.statusText));
                 } else {
-                  error2(FAILURE_EMPTY_MESSAGE);
+                  error3(FAILURE_EMPTY_MESSAGE);
                 }
               }
             }
@@ -2259,9 +2385,9 @@
                 code.textContent = text2;
                 Prism2.highlightElement(code);
               },
-              function(error2) {
+              function(error3) {
                 pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
-                code.textContent = error2;
+                code.textContent = error3;
               }
             );
           }
@@ -3549,6 +3675,7 @@
       "use strict";
       init_misc();
       var import_prismjs = __toESM(require_prism());
+      init_locales();
       require_prism_java();
       require_prism_c();
       require_prism_cpp();
@@ -3560,6 +3687,7 @@
       require_prism_ruby();
       require_prism_rust();
       require_prism_sql();
+      var notfmsg3 = (fn, notfId) => notf_lang2("blog", fn, notfId);
       async function commentHTML(d, sub = false) {
         let profilePic1 = !d.comment_author ? `
     <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
@@ -3567,7 +3695,7 @@
     </div>
     ` : isURL(d.comment_author.avatar) ? `<img class="${sub ? "w-8 h-8" : "w-10 h-10"} rounded-full bg-white " referrerpolicy="no-referrer" src="${d.comment_author.avatar}" alt="User Avatar">` : `
     <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full bg-gradient-to-br ${d.comment_author.avatar} flex items-center justify-center text-white font-bold">
-        ${d.comment_author.username.charAt(0).toUpperCase() || "U"}
+        ${d.comment_author.username.charAt(0).toUpperCase() || notfmsg3("placeholders", "u")}
     </div>
     `;
         let postMenu = "";
@@ -3593,21 +3721,21 @@
           const currentUserAvatar = avatar.user.avatar;
           profilePic2 = isURL(currentUserAvatar) ? `<img class="w-8 h-8 rounded-full bg-white" referrerpolicy="no-referrer" src="${currentUserAvatar}" alt="User Avatar">` : `
         <div class="w-8 h-8 shrink-0 aspect-square rounded-full bg-gradient-to-br ${currentUserAvatar} flex items-center justify-center text-white font-bold">
-            ${currentUserUsername.charAt(0).toUpperCase() || "U"}
+            ${currentUserUsername.charAt(0).toUpperCase() || notfmsg3("placeholders", "u")}
         </div>
         `;
-          if (currentUserUid !== d.comment_author.uid && (d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile)) {
+          if (currentUserUid !== d.comment_author?.uid && (d.comment_author?.user_preferences && !d.comment_author.user_preferences.visible_profile)) {
             profilePic1 = `
                 <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
                     <i class="mdi mdi-account"></i>
                 </div>
             `;
           }
-        } else if (d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile) {
+        } else if (d.comment_author?.user_preferences && !d.comment_author.user_preferences.visible_profile) {
           profilePic1 = `
             <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
-                <i class="mdi mdi-account"></i>
-            </div>
+                    <i class="mdi mdi-account"></i>
+                </div>
         `;
         }
         return { html: `
@@ -3618,37 +3746,36 @@
                     <div class="flex items-center justify-between gap-2 mb-1 relative">
                         <div class="flex items-center gap-2 min-w-0">
                             ${(() => {
-          if (uid.user?.uid === d.comment_author.uid) {
+          if (uid.user?.uid === d.comment_author?.uid) {
             return `<h4 class="font-semibold text-slate-900 dark:text-white truncate">
                                         ${d.comment_author.display_name}
                                     </h4>`;
           } else {
             return `<h4 class="font-semibold text-slate-900 dark:text-white truncate">
-                                        ${d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile ? d.comment_author.display_name : d.comment_author && d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile ? "Annonymous User" : !d.comment_author ? "[Deleted Account]" : "Unknown"}
+                                        ${d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile ? d.comment_author.display_name : d.comment_author && d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile ? notfmsg3("placeholders", "anonymous_user") : !d.comment_author ? notfmsg3("placeholders", "deleted_account") : notfmsg3("placeholders", "unknown_user")}
                                     </h4>`;
           }
         })()}
                             ${(() => {
-          if (uid.user?.uid === d.comment_author.uid || d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile) {
+          if (uid.user?.uid === d.comment_author?.uid || d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile) {
             return `<span class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">@${d.comment_author.username}</span>`;
           } else return "";
         })()}
                             <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">${getTimeAgo(d.comment.createdat)}</span>
                         </div>
-                        ${signedIn && d.comment_author && d.comment_author.uid === uid.user.uid ? `
+                        ${signedIn && d.comment_author && d.comment_author?.uid === uid.user.uid ? `
                         <button class="comment-menu-btn text-slate-400 hover:text-slate-600 relative group flex-shrink-0">
                             <i class="mdi mdi-dots-vertical text-lg"></i>
                         </button>
-                        <!-- Dropdown Menu -->
                         <div class="comment-menu hidden absolute right-6 top-0 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 w-48 z-[10] flex-col">
                             <button class="edit-comment-btn w-full text-left p-4 rounded-t-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2">
                                 <i class="mdi mdi-pencil" style="margin-top: 0.125rem;"></i>
-                                Edit Comment
+                                ${notfmsg3("buttons", "edit_comment")}
                             </button>
                             <hr class="border-slate-200 dark:border-slate-600" />
                             <button class="delete-comment-btn w-full text-left p-4 rounded-b-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 flex items-center gap-2">
                                 <i class="mdi mdi-delete" style="margin-top: 0.125rem;"></i>
-                                Delete Comment
+                                ${notfmsg3("buttons", "delete_comment")}
                             </button>
                         </div>
                         ` : ""}
@@ -3657,15 +3784,14 @@
                         ${d.comment.comment}
                     </p>
                     ${signedIn && d.comment_author && d.comment_author.uid === uid.user.uid ? `
-                    <!-- Edit Form (Hidden by default) -->
                     <div class="edit-form hidden flex flex-col gap-2 mb-3">
                         <textarea class="edit-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm">${d.comment.comment}</textarea>
                         <div class="flex gap-2 justify-end">
                             <button class="cancel-edit px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                                Cancel
+                                ${notfmsg3("buttons", "cancel")}
                             </button>
                             <button class="submit-edit px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 text-sm">
-                                Save
+                                ${notfmsg3("buttons", "save")}
                             </button>
                         </div>
                     </div>
@@ -3677,7 +3803,7 @@
                         </button>
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" data-comment-id="${d.comment.commentid}">
                             <i class="mdi mdi-reply"></i>
-                            Reply
+                            ${notfmsg3("buttons", "reply")}
                         </button>
                     </div>
                 </div>
@@ -3686,18 +3812,17 @@
                     
             </div>
             ${signedIn ? `
-                <!-- Reply Form (Hidden) -->
                 <div class="reply-form hidden pt-4 border-t border-slate-100 dark:border-slate-700 ${sub ? "ml-12" : "ml-14"}">
                     <div class="flex gap-3">
                         ${profilePic2}
                         <div class="flex-1">
-                            <textarea placeholder="Write a reply..." class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
+                            <textarea placeholder="${notfmsg3("placeholders", "write_reply")}" class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
                             <div class="flex gap-2 mt-2 justify-end">
                                 <button class="cancel-reply px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                                    Cancel
+                                    ${notfmsg3("buttons", "cancel")}
                                 </button>
                                 <button class="submit-reply px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-sm">
-                                    Reply
+                                    ${notfmsg3("buttons", "reply")}
                                 </button>
                             </div>
                         </div>
@@ -3705,10 +3830,9 @@
                 </div>
             ` : ""}
             ${d.comment.hasReplies ? `
-                <!-- Load More Replies -->
                 <div class="load-replies ml-14 text-center">
                     <button class="min-h-auto load-replies-btn text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-300 flex items-center justify-center gap-2">
-                        <i class="mdi mdi-chevron-down"></i>Load More Replies
+                        <i class="mdi mdi-chevron-down"></i>${notfmsg3("buttons", "load_more_replies")}
                     </button>
                 </div>
             ` : ""} 
@@ -3807,7 +3931,7 @@
             e.preventDefault();
             const newContent = editTextarea.value.trim();
             if (!newContent) {
-              showToast("Comment cannot be empty.", "error");
+              showToast(notfmsg3("toasts", "empty_comment_error"), "error");
               return;
             }
             fetch(`/api/comments/${commentId}/edit`, {
@@ -3821,17 +3945,17 @@
                 commentText.classList.remove("hidden");
               } else {
                 return res.json().then((err) => {
-                  throw new Error(err.error || "Failed to update comment.");
+                  throw new Error(err.error || notfmsg3("toasts", "edit_failed_error"));
                 });
               }
-            }).catch((err) => showToast(`Error updating comment: ${err.message}`, "error"));
+            }).catch((err) => showToast(`${notfmsg3("toasts", "edit_error")}${err.message}`, "error"));
           });
         }
         const deleteBtn = menu.querySelector(".delete-comment-btn");
         if (deleteBtn) {
           deleteBtn.addEventListener("click", function(e) {
             e.preventDefault();
-            if (confirm("Are you sure you want to delete this comment? This action cannot be undone.")) {
+            if (confirm(notfmsg3("toasts", "confirm_delete"))) {
               fetch(`/api/comments/${commentId}/delete`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" }
@@ -3842,14 +3966,14 @@
                   commentItem.style.transition = "all 0.3s ease-out";
                   setTimeout(() => {
                     commentItem.remove();
-                    showToast("Comment deleted successfully.", "success");
+                    showToast(notfmsg3("toasts", "delete_success"), "success");
                   }, 300);
                 } else {
                   return res.json().then((err) => {
-                    throw new Error(err.error || "Failed to delete comment.");
+                    throw new Error(err.error || notfmsg3("toasts", "delete_failed_error"));
                   });
                 }
-              }).catch((err) => showToast(`Error deleting comment: ${err.message}`, "error"));
+              }).catch((err) => showToast(`${notfmsg3("toasts", "delete_error")}${err.message}`, "error"));
             }
           });
         }
@@ -3901,16 +4025,16 @@
               credentials: "include"
             });
             if (!response.ok) {
-              const error2 = await response.json();
-              showToast(error2.error || "An error occurred while saving the post. Please try again.");
+              const error3 = await response.json();
+              showToast(error3.error || notfmsg3("toasts", "save_post_error"));
               return;
             }
             savePostBtn.classList.toggle("text-blue-600");
             if (document.documentElement.classList.contains("dark")) savePostBtn.classList.toggle("dark:text-slate-400");
             else savePostBtn.classList.toggle("text-slate-600");
-            savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === "Save" ? "Saved" : "Save";
-          } catch (error2) {
-            showToast("An error occurred while saving the post. Please try again.", "error");
+            savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === notfmsg3("buttons", "save") ? notfmsg3("buttons", "saved") : notfmsg3("buttons", "save");
+          } catch (error3) {
+            showToast(notfmsg3("toasts", "save_post_error"), "error");
           }
           savePostBtn.removeAttribute("disabled");
           savePostBtn.style.transform = "";
@@ -3932,13 +4056,7 @@
           codeblock.appendChild(codeWrapper);
         }
         import_prismjs.default?.highlightAll();
-        if (document.querySelector(".ql-editor")) document.querySelector(".ql-editor").innerHTML = document.querySelector(".ql-editor").innerHTML.replace(`<!-- 
-            
-                <p class="text-slate-700 leading-relaxed text-base sm:text-lg mb-4">
-                    
-                </p>
-            
-         -->`, "").trim();
+        if (document.querySelector(".ql-editor")) document.querySelector(".ql-editor").innerHTML = document.querySelector(".ql-editor").innerHTML.replace(``, "").trim();
         function cancelComment() {
           document.getElementById("comment-content").value = "";
         }
@@ -4048,6 +4166,7 @@
                 registerEvents(commentItem, csred);
                 subCommentsList.insertAdjacentElement("beforeend", commentItem);
               } catch (err) {
+                console.error(err);
                 showToast(err);
                 return;
               }
@@ -4099,6 +4218,8 @@
   var require_compose = __commonJS({
     "src/frontend/blogs/compose.js"() {
       "use strict";
+      var { showToast: showToast2 } = (init_misc(), __toCommonJS(misc_exports));
+      var { default: notf_lang3 } = (init_locales(), __toCommonJS(locales_exports));
       var rawEditor = document.getElementById("editor");
       if (!rawEditor) return;
       var quill = new Quill("#editor", {
@@ -4107,7 +4228,7 @@
           syntax: true,
           toolbar: false
         },
-        placeholder: "Write your blog here. Share your thoughts, ideas, and experiences..."
+        placeholder: notf_lang3("compose", "quill_placeholder")
       });
       if (rawEditor.dataset.mode === "edit") {
         const editingContent = rawEditor.dataset.editingContent;
@@ -4454,9 +4575,9 @@
           if (!urlResponse.ok) throw urlResponse;
           const url = await urlResponse.json();
           return url.url;
-        } catch (error2) {
-          console.error(await error2.json());
-          throw new Error(error2);
+        } catch (error3) {
+          console.error(await error3.json());
+          throw new Error(error3);
         }
       }
       document.getElementById("blog-composing-form").addEventListener("submit", async (e) => {
@@ -4476,7 +4597,10 @@
             })
           });
           const fromDraftedResponse = await draftedResponse.json();
-          if (!draftedResponse.ok) return console.error(draftedResponse.error);
+          if (!draftedResponse.ok) {
+            showToast2(error.error || notf_lang3("compose", "default_error"));
+            return console.error(draftedResponse.error);
+          }
           targetBlogId = fromDraftedResponse.blogid;
         }
         const updatedOps = await Promise.all(delta.ops.map(async (op) => {
@@ -4507,8 +4631,9 @@
         });
         if (updatedResponse.ok) window.location.href = `/`;
         else {
-          const error2 = await updatedResponse.json();
-          console.error(error2);
+          const error3 = await updatedResponse.json();
+          showToast2(error3.error || notf_lang3("compose", "default_error"));
+          console.error(error3);
         }
       });
     }
@@ -4566,7 +4691,7 @@
       }
     }
   }
-  function error(...params) {
+  function error2(...params) {
     params = enhanceLogMessage(params);
     const message = "THREE." + params.shift();
     if (_setConsoleFunction) {
@@ -11765,7 +11890,7 @@
             return this;
           }
           if (object === this) {
-            error("Object3D.add: object can't be added as a child of itself.", object);
+            error2("Object3D.add: object can't be added as a child of itself.", object);
             return this;
           }
           if (object && object.isObject3D) {
@@ -11777,7 +11902,7 @@
             this.dispatchEvent(_childaddedEvent);
             _childaddedEvent.child = null;
           } else {
-            error("Object3D.add: object not an instance of THREE.Object3D.", object);
+            error2("Object3D.add: object not an instance of THREE.Object3D.", object);
           }
           return this;
         }
@@ -15312,7 +15437,7 @@
           const position = this.attributes.position;
           const morphAttributesPosition = this.morphAttributes.position;
           if (position && position.isGLBufferAttribute) {
-            error("BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.", this);
+            error2("BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.", this);
             this.boundingBox.set(
               new Vector3(-Infinity, -Infinity, -Infinity),
               new Vector3(Infinity, Infinity, Infinity)
@@ -15340,7 +15465,7 @@
             this.boundingBox.makeEmpty();
           }
           if (isNaN(this.boundingBox.min.x) || isNaN(this.boundingBox.min.y) || isNaN(this.boundingBox.min.z)) {
-            error('BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The "position" attribute is likely to have NaN values.', this);
+            error2('BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The "position" attribute is likely to have NaN values.', this);
           }
         }
         /**
@@ -15355,7 +15480,7 @@
           const position = this.attributes.position;
           const morphAttributesPosition = this.morphAttributes.position;
           if (position && position.isGLBufferAttribute) {
-            error("BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.", this);
+            error2("BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.", this);
             this.boundingSphere.set(new Vector3(), Infinity);
             return;
           }
@@ -15399,7 +15524,7 @@
             }
             this.boundingSphere.radius = Math.sqrt(maxRadiusSq);
             if (isNaN(this.boundingSphere.radius)) {
-              error('BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.', this);
+              error2('BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.', this);
             }
           }
         }
@@ -15414,7 +15539,7 @@
           const index = this.index;
           const attributes = this.attributes;
           if (index === null || attributes.position === void 0 || attributes.normal === void 0 || attributes.uv === void 0) {
-            error("BufferGeometry: .computeTangents() failed. Missing required attributes (index, position, normal or uv)");
+            error2("BufferGeometry: .computeTangents() failed. Missing required attributes (index, position, normal or uv)");
             return;
           }
           const positionAttribute = attributes.position;
@@ -19800,11 +19925,11 @@
               oneMinusS2 = oneMinusS * oneMinusS;
               oneMinusS3 = oneMinusS2 * oneMinusS;
               const bx = oneMinusS3 * t0 + 3 * oneMinusS2 * s * c0x + 3 * oneMinusS * s2 * c1x + s3 * t1;
-              const error2 = bx - t;
-              if (Math.abs(error2) < 1e-10) break;
+              const error3 = bx - t;
+              if (Math.abs(error3) < 1e-10) break;
               const dbx = 3 * oneMinusS2 * (c0x - t0) + 6 * oneMinusS * s * (c1x - c0x) + 3 * s2 * (t1 - c1x);
               if (Math.abs(dbx) < 1e-10) break;
-              s = s - error2 / dbx;
+              s = s - error3 / dbx;
               s = Math.max(0, Math.min(1, s));
             }
             result[i] = oneMinusS3 * v0 + 3 * oneMinusS2 * s * c0y + 3 * oneMinusS * s2 * c1y + s3 * v1;
@@ -20037,24 +20162,24 @@
           let valid = true;
           const valueSize = this.getValueSize();
           if (valueSize - Math.floor(valueSize) !== 0) {
-            error("KeyframeTrack: Invalid value size in track.", this);
+            error2("KeyframeTrack: Invalid value size in track.", this);
             valid = false;
           }
           const times = this.times, values = this.values, nKeys = times.length;
           if (nKeys === 0) {
-            error("KeyframeTrack: Track is empty.", this);
+            error2("KeyframeTrack: Track is empty.", this);
             valid = false;
           }
           let prevTime = null;
           for (let i = 0; i !== nKeys; i++) {
             const currTime = times[i];
             if (typeof currTime === "number" && isNaN(currTime)) {
-              error("KeyframeTrack: Time is not a valid number.", this, i, currTime);
+              error2("KeyframeTrack: Time is not a valid number.", this, i, currTime);
               valid = false;
               break;
             }
             if (prevTime !== null && prevTime > currTime) {
-              error("KeyframeTrack: Out of order keys.", this, i, currTime, prevTime);
+              error2("KeyframeTrack: Out of order keys.", this, i, currTime, prevTime);
               valid = false;
               break;
             }
@@ -20065,7 +20190,7 @@
               for (let i = 0, n = values.length; i !== n; ++i) {
                 const value = values[i];
                 if (isNaN(value)) {
-                  error("KeyframeTrack: Value is not a valid number.", this, i, value);
+                  error2("KeyframeTrack: Value is not a valid number.", this, i, value);
                   valid = false;
                   break;
                 }
@@ -20451,7 +20576,7 @@
         static parseAnimation(animation, bones) {
           warn("AnimationClip: parseAnimation() is deprecated and will be removed with r185");
           if (!animation) {
-            error("AnimationClip: No animation in JSONLoader data.");
+            error2("AnimationClip: No animation in JSONLoader data.");
             return null;
           }
           const addNonemptyTrack = function(trackType, trackName, animationKeys, propertyName, destTracks) {
@@ -22557,18 +22682,18 @@
             switch (objectName) {
               case "materials":
                 if (!targetObject.material) {
-                  error("PropertyBinding: Can not bind to material as node does not have a material.", this);
+                  error2("PropertyBinding: Can not bind to material as node does not have a material.", this);
                   return;
                 }
                 if (!targetObject.material.materials) {
-                  error("PropertyBinding: Can not bind to material.materials as node.material does not have a materials array.", this);
+                  error2("PropertyBinding: Can not bind to material.materials as node.material does not have a materials array.", this);
                   return;
                 }
                 targetObject = targetObject.material.materials;
                 break;
               case "bones":
                 if (!targetObject.skeleton) {
-                  error("PropertyBinding: Can not bind to bones as node does not have a skeleton.", this);
+                  error2("PropertyBinding: Can not bind to bones as node does not have a skeleton.", this);
                   return;
                 }
                 targetObject = targetObject.skeleton.bones;
@@ -22585,25 +22710,25 @@
                   break;
                 }
                 if (!targetObject.material) {
-                  error("PropertyBinding: Can not bind to material as node does not have a material.", this);
+                  error2("PropertyBinding: Can not bind to material as node does not have a material.", this);
                   return;
                 }
                 if (!targetObject.material.map) {
-                  error("PropertyBinding: Can not bind to material.map as node.material does not have a map.", this);
+                  error2("PropertyBinding: Can not bind to material.map as node.material does not have a map.", this);
                   return;
                 }
                 targetObject = targetObject.material.map;
                 break;
               default:
                 if (targetObject[objectName] === void 0) {
-                  error("PropertyBinding: Can not bind to objectName of node undefined.", this);
+                  error2("PropertyBinding: Can not bind to objectName of node undefined.", this);
                   return;
                 }
                 targetObject = targetObject[objectName];
             }
             if (objectIndex !== void 0) {
               if (targetObject[objectIndex] === void 0) {
-                error("PropertyBinding: Trying to bind to objectIndex of objectName, but is undefined.", this, targetObject);
+                error2("PropertyBinding: Trying to bind to objectIndex of objectName, but is undefined.", this, targetObject);
                 return;
               }
               targetObject = targetObject[objectIndex];
@@ -22612,7 +22737,7 @@
           const nodeProperty = targetObject[propertyName];
           if (nodeProperty === void 0) {
             const nodeName = parsedPath.nodeName;
-            error("PropertyBinding: Trying to update property for track: " + nodeName + "." + propertyName + " but it wasn't found.", targetObject);
+            error2("PropertyBinding: Trying to update property for track: " + nodeName + "." + propertyName + " but it wasn't found.", targetObject);
             return;
           }
           let versioning = this.Versioning.None;
@@ -22626,11 +22751,11 @@
           if (propertyIndex !== void 0) {
             if (propertyName === "morphTargetInfluences") {
               if (!targetObject.geometry) {
-                error("PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.", this);
+                error2("PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.", this);
                 return;
               }
               if (!targetObject.geometry.morphAttributes) {
-                error("PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes.", this);
+                error2("PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes.", this);
                 return;
               }
               if (targetObject.morphTargetDictionary[propertyIndex] !== void 0) {
@@ -24394,7 +24519,7 @@
           render.points += instanceCount * count;
           break;
         default:
-          error("WebGLInfo: Unknown draw mode:", mode);
+          error2("WebGLInfo: Unknown draw mode:", mode);
           break;
       }
     }
@@ -25808,7 +25933,7 @@
           } else {
             const vertexErrors = getShaderErrors(gl, glVertexShader, "vertex");
             const fragmentErrors = getShaderErrors(gl, glFragmentShader, "fragment");
-            error(
+            error2(
               "THREE.WebGLProgram: Shader Error " + gl.getError() + " - VALIDATE_STATUS " + gl.getProgramParameter(program, gl.VALIDATE_STATUS) + "\n\nMaterial Name: " + self2.name + "\nMaterial Type: " + self2.type + "\n\nProgram Info Log: " + programLog + "\n" + vertexErrors + "\n" + fragmentErrors
             );
           }
@@ -27655,7 +27780,7 @@
                 gl.blendFuncSeparate(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE);
                 break;
               default:
-                error("WebGLState: Invalid blending: ", blending);
+                error2("WebGLState: Invalid blending: ", blending);
                 break;
             }
           } else {
@@ -27667,13 +27792,13 @@
                 gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE, gl.ONE, gl.ONE);
                 break;
               case SubtractiveBlending:
-                error("WebGLState: SubtractiveBlending requires material.premultipliedAlpha = true");
+                error2("WebGLState: SubtractiveBlending requires material.premultipliedAlpha = true");
                 break;
               case MultiplyBlending:
-                error("WebGLState: MultiplyBlending requires material.premultipliedAlpha = true");
+                error2("WebGLState: MultiplyBlending requires material.premultipliedAlpha = true");
                 break;
               default:
-                error("WebGLState: Invalid blending: ", blending);
+                error2("WebGLState: Invalid blending: ", blending);
                 break;
             }
           }
@@ -27828,70 +27953,70 @@
       try {
         gl.compressedTexImage2D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function compressedTexImage3D() {
       try {
         gl.compressedTexImage3D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function texSubImage2D() {
       try {
         gl.texSubImage2D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function texSubImage3D() {
       try {
         gl.texSubImage3D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function compressedTexSubImage2D() {
       try {
         gl.compressedTexSubImage2D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function compressedTexSubImage3D() {
       try {
         gl.compressedTexSubImage3D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function texStorage2D() {
       try {
         gl.texStorage2D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function texStorage3D() {
       try {
         gl.texStorage3D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function texImage2D() {
       try {
         gl.texImage2D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function texImage3D() {
       try {
         gl.texImage3D(...arguments);
       } catch (e) {
-        error("WebGLState:", e);
+        error2("WebGLState:", e);
       }
     }
     function getParameter(name) {
@@ -29314,7 +29439,7 @@
             warn("WebGLTextures: sRGB encoded textures have to use RGBAFormat and UnsignedByteType.");
           }
         } else {
-          error("WebGLTextures: Unsupported texture color space:", colorSpace);
+          error2("WebGLTextures: Unsupported texture color space:", colorSpace);
         }
       }
       return image;
@@ -29826,7 +29951,7 @@
           return i;
         }
       }
-      error("WebGLRenderer: Maximum number of simultaneously usable uniforms groups reached.");
+      error2("WebGLRenderer: Maximum number of simultaneously usable uniforms groups reached.");
       return 0;
     }
     function updateBufferData(uniformsGroup) {
@@ -31117,7 +31242,7 @@
           const renderer = this._renderer;
           const blurMaterial = this._blurMaterial;
           if (direction !== "latitudinal" && direction !== "longitudinal") {
-            error(
+            error2(
               "blur direction must be either latitudinal or longitudinal!"
             );
           }
@@ -32744,7 +32869,7 @@ void main() {
               }
             }
           } catch (e) {
-            error("WebGLRenderer: " + e.message);
+            error2("WebGLRenderer: " + e.message);
             throw e;
           }
           let extensions, capabilities, state, info;
@@ -32851,7 +32976,7 @@ void main() {
           };
           this.setEffects = function(effects) {
             if (_outputBufferType === UnsignedByteType) {
-              error("THREE.WebGLRenderer: setEffects() requires outputBufferType set to HalfFloatType or FloatType.");
+              error2("THREE.WebGLRenderer: setEffects() requires outputBufferType set to HalfFloatType or FloatType.");
               return;
             }
             if (effects) {
@@ -33010,7 +33135,7 @@ void main() {
             shadowMap.type = shadowMapType;
           }
           function onContextCreationError(event) {
-            error("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
+            error2("WebGLRenderer: A WebGL context could not be created. Reason: ", event.statusMessage);
           }
           function onMaterialDispose(event) {
             const material = event.target;
@@ -33221,7 +33346,7 @@ void main() {
           xr.addEventListener("sessionend", onXRSessionEnd);
           this.render = function(scene, camera) {
             if (camera !== void 0 && camera.isCamera !== true) {
-              error("WebGLRenderer.render: camera is not an instance of THREE.Camera.");
+              error2("WebGLRenderer.render: camera is not an instance of THREE.Camera.");
               return;
             }
             if (_isContextLost === true) return;
@@ -33946,7 +34071,7 @@ void main() {
           };
           this.readRenderTargetPixels = function(renderTarget, x, y, width, height, buffer, activeCubeFaceIndex, textureIndex = 0) {
             if (!(renderTarget && renderTarget.isWebGLRenderTarget)) {
-              error("WebGLRenderer.readRenderTargetPixels: renderTarget is not THREE.WebGLRenderTarget.");
+              error2("WebGLRenderer.readRenderTargetPixels: renderTarget is not THREE.WebGLRenderTarget.");
               return;
             }
             let framebuffer = properties.get(renderTarget).__webglFramebuffer;
@@ -33961,11 +34086,11 @@ void main() {
                 const textureType = texture.type;
                 if (renderTarget.textures.length > 1) _gl.readBuffer(_gl.COLOR_ATTACHMENT0 + textureIndex);
                 if (!capabilities.textureFormatReadable(textureFormat)) {
-                  error("WebGLRenderer.readRenderTargetPixels: renderTarget is not in RGBA or implementation defined format.");
+                  error2("WebGLRenderer.readRenderTargetPixels: renderTarget is not in RGBA or implementation defined format.");
                   return;
                 }
                 if (!capabilities.textureTypeReadable(textureType)) {
-                  error("WebGLRenderer.readRenderTargetPixels: renderTarget is not in UnsignedByteType or implementation defined type.");
+                  error2("WebGLRenderer.readRenderTargetPixels: renderTarget is not in UnsignedByteType or implementation defined type.");
                   return;
                 }
                 if (x >= 0 && x <= renderTarget.width - width && (y >= 0 && y <= renderTarget.height - height)) {
@@ -34763,8 +34888,8 @@ void main() {
             if (magic === BINARY_EXTENSION_HEADER_MAGIC) {
               try {
                 extensions[EXTENSIONS.KHR_BINARY_GLTF] = new GLTFBinaryExtension(data);
-              } catch (error2) {
-                if (onError) onError(error2);
+              } catch (error3) {
+                if (onError) onError(error3);
                 return;
               }
               json = JSON.parse(extensions[EXTENSIONS.KHR_BINARY_GLTF].content);
@@ -36137,9 +36262,9 @@ void main() {
             assignExtrasToUserData(texture, sourceDef);
             texture.userData.mimeType = sourceDef.mimeType || getImageURIMimeType(sourceDef.uri);
             return texture;
-          }).catch(function(error2) {
+          }).catch(function(error3) {
             console.error("THREE.GLTFLoader: Couldn't load texture", sourceURI);
-            throw error2;
+            throw error3;
           });
           this.sourceCache[sourceIndex] = promise;
           return promise;
@@ -36891,8 +37016,8 @@ void main() {
       (xhr) => {
         console.log(xhr.loaded / xhr.total * 100 + "% loaded");
       },
-      (error2) => {
-        console.error("An error happened while loading the model:", error2);
+      (error3) => {
+        console.error("An error happened while loading the model:", error3);
       }
     );
     camera.position.set(0, 0, 2);
@@ -37019,7 +37144,7 @@ void main() {
             } else {
               throw response;
             }
-          } catch (error2) {
+          } catch (error3) {
             showToast("An error occurred while logging in. Please try again.");
             loadingOverlay.classList.add("hidden");
           }
@@ -37073,7 +37198,7 @@ void main() {
         closePasswordResetModal();
       }
     });
-    const notfmsg3 = (fn, notfId) => notf_lang("password_reset_form", fn, notfId);
+    const notfmsg3 = (fn, notfId) => notf_lang2("password_reset_form", fn, notfId);
     passwordResetForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = resetEmailInput.value.trim();
@@ -37088,8 +37213,8 @@ void main() {
           body: JSON.stringify({ email })
         });
         if (!response.ok) {
-          const error2 = await response.json();
-          showToast(error2.error || notfmsg3("passwordResetFormSubmission", 2));
+          const error3 = await response.json();
+          showToast(error3.error || notfmsg3("passwordResetFormSubmission", 2));
           return;
         }
         passwordResetForm.style.display = "none";
@@ -37098,8 +37223,8 @@ void main() {
           closePasswordResetModal();
           passwordResetForm.style.display = "block";
         }, 3e3);
-      } catch (error2) {
-        console.error(error2);
+      } catch (error3) {
+        console.error(error3);
         showToast(notfmsg3("passwordResetFormSubmission", 3));
       }
     });
@@ -37125,14 +37250,14 @@ void main() {
         registerPasswordResetForm();
         function parseUrlError() {
           const params = new URLSearchParams(window.location.search);
-          const error2 = params.get("err");
-          if (error2) {
-            const decodedError = decodeURIComponent(error2);
+          const error3 = params.get("err");
+          if (error3) {
+            const decodedError = decodeURIComponent(error3);
             showToast(decodedError);
             window.location.href = "/";
           }
         }
-        const notfmsg3 = (fn, notfId) => notf_lang("login", fn, notfId);
+        const notfmsg3 = (fn, notfId) => notf_lang2("login", fn, notfId);
         form?.addEventListener("submit", async (e) => {
           e.preventDefault();
           const email = document.querySelector('input[name="email"]').value.trim();
@@ -37148,13 +37273,13 @@ void main() {
               body: JSON.stringify({ email, password })
             });
             if (!response.ok) {
-              const error2 = await response.json();
-              console.error(error2);
+              const error3 = await response.json();
+              console.error(error3);
               showToast(notfmsg3("emailLoginFormSubmission", 2));
               return;
             }
             window.location.href = "/";
-          } catch (error2) {
+          } catch (error3) {
             showToast(notfmsg3("emailLoginFormSubmission", 3));
           }
         });
@@ -37164,8 +37289,8 @@ void main() {
             credentials: "include"
           });
           if (!response.ok) {
-            const error2 = await response.json();
-            showToast(error2.error || notfmsg3("signInWGoogle", 1));
+            const error3 = await response.json();
+            showToast(error3.error || notfmsg3("signInWGoogle", 1));
             return;
           } else {
             const oauthURL = await response.json();
@@ -37266,7 +37391,7 @@ void main() {
     "src/frontend/utils/reg_form_validation.js"() {
       "use strict";
       init_locales();
-      errmsg = (notfId) => notf_lang("reg_form_validation", "rules", notfId);
+      errmsg = (notfId) => notf_lang2("reg_form_validation", "rules", notfId);
       rules = {
         userName: {
           required: true,
@@ -37324,7 +37449,7 @@ void main() {
         window.history.replaceState(null, "", "/register");
         const form = document.getElementById("register-form");
         const termsCheckbox = document.querySelector('input[type="checkbox"]');
-        const notfmsg3 = (fn, notfId) => notf_lang("register", fn, notfId);
+        const notfmsg3 = (fn, notfId) => notf_lang2("register", fn, notfId);
         function validateForm(e) {
           e.preventDefault();
           const fields = {
@@ -37380,8 +37505,8 @@ void main() {
             credentials: "include"
           });
           if (!response.ok) {
-            const error2 = await response.json();
-            showToast(error2.error || notfmsg3("signUpWGoogle", 1));
+            const error3 = await response.json();
+            showToast(error3.error || notfmsg3("signUpWGoogle", 1));
             return;
           } else {
             const oauthURL = await response.json();
@@ -37411,8 +37536,8 @@ void main() {
       }
     });
     const notfmsg3 = (notfId, arg = void 0) => {
-      if (notfId === 2) return notf_lang("auth", "resetPasswordFormSubmission", notfId) + arg;
-      else return notf_lang("auth", "resetPasswordFormSubmission", notfId);
+      if (notfId === 2) return notf_lang2("auth", "resetPasswordFormSubmission", notfId) + arg;
+      else return notf_lang2("auth", "resetPasswordFormSubmission", notfId);
     };
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -37449,8 +37574,8 @@ void main() {
           body: JSON.stringify({ newPassword: passwordInput.value })
         });
         if (!response.ok) {
-          const error2 = await response.json();
-          showToast(notfmsg3(2, error2.error), "error");
+          const error3 = await response.json();
+          showToast(notfmsg3(2, error3.error), "error");
           return;
         } else {
           showToast(notfmsg3(3), "success");
@@ -37460,8 +37585,8 @@ void main() {
         setTimeout(() => {
           window.location.href = "/login";
         }, 3e3);
-      } catch (error2) {
-        console.error("Password reset error:", error2);
+      } catch (error3) {
+        console.error("Password reset error:", error3);
         showToast(notfmsg3(5), "error");
       }
     });
@@ -37478,8 +37603,8 @@ void main() {
         const th = processedParams.get("token");
         let access_token;
         try {
-        } catch (error2) {
-          console.error(error2);
+        } catch (error3) {
+          console.error(error3);
           document.getElementById("invalid-request-modal").classList.remove("hidden");
           window.history.replaceState("", null, window.location.pathname);
           document.querySelector("#auth-action").innerHTML = "";
@@ -37526,16 +37651,24 @@ void main() {
     "src/frontend/user_pages/people.js"() {
       "use strict";
       init_load_blog();
+      init_misc();
+      init_locales();
       document.addEventListener("DOMContentLoaded", () => {
         if (!window.location.pathname.startsWith("/people")) return;
         let username = window.location.pathname.split("/")[2];
         username.startsWith("@") && (username = username.slice(1));
         window.history.replaceState(null, "", `/people/@${username}`);
+        document.querySelectorAll(".post").forEach((post) => addEditEventListeners(post, true));
         const loadBlogButton = document.getElementById("load-blog");
         const holdUIDData = document.querySelector("[data-uid]");
         const uid = holdUIDData ? holdUIDData.dataset.uid : null;
         loadBlogButton?.addEventListener("click", (e) => loadMoreBlogs(loadBlogButton, `/api/blogs/fetch/from/${uid}`));
         if (loadBlogButton) registerAutoLoad(loadBlogButton);
+        document.querySelectorAll(".follow-btn")?.forEach((btn) => {
+          btn.addEventListener("click", function() {
+            showToast(notf_lang2("wip", "follow"), "info");
+          });
+        });
       });
     }
   });
@@ -37547,6 +37680,7 @@ void main() {
       init_load_blog();
       document.addEventListener("DOMContentLoaded", async () => {
         if (!window.location.pathname.startsWith("/blogs/saves")) return;
+        document.querySelectorAll(".post").forEach((post) => addEditEventListeners(post, true));
         const loadBlogButton = document.getElementById("load-blog");
         loadBlogButton?.addEventListener("click", (e) => loadMoreBlogs(loadBlogButton, "/api/blogs/fetch/from/my-saves"));
         if (loadBlogButton) registerAutoLoad(loadBlogButton);
@@ -37561,6 +37695,9 @@ void main() {
       init_misc();
       init_reg_form_validation();
       init_password_reset_form();
+      function t(fn, id = void 0) {
+        return notf_lang("account", fn, id);
+      }
       document.addEventListener("DOMContentLoaded", () => {
         if (window.location.pathname !== "/account") return;
         const profileForm = document.getElementById("account-profile-form");
@@ -37592,7 +37729,7 @@ void main() {
             }
           });
         });
-        profileForm.querySelector('textarea[name="bio"]').addEventListener("input", (event) => profileForm.querySelector('textarea[name="bio"]').parentElement.querySelector("span").textContent = `Max 1000 characters. Characters Left: ${1e3 - event.target.value.length}`);
+        profileForm.querySelector('textarea[name="bio"]').addEventListener("input", (event) => profileForm.querySelector('textarea[name="bio"]').parentElement.querySelector("span").textContent = `${t("bio_max_chars")} ${1e3 - event.target.value.length}`);
         document.querySelector('input[name="confirm-password"]').addEventListener("input", () => {
           const rule = reg_form_validation_default.rules[convertToRuleName("confirm-password")];
           if (rule && !reg_form_validation_default.validateField(document.querySelector('input[name="confirm-password"]'), rule)) {
@@ -37643,7 +37780,7 @@ void main() {
               body: JSON.stringify({ avatar: pfpURL, displayName: displayName.value, bio: bio.value })
             });
             if (!updatedProfileResponse.ok) throw updatedProfileResponse;
-            showToast("Profile updated successfully", "success");
+            showToast(t("profileForm", "saveSuccess"));
           } catch (e2) {
             console.error(e2);
             return showToast(e2.message);
@@ -37661,7 +37798,7 @@ void main() {
           for (let tvf in to_validate_fields) {
             if (tvf === "password") {
               if (!reg_form_validation_default.validatePasswordRequirements(to_validate_fields[tvf])) {
-                reg_form_validation_default.currentError("Password must have 8+ characters, uppercase, lowercase, number, and symbol");
+                reg_form_validation_default.currentError(t("passwordForm", "passwordRequirements"));
                 isValid = false;
                 break;
               }
@@ -37684,13 +37821,13 @@ void main() {
               body: JSON.stringify({ oldPassword: currentPassword.value, newPassword: newPassword.value })
             });
             if (!updatedPasswordResponse.ok) {
-              const error2 = await updatedPasswordResponse.json();
-              return showToast(error2.error, "error");
+              const error3 = await updatedPasswordResponse.json();
+              return showToast(error3.error, "error");
             }
           } catch (e2) {
             console.error(e2);
           }
-          showToast("Password updated successfully", "success");
+          showToast(t("passwordForm", "saveSuccess"));
           e.target.reset();
         });
         const accountDeleteBtn = document.getElementById("account-delete");
@@ -37717,7 +37854,7 @@ void main() {
           e.preventDefault();
           const password = accountDeleteConfirmPasswordInput.value.trim();
           if (!password) {
-            showToast("Please enter your password to confirm account deletion.");
+            showToast(t("deleteModal", "emptyPassword"));
             return;
           }
           try {
@@ -37727,14 +37864,14 @@ void main() {
               body: JSON.stringify({ confirm_password: password })
             });
             if (!response.ok) {
-              const error2 = await response.json();
-              showToast(error2.error || "Failed to delete account.");
+              const error3 = await response.json();
+              showToast(error3.error || t("deleteModal", "fallbackError"));
               return;
             }
             window.location.replace("/");
-          } catch (error2) {
-            console.error(error2);
-            showToast("An error occurred. Please try again.");
+          } catch (error3) {
+            console.error(error3);
+            showToast(t("deleteModal", "networkError"));
           }
         });
       });
@@ -37746,6 +37883,7 @@ void main() {
     "src/frontend/user_pages/settings/preferences.js"() {
       "use strict";
       init_misc();
+      init_locales();
       document.addEventListener("DOMContentLoaded", () => {
         if (window.location.pathname !== "/account/preferences") return;
         document.querySelector('input[name="font-size"]').addEventListener("input", function(e) {
@@ -37800,11 +37938,11 @@ void main() {
               })
             });
             if (!response.ok) throw response;
-            showToast("Successfully saved your preference settings!", "success");
+            showToast(notf_lang2("preferences", "success"), "success");
             window.location.reload();
           } catch (err) {
             console.error("Error saving preferences:", err);
-            showToast("Failed to save your preference settings.");
+            showToast(notf_lang2("preferences", "error"));
           }
         });
       });

@@ -1,4 +1,5 @@
 import { showToast } from "../../utils/misc.js";
+import notf_lang from "../../locales.js"
 
 document.addEventListener("DOMContentLoaded", () => {
     if(window.location.pathname !== '/account/preferences') return
@@ -66,11 +67,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) throw response;
 
-            showToast('Successfully saved your preference settings!', 'success');
+            showToast(notf_lang("preferences", "success"), 'success');
             window.location.reload();
         } catch (err) {
             console.error("Error saving preferences:", err);
-            showToast('Failed to save your preference settings.');
+            showToast(notf_lang("preferences", "error"));
         }
     });
 })

@@ -14,22 +14,22 @@ function getTimeAgo(stamp) {
     const publishedDate = new Date(stamp).getTime();
     const diffInSeconds = Math.floor((now - publishedDate) / 1000);
     if (diffInSeconds < 60) {
-        return diffInSeconds + ` second${diffInSeconds === 1 ? '' : 's'} ago`;
+        return diffInSeconds + ` ${req.t('getTimeAgo.second')}${diffInSeconds === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
     } else if (diffInSeconds < (60 * 60)) {
         const minutes = Math.floor(diffInSeconds / (60));
-        return minutes + ` minute${minutes === 1 ? '' : 's'} ago`;
+        return minutes + ` ${req.t('getTimeAgo.minute')}${minutes === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
     } else if (diffInSeconds < (60 * 60 * 24)) {
         const hours = Math.floor(diffInSeconds / (60 * 60));
-        return hours + ` hour${hours === 1 ? '' : 's'} ago`;
+        return hours + ` ${req.t('getTimeAgo.hour')}${hours === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
     } else if (diffInSeconds < (60 * 60 * 24 * 30)) {
         const days = Math.floor(diffInSeconds / (60 * 60 * 24));
-        return days + ` day${days === 1 ? '' : 's'} ago`;
+        return days + ` ${req.t('getTimeAgo.day')}${days === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
     } else if (diffInSeconds < (60 * 60 * 24 * 30 * 12)) {
         const months = Math.floor(diffInSeconds / (60 * 60 * 24 * 30));
-        return months + ` month${months === 1 ? '' : 's'} ago`;
+        return months + ` ${req.t('getTimeAgo.month')}${months === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
     } else {
         const years = Math.floor(diffInSeconds / (60 * 60 * 24 * 30 * 12));
-        return years + ` year${years === 1 ? '' : 's'} ago`;
+        return years + ` ${req.t('getTimeAgo.year')}${years === 1 ? '' : req.t('getTimeAgo.englishPlural')}${req.t('getTimeAgo.punctuation')}${req.t('getTimeAgo.ago')}`;
     }
 }
 
@@ -64,7 +64,7 @@ function getTimeAgo(stamp) {
             <div class="flex items-center justify-between gap-2 mb-1 relative">
                 <div class="flex items-center gap-2 min-w-0">
                     <h4 class="font-semibold text-slate-900 dark:text-white truncate">
-                        <% if (user?.uid === ocap.profiles.uid) { %>
+                        <% if (ocap.profiles && user?.uid === ocap.profiles.uid) { %>
                             <%= ocap.profiles.display_name %>
                         <% } else { %>
                             <%= ocap.profiles && ocap.profiles.user_preferences && ocap.profiles.user_preferences.visible_profile ? ocap.profiles.display_name : 
@@ -72,7 +72,7 @@ function getTimeAgo(stamp) {
                                 !ocap.profiles ? req.t('comments.deleted_account') : req.t('comments.unknown') %>
                         <% } %>
                     </h4>
-                    <% if(user?.uid === ocap.profiles.uid || (ocap.profiles && ocap.profiles.user_preferences && ocap.profiles.user_preferences.visible_profile)) { %>
+                    <% if(ocap.profiles && user?.uid === ocap.profiles.uid || (ocap.profiles && ocap.profiles.user_preferences && ocap.profiles.user_preferences.visible_profile)) { %>
                         <span class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">@<%= ocap.profiles.username %></span>
                     <% } %>
                     <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap"><%= getTimeAgo(ocap.createdat) %></span>
@@ -105,10 +105,10 @@ function getTimeAgo(stamp) {
                     <textarea class="edit-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm"><%= ocap.comment %></textarea>
                     <div class="flex gap-2 justify-end">
                         <button class="cancel-edit px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                            Cancel
+                           <%= req.t('comments.edit_cancel') %>
                         </button>
                         <button class="submit-edit px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 text-sm">
-                            Save
+                           <%= req.t('comments.edit_save') %>
                         </button>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ function getTimeAgo(stamp) {
                     </button>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn">
                         <i class="mdi mdi-reply"></i>
-                        Reply
+                        <%= req.t('comments.reply_btn') %>
                     </button>
                 <% } else { %>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" disabled title="Sign in to reply">
@@ -130,7 +130,7 @@ function getTimeAgo(stamp) {
                     </button>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" disabled title="Sign in to reply">
                         <i class="mdi mdi-reply"></i>
-                        Reply
+                        <%= req.t('comments.reply_btn') %>
                     </button>
                 <% } %>
             </div>
@@ -151,13 +151,13 @@ function getTimeAgo(stamp) {
                     </div>
                 <% } %>
                 <div class="flex-1">
-                    <textarea placeholder="Write a reply..." class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
+                    <textarea placeholder="<%= req.t('comments.reply_placeholder') %>" class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
                     <div class="flex gap-2 mt-2 justify-end">
                         <button class="cancel-reply px-4 py-2 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                            Cancel
+                            <%= req.t('comments.reply_cancel') %>
                         </button>
                         <button class="submit-reply px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-sm">
-                            Reply
+                            <%= req.t('comments.reply_send') %>
                         </button>
                     </div>
                 </div>
@@ -168,7 +168,7 @@ function getTimeAgo(stamp) {
         <!-- Load More Replies -->
         <div class="load-replies ml-14 text-center">
             <button class="min-h-auto load-replies-btn text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-300 flex items-center justify-center gap-2">
-                <i class="mdi mdi-chevron-down"></i>Load More Replies
+                <i class="mdi mdi-chevron-down"></i><%= req.t('comments.reply_load') %>
             </button>
         </div>
     <% } %>

@@ -52,9 +52,9 @@ function getTimeAgo(stamp) {
             <section class="mb-12">
                 <div class="flex items-center gap-3 mb-2">
                     <i class="mdi mdi-bookmark text-4xl text-blue-600 dark:text-blue-400"></i>
-                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Saved Posts</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white"><%= req.t('saves.title') %></h1>
                 </div>
-                <p class="text-slate-600 dark:text-slate-400 text-lg">Your collection of bookmarked posts</p>
+                <p class="text-slate-600 dark:text-slate-400 text-lg"><%= req.t('saves.subtitle') %></p>
             </section>
 
             <!-- Posts Section -->
@@ -64,8 +64,8 @@ function getTimeAgo(stamp) {
                         <div class="flex flex-col items-center gap-4">
                             <i class="mdi mdi-bookmark-outline text-5xl text-slate-300 dark:text-slate-700"></i>
                             <div>
-                                <p class="text-slate-700 dark:text-slate-300 font-semibold text-lg mb-2">No saved posts yet</p>
-                                <p class="text-slate-600 dark:text-slate-400 mb-6">Bookmark posts to read them later</p>
+                                <p class="text-slate-700 dark:text-slate-300 font-semibold text-lg mb-2"><%= req.t('saves.no_saved') %></p>
+                                <p class="text-slate-600 dark:text-slate-400 mb-6"><%= req.t('saves.no_saved_recommendations') %></p>
                                 <a href="/" class="inline-block px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
                                     Explore Posts
                                 </a>

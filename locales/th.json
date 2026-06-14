@@ -20,8 +20,15 @@
         "anonymous_user": "ผู้ใช้ที่ไม่ระบุชื่อ",
         "deleted_account": "[บัญชีที่ถูกลบ]",
         "unknown": "ไม่ทราบ",
-        "edit_comment": "แก้ไขความเห็น",
-        "delete_comment": "ลบความเห็น"
+        "edit_comment": "แก้ไขความคิดเห็น",
+        "delete_comment": "ลบความคิดเห็น",
+        "edit_cancel": "ยกเลิก",
+        "edit_save": "บันทึก",
+        "reply_btn": "ตอบกลับ",
+        "reply_cancel": "ยกเลิก",
+        "reply_send": "ตอบกลับ",
+        "reply_placeholder": "เขียนการตอบกลับ...",
+        "reply_load": "โหลดการตอบกลับเพิ่มเติม"
     },
     "posts": {
         "featured": "เด่น",
@@ -58,6 +65,7 @@
         "created_by": "สร้างโดย Rand"
     },
     "media_attribution": {
+        "page_title": "แหล่งที่มาสื่อที่ใช้",
         "globe_model": "โมเดลโลก",
         "credit_to": "เครดิตให้",
         "coworking_space": "รูปกราฟิกผู้คนในพื้นที่ Coworking Space โดย Freepik"
@@ -74,6 +82,7 @@
     },
     "auth": {
         "register": {
+            "page_title": "สมัครสมาชิก",
             "title": "เข้าร่วมชุมชนของเรา",
             "subtitle": "สร้างบัญชีและเริ่มแบ่งปันเรื่องราวของคุณ",
             "username_label": "ชื่อผู้ใช้",
@@ -83,10 +92,10 @@
             "password_label": "รหัสผ่าน",
             "password_placeholder": "สร้างรหัสผ่านที่ปลอดภัย",
             "password_requirements": "ข้อกำหนดรหัสผ่าน:",
-            "password_min_length": "อย่างน้อย 8 ตัวอักษร",
-            "password_uppercase": "ตัวอักษรพิมพ์ใหญ่หนึ่งตัว",
-            "password_number": "ตัวเลขหนึ่งตัว",
-            "password_special": "อักขระพิเศษหนึ่งตัว (!@#$%)",
+            "password_min_length": "ความยาวอย่างน้อย 8 ตัวอักษร",
+            "password_uppercase": "มีตัวอักษรพิมพ์ใหญ่อย่างน้อยหนึ่งตัว",
+            "password_number": "มีตัวเลขอย่างน้อยหนึ่งตัว",
+            "password_special": "มีอักขระพิเศษอย่างน้อยหนึ่งตัว (!@#$%)",
             "confirm_password_label": "ยืนยันรหัสผ่าน",
             "confirm_password_placeholder": "ยืนยันรหัสผ่านของคุณ",
             "terms_agreement": "ฉันเห็นด้วยกับ",
@@ -99,6 +108,7 @@
             "signin_here": "เข้าสู่ระบบที่นี่"
         },
         "login": {
+            "page_title": "เข้าสู่ระบบ",
             "title": "ยินดีต้อนรับกลับ",
             "subtitle": "เข้าสู่ระบบบัญชีของคุณเพื่อดำเนินการต่อ",
             "email_label": "ที่อยู่อีเมล",
@@ -134,6 +144,7 @@
         }
     },
     "contact": {
+        "page_title": "ติดต่อเรา",
         "title": "ติดต่อเรา",
         "subtitle": "เรายินดีที่จะรับฟังทุกความเห็นจากคุณ ส่งข้อความหาเราแล้วเราจะตอบกลับโดยเร็วที่สุด",
         "labels": {
@@ -206,10 +217,10 @@
             "label_new": "รหัสผ่านใหม่",
             "placeholder_new": "ป้อนรหัสผ่านใหม่",
             "requirements_title": "ข้อกำหนดเกณฑ์รหัสผ่าน:",
-            "req_length": "อย่างน้อย 8 ตัวอักษร",
-            "req_uppercase": "ตัวอักษรพิมพ์ใหญ่หนึ่งตัว",
-            "req_number": "ตัวเลขหนึ่งตัว",
-            "req_special": "อักขระพิเศษหนึ่งตัว (!@#$%)",
+            "req_length": "ความยาวอย่างน้อย 8 ตัวอักษร",
+            "req_uppercase": "มีตัวอักษรพิมพ์ใหญ่อย่างน้อยหนึ่งตัว",
+            "req_number": "มีตัวเลขอย่างน้อยหนึ่งตัว",
+            "req_special": "มีอักขระพิเศษอย่างน้อยหนึ่งตัว (!@#$%)",
             "label_confirm": "ยืนยันรหัสผ่าน",
             "placeholder_confirm": "ยืนยันรหัสผ่านของคุณ",
             "btn_submit": "รีเซ็ตรหัสผ่าน",
@@ -292,5 +303,218 @@
             "btn_home": "กลับสู่หน้าหลัก",
             "btn_login": "ไปยังหน้าเข้าสู่ระบบ"
         }
+    },
+    "blog_view": {
+        "labels": {
+            "likes": "การถูกใจ",
+            "author": "ผู้เขียน",
+            "comments_heading": "ความคิดเห็น",
+            "saved": "บันทึกแล้ว",
+            "save": "บันทึก"
+        },
+        "placeholders": {
+            "sign_in_to_action": "กรุณาเข้าสู่ระบบเพื่อกดถูกใจและบันทึกบล็อกนี้",
+            "sign_in_to_comment": "กรุณาเข้าสู่ระบบเพื่อแสดงความคิดเห็นบนบล็อกนี้",
+            "comments_disabled": "ปิดการใช้งานแสดงความคิดเห็นสำหรับบล็อกนี้",
+            "no_comments": "บล็อกนี้ยังไม่มีความคิดเห็น",
+            "share_thoughts": "แบ่งปันความสร้างสรรค์และความคิดเห็นของคุณ...",
+            "no_bio": "ผู้เขียนท่านนี้ยังไม่ได้เพิ่มคำแนะนำตัวหรือประวัติส่วนตัว"
+        },
+        "actions": {
+            "enjoyed_title": "ชื่นชอบบล็อกเรื่องนี้ใช่ไหม?",
+            "cancel": "ยกเลิก",
+            "post_comment": "ส่งความคิดเห็น",
+            "load_more_comments": "โหลดความคิดเห็นเพิ่มเติม",
+            "back_to_feed": "กลับสู่หน้าฟีด",
+            "view_profile": "ดูโปรไฟล์แบบเต็ม"
+        },
+        "modals": {
+            "about_author": "เกี่ยวกับผู้เขียน",
+            "bio_tooltip": "คลิกเพื่อดูประวัติส่วนตัวของผู้เขียน"
+        }
+    },
+    "saves": {
+        "title": "โพสต์ที่บันทึกไว้",
+        "subtitle": "แหล่งเก็บโพสต์ที่คุณบันทึกไว้",
+        "no_saved": "ยังไม่มีโพสต์ที่บันทึกไว้",
+        "no_saved_recommendations": "บันทึกโพสต์ไว้อ่านในภายหลัง"
+    },
+    "people": {
+        "buttons": {
+            "edit_profile": "แก้ไขโปรไฟล์",
+            "follow": "ติดตาม"
+        },
+        "profile_labels": {
+            "followers": "ผู้ติดตาม",
+            "following": "กำลังติดตาม",
+            "posts": "โพสต์"
+        },
+        "about": "เกี่ยวกับ",
+        "no_posts": "ยังไม่มีโพสต์",
+        "your_posts": "โพสต์ของคุณ",
+        "their_posts": "โพสต์ของเขา"
+    },
+    "compose_actions": {
+        "titles": {
+            "write_your_story": "เขียนเรื่องราวของคุณ",
+            "tips_header": "เคล็ดลับสำหรับบล็อกที่ยอดเยี่ยม",
+            "insert_image": "แทรกรูปภาพ",
+            "insert_link": "แทรกลิงก์"
+        },
+        "labels": {
+            "blog_title": "ชื่อบล็อก*",
+            "blog_description": "คำอธิบายบล็อก",
+            "your_story": "เรื่องราวของคุณ*",
+            "blog_visibility": "การมองเห็นบล็อก",
+            "allow_comments": "อนุญาตความคิดเห็น",
+            "image_url": "URL รูปภาพ",
+            "alt_text": "ข้อความแทนรูปภาพ (เพื่อการเข้าถึง)",
+            "select_image_file": "เลือกไฟล์รูปภาพ",
+            "link_text": "ข้อความลิงก์",
+            "url": "URL"
+        },
+        "placeholders": {
+            "title_placeholder": "ตั้งชื่อบล็อกให้น่าดึงดูด...",
+            "description_placeholder": "อธิบายบล็อกของคุณสั้นๆ เพื่อให้ผู้อ่านทราบว่าควรคาดหวังอะไร...",
+            "image_url_placeholder": "https://example.com/image.jpg",
+            "describe_image_placeholder": "อธิบายรูปภาพ...",
+            "link_text_placeholder": "ป้อนข้อความลิงก์...",
+            "url_placeholder": "https://example.com",
+            "your_story_placeholder": "เขียนบล็อกของคุณที่นี่ แบ่งปันความคิด ไอเดีย ประสบการณ์ต่างๆของคุณ..."
+        },
+        "options": {
+            "normal": "ปกติ",
+            "heading_1": "หัวข้อ 1",
+            "heading_2": "หัวข้อ 2",
+            "heading_3": "หัวข้อ 3",
+            "public": "สาธารณะ",
+            "unlisted": "ไม่แสดงรายการ",
+            "private": "ส่วนตัว"
+        },
+        "descriptions": {
+            "toolbar_tip": "ใช้แถบเครื่องมือด้านล่างเพื่อจัดรูปแบบข้อความ เพิ่มรูปภาพ และฝังลิงก์",
+            "lightbulb_tip": "เคล็ดลับ: จัดรูปแบบข้อความด้วยแถบเครื่องมือด้านบน คุณสามารถเพิ่มรูปภาพ ลิงก์ และบล็อกโค้ดเพื่อให้เรื่องราวของคุณน่าสนใจยิ่งขึ้น",
+            "public_desc": "ทุกคนสามารถเห็นและค้นหาบล็อกของคุณได้",
+            "unlisted_desc": "เฉพาะผู้ที่มีลิงก์เท่านั้นที่สามารถดูได้",
+            "private_desc": "มีเพียงคุณเท่านั้นที่เห็นบล็อกนี้",
+            "disable_comments_warning": "การตั้งค่าบัญชีของคุณในปัจจุบันปิดใช้งานความคิดเห็นในบล็อกทั้งหมดของคุณ เปลี่ยนแปลงสิ่งนี้ใน ",
+            "preferences_link_text": "การตั้งค่า",
+            "set_comments_desc": "ตั้งค่าว่าคุณอนุญาตให้ผู้อ่านแสดงความคิดเห็นในโพสต์ของคุณหรือไม่",
+            "drag_drop": "ลากและวางรูปภาพของคุณที่นี่",
+            "click_select": "หรือคลิกเพื่อเลือก",
+            "subtitle": "แบ่งปันความคิดเห็น ไอเดีย และประสบการณ์ของคุณกับชุมชน"
+        },
+        "buttons": {
+            "cancel": "ยกเลิก",
+            "update_blog": "อัปเดตบล็อก",
+            "publish_blog": "เผยแพร่บล็อก",
+            "url_tab": "URL",
+            "upload_tab": "อัปโหลด",
+            "insert": "แทรก"
+        },
+        "tooltips": {
+            "bold": "ตัวหนา (Ctrl+B)",
+            "italic": "ตัวเอียง (Ctrl+I)",
+            "underline": "ขีดเส้นใต้ (Ctrl+U)",
+            "strikethrough": "ขีดทับ",
+            "text_color": "สีข้อความ",
+            "preset_colors": "สีที่ตั้งไว้ล่วงหน้า",
+            "custom": "กำหนดเอง:",
+            "recently_used": "สีที่ใช้ล่าสุด:",
+            "text_highlight": "ไฮไลท์ข้อความ",
+            "clear_formatting": "ล้างการจัดรูปแบบ",
+            "align_left": "จัดชิดซ้าย",
+            "align_center": "จัดกึ่งกลาง",
+            "align_right": "จัดชิดขวา",
+            "justify": "จัดแนวให้เท่ากัน",
+            "heading": "หัวข้อ",
+            "ordered_list": "รายการลำดับตัวเลข",
+            "bullet_list": "รายการสัญลักษณ์แสดงหัวข้อย่อย",
+            "quote": "อัญพจน์",
+            "code_block": "บล็อกโค้ด",
+            "insert_image": "แทรกรูปภาพ",
+            "insert_link": "แทรกลิงก์"
+        },
+        "tips_list": [
+            "เขียนชื่อเรื่องที่ชัดเจนและน่าดึงดูด",
+            "ใช้การจัดรูปแบบเพื่อเน้นจุดสำคัญและปรับปรุงความสามารถในการอ่าน",
+            "เพิ่มรูปภาพและลิงก์เพื่อให้เรื่องราวของคุณโต้ตอบได้มากขึ้น",
+            "แบ่งส่วนยาวๆ ด้วยหัวข้อและบทพูดคำคม",
+            "แบ่งปันประสบการณ์และข้อมูลเชิงลึกที่แท้จริง",
+            "ตรวจทานความถูกต้องก่อนเผยแพร่"
+        ]
+    },
+    "account_settings": {
+        "title": "ตั้งค่าบัญชี",
+        "meta_description": "จัดการความปลอดภัยของบัญชีและข้อมูลส่วนตัวของคุณ",
+        "profile_information": "ข้อมูลโปรไฟล์",
+        "profile_picture": "รูปโปรไฟล์",
+        "change_picture_btn": "เปลี่ยนรูปภาพ",
+        "picture_requirements": "รองรับไฟล์ JPG, PNG หรือ GIF ขนาดสูงสุดไม่เกิน 10MB",
+        "display_name_label": "ชื่อที่แสดง",
+        "display_name_hint": "ความยาว 3-30 ตัวอักษร",
+        "username_label": "ชื่อผู้ใช้",
+        "bio_label": "แนะนำตัวเอง",
+        "bio_max_characters": "สูงสุด 1000 ตัวอักษร",
+        "bio_characters_left": "จำนวนตัวอักษรที่เหลือ:",
+        "save_profile_btn": "บันทึกโปรไฟล์",
+        "password_security": "รหัสผ่านและความปลอดภัย",
+        "current_password_label": "รหัสผ่านปัจจุบัน",
+        "current_password_placeholder": "กรอกรหัสผ่านปัจจุบันของคุณ",
+        "current_password_hint": "หากคุณลงชื่อเข้าใช้ด้วย Google และไม่เคยเปลี่ยนรหัสผ่าน ให้เว้นว่างไว้",
+        "new_password_label": "รหัสผ่านใหม่",
+        "new_password_placeholder": "กรอกรหัสผ่านใหม่ที่คาดเดายาก",
+        "password_requirements_title": "ข้อกำหนดของรหัสผ่าน:",
+        "req_length": "ความยาวอย่างน้อย 8 ตัวอักษร",
+        "req_uppercase": "มีตัวอักษรพิมพ์ใหญ่อย่างน้อยหนึ่งตัว",
+        "req_number": "มีตัวเลขอย่างน้อยหนึ่งตัว",
+        "req_special": "มีอักขระพิเศษอย่างน้อยหนึ่งตัว (!@#$%)",
+        "confirm_new_password_label": "ยืนยันรหัสผ่านใหม่",
+        "confirm_new_password_placeholder": "กรอกรหัสผ่านใหม่อีกครั้งเพื่อยืนยัน",
+        "update_password_btn": "อัปเดตรหัสผ่าน",
+        "forgot_password_txt": "ลืมรหัสผ่านใช่ไหม?",
+        "reset_here_btn": "รีเซ็ตที่นี่",
+        "danger_zone_title": "พื้นที่อันตราย",
+        "delete_account_title": "ลบบัญชีผู้ใช้ของคุณ",
+        "delete_account_desc": "ลบบัญชีผู้ใช้และข้อมูลทั้งหมดที่เกี่ยวข้องของคุณอย่างถาวร การกระทำนี้ไม่สามารถย้อนกลับคืนได้",
+        "delete_account_btn": "ลบบัญชีผู้ใช้",
+        "back_to_feed_btn": "กลับไปยังหน้าฟีด",
+        "reset_password_modal_title": "รีเซ็ตรหัสผ่าน",
+        "reset_password_modal_desc": "กรอกที่อยู่อีเมลของคุณด้านล่าง เพื่อให้ระบบส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปให้",
+        "email_address_label": "ที่อยู่อีเมล",
+        "send_reset_link_btn": "ส่งลิงก์รีเซ็ต",
+        "reset_success_title": "ส่งลิงก์รีเซ็ตรหัสผ่านเรียบร้อยแล้ว!",
+        "reset_success_desc": "โปรดตรวจสอบกล่องข้อความในอีเมลของคุณสำหรับขั้นตอนต่อไป",
+        "delete_account_modal_title": "ลบบัญชีผู้ใช้",
+        "delete_account_modal_desc": "กรุณากรอกรหัสผ่านของคุณด้านล่าง เพื่อยืนยันว่าคุณต้องการลบบัญชีผู้ใช้ของคุณ",
+        "your_password_label": "รหัสผ่านของคุณ",
+        "submit_delete_account_btn": "ยืนยันการลบบัญชีผู้ใช้ของฉัน"
+    },
+    "preferences": {
+        "page_title": "ตั้งค่าการใช้งาน",
+        "meta_description": "ปรับแต่งประสบการณ์การอ่านและการเขียนในแบบของคุณ",
+        "theme_appearance": "ธีมและการแสดงผล",
+        "display_mode": "โหมดการแสดงผล",
+        "mode_light": "โหมดสว่าง",
+        "mode_dark": "โหมดมืด",
+        "mode_auto": "ตามระบบ",
+        "language_label": "ภาษา",
+        "lang_th": "ภาษาไทย",
+        "lang_en": "English",
+        "typography": "การจัดพิมพ์และฟอนต์",
+        "font_family_label": "รูปแบบฟอนต์",
+        "font_sans": "โมเดิร์น ซานส์ (เริ่มต้น)",
+        "font_serif": "คลาสสิก เซริฟ",
+        "font_mono": "โมโนสเปซ (โค้ด)",
+        "font_hint": "เลือกรูปแบบฟอนต์สำหรับประสบการณ์การอ่านของคุณ",
+        "base_font_size": "ขนาดฟอนต์เริ่มต้น",
+        "font_size_hint": "ปรับขนาดตัวอักษรเริ่มต้นเพื่อให้อ่านง่ายยิ่งขึ้น",
+        "privacy_sharing": "ความเป็นส่วนตัวและการแชร์",
+        "public_profile_label": "โปรไฟล์สาธารณะ",
+        "public_profile_hint": "อนุญาตให้ทุกคนเข้าชมโปรไฟล์และโพสต์ของคุณได้",
+        "allow_comments_label": "อนุญาตให้แสดงความคิดเห็นโดยเริ่มต้น",
+        "allow_comments_hint": "ตั้งค่าว่าคุณจะอนุญาตให้ผู้อ่านแสดงความคิดเห็นในโพสต์ของคุณโดยเริ่มต้นหรือไม่",
+        "save_preferences_btn": "บันทึกการตั้งค่า",
+        "cancel_btn": "ยกเลิก"
     }
 }

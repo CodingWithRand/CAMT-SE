@@ -12,6 +12,9 @@ import { UnauthorizedError, NotFoundError } from '../utils/errors';
 import { validateBio } from '../utils/validators';
 import { ValidationError } from '../utils/errors'
 import { CommentModel } from '../models/commentModel';
+import notf_lang from "../locales"
+
+const t = (req: Request, c: string, fn?: number | string) => notf_lang(req, 'user', c, fn)
 
 export const userController = {
   /**
@@ -45,7 +48,7 @@ export const userController = {
     const { property } = req.params;
 
     if (!property || typeof property !== 'string') {
-      throw new Error('Property name is required');
+      throw new Error(t(req, "fetchCurrentUserProperty", 1));
     }
 
     const userProperty = await UserModel.getProfileProperty(req.userId, property);
@@ -62,7 +65,7 @@ export const userController = {
     const { uid } = req.body;
 
     if (!uid) {
-      throw new Error('User ID is required');
+      throw new Error(t(req, "fetchUserProfile", 1));
     }
 
     const userProfile = await UserModel.getProfileByUserId(uid);
@@ -78,7 +81,7 @@ export const userController = {
     
     const { avatar, displayName, bio } = req.body;
 
-    if(!validateBio(bio)) throw new ValidationError("Number of characters for bio must not exceed 1000.");
+    if(!validateBio(bio)) throw new ValidationError(t(req, "updateUserProfile", 1));
 
     await UserModel.updateProfile(req.userId, { avatar, display_name: displayName, bio})
     
@@ -92,7 +95,7 @@ export const userController = {
     const { username } = req.params;
     
     if (!username || typeof username !== 'string') {
-      throw new Error('Username is required');
+      throw new Error(t(req, "viewPublicProfile", 1));
     }
     
     let profile;
@@ -115,8 +118,8 @@ export const userController = {
     } catch (error) {
       if (error instanceof NotFoundError) return res.status(404).render('error', {
         errorCode: 404,
-        customMessage: "The user you are looking for does not exist.",
-        customTip: "Please check for the typo of the username in the URL. The user may have their account private." 
+        customMessage: t(req, "viewPublicProfile", 2),
+        customTip: t(req, "viewPublicProfile", 3) 
       })
     }
 

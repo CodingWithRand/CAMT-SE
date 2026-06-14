@@ -98,6 +98,60 @@ const notfs = {
             "errors": {
                 "logout_failed": "An error occurred while logging out. Please try again."
             }
+        },
+        "blog": {
+            "placeholders": {
+                "u": "U",
+                "anonymous_user": "Anonymous User",
+                "deleted_account": "[Deleted Account]",
+                "unknown_user": "Unknown",
+                "write_reply": "Write a reply..."
+            },
+            "buttons": {
+                "edit_comment": "Edit Comment",
+                "delete_comment": "Delete Comment",
+                "cancel": "Cancel",
+                "save": "Save",
+                "reply": "Reply",
+                "load_more_replies": "Load More Replies",
+                "saved": "Saved"
+            },
+            "toasts": {
+                "empty_comment_error": "Comment cannot be empty.",
+                "edit_failed_error": "Failed to update comment.",
+                "edit_error": "Error updating comment: ",
+                "confirm_delete": "Are you sure you want to delete this comment? This action cannot be undone.",
+                "delete_success": "Comment deleted successfully.",
+                "delete_failed_error": "Failed to delete comment.",
+                "delete_error": "Error deleting comment: ",
+                "save_post_error": "An error occurred while saving the post. Please try again."
+            }
+        },
+        "compose": {
+            "quill_placeholder": "Write your blog here. Share your thoughts, ideas, and experiences...",
+            "default_error": "An error occurred while publishing the blog. Please try again."
+        },
+        "preferences": {
+            "success": 'Successfully saved your preference settings!',  
+            "error": "Failed to save your preference settings."
+        },
+        "account": {
+            "bio_max_chars": "Max 1000 characters. Characters Left:",
+            "profileForm": {
+                "saveSuccess": "Profile updated successfully!",
+            },
+            "passwordForm": {
+                "passwordRequirements": "Password must have 8+ characters, uppercase, lowercase, number, and symbol",
+                "saveSuccess": "Password updated successfully!"
+            },
+            "deleteModal": {
+                "emptyPassword": "Please enter your password to confirm account deletion.",
+                "fallbackError": "Failed to delete account.",
+                "networkError": "An error occurred. Please try again."
+            }
+        },
+        wip: {
+            follow: "Follow is not implemented yet. Please keep up with the new updates in the future. Sorry for the inconvenience."
         }
     },
     th: {
@@ -199,11 +253,66 @@ const notfs = {
             "errors": {
                 "logout_failed": "เกิดข้อผิดพลาดขณะลงชื่อออกากรระบบ กรุณาลองใหม่อีกครั้ง"
             }
+        },
+        "blog": {
+            "placeholders": {
+                "u": "U",
+                "anonymous_user": "ผู้ใช้ที่ไม่ระบุตัวตน",
+                "deleted_account": "[บัญชีที่ถูกลบ]",
+                "unknown_user": "ไม่รู้จัก",
+                "write_reply": "เขียนการตอบกลับ..."
+            },
+            "buttons": {
+                "edit_comment": "แก้ไขความคิดเห็น",
+                "delete_comment": "ลบความคิดเห็น",
+                "cancel": "ยกเลิก",
+                "save": "บันทึก",
+                "reply": "ตอบกลับ",
+                "load_more_replies": "โหลดการตอบกลับเพิ่มเติม",
+                "saved": "บันทึกแล้ว"
+            },
+            "toasts": {
+                "empty_comment_error": "ความคิดเห็นต้องไม่ว่างเปล่า",
+                "edit_failed_error": "ไม่สามารถอัปเดตความคิดเห็นได้",
+                "edit_error": "เกิดข้อผิดพลาดในการอัปเดตความคิดเห็น: ",
+                "confirm_delete": "คุณแน่ใจหรือไม่ว่าต้องการลบความคิดเห็นนี้? การดำเนินการนี้ไม่สามารถย้อนกลับได้",
+                "delete_success": "ลบความคิดเห็นเรียบร้อยแล้ว",
+                "delete_failed_error": "ไม่สามารถลบความคิดเห็นได้",
+                "delete_error": "เกิดข้อผิดพลาดในการลบความคิดเห็น: ",
+                "save_post_error": "เกิดข้อผิดพลาดขณะบันทึกโพสต์ กรุณาลองใหม่อีกครั้ง"
+            }
+        },
+        "compose": {
+            "quill_placeholder": "เขียนบล็อกของคุณที่นี่ แบ่งปันความคิด ไอเดีย ประสบการณ์ต่างๆของคุณ...",
+            "default_error": "เกิดข้อผิดพลาดขณะเผยแพร่บล็อก กรุณาลองใหม่อีกครั้ง"
+        },
+        "preferences": {
+            "success": "บันทึกการตั้งค่าใช้งานของคุณสำเร็จ",  
+            "error": "เกิดข้อผิดพลาดในการบันทึกการตั้งค่าใช้งานของคุณ"
+        },
+        "account": {
+            "bio_max_chars": "สูงสุด 1000 ตัวอักษร เหลือ:",
+            "profileForm": {
+                "saveSuccess": "อัปเดตข้อมูลโปรไฟล์สำเร็จแล้ว!",
+            },
+            "passwordForm": {
+                "saveSuccess": "เปลี่ยนรหัสผ่านสำเร็จแล้ว!",
+                "passwordRequirements": "รหัสผ่านต้องมี 8 ตัวอักษรขึ้นไป มีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และสัญลักษณ์"
+            },
+            "deleteModal": {
+                "emptyPassword": "กรุณากรอกรหัสผ่านของคุณเพื่อยืนยันการลบบัญชีผู้ใช้",
+                "fallbackError": "ไม่สามารถลบบัญชีผู้ใช้ได้",
+                "networkError": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
+            }
+        },
+        wip: {
+            follow: "ขณะนี้ยังไม่มีระบบการติดตาม โปรดติดตามการอัปเดตเพิ่มเติมในอนาคต ขออภัยในความไม่สะดวก"
         }
     }
 }
 
 
-export default function notf_lang(file, fn, id) {
-    return notfs[document.documentElement.lang.slice(0, 2)][file][fn][id];
+export default function notf_lang(file, fn, id=undefined) {
+    if(id) return notfs[document.documentElement.lang.slice(0, 2)][file][fn][id];
+    else return notfs[document.documentElement.lang.slice(0, 2)][file][fn];
 }

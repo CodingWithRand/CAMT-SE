@@ -83,11 +83,11 @@ function getTimeAgo(stamp) {
                         <div class="flex-shrink-0 w-full sm:w-auto">
                             <% if(currentUser && currentUser.uid === profile.uid) { %>
                                 <a href="/account" class="w-full sm:w-auto px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-center block">
-                                    Edit Profile
+                                    <%= req.t('people.buttons.edit_profile') %>
                                 </a>
                             <% } else { %>
                                 <button class="follow-btn w-full sm:w-auto px-6 py-2 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200 transition-all duration-300">
-                                    Follow
+                                    <%= req.t('people.buttons.follow') %>
                                 </button>
                             <% } %>
                         </div>
@@ -97,15 +97,15 @@ function getTimeAgo(stamp) {
                     <div class="flex gap-8 pt-6 border-t border-slate-100 dark:border-slate-700">
                         <div class="text-center">
                             <p class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white"><%= stats.postCount %></p>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">Posts</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400"><%= req.t('people.profile_labels.posts') %></p>
                         </div>
                         <div class="text-center">
                             <p class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white"><%= stats.followerCount %></p>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">Followers</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400"><%= req.t('people.profile_labels.followers') %></p>
                         </div>
                         <div class="text-center">
                             <p class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white"><%= stats.followingCount %></p>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">Following</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400"><%= req.t('people.profile_labels.following') %></p>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@ function getTimeAgo(stamp) {
             <% if(profile.bio) { %>
                 <section class="mb-12 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm dark:shadow-slate-950">
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                        <i class="mdi mdi-information-outline text-blue-500"></i>About
+                        <i class="mdi mdi-information-outline text-blue-500"></i><%= req.t('people.about') %>
                     </h2>
                     <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
                         <%= profile.bio %>
@@ -125,11 +125,11 @@ function getTimeAgo(stamp) {
 
             <!-- Posts Section -->
             <section class="mb-12">
-                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-8"><%= currentUser && currentUser.uid === profile.uid ? "Your" : "Their" %> Posts</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-8"><%= currentUser && currentUser.uid === profile.uid ? req.t('people.your_posts') : req.t('people.their_posts') %></h2>
                 
                 <% if(blogs.length === 0) { %>
                     <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8 text-center">
-                        <p class="text-slate-600 dark:text-slate-400">No posts yet</p>
+                        <p class="text-slate-600 dark:text-slate-400"><%= req.t('people.no_posts') %></p>
                     </div>
                 <% } else { %>
                     <div id="blogs-container" class="space-y-6">
@@ -159,13 +159,3 @@ function getTimeAgo(stamp) {
 </div>
 
 <%- include("../partials/footer") %>
-
-<script>
-    // Follow button functionality (to be implemented)
-    document.querySelectorAll('.follow-btn')?.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // TODO: Implement follow functionality
-            console.log('Follow clicked');
-        });
-    });
-</script>

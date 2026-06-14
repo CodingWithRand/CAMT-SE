@@ -18,7 +18,7 @@ This is what it looked like. Pretty simple.
 Completely rebranded blog that works in the real world and deployed to [Render](https://render.com)
 
 # TODO
-1. Language preference; Page left for translation: Compose, Blog, People, Account, Preferences
+1. Language preference ✓
 2. Functional Contact page.
 3. Final check.
 

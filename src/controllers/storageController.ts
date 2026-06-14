@@ -10,6 +10,9 @@ import path from 'path';
 import { asyncHandler } from '../middleware/errorHandler';
 import { UnauthorizedError, ValidationError, DatabaseError } from '../utils/errors';
 import { UPLOAD } from '../utils/constants';
+import notf_lang from '../locales';
+
+const t = (req: Request, c: string) => notf_lang(req, 'storage', c)
 
 export const storageController = {
   /**
@@ -17,23 +20,23 @@ export const storageController = {
    */
   uploadImagesForBlog: asyncHandler(async (req: Request, res: Response) => {
     const signedIn = await auth.getUser();
-    if (!signedIn.data.user) throw new UnauthorizedError('Unauthorized user trying to upload an image');
+    if (!signedIn.data.user) throw new UnauthorizedError(t(req, 'unauthorized_upload'));
 
     // Check if file exists
     if (!req.file) {
-      throw new ValidationError('No file provided or key mismatch');
+      throw new ValidationError(t(req, 'no_file'));
     }
 
     // Check blog ID
     const { blogid } = req.body;
     if (!blogid) {
-      throw new ValidationError('Blog ID is required');
+      throw new ValidationError(t(req, 'missing_blog_id'));
     }
 
     // Get current session for authorization
     const userSession = await auth.getSession();
     if (!userSession.data.session?.access_token) {
-      throw new UnauthorizedError('No active session');
+      throw new UnauthorizedError(t(req, 'no_session'));
     }
 
     // Generate file hash and path

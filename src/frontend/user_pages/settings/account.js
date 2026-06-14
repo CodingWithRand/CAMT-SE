@@ -2,6 +2,11 @@ import { showToast } from "../../utils/misc.js"
 import FormValidation from "../../utils/reg_form_validation.js"
 import registerPasswordResetForm from "../../utils/password_reset_form.js";
 
+// Helper function to dynamically pull translations via the injected notf_lang utility
+function t(fn, id = undefined) {
+    return notf_lang("account", fn, id);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     if(window.location.pathname !== '/account') return
     const profileForm = document.getElementById("account-profile-form")
@@ -41,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
-    profileForm.querySelector('textarea[name="bio"]').addEventListener("input", (event) => profileForm.querySelector('textarea[name="bio"]').parentElement.querySelector('span').textContent = `Max 1000 characters. Characters Left: ${1000 - event.target.value.length}`);
+    profileForm.querySelector('textarea[name="bio"]').addEventListener("input", (event) => profileForm.querySelector('textarea[name="bio"]').parentElement.querySelector('span').textContent = `${t("bio_max_chars")} ${1000 - event.target.value.length}`);
 
     document.querySelector('input[name="confirm-password"]').addEventListener('input', () => {
         const rule = FormValidation.rules[convertToRuleName("confirm-password")];
@@ -101,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({ avatar: pfpURL, displayName: displayName.value, bio: bio.value })
             })
             if(!updatedProfileResponse.ok) throw updatedProfileResponse;
-            showToast("Profile updated successfully", "success");
+            showToast(t("profileForm", "saveSuccess"));
         } catch (e) {
             console.error(e);
             return showToast(e.message);
@@ -125,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let tvf in to_validate_fields) {
             if (tvf === 'password') {
                 if (!FormValidation.validatePasswordRequirements(to_validate_fields[tvf])) {
-                    FormValidation.currentError("Password must have 8+ characters, uppercase, lowercase, number, and symbol");
+                    FormValidation.currentError(t("passwordForm", "passwordRequirements"));
                     isValid = false;
                     break;
                 }
@@ -156,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) {
             console.error(e);
         }
-        showToast("Password updated successfully", "success");
+        showToast(t("passwordForm", "saveSuccess"));
         e.target.reset();
     })
 
@@ -194,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = accountDeleteConfirmPasswordInput.value.trim();
 
         if (!password) {
-            showToast('Please enter your password to confirm account deletion.');
+            showToast(t("deleteModal", "emptyPassword"));
             return;
         }
 
@@ -207,14 +212,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
                 const error = await response.json();
-                showToast(error.error || 'Failed to delete account.');
+                showToast(error.error || t("deleteModal", "fallbackError"));
                 return;
             }
 
             window.location.replace('/');
         } catch (error) {
             console.error(error);
-            showToast('An error occurred. Please try again.');
+            showToast(t("deleteModal", "networkError"));    
         }
     });
 })

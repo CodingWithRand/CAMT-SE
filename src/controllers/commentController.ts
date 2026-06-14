@@ -10,6 +10,9 @@ import { asyncHandler } from '../middleware/errorHandler';
 import { validateComment } from '../utils/validators';
 import { UnauthorizedError, NotFoundError, ValidationError } from '../utils/errors';
 import { PAGINATION } from '../utils/constants';
+import notf_lang from '../locales';
+
+const t = (req: Request, c: string, fn?: number | string) => notf_lang(req, 'comment', c, fn)
 
 export const commentController = {
   /**
@@ -21,7 +24,7 @@ export const commentController = {
     const { blogid, comment, replyTo } = req.body;
 
     if (!blogid || !comment) {
-      throw new ValidationError('Blog ID and comment text are required');
+      throw new ValidationError(t(req, "createComment", 1));
     }
 
     // Validate comment
@@ -51,7 +54,7 @@ export const commentController = {
     const { blogid, isReply, ownerComment, page = 0 } = req.body;
 
     if (!blogid) {
-      throw new ValidationError('Blog ID is required');
+      throw new ValidationError(t(req, "fetchComments", 1));
     }
 
     let comments;
@@ -119,10 +122,10 @@ export const commentController = {
     let comment
     try {
       comment = await CommentModel.getCommentById(id as string); 
-      commentController.validateCommentOwnership(comment, req.userId);
+      commentController.validateCommentOwnership(req, comment, req.userId);
     } catch (error) {
-      if (error instanceof NotFoundError) return res.status(404).json({ message: "Comment not found." });
-      else if (error instanceof UnauthorizedError) return res.status(401).json({ message: "You can't edit another person's comment." }); 
+      if (error instanceof NotFoundError) return res.status(404).json({ message: t(req, "editComment", 1) });
+      else if (error instanceof UnauthorizedError) return res.status(401).json({ message: t(req, "editComment", 2) }); 
     }
 
     await CommentModel.editComment(id as string, req.userId, commentContent);
@@ -142,10 +145,10 @@ export const commentController = {
     let comment
     try {
       comment = await CommentModel.getCommentById(id as string); 
-      commentController.validateCommentOwnership(comment, req.userId);
+      commentController.validateCommentOwnership(req, comment, req.userId);
     } catch (error) {
-      if (error instanceof NotFoundError) return res.status(404).json({ message: "Comment not found." });
-      else if (error instanceof UnauthorizedError) return res.status(401).json({ message: "You can't delete another person's comment." }); 
+      if (error instanceof NotFoundError) return res.status(404).json({ message: t(req, "deleteComment", 1) });
+      else if (error instanceof UnauthorizedError) return res.status(401).json({ message: t(req, "deleteComment", 1) }); 
     }
 
     await CommentModel.deleteComment(id as string, req.userId);
@@ -155,7 +158,7 @@ export const commentController = {
   /**
    * Miscellaneous functions
    */
-  validateCommentOwnership: (commentData: any, userId: string) => {
-    if (commentData.authorid !== userId) throw new UnauthorizedError("This comment doesn't belong to you.")
+  validateCommentOwnership: (req: Request, commentData: any, userId: string) => {
+    if (commentData.authorid !== userId) throw new UnauthorizedError(t(req, "validateCommentOwnership", 1));
   }
 };
