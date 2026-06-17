@@ -6,6 +6,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import path from "path";
 import "dotenv/config";
+import cookieParser from 'cookie-parser';
 
 // Middleware
 import { requestLogger } from "./middleware/requestLogger";
@@ -23,6 +24,9 @@ import i18next from 'i18next';
 import FilesystemBackend from 'i18next-fs-backend';
 import i18nextMiddleware from 'i18next-http-middleware';
 
+const enTranslations = require('../locales/en.json');
+const thTranslations = require('../locales/th.json');
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,9 +43,17 @@ i18next
     ignoreJSONStructure: false,
     fallbackLng: 'en', // Default language if detection fails
     preload: ['th', 'en'], // Languages to load into server memory
-    backend: {
-      loadPath: path.join(__dirname, '..', '/locales/{{lng}}.json') // Path to your files
+    resources: {
+      en: {
+        translation: enTranslations
+      },
+      th: {
+        translation: thTranslations
+      }
     },
+    // backend: {
+    //   loadPath: path.join(process.cwd(), 'locales/{{lng}}.json') // Path to your files
+    // },
     detection: {
       order: ['querystring', 'cookie', 'header'], // Look at URL (?lng=th), then cookies, then browser settings
       caches: ['cookie'] // Save preference in a cookie
@@ -74,6 +86,7 @@ app.set("views", path.join(__dirname, "..", "views"));
 app.use(requestLogger);
 
 // Body parsing middleware
+app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 

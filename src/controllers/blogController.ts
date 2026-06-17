@@ -23,11 +23,10 @@ export const blogController = {
    * GET / - Home page (logged in users) or Landing page (guests)
    */
   renderHomePage: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-
-    if (signedIn.data.user) {
+    // console.log(req.user, req.userId)
+    if (req.user) {
       // Logged in user - show dashboard
-      const userProfile = await UserModel.getProfileByUserId(signedIn.data.user.id);
+      const userProfile = await UserModel.getProfileByUserId(req.userId!);
       let blogs
       if(req.query.search) blogs = await BlogModel.searchBlogs(req.query.search as string, 0, PAGINATION.BLOGS_PER_PAGE);
       else blogs = await BlogModel.getAllBlogs(0, PAGINATION.BLOGS_PER_PAGE);
@@ -130,9 +129,8 @@ export const blogController = {
 
     // Get current user if logged in
     let userProfile;
-    const signedIn = await auth.getUser();
-    if (signedIn.data.user) {
-      userProfile = await UserModel.getProfileByUserId(signedIn.data.user.id);
+    if (req.user) {
+      userProfile = await UserModel.getProfileByUserId(req.userId!);
     }
 
     const authorPreferences = await UserModel.getUserPreferences(blog.authorid);

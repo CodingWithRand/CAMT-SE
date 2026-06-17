@@ -82,6 +82,7 @@
     },
     "auth": {
         "register": {
+            "page_title": "Sign Up",
             "title": "Join Our Community",
             "subtitle": "Create an account and start sharing your stories",
             "username_label": "Username",
@@ -107,6 +108,7 @@
             "signin_here": "Sign in here"
         },
         "login": {
+            "page_title": "Log In",
             "title": "Welcome Back",
             "subtitle": "Sign in to your account to continue",
             "email_label": "Email Address",

@@ -81,7 +81,7 @@ const notfs = {
                 ago: "ago"
             }
         },
-        "home_feed": {
+        "home": {
             "placeholders": {
                 "untitled": "Untitled Blog",
                 "no_desc_available": "No description available",
@@ -149,6 +149,9 @@ const notfs = {
                 "fallbackError": "Failed to delete account.",
                 "networkError": "An error occurred. Please try again."
             }
+        },
+        contact: {
+            contact_sent_success: "Successfully sent your message to the support."
         },
         wip: {
             follow: "Follow is not implemented yet. Please keep up with the new updates in the future. Sorry for the inconvenience."
@@ -300,10 +303,13 @@ const notfs = {
                 "passwordRequirements": "รหัสผ่านต้องมี 8 ตัวอักษรขึ้นไป มีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และสัญลักษณ์"
             },
             "deleteModal": {
-                "emptyPassword": "กรุณากรอกรหัสผ่านของคุณเพื่อยืนยันการลบบัญชีผู้ใช้",
+                "emptyPassword": "กรุณากaรอกรหัสผ่านของคุณเพื่อยืนยันการลบบัญชีผู้ใช้",
                 "fallbackError": "ไม่สามารถลบบัญชีผู้ใช้ได้",
                 "networkError": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
             }
+        },
+        contact: {
+            contact_sent_success: "ส่งข้อความของคุณไปหาฝ่าย Support เรียบร้อยแล้ว"
         },
         wip: {
             follow: "ขณะนี้ยังไม่มีระบบการติดตาม โปรดติดตามการอัปเดตเพิ่มเติมในอนาคต ขออภัยในความไม่สะดวก"

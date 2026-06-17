@@ -28,8 +28,7 @@ export const authController = {
    * GET /login - Render login page
    */
   renderLoginPage: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-    if (signedIn.data.user) return res.redirect('/');
+    if (req.userId) return res.redirect('/');
     res.render('reg/login');
   }),
 
@@ -37,8 +36,7 @@ export const authController = {
    * GET /register - Render registration page
    */
   renderRegisterPage: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-    if (signedIn.data.user) return res.redirect('/');
+    if (req.userId) return res.redirect('/');
     res.render('reg/register');
   }),
 
@@ -78,7 +76,14 @@ export const authController = {
     else if(email_exist) return res.status(400).redirect(`/register?error=${errmsg(2)}`);
 
     // Sign up
-    await AuthModel.signUpWithEmail(email.trim(), password, userName.trim());
+    const authedData = await AuthModel.signUpWithEmail(email.trim(), password, userName.trim());
+
+    res.cookie('sb_access_token', authedData.session?.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true on Vercel
+      sameSite: 'lax',
+      maxAge: authedData.session?.expires_in! * 1000
+    });
 
     res.status(201).redirect('/');
   }),
@@ -101,8 +106,15 @@ export const authController = {
     validateLoginData({ email, password });
 
     // Sign in
-    await AuthModel.signInWithEmail(email, password);
-
+    const authedData = await AuthModel.signInWithEmail(email, password);
+    
+    res.cookie('sb_access_token', authedData.session.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true on Vercel
+      sameSite: 'lax',
+      maxAge: authedData.session.expires_in * 1000
+    });
+    
     // res.status(200).json({ message: 'Login successful' });
     res.redirect('/');
   }),
@@ -125,7 +137,15 @@ export const authController = {
       throw new ValidationError('Missing access_token or refresh_token');
     }
 
-    await AuthModel.setSession(access_token, refresh_token);
+    const authedData = await AuthModel.setSession(access_token, refresh_token);
+
+    res.cookie('sb_access_token', authedData.session?.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true on Vercel
+      sameSite: 'lax',
+      maxAge: authedData.session?.expires_in! * 1000
+    });
+
     res.status(200).send();
   }),
 
@@ -135,6 +155,12 @@ export const authController = {
   logout: asyncHandler(async (req: Request, res: Response) => {
     await AuthModel.signOut();
     const msg = (notfId: number) => notf_lang(req, "auth", "logout", notfId)    
+
+    res.clearCookie('sb_access_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Must match the setting used when creating the cookie
+      sameSite: 'lax'                                // Must match the setting used when creating the cookie
+    });
 
     res.status(200).json({ message: msg(1) });
   }),
@@ -203,8 +229,10 @@ export const authController = {
       else throw error;
     } 
 
+    const domainURL = process.env.NODE_ENV === 'production' ? 'https://camt-se.vercel.app/' : 'http://localhost:3000';
+
     const subjectText = () => {
-      switch(req.language) {
+      switch(req.language.slice(0,2)) {
         case 'en':
           return "Reset Your Password";
         case 'th':
@@ -213,19 +241,29 @@ export const authController = {
     }
     
     const emailHTMLContent = () => {
-      switch(req.language) {
+      switch(req.language.slice(0,2)) {
         case 'en':
           return `
             <h1>Reset Your Password</h1>
             <p>Click the link below to reset your password:</p>
-            <a href="http://localhost:3000/auth/password-reset?token=${data.properties.hashed_token}">Reset Password</a>
+            <a href="${domainURL}/auth/password-reset?token=${data.properties.hashed_token}">Reset Password</a>
           `;
         case 'th':
           return `
             <h1>รีเซ็ตรหัสผ่าน</h1>
             <p>กดลิงค์ด้านล่างเพื่อรีเซ็ตรหัสผ่านของคุณ:</p>
-            <a href="http://localhost:3000/auth/password-reset?token=${data.properties.hashed_token}">รีเซ็ตรหัสผ่าน</a>
+            <a href="${domainURL}/auth/password-reset?token=${data.properties.hashed_token}">รีเซ็ตรหัสผ่าน</a>
           `;
+      }
+    }
+    
+
+    const emailTextContent = () => {
+      switch(req.language.slice(0,2)) {
+        case 'en':
+          return `Please copy and paste the link below into your browser to reset your password\n\n${domainURL}/auth/password-reset?token=${data.properties.hashed_token}`;
+        case 'th':
+          return `โปรดคัดลอกและวางลิงค์ด้านล่างเพื่อรีเซ็ตรหัสผ่านของคุณ\n\n${domainURL}/auth/password-reset?token=${data.properties.hashed_token}`;
       }
     }
 
@@ -233,6 +271,7 @@ export const authController = {
       from: `"Whiskey Security" <${process.env.NODEMAILER_TRANSPORTER_EMAIL}>`,
       to: email,
       subject: subjectText(),
+      text: emailTextContent(),
       html: emailHTMLContent()
     })
 
@@ -247,8 +286,6 @@ export const authController = {
     const authHeader = req.headers.authorization;
 
     const errmsg = (notfId: number) => notf_lang(req, "auth", "resetPassword", notfId)
-
-    console.log(req.language)
 
     if (!authHeader) throw new UnauthorizedError(errmsg(1));
 

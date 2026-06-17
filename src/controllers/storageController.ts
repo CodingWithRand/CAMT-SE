@@ -19,8 +19,7 @@ export const storageController = {
    * POST /api/blogs/upload/image - Upload image to storage
    */
   uploadImagesForBlog: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-    if (!signedIn.data.user) throw new UnauthorizedError(t(req, 'unauthorized_upload'));
+    if (req.user) throw new UnauthorizedError(t(req, 'unauthorized_upload'));
 
     // Check if file exists
     if (!req.file) {
@@ -74,8 +73,7 @@ export const storageController = {
    * POST /api/users/upload/image - Upload user pfp image to storage
    */
   uploadPFP: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-    if (!signedIn.data.user) throw new UnauthorizedError('Unauthorized user trying to upload an image');
+    if (req.user) throw new UnauthorizedError('Unauthorized user trying to upload an image');
 
     // Check if file exists
     if (!req.file) {
@@ -91,7 +89,7 @@ export const storageController = {
     // Upload to Supabase Storage
     const { data, error } = await supabase.storage
       .from(UPLOAD.STORAGE_BUCKETS.USER_AVATAR)
-      .upload(`/${signedIn.data.user.id}.png`, req.file.buffer, {
+      .upload(`/${req.userId}.png`, req.file.buffer, {
         contentType: req.file.mimetype,
         upsert: true,
         headers: {

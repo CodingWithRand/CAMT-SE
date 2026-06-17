@@ -107,6 +107,11 @@ const notfs: any = {
             "validateCommentOwnership": {
                 1: "This comment doesn't belong to you."
             }
+        },
+        page: {
+            sendContact: {
+                1: 'Please fill in name, email, subject, and message, before submitting.'
+            }
         }
     },
     th: {
@@ -214,6 +219,11 @@ const notfs: any = {
             },
             validateCommentOwnership: {
                 1: "ความคิดเห็นนี้ไม่ใช่ของคุณ"
+            }
+        },
+        page: {
+            sendContact: {
+                1: 'กรุณากรอกชื่อ อีเมล หัวข้อและข้อความให้ครบถ้วนก่อนส่ง'
             }
         }
     }

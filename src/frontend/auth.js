@@ -16,18 +16,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     let access_token
 
     try {
-        // if (th) {
-        //     const response = await fetch('/api/auth/verify', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({ token: th, type: "recovery" })
-        //     });
+        if (th) {
+            const response = await fetch('/api/auth/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: th, type: "recovery" })
+            });
 
-        //     if (!response.ok) throw response;
-        //     access_token = (await response.json()).access_token
-        // } else {
-        //     throw new Error("No token provided")
-        // }
+            if (!response.ok) throw response;
+            access_token = (await response.json()).access_token
+        } else {
+            throw new Error("No token provided")
+        }
     } catch (error) {
         console.error(error)
         // Notification modal, "This request is invalid or has expired."

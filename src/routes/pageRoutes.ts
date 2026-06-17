@@ -17,4 +17,7 @@ router.get('/people/@:username', optionalAuthMiddleware, userController.viewPubl
 router.get('/people/:username', optionalAuthMiddleware, userController.viewPublicProfile);
 router.get('/media', pageController.renderMediaAttributionPage);
 
+// POST routes
+router.post('/api/contact/send', pageController.sendContact);
+
 export default router;

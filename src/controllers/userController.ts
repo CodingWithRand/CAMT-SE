@@ -21,21 +21,19 @@ export const userController = {
    * GET /account - Render account page
    */
   renderAccountPage: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-    if (!signedIn.data.user) return res.redirect('/login');
+    if (!req.user) return res.redirect('/login');
 
-    const userProfile = await UserModel.getProfileByUserId(signedIn.data.user.id);
+    const userProfile = await UserModel.getProfileByUserId(req.userId!);
     res.render('user_pages/settings/account', { user: userProfile });
   }),
 
   /**
    * GET /account/preferences - Render preferences page
    */
-  renderPreferencesPage: asyncHandler(async (req: Request, res: Response) => {
-    const signedIn = await auth.getUser();
-    if (!signedIn.data.user) return res.redirect('/login');
+  renderPreferencesPage: asyncHandler(async (req: Request, res: Response) => {;
+    if (!req.user) return res.redirect('/login');
     
-    const userPreferences = await UserModel.getUserPreferences(signedIn.data.user.id);
+    const userPreferences = await UserModel.getUserPreferences(req.userId!);
     res.render('user_pages/settings/preferences', { preferences: userPreferences });
   }),
 

@@ -12,3 +12,4 @@ import './user_pages/people.js'
 import './user_pages/saves.js'
 import './user_pages/settings/account.js'
 import './user_pages/settings/preferences.js'
+import './contact.js';

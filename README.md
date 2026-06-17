@@ -19,8 +19,11 @@ Completely rebranded blog that works in the real world and deployed to [Render](
 
 # TODO
 1. Language preference ✓
-2. Functional Contact page.
+2. Functional Contact page. ✓
 3. Final check.
+
+Problem:
+- Unstable auth, can log out every reload + 401. -> try migrate from session to jwt cookie.
 
 I tried docker. Here is the take away.
 - `.devcontainer` is for deving and testing, use with vscode. features are optional.

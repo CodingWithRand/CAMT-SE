@@ -130,7 +130,7 @@
               ago: "ago"
             }
           },
-          "home_feed": {
+          "home": {
             "placeholders": {
               "untitled": "Untitled Blog",
               "no_desc_available": "No description available",
@@ -198,6 +198,9 @@
               "fallbackError": "Failed to delete account.",
               "networkError": "An error occurred. Please try again."
             }
+          },
+          contact: {
+            contact_sent_success: "Successfully sent your message to the support."
           },
           wip: {
             follow: "Follow is not implemented yet. Please keep up with the new updates in the future. Sorry for the inconvenience."
@@ -349,10 +352,13 @@
               "passwordRequirements": "\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 8 \u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E02\u0E36\u0E49\u0E19\u0E44\u0E1B \u0E21\u0E35\u0E15\u0E31\u0E27\u0E1E\u0E34\u0E21\u0E1E\u0E4C\u0E43\u0E2B\u0E0D\u0E48 \u0E15\u0E31\u0E27\u0E1E\u0E34\u0E21\u0E1E\u0E4C\u0E40\u0E25\u0E47\u0E01 \u0E15\u0E31\u0E27\u0E40\u0E25\u0E02 \u0E41\u0E25\u0E30\u0E2A\u0E31\u0E0D\u0E25\u0E31\u0E01\u0E29\u0E13\u0E4C"
             },
             "deleteModal": {
-              "emptyPassword": "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E01\u0E23\u0E2D\u0E01\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E01\u0E32\u0E23\u0E25\u0E1A\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49",
+              "emptyPassword": "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E01a\u0E23\u0E2D\u0E01\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E01\u0E32\u0E23\u0E25\u0E1A\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49",
               "fallbackError": "\u0E44\u0E21\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E25\u0E1A\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49\u0E44\u0E14\u0E49",
               "networkError": "\u0E40\u0E01\u0E34\u0E14\u0E02\u0E49\u0E2D\u0E1C\u0E34\u0E14\u0E1E\u0E25\u0E32\u0E14 \u0E01\u0E23\u0E38\u0E13\u0E32\u0E25\u0E2D\u0E07\u0E43\u0E2B\u0E21\u0E48\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
             }
+          },
+          contact: {
+            contact_sent_success: "\u0E2A\u0E48\u0E07\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E44\u0E1B\u0E2B\u0E32\u0E1D\u0E48\u0E32\u0E22 Support \u0E40\u0E23\u0E35\u0E22\u0E1A\u0E23\u0E49\u0E2D\u0E22\u0E41\u0E25\u0E49\u0E27"
           },
           wip: {
             follow: "\u0E02\u0E13\u0E30\u0E19\u0E35\u0E49\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E21\u0E35\u0E23\u0E30\u0E1A\u0E1A\u0E01\u0E32\u0E23\u0E15\u0E34\u0E14\u0E15\u0E32\u0E21 \u0E42\u0E1B\u0E23\u0E14\u0E15\u0E34\u0E14\u0E15\u0E32\u0E21\u0E01\u0E32\u0E23\u0E2D\u0E31\u0E1B\u0E40\u0E14\u0E15\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E43\u0E19\u0E2D\u0E19\u0E32\u0E04\u0E15 \u0E02\u0E2D\u0E2D\u0E20\u0E31\u0E22\u0E43\u0E19\u0E04\u0E27\u0E32\u0E21\u0E44\u0E21\u0E48\u0E2A\u0E30\u0E14\u0E27\u0E01"
@@ -37603,6 +37609,17 @@ void main() {
         const th = processedParams.get("token");
         let access_token;
         try {
+          if (th) {
+            const response = await fetch("/api/auth/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token: th, type: "recovery" })
+            });
+            if (!response.ok) throw response;
+            access_token = (await response.json()).access_token;
+          } else {
+            throw new Error("No token provided");
+          }
         } catch (error3) {
           console.error(error3);
           document.getElementById("invalid-request-modal").classList.remove("hidden");
@@ -37949,6 +37966,47 @@ void main() {
     }
   });
 
+  // src/frontend/contact.js
+  var require_contact = __commonJS({
+    "src/frontend/contact.js"() {
+      "use strict";
+      init_locales();
+      init_misc();
+      function t(fn, id = void 0) {
+        return notf_lang2("contact", fn, id);
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.location.pathname !== "/contact") return;
+        const form = document.getElementById("contact-form");
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const fullName = form.querySelector('input[name="fullname"]').value;
+          const email = form.querySelector('input[name="email_address"]').value;
+          const subject = form.querySelector('input[name="subject"]').value;
+          const message = form.querySelector('textarea[name="message"]').value;
+          try {
+            const contact_sent_response = await fetch("/api/contact/send", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: fullName,
+                email,
+                subject,
+                message
+              })
+            });
+            if (contact_sent_response.ok) showToast(t("contact_sent_success", "success"));
+            else throw contact_sent_response;
+          } catch (e2) {
+            const error3 = await e2.json();
+            console.error(error3);
+            showToast(error3.message, "error");
+          }
+        });
+      });
+    }
+  });
+
   // src/frontend/main.js
   var require_main = __commonJS({
     "src/frontend/main.js"() {
@@ -37965,6 +38023,7 @@ void main() {
       var import_saves = __toESM(require_saves());
       var import_account = __toESM(require_account());
       var import_preferences = __toESM(require_preferences());
+      var import_contact = __toESM(require_contact());
     }
   });
   require_main();

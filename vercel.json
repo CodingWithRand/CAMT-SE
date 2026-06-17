@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "functions": {
+    "src/app.ts": {
+      "includeFiles": "locales/**"
+    }
+  }
+}
