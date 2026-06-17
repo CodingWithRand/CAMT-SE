@@ -5,6 +5,7 @@
 
 import { Request, Response } from 'express';
 import { auth, supabase } from '../db';
+import { SupabaseClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import path from 'path';
 import { asyncHandler } from '../middleware/errorHandler';
@@ -19,7 +20,7 @@ export const storageController = {
    * POST /api/blogs/upload/image - Upload image to storage
    */
   uploadImagesForBlog: asyncHandler(async (req: Request, res: Response) => {
-    if (req.user) throw new UnauthorizedError(t(req, 'unauthorized_upload'));
+    if (!req.user) throw new UnauthorizedError(t(req, 'unauthorized_upload'));
 
     // Check if file exists
     if (!req.file) {
@@ -32,11 +33,7 @@ export const storageController = {
       throw new ValidationError(t(req, 'missing_blog_id'));
     }
 
-    // Get current session for authorization
-    const userSession = await auth.getSession();
-    if (!userSession.data.session?.access_token) {
-      throw new UnauthorizedError(t(req, 'no_session'));
-    }
+    let supabase = req.local_supabase;
 
     // Generate file hash and path
     const filehash = crypto
@@ -47,13 +44,13 @@ export const storageController = {
     const fileName = `/${parseInt(blogid)}/${filehash}${ext}`;
 
     // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabase!.storage
       .from(UPLOAD.STORAGE_BUCKETS.BLOG)
       .upload(fileName, req.file.buffer, {
         contentType: req.file.mimetype,
         upsert: true,
         headers: {
-          Authorization: `Bearer ${userSession.data.session.access_token}`,
+          Authorization: `Bearer ${req.cookies.sb_access_token}`,
         },
       });
 
@@ -62,7 +59,7 @@ export const storageController = {
     }
 
     // Get public URL
-    const { data: { publicUrl } } = supabase.storage
+    const { data: { publicUrl } } = supabase!.storage
       .from(UPLOAD.STORAGE_BUCKETS.BLOG)
       .getPublicUrl(data.path);
 
@@ -73,27 +70,25 @@ export const storageController = {
    * POST /api/users/upload/image - Upload user pfp image to storage
    */
   uploadPFP: asyncHandler(async (req: Request, res: Response) => {
-    if (req.user) throw new UnauthorizedError('Unauthorized user trying to upload an image');
+    if (!req.user) throw new UnauthorizedError(t(req, 'unauthorized_upload'));
 
     // Check if file exists
     if (!req.file) {
-      throw new ValidationError('No file provided or key mismatch');
+      throw new ValidationError(t(req, 'no_file'));
     }
 
-    // Get current session for authorization
-    const userSession = await auth.getSession();
-    if (!userSession.data.session?.access_token) {
-      throw new UnauthorizedError('No active session');
-    }
+    let supabase = req.local_supabase;
+    let auth = supabase?.auth;
+
 
     // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabase!.storage
       .from(UPLOAD.STORAGE_BUCKETS.USER_AVATAR)
       .upload(`/${req.userId}.png`, req.file.buffer, {
         contentType: req.file.mimetype,
         upsert: true,
         headers: {
-          Authorization: `Bearer ${userSession.data.session.access_token}`,
+          Authorization: `Bearer ${req.cookies.sb_access_token}`,
         },
       });
 
@@ -102,7 +97,7 @@ export const storageController = {
     }
 
     // Get public URL
-    const { data: { publicUrl } } = supabase.storage
+    const { data: { publicUrl } } = supabase!.storage
       .from(UPLOAD.STORAGE_BUCKETS.USER_AVATAR)
       .getPublicUrl(data.path);
 
@@ -113,7 +108,7 @@ export const storageController = {
    * DELETE /api/blogs/:id/delete - Delete a blog. This extension delete all images used in the blog.
    */
 
-  deleteBlogImages: async (blogId: number) => {
+  deleteBlogImages: async (supabase: SupabaseClient<any, "public", "public", any, any>, blogId: number) => {
     // 1. List all files in the folder
     const { data: files, error: listError } = await supabase.storage
       .from(UPLOAD.STORAGE_BUCKETS.BLOG)

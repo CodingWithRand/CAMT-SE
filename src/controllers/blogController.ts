@@ -168,7 +168,7 @@ export const blogController = {
       // Validate blog data
       validateBlogData({ blogTitle, blogDescription });
 
-      const result = await BlogModel.createBlog(req.userId, {
+      const result = await BlogModel.createBlog(req.local_supabase!, req.userId, {
         blogTitle,
         blogDescription,
         content,
@@ -181,7 +181,7 @@ export const blogController = {
       if (!blogid) throw new ValidationError(t(req, 'composeBlog', 1));
       validateBlogData({ blogTitle, blogDescription });
 
-      await BlogModel.updateBlog(parseInt(blogid), { 
+      await BlogModel.updateBlog(req.local_supabase!, parseInt(blogid), { 
         title: blogTitle, 
         description: blogDescription, 
         content,
@@ -266,7 +266,7 @@ export const blogController = {
     if (Array.isArray(id)) id = id[0];
 
     const blog = await BlogModel.getBlogById(parseInt(id as string));
-    const likeCount = await BlogModel.likeBlog(blog.blogid, req.userId);
+    const likeCount = await BlogModel.likeBlog(req.local_supabase!, blog.blogid, req.userId);
 
     res.status(200).json({ id: blog.blogid, likes: likeCount });
   }),
@@ -284,7 +284,7 @@ export const blogController = {
     // Ensure id is a string (handle array case)
     if (Array.isArray(id)) id = id[0];
 
-    await BlogModel.saveBlog(parseInt(id as string), req.userId);
+    await BlogModel.saveBlog(req.local_supabase!, parseInt(id as string), req.userId);
 
     res.status(200).send();
   }),
@@ -326,8 +326,8 @@ export const blogController = {
       else if (error instanceof UnauthorizedError) return res.status(401).json({ message: t(req, "deleteBlog", "unauthorized_delete") }); 
     }
     
-    await storageController.deleteBlogImages(blogData.blogid);
-    await BlogModel.deleteBlog(blogData.blogid);
+    await storageController.deleteBlogImages(req.local_supabase!, blogData.blogid);
+    await BlogModel.deleteBlog(req.local_supabase!, blogData.blogid);
     res.status(200).json({ message: t(req, "deleteBlog", "delete_success") });
   }),
 

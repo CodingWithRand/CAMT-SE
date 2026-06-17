@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '../db';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { DatabaseError, NotFoundError } from '../utils/errors';
 import { PAGINATION } from '../utils/constants';
 import { UserModel } from './userModel';
@@ -12,7 +13,7 @@ export class BlogModel {
   /**
    * Create a new blog post
    */
-  static async createBlog(userId: string, blogData: any) {
+  static async createBlog(supabase: SupabaseClient<any, "public", "public", any, any>, userId: string, blogData: any) {
     try {
       const { data, error } = await supabase
         .from('blogs')
@@ -38,7 +39,7 @@ export class BlogModel {
   /**
    * Update blog
    */
-  static async updateBlog(blogId: number, new_blog_data: any) {
+  static async updateBlog(supabase: SupabaseClient<any, "public", "public", any, any>, blogId: number, new_blog_data: any) {
     try {
       const { data, error } = await supabase
         .from('blogs')
@@ -57,7 +58,7 @@ export class BlogModel {
   /**
    * Delete blog
    */
-  static async deleteBlog(blogId: number) {
+  static async deleteBlog(supabase: SupabaseClient<any, "public", "public", any, any>, blogId: number) {
     try {
       const { data, error } = await supabase
         .from('blogs')
@@ -199,7 +200,7 @@ export class BlogModel {
   /**
    * Like a blog post
    */
-  static async likeBlog(blogId: number, userId: string) {
+  static async likeBlog(supabase: SupabaseClient<any, "public", "public", any, any>, blogId: number, userId: string) {
     try {
       const { data, error } = await supabase.rpc('like_blog', {
         target_blog_id: blogId,
@@ -217,7 +218,7 @@ export class BlogModel {
   /**
    * Save a blog post
    */
-  static async saveBlog(blogId: number, userId: string) {
+  static async saveBlog(supabase: SupabaseClient<any, "public", "public", any, any>, blogId: number, userId: string) {
     try {
       const { data, error } = await supabase.rpc('save_post', {
         actor_user_id: userId,

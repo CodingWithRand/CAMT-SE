@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '../db';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { DatabaseError, NotFoundError } from '../utils/errors';
 
 export class UserModel {
@@ -61,7 +62,7 @@ export class UserModel {
   /**
    * Update user profile
    */
-  static async updateProfile(userId: string, updateData: any) {
+  static async updateProfile(supabase: SupabaseClient<any, "public", "public", any, any>, userId: string, updateData: any) {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -80,7 +81,7 @@ export class UserModel {
   /**
    * Get profile by username (for public profile pages)
    */
-  static async getProfileByUsername(username: string) {
+  static async getProfileByUsername(supabase: SupabaseClient<any, "public", "public", any, any>, username: string) {
     try {
       const table = await supabase
         .from('profiles')
@@ -152,7 +153,7 @@ export class UserModel {
   /**
    * Update user's preferences settings
    */
-  static async updateUserPreferences(userId: string, preferencesData: any) {
+  static async updateUserPreferences(supabase: SupabaseClient<any, "public", "public", any, any>, userId: string, preferencesData: any) {
     try {
       const { data, error } = await supabase
         .from('user_preferences')

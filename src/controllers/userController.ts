@@ -41,6 +41,8 @@ export const userController = {
    * GET /api/users/fetch/current/:property - Fetch current user property
    */
   fetchCurrentUserProperty: asyncHandler(async (req: Request, res: Response) => {
+    // console.log(req)
+    console.log(req.user, req.userId)
     if (!req.userId) throw new UnauthorizedError();
 
     const { property } = req.params;
@@ -81,7 +83,7 @@ export const userController = {
 
     if(!validateBio(bio)) throw new ValidationError(t(req, "updateUserProfile", 1));
 
-    await UserModel.updateProfile(req.userId, { avatar, display_name: displayName, bio})
+    await UserModel.updateProfile(req.local_supabase!, req.userId, { avatar, display_name: displayName, bio})
     
     res.status(200).send();
   }),
@@ -102,7 +104,7 @@ export const userController = {
     let postCount;
     try {
       // Get profile by username
-      profile = await UserModel.getProfileByUsername(username);
+      profile = await UserModel.getProfileByUsername(req.local_supabase!, username);
       
       // Get user's blogs (filter by visibility)
       blogs = await BlogModel.getBlogsByAuthor(profile[0].uid, req.userId);
@@ -158,7 +160,7 @@ export const userController = {
   updateCurrentUserPreferences: asyncHandler(async (req: Request, res: Response) => {
     if (!req.userId) throw new UnauthorizedError();
 
-    await UserModel.updateUserPreferences(req.userId, req.body);
+    await UserModel.updateUserPreferences(req.local_supabase!, req.userId, req.body);
 
     res.status(200).send();
   })

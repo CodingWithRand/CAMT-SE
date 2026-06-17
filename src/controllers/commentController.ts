@@ -32,6 +32,7 @@ export const commentController = {
 
     // Create comment
     const newComment = await CommentModel.createComment(
+      req.local_supabase!,
       parseInt(blogid),
       req.userId,
       comment,
@@ -103,7 +104,7 @@ export const commentController = {
     const comment = await CommentModel.getCommentById(id as string);
     if (!comment) throw new NotFoundError('Comment');
 
-    const likeCount = await CommentModel.likeComment(comment.cid, req.userId);
+    const likeCount = await CommentModel.likeComment(req.local_supabase!, comment.cid, req.userId);
 
     res.status(200).json({ id: comment.cid, likes: likeCount });
   }),
@@ -128,7 +129,7 @@ export const commentController = {
       else if (error instanceof UnauthorizedError) return res.status(401).json({ message: t(req, "editComment", 2) }); 
     }
 
-    await CommentModel.editComment(id as string, req.userId, commentContent);
+    await CommentModel.editComment(req.local_supabase!, id as string, req.userId, commentContent);
     res.status(200).send();
   }),
 
@@ -151,7 +152,7 @@ export const commentController = {
       else if (error instanceof UnauthorizedError) return res.status(401).json({ message: t(req, "deleteComment", 1) }); 
     }
 
-    await CommentModel.deleteComment(id as string, req.userId);
+    await CommentModel.deleteComment(req.local_supabase!, id as string, req.userId);
     res.status(200).send();
   }),
 

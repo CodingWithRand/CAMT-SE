@@ -28,7 +28,7 @@
     "i18next-fs-backend": "^2.6.6",
     "i18next-http-middleware": "^3.9.7",
     "jsonwebtoken": "^9.0.3",
-    "jwks-rsa": "^4.0.1",
+    "jwks-rsa": "^3.0.1",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.9",
     "path": "^0.12.7",

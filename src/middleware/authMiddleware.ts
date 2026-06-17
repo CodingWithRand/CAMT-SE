@@ -4,8 +4,9 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import { auth } from '../db';
+import { createClient, SupabaseClient } from "@supabase/supabase-js"
 import { UnauthorizedError } from '../utils/errors';
+import { asyncHandler } from './errorHandler';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
@@ -31,34 +32,49 @@ declare global {
     interface Request {
       userId?: string;
       user?: any;
+      local_supabase?: SupabaseClient<any, "public", "public", any, any>
     }
   }
 }
 
-export const authMiddleware = async (
+export const authMiddleware = asyncHandler(async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
 
-  if (!req.cookies?.sb_access_token) return res.redirect('/login');
+  // console.log(req.cookies?.sb_access_token)
+  if (!req.cookies?.sb_access_token) throw new UnauthorizedError('Invalid token signature');
+
+  // jwt.verify and below run parallely -> synchronize it.
 
   jwt.verify(req.cookies?.sb_access_token, getJwtKey, {
     audience: 'authenticated',
     algorithms: ["ES256"],
   }, (err, decoded: any) => {
       if (err || !decoded) {
-        throw new UnauthorizedError('Invalid token signature');
+        return console.error(err);
       }
       
       req.userId = decoded.sub;
       req.user = decoded;
+      req.local_supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_PUBLISHABLE_KEY!,
+        {
+          auth: { persistSession: false },
+          global: {
+            headers: {
+              Authorization: `Bearer ${req.cookies?.sb_access_token}`
+            }
+          }
+        }
+      );
       next();
-    }
-  )
-};
+  })
+});
 
-export const checkAuthRedirect = async (
+export const checkAuthRedirect = asyncHandler(async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -68,19 +84,32 @@ export const checkAuthRedirect = async (
   jwt.verify(req.cookies?.sb_access_token, getJwtKey, {
     audience: 'authenticated',
     algorithms: ["ES256"],
-  }, (err, decoded: any) => {
+  }, async (err, decoded: any) => {
       if (err || !decoded) {
         return res.redirect('/login');
       }
       
       req.userId = decoded.sub;
       req.user = decoded;
+      req.local_supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_PUBLISHABLE_KEY!,
+        {
+          auth: { persistSession: false },
+          global: {
+            headers: {
+              Authorization: `Bearer ${req.cookies?.sb_access_token}`
+            }
+          }
+        }
+      );
+
       next();
     }
   )
-};
+});
 
-export const optionalAuthMiddleware = async (
+export const optionalAuthMiddleware = asyncHandler(async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -90,23 +119,36 @@ export const optionalAuthMiddleware = async (
   jwt.verify(req.cookies?.sb_access_token, getJwtKey, {
     audience: 'authenticated',
     algorithms: ["ES256"],
-  }, (err, decoded: any) => {
+  }, async (err, decoded: any) => {
       if (err || !decoded) {
         return next()
       }
       
       req.userId = decoded.sub;
       req.user = decoded;
+      req.local_supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_PUBLISHABLE_KEY!,
+        {
+          auth: { persistSession: false },
+          global: {
+            headers: {
+              Authorization: `Bearer ${req.cookies?.sb_access_token}`
+            }
+          }
+        }
+      );
+
       next();
     }
   )
-}
+});
 
-export const guestMiddleware = async (
+export const guestMiddleware = asyncHandler(async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   if (req.cookies?.sb_access_token) return res.redirect('/');
   next();
-};
+});

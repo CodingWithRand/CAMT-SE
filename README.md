@@ -14,16 +14,10 @@ Pretty much what I submitted to professor. This version is long gone...
 This is what it looked like. Pretty simple.
 ![](./Screenshots/Homepage.png)
 
-## v2.0.0 (Not out yet)
-Completely rebranded blog that works in the real world and deployed to [Render](https://render.com)
+## v2.0.0
+Completely rebranded blog that works in the real world and deployed to ~~[Render](https://render.com)~~ [Vercel](https://vercel.com)
 
-# TODO
-1. Language preference ✓
-2. Functional Contact page. ✓
-3. Final check.
-
-Problem:
-- Unstable auth, can log out every reload + 401. -> try migrate from session to jwt cookie.
+Visit here: [https://whiskey-black.vercel.app/](https://whiskey-black.vercel.app/)
 
 I tried docker. Here is the take away.
 - `.devcontainer` is for deving and testing, use with vscode. features are optional.

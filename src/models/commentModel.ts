@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '../db';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { DatabaseError, NotFoundError } from '../utils/errors';
 import { PAGINATION } from '../utils/constants';
 
@@ -11,7 +12,7 @@ export class CommentModel {
   /**
    * Create a new comment
    */
-  static async createComment(blogId: number, userId: string, commentText: string, replyTo?: number) {
+  static async createComment(supabase: SupabaseClient<any, "public", "public", any, any>, blogId: number, userId: string, commentText: string, replyTo?: number) {
     try {
       const { data, error } = await supabase
         .from('comments')
@@ -123,7 +124,7 @@ export class CommentModel {
   /**
    * Like a comment
    */
-  static async likeComment(commentId: number, userId: string) {
+  static async likeComment(supabase: SupabaseClient<any, "public", "public", any, any>, commentId: number, userId: string) {
     try {
       const { data, error } = await supabase.rpc('like_comment', {
         target_comment_id: commentId,
@@ -159,7 +160,7 @@ export class CommentModel {
     }
   }
 
-  static async editComment(commentId: string, userId: string, newContent: string) {
+  static async editComment(supabase: SupabaseClient<any, "public", "public", any, any>, commentId: string, userId: string, newContent: string) {
     try {
       const { data, error } = await supabase
         .from('comments')
@@ -177,7 +178,7 @@ export class CommentModel {
     }
   }
 
-  static async deleteComment(commentId: string, userId: string) {
+  static async deleteComment(supabase: SupabaseClient<any, "public", "public", any, any>, commentId: string, userId: string) {
     // Decision needed: 
     // Reddit delete (current -> edit the comment as [Deleted] and lock it while keeping replies.) 
     // or 
