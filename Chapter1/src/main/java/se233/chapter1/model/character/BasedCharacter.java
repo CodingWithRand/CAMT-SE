@@ -22,10 +22,19 @@ public class BasedCharacter {
         this.weapon = weapon;
         this.power = this.basedPow + weapon.getPower();
     }
+    public void unequipWeapon() {
+        this.weapon = null;
+        this.power = this.basedPow;
+    }
     public void equipArmor(Armor armor) {
         this.armor = armor;
         this.defense = this.basedDef + armor.getDefense();
         this.resistance = this.basedRes + armor.getResistance();
+    }
+    public void unequipArmor() {
+        this.armor = null;
+        this.defense = this.basedDef;
+        this.resistance = this.basedRes;
     }
     @Override
     public String toString() { return name; }

@@ -19,13 +19,35 @@ import java.util.ArrayList;
 public class AllCustomHandler {
     private static boolean dragCompleted;
 
+    private static void unequipallbtn() {
+        ArrayList<BasedEquipment> allEquipments = Launcher.getAllEquipments();
+        if(Launcher.getEquippedWeapon() != null)
+            allEquipments.add(Launcher.getEquippedWeapon());
+        if(Launcher.getEquippedArmor() != null)
+            allEquipments.add(Launcher.getEquippedArmor());
+        Launcher.getMainCharacter().unequipWeapon();
+        Launcher.getMainCharacter().unequipArmor();
+        Launcher.setEquippedWeapon(null);
+        Launcher.setEquippedArmor(null);
+        Launcher.refreshPane();
+    }
+
     public static class GenCharacterHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
             Launcher.setMainCharacter(GenCharacter.setUpCharacter());
+            unequipallbtn();
             Launcher.refreshPane();
         }
     }
+
+    public static class UnequipAll implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            unequipallbtn();
+        }
+    }
+
     public static void onDragDetected(MouseEvent event, BasedEquipment equipment, ImageView imgView) {
         Dragboard db = imgView.startDragAndDrop(TransferMode.ANY);
         db.setDragView(imgView.getImage());
@@ -47,12 +69,16 @@ public class AllCustomHandler {
         if (dragboard.hasContent(BasedEquipment.DATA_FORMAT)) {
             BasedEquipment retrievedEquipment = (BasedEquipment) dragboard.getContent(BasedEquipment.DATA_FORMAT);
             BasedCharacter character = Launcher.getMainCharacter();
+            boolean isBattlemage = character.getClass().getSimpleName().equals("Battlemage");
+
             if (retrievedEquipment.getClass().getSimpleName().equals("Weapon")) {
+                if (!isBattlemage && ((Weapon) retrievedEquipment).getDamageType() != character.getType()) return;
                 if (Launcher.getEquippedWeapon() != null)
                     allEquipments.add(Launcher.getEquippedWeapon());
                 Launcher.setEquippedWeapon((Weapon) retrievedEquipment);
                 character.equipWeapon((Weapon) retrievedEquipment);
             } else {
+                if (isBattlemage) return;
                 if (Launcher.getEquippedArmor() != null)
                     allEquipments.add(Launcher.getEquippedArmor());
                 Launcher.setEquippedArmor((Armor) retrievedEquipment);

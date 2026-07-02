@@ -15,12 +15,15 @@ public class GenCharacter {
         int basedDef = rand.nextInt(50) + 1;
         int basedRes = rand.nextInt(50) + 1;
         switch(type) {
-            case 0:
-                character = new PhysicalCharacter("PhysicalChar1", "assets/knight.png", basedDef, basedRes);
             case 1:
+                character = new PhysicalCharacter("PhysicalChar1", "assets/knight.png", basedDef, basedRes);
+                break;
+            case 2:
                 character = new MagicalCharacter("MagicChar1", "assets/wizard.png", basedDef, basedRes);
-            case 2: default:
+                break;
+            case 3: default:
                 character = new Battlemage("BattleMage1", "assets/battlemage.png", basedDef, basedRes);
+                break;
         }
         return character;
     }
