@@ -1,0 +1,12 @@
+*.class
+/*/**/*.class
+
+*.env
+
+/*/**/.idea
+/*/**/.mvn
+/*/**/.gitignore
+/*/**/mvnw*
+
+/.vercel
+/node_modules
