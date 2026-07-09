@@ -22,9 +22,9 @@ public class AllCustomHandler {
     private static void unequipallbtn() {
         ArrayList<BasedEquipment> allEquipments = Launcher.getAllEquipments();
         if(Launcher.getEquippedWeapon() != null)
-            allEquipments.add(Launcher.getEquippedWeapon());
+            allEquipments.add(Math.min(Launcher.getEquippedWeapon().i, allEquipments.size()), Launcher.getEquippedWeapon());
         if(Launcher.getEquippedArmor() != null)
-            allEquipments.add(Launcher.getEquippedArmor());
+            allEquipments.add(Math.min(Launcher.getEquippedArmor().i, allEquipments.size()), Launcher.getEquippedArmor());
         Launcher.getMainCharacter().unequipWeapon();
         Launcher.getMainCharacter().unequipArmor();
         Launcher.setEquippedWeapon(null);
@@ -74,13 +74,13 @@ public class AllCustomHandler {
             if (retrievedEquipment.getClass().getSimpleName().equals("Weapon")) {
                 if (!isBattlemage && ((Weapon) retrievedEquipment).getDamageType() != character.getType()) return;
                 if (Launcher.getEquippedWeapon() != null)
-                    allEquipments.add(Launcher.getEquippedWeapon());
+                    allEquipments.add(Math.min(Launcher.getEquippedWeapon().i, allEquipments.size()), Launcher.getEquippedWeapon());
                 Launcher.setEquippedWeapon((Weapon) retrievedEquipment);
                 character.equipWeapon((Weapon) retrievedEquipment);
             } else {
                 if (isBattlemage) return;
                 if (Launcher.getEquippedArmor() != null)
-                    allEquipments.add(Launcher.getEquippedArmor());
+                    allEquipments.add(Math.min(Launcher.getEquippedArmor().i, allEquipments.size()), Launcher.getEquippedArmor());
                 Launcher.setEquippedArmor((Armor) retrievedEquipment);
                 character.equipArmor((Armor) retrievedEquipment);
             }
