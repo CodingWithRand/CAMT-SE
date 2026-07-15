@@ -5,3 +5,6 @@
 
 ## Lab 1
 Simple RPG game character panel. Learning about JavaFX, Event-Driven Programming, Each event handler types, e.g. onDragDetected, onDragOver. The program allows you to drag items to equip, unequip, with the stats change in real-time, and generate new character. [Lab Folder](./Chapter1/)
+
+## Lab 2
+Currency exchange stats. We learn exception handling here. [Lab Folder](./Chapter2/)
