@@ -1,6 +1,8 @@
 package se233.chapter2.controller;
 
+import javafx.scene.control.Alert;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import se233.chapter2.model.CurrencyEntity;
 

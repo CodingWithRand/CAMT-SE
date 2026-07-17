@@ -15,7 +15,7 @@ public class RefreshTask extends Task<Void> {
     protected Void call() throws InterruptedException {
         for(;;) {
             try {
-                Thread.sleep((long) (60 * 1e3));
+                Thread.sleep((long) (3 * 1e3));
             } catch (InterruptedException e) {
                 System.out.println("Encountered an interrupted exception");
             }

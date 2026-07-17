@@ -11,7 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import se233.chapter2.controller.AllEventHandlers;
+import se233.chapter2.controller.draw.DrawCurrencyInfoTask;
 import se233.chapter2.controller.draw.DrawGraphTask;
+import se233.chapter2.controller.draw.DrawTopAreaTask;
 import se233.chapter2.model.Currency;
 
 import java.util.concurrent.ExecutionException;
@@ -21,11 +23,19 @@ import java.util.concurrent.FutureTask;
 
 public class CurrencyPane extends BorderPane {
     private Currency currency;
+    private Button unwatch;
     private Button watch;
     private Button delete;
     public CurrencyPane(Currency currency) {
+        this.unwatch = new Button("Unwatch");
         this.watch = new Button("Watch");
         this.delete = new Button("Delete");
+        this.unwatch.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                AllEventHandlers.onUnwatch();
+            }
+        });
         this.watch.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -51,38 +61,18 @@ public class CurrencyPane extends BorderPane {
     }
     public void refreshPane(Currency currency) throws ExecutionException, InterruptedException {
         this.currency = currency;
-        Pane currencyInfo = genInfoPane();
-        FutureTask futureTask = new FutureTask<VBox>(new DrawGraphTask(currency));
+        FutureTask futureGraphTask = new FutureTask<VBox>(new DrawGraphTask(currency));
+        FutureTask futureCurrencyTask = new FutureTask<Pane>(new DrawCurrencyInfoTask(currency));
+        FutureTask futureTopTask = new FutureTask<Pane>(new DrawTopAreaTask(currency, this.watch, this.unwatch, this.delete));
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(futureTask);
-        VBox currencyGraph = (VBox) futureTask.get();
-        Pane topArea = genTopArea();
+        executor.execute(futureGraphTask);
+        executor.execute(futureCurrencyTask);
+        executor.execute(futureTopTask);
+        VBox currencyGraph = (VBox) futureGraphTask.get();
+        Pane currencyInfo = (Pane) futureCurrencyTask.get();
+        Pane topArea = (Pane) futureTopTask.get();
         this.setTop(topArea);
         this.setLeft(currencyInfo);
         this.setCenter(currencyGraph);
-    }
-    private Pane genInfoPane() {
-        VBox currencyInfoPane = new VBox(10);
-        currencyInfoPane.setPadding(new Insets(5, 25, 5, 25));
-        currencyInfoPane.setAlignment(Pos.CENTER);
-        Label exchangeString = new Label("");
-        Label watchString = new Label("");
-        exchangeString.setStyle("-fx-font-size: 20;");
-        watchString.setStyle("-fx-font-style: 14");
-        if (this.currency != null) {
-            exchangeString.setText(String.format("%s %.4f", this.currency.getShortCode(), this.currency.getCurrency().getRate()));
-            if (this.currency.getWatch() == true) {
-                watchString.setText(String.format("(Watch @%.4f)", this.currency.getWatchRate()));
-            }
-        }
-        currencyInfoPane.getChildren().addAll(exchangeString, watchString);
-        return currencyInfoPane;
-    }
-    private HBox genTopArea() {
-        HBox topArea = new HBox(10);
-        topArea.setPadding(new Insets(5));
-        topArea.getChildren().addAll(watch, delete);
-        ((HBox) topArea).setAlignment(Pos.CENTER_RIGHT);
-        return topArea;
     }
 }

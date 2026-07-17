@@ -1,6 +1,8 @@
 package se233.chapter2.controller;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import org.json.JSONException;
 import se233.chapter2.Launcher;
 import se233.chapter2.model.Currency;
 import se233.chapter2.model.CurrencyEntity;
@@ -27,8 +29,8 @@ public class AllEventHandlers {
             Optional<String> code = dialog.showAndWait();
             if (code.isPresent()) {
                 List<Currency> currencyList = Launcher.getCurrencyList();
-                Currency c = new Currency(code.get());
-                List<CurrencyEntity> cList = FetchData.fetchRange(c.getShortCode(), 8);
+                Currency c = new Currency(code.get().toUpperCase());
+                List<CurrencyEntity> cList = FetchData.fetchRange(c.getShortCode(), 30);
                 c.setHistorical(cList);
                 c.setCurrency(cList.get(cList.size() - 1));
                 currencyList.add(c);
@@ -39,6 +41,13 @@ public class AllEventHandlers {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(null);
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid currency code, please try again.");
+            alert.showAndWait();
+            AllEventHandlers.onAdd();
         }
     }
     public static void onDelete(String code) {
@@ -72,7 +81,7 @@ public class AllEventHandlers {
                     break;
                 }
             }
-            if (index == -1) {
+            if (index != -1) {
                 TextInputDialog dialog = new TextInputDialog();
                 dialog.setTitle("Add Watch");
                 dialog.setContentText("Rate:");
@@ -89,6 +98,21 @@ public class AllEventHandlers {
                 Launcher.setCurrencyList(currencyList);
                 Launcher.refreshPane();
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void onUnwatch() {
+        try {
+            List<Currency> currencyList = Launcher.getCurrencyList();
+            for (int i = 0; i < currencyList.size(); i++) {
+                currencyList.get(i).setWatch(false);
+                currencyList.get(i).setWatchRate(0.0);
+            }
+            Launcher.setCurrencyList(currencyList);
+            Launcher.refreshPane();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

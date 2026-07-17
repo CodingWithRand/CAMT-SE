@@ -58,7 +58,4 @@ public class Launcher extends Application {
         currencyParentPane.refreshPane(currencyList);
         primaryStage.sizeToScene();
     }
-//    public static void main(String[] args) {
-//        Application.launch(HelloApplication.class, args);
-//    }
 }
