@@ -21,6 +21,7 @@ public class Launcher extends Application {
     private static TopPane topPane;
     private static CurrencyParentPane currencyParentPane;
     private static List<Currency> currencyList;
+    private static String baseCurrencyCode = "THB";
 
     public static List<Currency> getCurrencyList() {
         return currencyList;
@@ -28,6 +29,14 @@ public class Launcher extends Application {
 
     public static void setCurrencyList(List<Currency> currencyList) {
         Launcher.currencyList = currencyList;
+    }
+
+    public static String getBaseCurrencyCode() {
+        return baseCurrencyCode;
+    }
+
+    public static void setBaseCurrencyCode(String baseCurrencyCode) {
+        Launcher.baseCurrencyCode = baseCurrencyCode;
     }
 
     @Override

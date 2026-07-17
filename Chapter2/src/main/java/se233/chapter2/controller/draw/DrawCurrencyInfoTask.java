@@ -25,6 +25,7 @@ public class DrawCurrencyInfoTask implements Callable<Pane> {
         exchangeString.setStyle("-fx-font-size: 20;");
         watchString.setStyle("-fx-font-style: 14");
         if (this.currency != null) {
+//            System.out.println(this.currency.getCurrency().getRate());
             exchangeString.setText(String.format("%s %.4f", this.currency.getShortCode(), this.currency.getCurrency().getRate()));
             if (this.currency.getWatch() == true) {
                 watchString.setText(String.format("(Watch @%.4f)", this.currency.getWatchRate()));

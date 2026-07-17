@@ -12,6 +12,41 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class AllEventHandlers {
+    public static void onBaseChange() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Change base currency");
+        dialog.setContentText("Currency code:");
+        dialog.getEditor().setText(Launcher.getBaseCurrencyCode());
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        Optional<String> newBaseCode = dialog.showAndWait();
+
+        if(newBaseCode.isPresent()) {
+            List<Currency> currencyList = Launcher.getCurrencyList();
+            try {
+                for(Currency c: currencyList) {
+                    List<CurrencyEntity> histList = FetchData.fetchRange(c.getShortCode(), newBaseCode.get().toUpperCase(), 30);
+                    c.setHistorical(histList);
+                    c.setCurrency(histList.get(histList.size() - 1));
+                }
+                Launcher.setCurrencyList(currencyList);
+//                System.out.println(currencyList.getFirst().getCurrency().getRate());
+                Launcher.setBaseCurrencyCode(newBaseCode.get());
+                Launcher.refreshPane();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(null);
+                alert.setHeaderText(null);
+                alert.setContentText("Invalid currency code, please try again.");
+                alert.showAndWait();
+                AllEventHandlers.onBaseChange();
+            }
+        }
+    }
     public static void onRefresh() {
         try {
             Launcher.refreshPane();
@@ -30,7 +65,7 @@ public class AllEventHandlers {
             if (code.isPresent()) {
                 List<Currency> currencyList = Launcher.getCurrencyList();
                 Currency c = new Currency(code.get().toUpperCase());
-                List<CurrencyEntity> cList = FetchData.fetchRange(c.getShortCode(), 30);
+                List<CurrencyEntity> cList = FetchData.fetchRange(c.getShortCode(),  Launcher.getBaseCurrencyCode(), 30);
                 c.setHistorical(cList);
                 c.setCurrency(cList.get(cList.size() - 1));
                 currencyList.add(c);
