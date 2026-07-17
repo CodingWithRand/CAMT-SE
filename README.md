@@ -45,3 +45,6 @@ Modified the website to look more interesting with transition and animation. And
 Yay.
 - [Instruction](https://mango-cmu.instructure.com/courses/19380/assignments/136687)
 - [Visit the site](https://codingwithrand.github.io/CAMT-SE/Term%20Project/)
+
+## Final Revisions
+[Ch.5 Javascript](/Exam%20revision/Ch.5.md)
