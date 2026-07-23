@@ -33,7 +33,7 @@ public class CurrencyPane extends BorderPane {
         this.unwatch.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                AllEventHandlers.onUnwatch();
+                AllEventHandlers.onUnwatch(currency.getShortCode());
             }
         });
         this.watch.setOnAction(new EventHandler<ActionEvent>() {

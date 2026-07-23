@@ -139,12 +139,14 @@ public class AllEventHandlers {
             e.printStackTrace();
         }
     }
-    public static void onUnwatch() {
+    public static void onUnwatch(String code) {
         try {
             List<Currency> currencyList = Launcher.getCurrencyList();
             for (int i = 0; i < currencyList.size(); i++) {
-                currencyList.get(i).setWatch(false);
-                currencyList.get(i).setWatchRate(0.0);
+                if(currencyList.get(i).getShortCode().equals(code)) {
+                    currencyList.get(i).setWatch(false);
+                    currencyList.get(i).setWatchRate(0.0);
+                }
             }
             Launcher.setCurrencyList(currencyList);
             Launcher.refreshPane();
