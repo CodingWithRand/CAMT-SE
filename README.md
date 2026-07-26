@@ -3,3 +3,5 @@
 Revise OOP and accessing file data (file-based database) [Lab Folder](./Lab0102/)
 ## Lab3
 Design database -> Traditional ER Diagram [Lab File](./Lab3.docx)
+## Lab4
+ER Diagram again with composite entity and weak entity. [Lab Folder](./Lab4/)
