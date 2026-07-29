@@ -452,7 +452,7 @@
         "change_picture_btn": "เปลี่ยนรูปภาพ",
         "picture_requirements": "รองรับไฟล์ JPG, PNG หรือ GIF ขนาดสูงสุดไม่เกิน 10MB",
         "display_name_label": "ชื่อที่แสดง",
-        "display_name_hint": "ความยาว 3-30 ตัวอักษร",
+        "display_name_hint": "ความยาว 3-50 ตัวอักษร",
         "username_label": "ชื่อผู้ใช้",
         "bio_label": "แนะนำตัวเอง",
         "bio_max_characters": "สูงสุด 1000 ตัวอักษร",

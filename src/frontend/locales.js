@@ -11,7 +11,7 @@ const notfs = {
         },
         reg_form_validation: {
             rules: {
-                1: "Username must be 3-30 alphanumeric characters. Spaces and underscores are allowed.",
+                1: "Username must be 3-50 alphanumeric characters. Spaces and underscores are allowed.",
                 2: "Please enter a valid email address.",
                 3: "Passwords do not match.",
                 4: "You must agree to the Terms of Service.",
@@ -169,7 +169,7 @@ const notfs = {
         },
         reg_form_validation: {
             rules: {
-                1: "ชื่อผู้ใช้ต้องมี 3-30 ตัวอักษรภาษาอังกฤษ อนุญาตให้มีขีดเส้นใต้กับเว้นวรรคในชื่อ",
+                1: "ชื่อผู้ใช้ต้องมี 3-50 ตัวอักษรภาษาอังกฤษ อนุญาตให้มีขีดเส้นใต้กับเว้นวรรคในชื่อ",
                 2: "กรุณากรอกที่อยู่อีเมลที่ถูกต้อง",
                 3: "รหัสผ่านไม่ตรงกัน",
                 4: "คุณต้องยอมรับข้อกําหนดในการใช้บริการ",

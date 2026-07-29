@@ -60,7 +60,7 @@
           },
           reg_form_validation: {
             rules: {
-              1: "Username must be 3-30 alphanumeric characters. Spaces and underscores are allowed.",
+              1: "Username must be 3-50 alphanumeric characters. Spaces and underscores are allowed.",
               2: "Please enter a valid email address.",
               3: "Passwords do not match.",
               4: "You must agree to the Terms of Service.",
@@ -218,7 +218,7 @@
           },
           reg_form_validation: {
             rules: {
-              1: "\u0E0A\u0E37\u0E48\u0E2D\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 3-30 \u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E20\u0E32\u0E29\u0E32\u0E2D\u0E31\u0E07\u0E01\u0E24\u0E29 \u0E2D\u0E19\u0E38\u0E0D\u0E32\u0E15\u0E43\u0E2B\u0E49\u0E21\u0E35\u0E02\u0E35\u0E14\u0E40\u0E2A\u0E49\u0E19\u0E43\u0E15\u0E49\u0E01\u0E31\u0E1A\u0E40\u0E27\u0E49\u0E19\u0E27\u0E23\u0E23\u0E04\u0E43\u0E19\u0E0A\u0E37\u0E48\u0E2D",
+              1: "\u0E0A\u0E37\u0E48\u0E2D\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49\u0E15\u0E49\u0E2D\u0E07\u0E21\u0E35 3-50 \u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E20\u0E32\u0E29\u0E32\u0E2D\u0E31\u0E07\u0E01\u0E24\u0E29 \u0E2D\u0E19\u0E38\u0E0D\u0E32\u0E15\u0E43\u0E2B\u0E49\u0E21\u0E35\u0E02\u0E35\u0E14\u0E40\u0E2A\u0E49\u0E19\u0E43\u0E15\u0E49\u0E01\u0E31\u0E1A\u0E40\u0E27\u0E49\u0E19\u0E27\u0E23\u0E23\u0E04\u0E43\u0E19\u0E0A\u0E37\u0E48\u0E2D",
               2: "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E01\u0E23\u0E2D\u0E01\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48\u0E2D\u0E35\u0E40\u0E21\u0E25\u0E17\u0E35\u0E48\u0E16\u0E39\u0E01\u0E15\u0E49\u0E2D\u0E07",
               3: "\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19\u0E44\u0E21\u0E48\u0E15\u0E23\u0E07\u0E01\u0E31\u0E19",
               4: "\u0E04\u0E38\u0E13\u0E15\u0E49\u0E2D\u0E07\u0E22\u0E2D\u0E21\u0E23\u0E31\u0E1A\u0E02\u0E49\u0E2D\u0E01\u0E4D\u0E32\u0E2B\u0E19\u0E14\u0E43\u0E19\u0E01\u0E32\u0E23\u0E43\u0E0A\u0E49\u0E1A\u0E23\u0E34\u0E01\u0E32\u0E23",
@@ -398,12 +398,12 @@
             <div class="post-menu hidden absolute right-6 sm:right-8 top-20 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 w-48 z-[1] flex-col">
                 <button class="edit-post-btn w-full text-left p-4 rounded-t-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2">
                     <i class="mdi mdi-pencil" style="margin-top: 0.125rem;"></i>
-                    ${notfmsg("menu", "edit_post")}
+                    ${notfmsg2("menu", "edit_post")}
                 </button>
                 <hr class="border-slate-200 dark:border-slate-600" />
                 <button class="delete-post-btn w-full text-left p-4 rounded-b-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 flex items-center gap-2">
                     <i class="mdi mdi-delete" style="margin-top: 0.125rem;"></i>
-                    ${notfmsg("menu", "delete_post")}
+                    ${notfmsg2("menu", "delete_post")}
                 </button>
             </div>
         `;
@@ -427,7 +427,7 @@
                 <a href="/blogs/${data.blog.blogid}/${data.blog.title.toLowerCase().replace(/s+/g, "-")}">${data.blog.title}</a>
             </h4>
             <p class="post-desc text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                ${data.blog.description ? data.blog.description.slice(0, 297) + (data.blog.content.length > 300 ? "..." : "") : notfmsg("placeholders", "no_description")}
+                ${data.blog.description ? data.blog.description.slice(0, 297) + (data.blog.content.length > 300 ? "..." : "") : notfmsg2("placeholders", "no_description")}
             </p>
 
             <div class="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm">
@@ -441,7 +441,7 @@
                 </button>
                 <button class="save-post flex items-center gap-1 ${data.blog.isSaved ? "text-blue-600 dark:text-blue-400" : ""} hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
                     <i class="mdi mdi-bookmark text-lg"></i>
-                    <span>${data.blog.isSaved ? notfmsg("actions", "saved") : notfmsg("actions", "save")}</span>
+                    <span>${data.blog.isSaved ? notfmsg2("actions", "saved") : notfmsg2("actions", "save")}</span>
                 </button>
             </div>
         </div>
@@ -461,7 +461,7 @@
         });
         if (!response.ok) {
           const error3 = await response.json();
-          showToast(error3.error || notfmsg("toasts", "save_error"));
+          showToast2(error3.error || notfmsg2("toasts", "save_error"));
           return;
         }
         if (document.documentElement.classList.contains("dark")) {
@@ -471,9 +471,9 @@
           savePostBtn.classList.toggle("text-blue-600");
           savePostBtn.classList.remove("dark:text-blue-400");
         }
-        savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === notfmsg("actions", "save") ? notfmsg("actions", "saved") : notfmsg("actions", "save");
+        savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === notfmsg2("actions", "save") ? notfmsg2("actions", "saved") : notfmsg2("actions", "save");
       } catch (error3) {
-        showToast(notfmsg("toasts", "save_error"), "error");
+        showToast2(notfmsg2("toasts", "save_error"), "error");
       }
       savePostBtn.removeAttribute("disabled");
       savePostBtn.style.transform = "";
@@ -508,7 +508,7 @@
     });
     menu.querySelector(".delete-post-btn").addEventListener("click", function(e) {
       e.preventDefault();
-      if (confirm(notfmsg("confirmations", "delete_prompt"))) {
+      if (confirm(notfmsg2("confirmations", "delete_prompt"))) {
         fetch(`/api/blogs/${blogId}/delete`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" }
@@ -519,10 +519,10 @@
             article.style.transition = "all 0.3s ease-out";
             setTimeout(() => {
               article.remove();
-              showToast(notfmsg("toasts", "delete_success"), "success");
+              showToast2(notfmsg2("toasts", "delete_success"), "success");
             }, 300);
           }
-        }).catch((err) => showToast(`${notfmsg("toasts", "delete_error")}${err.message}`, "error"));
+        }).catch((err) => showToast2(`${notfmsg2("toasts", "delete_error")}${err.message}`, "error"));
       }
     });
   }
@@ -539,7 +539,7 @@
     loadingSpinner.innerHTML = `
         <div class="flex flex-col items-center gap-3">
             <div class="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
-            <p class="text-sm text-slate-600 dark:text-slate-400">${notfmsg("loading", "blogs")}</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400">${notfmsg2("loading", "blogs")}</p>
         </div>
     `;
     feedBlogsContainer.insertAdjacentElement("beforeend", loadingSpinner);
@@ -554,7 +554,7 @@
       const blogsQueryData = await blogsQueryResponse.json();
       loadingSpinner.remove();
       if (blogsQueryData.error) {
-        return showToast(blogsQueryData.error);
+        return showToast2(blogsQueryData.error);
       }
       if (blogsQueryData.baps.length === 0) {
         btn.classList.add("hidden");
@@ -572,14 +572,14 @@
           addEditEventListeners(post, csred.owner);
           addSearchData(post);
         } catch (err) {
-          showToast(err);
+          showToast2(err);
           return;
         }
       }));
       setTimeout(() => cooled_down = true, 500);
     } catch (err) {
       loadingSpinner.remove();
-      showToast(err.message || notfmsg("toasts", "load_error"));
+      showToast2(err.message || notfmsg2("toasts", "load_error"));
     }
   }
   function registerAutoLoad(btn) {
@@ -592,14 +592,14 @@
     }, { threshold: 0.1 });
     observer.observe(btn);
   }
-  var notfmsg, cooled_down;
+  var notfmsg2, cooled_down;
   var init_load_blog = __esm({
     "src/frontend/utils/load_blog.js"() {
       "use strict";
       init_misc();
       init_home();
       init_locales();
-      notfmsg = (fn, notfId) => notf_lang2("load_blog", fn, notfId);
+      notfmsg2 = (fn, notfId) => notf_lang2("load_blog", fn, notfId);
       cooled_down = true;
       document.addEventListener("DOMContentLoaded", () => {
         if (window.location.pathname === "/blogs/saves" || window.location.pathname.startsWith("/people")) {
@@ -624,20 +624,20 @@
   });
 
   // src/frontend/index/home.js
-  var notfmsg2, blogsData, authorsData, addSearchData;
+  var notfmsg3, blogsData, authorsData, addSearchData;
   var init_home = __esm({
     "src/frontend/index/home.js"() {
       "use strict";
       init_misc();
       init_load_blog();
       init_locales();
-      notfmsg2 = (fn, notfId) => notf_lang2("home", fn, notfId);
+      notfmsg3 = (fn, notfId) => notf_lang2("home", fn, notfId);
       blogsData = [];
       authorsData = [];
       addSearchData = (card) => {
         const titleEl = card.querySelector("h4.post-title");
         const descEl = card.querySelector("p.post-desc");
-        const titleText = titleEl?.textContent?.trim() || notfmsg2("placeholders", "untitled");
+        const titleText = titleEl?.textContent?.trim() || notfmsg3("placeholders", "untitled");
         const descText = descEl?.textContent?.trim() || "";
         const authorName = card.querySelector("h3.author-name").textContent;
         const authorUsername = card.querySelector("span.author-username").textContent;
@@ -683,7 +683,7 @@
             const response = await fetch("/api/logout", { method: "POST", credentials: "include" });
             if (!response.ok) {
               const error3 = await response.json();
-              showToast(error3.error || notfmsg2("errors", "logout_failed"));
+              showToast2(error3.error || notfmsg3("errors", "logout_failed"));
               return;
             }
             localStorage.removeItem("theme");
@@ -692,7 +692,7 @@
             localStorage.removeItem("preferences_applied");
             window.location.href = "/login";
           } catch (error3) {
-            showToast(notfmsg2("errors", "logout_failed"));
+            showToast2(notfmsg3("errors", "logout_failed"));
           }
         });
         document.querySelectorAll(".post").forEach((post) => addEditEventListeners(post, true));
@@ -720,8 +720,8 @@
         function renderSearchResults(query) {
           query = query.toLowerCase().trim();
           if (query.length === 0) {
-            searchPostsContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg2("placeholders", "typing_search_posts")}</p>`;
-            searchPeopleContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg2("placeholders", "typing_search_people")}</p>`;
+            searchPostsContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg3("placeholders", "typing_search_posts")}</p>`;
+            searchPeopleContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg3("placeholders", "typing_search_people")}</p>`;
             return;
           }
           const matchingPosts = blogsData.filter(
@@ -732,17 +732,17 @@
           );
           matchingPeople = matchingPeople.filter((person, index) => matchingPeople.findIndex((p) => p.username === person.username) === index);
           if (matchingPosts.length === 0) {
-            searchPostsContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg2("search_results", "no_posts_found")}</p>`;
+            searchPostsContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg3("search_results", "no_posts_found")}</p>`;
           } else {
             searchPostsContainer.innerHTML = matchingPosts.map((post) => `
                 <a href="/blogs/${post.blogId}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-300">
                     <h4 class="font-semibold text-slate-900 dark:text-white text-sm">${post.title}</h4>
-                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-1">${post.description || notfmsg2("placeholders", "no_desc_available")}</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-1">${post.description || notfmsg3("placeholders", "no_desc_available")}</p>
                 </a>
             `).join("");
           }
           if (matchingPeople.length === 0) {
-            searchPeopleContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg2("search_results", "no_people_found")}</p>`;
+            searchPeopleContainer.innerHTML = `<p class="text-xs text-slate-500 py-2">${notfmsg3("search_results", "no_people_found")}</p>`;
           } else {
             searchPeopleContainer.innerHTML = matchingPeople.map((person) => {
               if (!person.avatar.src) {
@@ -776,7 +776,7 @@
         if (urlsq) {
           searchInput.value = urlsq;
           if (document.getElementById("blogs-container").querySelector(".nopost")) {
-            document.getElementById("blogs-container").querySelector(".nopost").innerHTML = notfmsg2("search_results", "search_query_empty_html").replace("{{query}}", urlsq);
+            document.getElementById("blogs-container").querySelector(".nopost").innerHTML = notfmsg3("search_results", "search_query_empty_html").replace("{{query}}", urlsq);
           }
         }
         searchForm?.addEventListener("keypress", (e) => {
@@ -790,7 +790,7 @@
           const searchQuery = searchInput.value.trim();
           try {
             searchResults.classList.add("hidden");
-            document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="dark:text-slate-400 text-slate-600">${notfmsg2("search_results", "searching")}</p></div>`;
+            document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="dark:text-slate-400 text-slate-600">${notfmsg3("search_results", "searching")}</p></div>`;
             const response = await fetch(`/api/blogs/fetch?q=${encodeURIComponent(searchQuery)}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -816,12 +816,12 @@
                 addSearchData(post);
               }));
             } else {
-              document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="dark:text-slate-400 text-slate-600">${notfmsg2("search_results", "search_query_empty_html").replace("{{query}}", searchQuery)}</p></div>`;
+              document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="dark:text-slate-400 text-slate-600">${notfmsg3("search_results", "search_query_empty_html").replace("{{query}}", searchQuery)}</p></div>`;
             }
             window.history.pushState({ search: searchQuery }, "", `?search=${encodeURIComponent(searchQuery)}`);
           } catch (error3) {
             console.error("Search error:", error3);
-            document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="text-red-600">${notfmsg2("search_results", "search_error")}</p></div>`;
+            document.getElementById("blogs-container").innerHTML = `<div class="text-center py-8"><p class="text-red-600">${notfmsg3("search_results", "search_error")}</p></div>`;
           }
         });
         searchInput.addEventListener("focus", () => {
@@ -855,7 +855,7 @@
     applyPreferences: () => applyPreferences,
     getTimeAgo: () => getTimeAgo,
     isURL: () => isURL,
-    showToast: () => showToast,
+    showToast: () => showToast2,
     wait: () => wait
   });
   function setCookie(cname, cvalue, exdays = void 0, p = "/") {
@@ -864,7 +864,7 @@
       document.cookie = `${cname}=${cvalue}; ${exdays ? `expires=${exdays}` : ""}; path=${p};`;
     }
   }
-  function showToast(message, type = "error") {
+  function showToast2(message, type = "error") {
     const toast = document.createElement("div");
     const colorMap = {
       error: {
@@ -3693,7 +3693,7 @@
       require_prism_ruby();
       require_prism_rust();
       require_prism_sql();
-      var notfmsg3 = (fn, notfId) => notf_lang2("blog", fn, notfId);
+      var notfmsg4 = (fn, notfId) => notf_lang2("blog", fn, notfId);
       async function commentHTML(d, sub = false) {
         let profilePic1 = !d.comment_author ? `
     <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-400 dark:text-slate-300 font-bold">
@@ -3701,7 +3701,7 @@
     </div>
     ` : isURL(d.comment_author.avatar) ? `<img class="${sub ? "w-8 h-8" : "w-10 h-10"} rounded-full bg-white " referrerpolicy="no-referrer" src="${d.comment_author.avatar}" alt="User Avatar">` : `
     <div class="${sub ? "w-8 h-8" : "w-10 h-10"} shrink-0 aspect-square rounded-full bg-gradient-to-br ${d.comment_author.avatar} flex items-center justify-center text-white font-bold">
-        ${d.comment_author.username.charAt(0).toUpperCase() || notfmsg3("placeholders", "u")}
+        ${d.comment_author.username.charAt(0).toUpperCase() || notfmsg4("placeholders", "u")}
     </div>
     `;
         let postMenu = "";
@@ -3727,7 +3727,7 @@
           const currentUserAvatar = avatar.user.avatar;
           profilePic2 = isURL(currentUserAvatar) ? `<img class="w-8 h-8 rounded-full bg-white" referrerpolicy="no-referrer" src="${currentUserAvatar}" alt="User Avatar">` : `
         <div class="w-8 h-8 shrink-0 aspect-square rounded-full bg-gradient-to-br ${currentUserAvatar} flex items-center justify-center text-white font-bold">
-            ${currentUserUsername.charAt(0).toUpperCase() || notfmsg3("placeholders", "u")}
+            ${currentUserUsername.charAt(0).toUpperCase() || notfmsg4("placeholders", "u")}
         </div>
         `;
           if (currentUserUid !== d.comment_author?.uid && (d.comment_author?.user_preferences && !d.comment_author.user_preferences.visible_profile)) {
@@ -3758,7 +3758,7 @@
                                     </h4>`;
           } else {
             return `<h4 class="font-semibold text-slate-900 dark:text-white truncate">
-                                        ${d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile ? d.comment_author.display_name : d.comment_author && d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile ? notfmsg3("placeholders", "anonymous_user") : !d.comment_author ? notfmsg3("placeholders", "deleted_account") : notfmsg3("placeholders", "unknown_user")}
+                                        ${d.comment_author && d.comment_author.user_preferences && d.comment_author.user_preferences.visible_profile ? d.comment_author.display_name : d.comment_author && d.comment_author.user_preferences && !d.comment_author.user_preferences.visible_profile ? notfmsg4("placeholders", "anonymous_user") : !d.comment_author ? notfmsg4("placeholders", "deleted_account") : notfmsg4("placeholders", "unknown_user")}
                                     </h4>`;
           }
         })()}
@@ -3776,12 +3776,12 @@
                         <div class="comment-menu hidden absolute right-6 top-0 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-slate-200 dark:border-slate-600 w-48 z-[10] flex-col">
                             <button class="edit-comment-btn w-full text-left p-4 rounded-t-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2">
                                 <i class="mdi mdi-pencil" style="margin-top: 0.125rem;"></i>
-                                ${notfmsg3("buttons", "edit_comment")}
+                                ${notfmsg4("buttons", "edit_comment")}
                             </button>
                             <hr class="border-slate-200 dark:border-slate-600" />
                             <button class="delete-comment-btn w-full text-left p-4 rounded-b-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200 flex items-center gap-2">
                                 <i class="mdi mdi-delete" style="margin-top: 0.125rem;"></i>
-                                ${notfmsg3("buttons", "delete_comment")}
+                                ${notfmsg4("buttons", "delete_comment")}
                             </button>
                         </div>
                         ` : ""}
@@ -3794,10 +3794,10 @@
                         <textarea class="edit-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm">${d.comment.comment}</textarea>
                         <div class="flex gap-2 justify-end">
                             <button class="cancel-edit px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                                ${notfmsg3("buttons", "cancel")}
+                                ${notfmsg4("buttons", "cancel")}
                             </button>
                             <button class="submit-edit px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 text-sm">
-                                ${notfmsg3("buttons", "save")}
+                                ${notfmsg4("buttons", "save")}
                             </button>
                         </div>
                     </div>
@@ -3809,7 +3809,7 @@
                         </button>
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" data-comment-id="${d.comment.commentid}">
                             <i class="mdi mdi-reply"></i>
-                            ${notfmsg3("buttons", "reply")}
+                            ${notfmsg4("buttons", "reply")}
                         </button>
                     </div>
                 </div>
@@ -3822,13 +3822,13 @@
                     <div class="flex gap-3">
                         ${profilePic2}
                         <div class="flex-1">
-                            <textarea placeholder="${notfmsg3("placeholders", "write_reply")}" class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
+                            <textarea placeholder="${notfmsg4("placeholders", "write_reply")}" class="reply-textarea w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 focus:outline-none transition-all duration-300 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none text-sm" rows="2"></textarea>
                             <div class="flex gap-2 mt-2 justify-end">
                                 <button class="cancel-reply px-4 py-2 text-slate-700 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300 text-sm">
-                                    ${notfmsg3("buttons", "cancel")}
+                                    ${notfmsg4("buttons", "cancel")}
                                 </button>
                                 <button class="submit-reply px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-sm">
-                                    ${notfmsg3("buttons", "reply")}
+                                    ${notfmsg4("buttons", "reply")}
                                 </button>
                             </div>
                         </div>
@@ -3838,7 +3838,7 @@
             ${d.comment.hasReplies ? `
                 <div class="load-replies ml-14 text-center">
                     <button class="min-h-auto load-replies-btn text-blue-600 font-semibold hover:text-blue-700 transition-colors duration-300 flex items-center justify-center gap-2">
-                        <i class="mdi mdi-chevron-down"></i>${notfmsg3("buttons", "load_more_replies")}
+                        <i class="mdi mdi-chevron-down"></i>${notfmsg4("buttons", "load_more_replies")}
                     </button>
                 </div>
             ` : ""} 
@@ -3877,7 +3877,7 @@
             throw new Error(`Error (${res.status}): ${res.statusText}`);
           }
         } catch (err) {
-          showToast(err.message, "error");
+          showToast2(err.message, "error");
           countSpan.textContent = originalCount;
         }
         likeBtn.removeAttribute("disabled");
@@ -3937,7 +3937,7 @@
             e.preventDefault();
             const newContent = editTextarea.value.trim();
             if (!newContent) {
-              showToast(notfmsg3("toasts", "empty_comment_error"), "error");
+              showToast2(notfmsg4("toasts", "empty_comment_error"), "error");
               return;
             }
             fetch(`/api/comments/${commentId}/edit`, {
@@ -3951,17 +3951,17 @@
                 commentText.classList.remove("hidden");
               } else {
                 return res.json().then((err) => {
-                  throw new Error(err.error || notfmsg3("toasts", "edit_failed_error"));
+                  throw new Error(err.error || notfmsg4("toasts", "edit_failed_error"));
                 });
               }
-            }).catch((err) => showToast(`${notfmsg3("toasts", "edit_error")}${err.message}`, "error"));
+            }).catch((err) => showToast2(`${notfmsg4("toasts", "edit_error")}${err.message}`, "error"));
           });
         }
         const deleteBtn = menu.querySelector(".delete-comment-btn");
         if (deleteBtn) {
           deleteBtn.addEventListener("click", function(e) {
             e.preventDefault();
-            if (confirm(notfmsg3("toasts", "confirm_delete"))) {
+            if (confirm(notfmsg4("toasts", "confirm_delete"))) {
               fetch(`/api/comments/${commentId}/delete`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" }
@@ -3972,14 +3972,14 @@
                   commentItem.style.transition = "all 0.3s ease-out";
                   setTimeout(() => {
                     commentItem.remove();
-                    showToast(notfmsg3("toasts", "delete_success"), "success");
+                    showToast2(notfmsg4("toasts", "delete_success"), "success");
                   }, 300);
                 } else {
                   return res.json().then((err) => {
-                    throw new Error(err.error || notfmsg3("toasts", "delete_failed_error"));
+                    throw new Error(err.error || notfmsg4("toasts", "delete_failed_error"));
                   });
                 }
-              }).catch((err) => showToast(`${notfmsg3("toasts", "delete_error")}${err.message}`, "error"));
+              }).catch((err) => showToast2(`${notfmsg4("toasts", "delete_error")}${err.message}`, "error"));
             }
           });
         }
@@ -4032,15 +4032,15 @@
             });
             if (!response.ok) {
               const error3 = await response.json();
-              showToast(error3.error || notfmsg3("toasts", "save_post_error"));
+              showToast2(error3.error || notfmsg4("toasts", "save_post_error"));
               return;
             }
             savePostBtn.classList.toggle("text-blue-600");
             if (document.documentElement.classList.contains("dark")) savePostBtn.classList.toggle("dark:text-slate-400");
             else savePostBtn.classList.toggle("text-slate-600");
-            savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === notfmsg3("buttons", "save") ? notfmsg3("buttons", "saved") : notfmsg3("buttons", "save");
+            savePostBtn.querySelector("span").textContent = savePostBtn.querySelector("span").textContent === notfmsg4("buttons", "save") ? notfmsg4("buttons", "saved") : notfmsg4("buttons", "save");
           } catch (error3) {
-            showToast(notfmsg3("toasts", "save_post_error"), "error");
+            showToast2(notfmsg4("toasts", "save_post_error"), "error");
           }
           savePostBtn.removeAttribute("disabled");
           savePostBtn.style.transform = "";
@@ -4118,7 +4118,7 @@
             replyTextarea.value = "";
             replyForm.classList.add("hidden");
           } else {
-            return showToast((await postReplyResponse.json()).error);
+            return showToast2((await postReplyResponse.json()).error);
           }
         }
         async function loadComments() {
@@ -4130,7 +4130,7 @@
             body: JSON.stringify({ page: Math.floor(currentCommentsNumber / 2), blogid: window.location.pathname.split("/")[2] })
           });
           const commentsQueryData = await commentsQueryResponse.json();
-          if (commentsQueryData.error) return showToast(commentsQueryData.error);
+          if (commentsQueryData.error) return showToast2(commentsQueryData.error);
           else {
             if (commentsQueryData.caps.length < 3) commentsList.parentElement.removeChild(commentsList.parentElement.querySelector("#load-comments-btn").parentElement);
             await Promise.all(commentsQueryData.caps.map(async (cap) => {
@@ -4141,7 +4141,7 @@
                 registerEvents(commentItem, csred);
                 commentsList.insertAdjacentElement("beforeend", commentItem);
               } catch (err) {
-                showToast(err);
+                showToast2(err);
                 return;
               }
             }));
@@ -4161,7 +4161,7 @@
             })
           });
           const repliesQueryData = await repliesQueryResponse.json();
-          if (repliesQueryData.error) return showToast(repliesQueryData.error);
+          if (repliesQueryData.error) return showToast2(repliesQueryData.error);
           else {
             if (repliesQueryData.caps.length < 3) oc.removeChild(oc.querySelector(":scope > .load-replies"));
             await Promise.all(repliesQueryData.caps.map(async (sub_cap) => {
@@ -4173,7 +4173,7 @@
                 subCommentsList.insertAdjacentElement("beforeend", commentItem);
               } catch (err) {
                 console.error(err);
-                showToast(err);
+                showToast2(err);
                 return;
               }
             }));
@@ -4211,7 +4211,7 @@
             registerEvents(commentsList.firstElementChild, oneComment);
             comment_textarea.value = "";
           } else {
-            showToast((await postCommentResponse.json()).error);
+            showToast2((await postCommentResponse.json()).error);
           }
         });
         document.getElementById("load-comments-btn")?.addEventListener("click", loadComments);
@@ -4224,7 +4224,7 @@
   var require_compose = __commonJS({
     "src/frontend/blogs/compose.js"() {
       "use strict";
-      var { showToast: showToast2 } = (init_misc(), __toCommonJS(misc_exports));
+      var { showToast: showToast3 } = (init_misc(), __toCommonJS(misc_exports));
       var { default: notf_lang3 } = (init_locales(), __toCommonJS(locales_exports));
       var rawEditor = document.getElementById("editor");
       if (!rawEditor) return;
@@ -4604,7 +4604,7 @@
           });
           const fromDraftedResponse = await draftedResponse.json();
           if (!draftedResponse.ok) {
-            showToast2(error.error || notf_lang3("compose", "default_error"));
+            showToast3(error.error || notf_lang3("compose", "default_error"));
             return console.error(draftedResponse.error);
           }
           targetBlogId = fromDraftedResponse.blogid;
@@ -4638,7 +4638,7 @@
         if (updatedResponse.ok) window.location.href = `/`;
         else {
           const error3 = await updatedResponse.json();
-          showToast2(error3.error || notf_lang3("compose", "default_error"));
+          showToast3(error3.error || notf_lang3("compose", "default_error"));
           console.error(error3);
         }
       });
@@ -37151,7 +37151,7 @@ void main() {
               throw response;
             }
           } catch (error3) {
-            showToast("An error occurred while logging in. Please try again.");
+            showToast2("An error occurred while logging in. Please try again.");
             loadingOverlay.classList.add("hidden");
           }
         }
@@ -37204,12 +37204,12 @@ void main() {
         closePasswordResetModal();
       }
     });
-    const notfmsg3 = (fn, notfId) => notf_lang2("password_reset_form", fn, notfId);
+    const notfmsg4 = (fn, notfId) => notf_lang2("password_reset_form", fn, notfId);
     passwordResetForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = resetEmailInput.value.trim();
       if (!email) {
-        showToast(notfmsg3("passwordResetFormSubmission", 1));
+        showToast2(notfmsg4("passwordResetFormSubmission", 1));
         return;
       }
       try {
@@ -37220,7 +37220,7 @@ void main() {
         });
         if (!response.ok) {
           const error3 = await response.json();
-          showToast(error3.error || notfmsg3("passwordResetFormSubmission", 2));
+          showToast2(error3.error || notfmsg4("passwordResetFormSubmission", 2));
           return;
         }
         passwordResetForm.style.display = "none";
@@ -37231,7 +37231,7 @@ void main() {
         }, 3e3);
       } catch (error3) {
         console.error(error3);
-        showToast(notfmsg3("passwordResetFormSubmission", 3));
+        showToast2(notfmsg4("passwordResetFormSubmission", 3));
       }
     });
   }
@@ -37259,17 +37259,17 @@ void main() {
           const error3 = params.get("err");
           if (error3) {
             const decodedError = decodeURIComponent(error3);
-            showToast(decodedError);
+            showToast2(decodedError);
             window.location.href = "/";
           }
         }
-        const notfmsg3 = (fn, notfId) => notf_lang2("login", fn, notfId);
+        const notfmsg4 = (fn, notfId) => notf_lang2("login", fn, notfId);
         form?.addEventListener("submit", async (e) => {
           e.preventDefault();
           const email = document.querySelector('input[name="email"]').value.trim();
           const password = document.querySelector('input[name="password"]').value.trim();
           if (!email || !password) {
-            showToast(notfmsg3("emailLoginFormSubmission", 1));
+            showToast2(notfmsg4("emailLoginFormSubmission", 1));
             return;
           }
           try {
@@ -37281,12 +37281,12 @@ void main() {
             if (!response.ok) {
               const error3 = await response.json();
               console.error(error3);
-              showToast(notfmsg3("emailLoginFormSubmission", 2));
+              showToast2(notfmsg4("emailLoginFormSubmission", 2));
               return;
             }
             window.location.href = "/";
           } catch (error3) {
-            showToast(notfmsg3("emailLoginFormSubmission", 3));
+            showToast2(notfmsg4("emailLoginFormSubmission", 3));
           }
         });
         document.getElementById("sign-in-w-google")?.addEventListener("click", async () => {
@@ -37296,7 +37296,7 @@ void main() {
           });
           if (!response.ok) {
             const error3 = await response.json();
-            showToast(error3.error || notfmsg3("signInWGoogle", 1));
+            showToast2(error3.error || notfmsg4("signInWGoogle", 1));
             return;
           } else {
             const oauthURL = await response.json();
@@ -37401,7 +37401,7 @@ void main() {
       rules = {
         userName: {
           required: true,
-          pattern: /^[a-zA-Z0-9_ ]{3,30}$/,
+          pattern: /^[a-zA-Z0-9_ ]{3,50}$/,
           errorMessage: errmsg(1)
         },
         email: {
@@ -37451,11 +37451,11 @@ void main() {
       document.addEventListener("DOMContentLoaded", () => {
         if (window.location.pathname !== "/register") return;
         const redirectErrorMsg = new URLSearchParams(window.location.search).get("error");
-        if (redirectErrorMsg) showToast(redirectErrorMsg);
+        if (redirectErrorMsg) showToast2(redirectErrorMsg);
         window.history.replaceState(null, "", "/register");
         const form = document.getElementById("register-form");
         const termsCheckbox = document.querySelector('input[type="checkbox"]');
-        const notfmsg3 = (fn, notfId) => notf_lang2("register", fn, notfId);
+        const notfmsg4 = (fn, notfId) => notf_lang2("register", fn, notfId);
         function validateForm(e) {
           e.preventDefault();
           const fields = {
@@ -37469,7 +37469,7 @@ void main() {
           for (let field in fields) {
             if (field === "password") {
               if (!validatePasswordRequirements2(fields[field])) {
-                currentError2(notfmsg3("validateForm", 1));
+                currentError2(notfmsg4("validateForm", 1));
                 isValid = false;
                 break;
               }
@@ -37482,7 +37482,7 @@ void main() {
             }
           }
           if (!isValid) {
-            showToast(currentError2(), "error");
+            showToast2(currentError2(), "error");
           } else {
             Object.values(fields).forEach((field) => {
               if (field.type !== "checkbox") {
@@ -37512,7 +37512,7 @@ void main() {
           });
           if (!response.ok) {
             const error3 = await response.json();
-            showToast(error3.error || notfmsg3("signUpWGoogle", 1));
+            showToast2(error3.error || notfmsg4("signUpWGoogle", 1));
             return;
           } else {
             const oauthURL = await response.json();
@@ -37541,7 +37541,7 @@ void main() {
         reg_form_validation_default.resetField(confirmPasswordInput, false);
       }
     });
-    const notfmsg3 = (notfId, arg = void 0) => {
+    const notfmsg4 = (notfId, arg = void 0) => {
       if (notfId === 2) return notf_lang2("auth", "resetPasswordFormSubmission", notfId) + arg;
       else return notf_lang2("auth", "resetPasswordFormSubmission", notfId);
     };
@@ -37555,7 +37555,7 @@ void main() {
       for (let tvf in to_validate_fields) {
         if (tvf === "password") {
           if (!reg_form_validation_default.validatePasswordRequirements(to_validate_fields[tvf])) {
-            reg_form_validation_default.currentError(notfmsg3(1));
+            reg_form_validation_default.currentError(notfmsg4(1));
             isValid = false;
             break;
           }
@@ -37568,7 +37568,7 @@ void main() {
         }
       }
       if (!isValid) {
-        return showToast(reg_form_validation_default.currentError(), "error");
+        return showToast2(reg_form_validation_default.currentError(), "error");
       }
       try {
         const response = await fetch("/api/auth/reset/password", {
@@ -37581,10 +37581,10 @@ void main() {
         });
         if (!response.ok) {
           const error3 = await response.json();
-          showToast(notfmsg3(2, error3.error), "error");
+          showToast2(notfmsg4(2, error3.error), "error");
           return;
         } else {
-          showToast(notfmsg3(3), "success");
+          showToast2(notfmsg4(3), "success");
         }
         form.style.display = "none";
         successMessage.classList.remove("hidden");
@@ -37593,7 +37593,7 @@ void main() {
         }, 3e3);
       } catch (error3) {
         console.error("Password reset error:", error3);
-        showToast(notfmsg3(5), "error");
+        showToast2(notfmsg4(5), "error");
       }
     });
   }
@@ -37660,6 +37660,23 @@ void main() {
       document.addEventListener("mouseout", () => {
         if (window.innerWidth < 768) nav.classList.remove("show");
       });
+      document.getElementById("signout")?.addEventListener("click", async () => {
+        try {
+          const response = await fetch("/api/logout", { method: "POST", credentials: "include" });
+          if (!response.ok) {
+            const error3 = await response.json();
+            showToast(error3.error || notfmsg("errors", "logout_failed"));
+            return;
+          }
+          localStorage.removeItem("theme");
+          localStorage.removeItem("font-family");
+          localStorage.removeItem("font-size");
+          localStorage.removeItem("preferences_applied");
+          window.location.href = "/login";
+        } catch (error3) {
+          showToast(notfmsg("errors", "logout_failed"));
+        }
+      });
     }
   });
 
@@ -37683,7 +37700,7 @@ void main() {
         if (loadBlogButton) registerAutoLoad(loadBlogButton);
         document.querySelectorAll(".follow-btn")?.forEach((btn) => {
           btn.addEventListener("click", function() {
-            showToast(notf_lang2("wip", "follow"), "info");
+            showToast2(notf_lang2("wip", "follow"), "info");
           });
         });
       });
@@ -37771,7 +37788,7 @@ void main() {
             if (!validation) isValid = false;
           }
           if (!isValid) {
-            return showToast(reg_form_validation_default.currentError, "error");
+            return showToast2(reg_form_validation_default.currentError, "error");
           }
           let pfpURL = void 0;
           if (avatar.files[0]) {
@@ -37787,7 +37804,7 @@ void main() {
               pfpURL = pfpURL.url;
             } catch (e2) {
               console.error(e2);
-              return showToast(e2.message);
+              return showToast2(e2.message);
             }
           }
           try {
@@ -37797,10 +37814,10 @@ void main() {
               body: JSON.stringify({ avatar: pfpURL, displayName: displayName.value, bio: bio.value })
             });
             if (!updatedProfileResponse.ok) throw updatedProfileResponse;
-            showToast(t("profileForm", "saveSuccess"));
+            showToast2(t("profileForm", "saveSuccess"));
           } catch (e2) {
             console.error(e2);
-            return showToast(e2.message);
+            return showToast2(e2.message);
           }
         });
         passwordForm.addEventListener("submit", async (e) => {
@@ -37828,7 +37845,7 @@ void main() {
             }
           }
           if (!isValid) {
-            return showToast(reg_form_validation_default.currentError(), "error");
+            return showToast2(reg_form_validation_default.currentError(), "error");
           }
           const currentPassword = passwordForm.querySelector("input[name='current-password']");
           try {
@@ -37839,12 +37856,12 @@ void main() {
             });
             if (!updatedPasswordResponse.ok) {
               const error3 = await updatedPasswordResponse.json();
-              return showToast(error3.error, "error");
+              return showToast2(error3.error, "error");
             }
           } catch (e2) {
             console.error(e2);
           }
-          showToast(t("passwordForm", "saveSuccess"));
+          showToast2(t("passwordForm", "saveSuccess"));
           e.target.reset();
         });
         const accountDeleteBtn = document.getElementById("account-delete");
@@ -37871,7 +37888,7 @@ void main() {
           e.preventDefault();
           const password = accountDeleteConfirmPasswordInput.value.trim();
           if (!password) {
-            showToast(t("deleteModal", "emptyPassword"));
+            showToast2(t("deleteModal", "emptyPassword"));
             return;
           }
           try {
@@ -37882,13 +37899,13 @@ void main() {
             });
             if (!response.ok) {
               const error3 = await response.json();
-              showToast(error3.error || t("deleteModal", "fallbackError"));
+              showToast2(error3.error || t("deleteModal", "fallbackError"));
               return;
             }
             window.location.replace("/");
           } catch (error3) {
             console.error(error3);
-            showToast(t("deleteModal", "networkError"));
+            showToast2(t("deleteModal", "networkError"));
           }
         });
       });
@@ -37955,11 +37972,11 @@ void main() {
               })
             });
             if (!response.ok) throw response;
-            showToast(notf_lang2("preferences", "success"), "success");
+            showToast2(notf_lang2("preferences", "success"), "success");
             window.location.reload();
           } catch (err) {
             console.error("Error saving preferences:", err);
-            showToast(notf_lang2("preferences", "error"));
+            showToast2(notf_lang2("preferences", "error"));
           }
         });
       });
@@ -37995,12 +38012,12 @@ void main() {
                 message
               })
             });
-            if (contact_sent_response.ok) showToast(t("contact_sent_success", "success"));
+            if (contact_sent_response.ok) showToast2(t("contact_sent_success", "success"));
             else throw contact_sent_response;
           } catch (e2) {
             const error3 = await e2.json();
             console.error(error3);
-            showToast(error3.message, "error");
+            showToast2(error3.message, "error");
           }
         });
       });

@@ -451,7 +451,7 @@
         "change_picture_btn": "Change Picture",
         "picture_requirements": "JPG, PNG or GIF. Max 10MB",
         "display_name_label": "Display Name",
-        "display_name_hint": "3-30 characters.",
+        "display_name_hint": "3-50 characters.",
         "username_label": "Username",
         "bio_label": "Bio",
         "bio_max_characters": "Max 1000 characters.",

@@ -6,7 +6,7 @@ const errmsg = (notfId) => notf_lang("reg_form_validation", "rules", notfId);
 const rules = {
     userName: {
         required: true,
-        pattern: /^[a-zA-Z0-9_ ]{3,30}$/,
+        pattern: /^[a-zA-Z0-9_ ]{3,50}$/,
         errorMessage: errmsg(1)
     },
     email: {

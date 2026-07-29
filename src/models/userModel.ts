@@ -81,10 +81,9 @@ export class UserModel {
   /**
    * Get profile by username (for public profile pages)
    */
-  static async getProfileByUsername(supabase: SupabaseClient<any, "public", "public", any, any>, username: string) {
+  static async getProfileByUsername(username: string) {
     try {
-      const table = await supabase
-        .from('profiles')
+      const table = supabase.from('profiles')
 
       const { data: profileFromUsername, error: profileFromUsernameError } = await table
         .select('*')

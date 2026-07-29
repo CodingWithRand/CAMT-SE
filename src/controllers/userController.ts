@@ -4,7 +4,7 @@
  */
 
 import { Request, Response } from 'express';
-import { auth } from '../db';
+import { auth, supabase } from '../db';
 import { UserModel } from '../models/userModel';
 import { BlogModel } from '../models/blogModel';
 import { asyncHandler } from '../middleware/errorHandler';
@@ -104,7 +104,8 @@ export const userController = {
     let postCount;
     try {
       // Get profile by username
-      profile = await UserModel.getProfileByUsername(req.local_supabase!, username);
+      profile = await UserModel.getProfileByUsername(username);
+      // console.log(profile)
       
       // Get user's blogs (filter by visibility)
       blogs = await BlogModel.getBlogsByAuthor(profile[0].uid, req.userId);
@@ -116,6 +117,7 @@ export const userController = {
 
       postCount = await UserModel.getPostCount(profile[0].uid)
     } catch (error) {
+      console.error(error)
       if (error instanceof NotFoundError) return res.status(404).render('error', {
         errorCode: 404,
         customMessage: t(req, "viewPublicProfile", 2),

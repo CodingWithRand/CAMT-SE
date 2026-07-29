@@ -23,7 +23,7 @@ export const validatePassword = (password: string): boolean => {
 
 export const validateUsername = (username: string): boolean => {
   // 3-20 characters, alphanumeric only
-  const usernameRegex = /^[a-zA-Z0-9_ ]{3,20}$/;
+  const usernameRegex = /^[a-zA-Z0-9_ ]{3,50}$/;
   return usernameRegex.test(username);
 };
 
