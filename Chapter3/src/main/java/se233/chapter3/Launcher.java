@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import se233.chapter3.controller.MainViewController;
 
 public class Launcher extends Application {
     public static Stage primaryStage;

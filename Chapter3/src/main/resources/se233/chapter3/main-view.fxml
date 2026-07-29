@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.Region?>
-
 
 <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se233.chapter3.controller.MainViewController">
    <children>
@@ -19,7 +16,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem fx:id="closeBtn" mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -38,8 +35,8 @@
          <children>
             <Label layoutX="20.0" layoutY="20.0" text="Drop PDF files below:" />
 
-             <ListView fx:id="inputListView" layoutX="10" layoutY="45.0" prefHeight="150" prefWidth="180" style="-fx-border-color: black;"/>
-             <Button fx:id="startButton" layoutX="20.0" layoutY="200.0" prefHeight="20.0" prefWidth="156.0" text="Start Indexing"/>
+             <ListView fx:id="inputListView" layoutX="10" layoutY="45.0" prefHeight="150" prefWidth="180" style="-fx-border-color: black;" />
+             <Button fx:id="startButton" layoutX="20.0" layoutY="200.0" prefHeight="20.0" prefWidth="156.0" text="Start Indexing" />
          </children>
       </AnchorPane>
       <Pane />
