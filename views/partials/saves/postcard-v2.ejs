@@ -98,7 +98,7 @@ function isURL(str) {
         <div class="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm">
             <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
                 <i class="mdi mdi-heart text-lg"></i>
-                <span><%= blog.likedBy?.length || 0 %></span>
+                <span><%= blog.likes || 0 %></span>
             </button>
             <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
                 <i class="mdi mdi-comment text-lg"></i>

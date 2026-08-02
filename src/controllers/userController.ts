@@ -42,7 +42,7 @@ export const userController = {
    */
   fetchCurrentUserProperty: asyncHandler(async (req: Request, res: Response) => {
     // console.log(req)
-    console.log(req.user, req.userId)
+    // console.log(req.user, req.userId)
     if (!req.userId) throw new UnauthorizedError();
 
     const { property } = req.params;
@@ -155,6 +155,15 @@ export const userController = {
     res.status(200).json({ preferences: userPreferences });
   }),
 
+  /**
+   * GET /api/users/fetch/current/saved_blogs - Get current user's saved blog ids
+   */
+  getCurrentUserSavedBlogIds: asyncHandler(async (req: Request, res: Response) => {
+    if (!req.userId) throw new UnauthorizedError();
+
+    const savedBlogIds = await UserModel.getUserSavedBlogIds(req.local_supabase!, req.userId);
+    res.status(200).json({ savedBlogIds });
+  }),
 
   /**
    * PUT /api/users/update/current/preferences - Update current user preferences

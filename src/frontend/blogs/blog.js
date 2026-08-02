@@ -145,7 +145,7 @@ async function commentHTML(d, sub=false) {
                     <div class="flex gap-4 text-sm text-slate-600 dark:text-slate-400">
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" data-id="${d.comment.cid}">
                             <i class="mdi mdi-heart"></i>
-                            <span>${d.comment.likedBy?.length || 0}</span>
+                            <span>${d.comment.likes || 0}</span>
                         </button>
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" data-comment-id="${d.comment.commentid}">
                             <i class="mdi mdi-reply"></i>

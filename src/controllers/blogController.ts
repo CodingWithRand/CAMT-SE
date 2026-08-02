@@ -26,7 +26,8 @@ export const blogController = {
     // console.log(req.user, req.userId)
     if (req.user) {
       // Logged in user - show dashboard
-      const userProfile = await UserModel.getProfileByUserId(req.userId!);
+      let userProfile = await UserModel.getProfileByUserId(req.userId!);
+      userProfile.saved_blogs = await UserModel.getUserSavedBlogIds(req.local_supabase!, req.userId!);
       let blogs
       if(req.query.search) blogs = await BlogModel.searchBlogs(req.query.search as string, 0, PAGINATION.BLOGS_PER_PAGE);
       else blogs = await BlogModel.getAllBlogs(0, PAGINATION.BLOGS_PER_PAGE);
@@ -131,6 +132,7 @@ export const blogController = {
     let userProfile;
     if (req.user) {
       userProfile = await UserModel.getProfileByUserId(req.userId!);
+      userProfile.saved_blogs = await UserModel.getUserSavedBlogIds(req.local_supabase!, req.userId!);
     }
 
     const authorPreferences = await UserModel.getUserPreferences(blog.authorid);
@@ -141,7 +143,7 @@ export const blogController = {
       title: blog.title,
       description: blog.description,
       content: htmlContent,
-      likes: blog.likedBy?.length || 0,
+      likes: blog.likes || 0,
       createdAt: blog.postedon,
       allowComments: blog.allow_comments,
     };
@@ -238,14 +240,14 @@ export const blogController = {
   renderSavedBlogsPage: asyncHandler(async (req: Request, res: Response) => {
     if (!req.userId) return res.redirect('/login');
 
-    const savedBlogs = await BlogModel.getAllSavedBlogs(req.userId, 0, PAGINATION.BLOGS_PER_PAGE);
+    const savedBlogs = await BlogModel.getAllSavedBlogs(req.local_supabase!, req.userId, 0, PAGINATION.BLOGS_PER_PAGE);
     const userProfile = await UserModel.getProfileByUserId(req.userId);
 
     const authorsProfile: any[] = [];
     const commentCounts: number[] = [];
     for (const sp of savedBlogs) {
-      const commentCount = await CommentModel.getCommentCount(sp.blogid);
-      authorsProfile.push(sp.profiles);
+      const commentCount = await CommentModel.getCommentCount(sp.blogs_with_likes_count.blogid);
+      authorsProfile.push(sp.blogs_with_likes_count.profiles);
       commentCounts.push(commentCount);
     }
 
@@ -298,12 +300,13 @@ export const blogController = {
 
     let blogs
     if(req.params.uid) blogs = await BlogModel.getBlogsByAuthor(req.params.uid as string, req.userId, page, PAGINATION.BLOGS_PER_PAGE);
-    else if(req.path.includes('my-saves')) blogs = await BlogModel.getAllSavedBlogs(req.userId as string, page, PAGINATION.BLOGS_PER_PAGE);
+    else if(req.path.includes('my-saves')) blogs = await BlogModel.getAllSavedBlogs(req.local_supabase!, req.userId as string, page, PAGINATION.BLOGS_PER_PAGE);
     else if(searchQuery) blogs = await BlogModel.searchBlogs(searchQuery, page, PAGINATION.BLOGS_PER_PAGE);
     else blogs = await BlogModel.getAllBlogs(page, PAGINATION.BLOGS_PER_PAGE);
 
     const commentCounts: number[] = [];
-    for (const blog of blogs) {
+    for (let blog of blogs) {
+      if (blog.blogs_with_likes_count) blog = blog.blogs_with_likes_count;
       const count = await CommentModel.getCommentCount(blog.blogid);
       commentCounts.push(count);
     }

@@ -13,6 +13,7 @@ const router = Router();
 router.get('/account', checkAuthRedirect, userController.renderAccountPage);
 router.get('/account/preferences', checkAuthRedirect, userController.renderPreferencesPage);
 router.get('/api/users/fetch/current/preferences', authMiddleware, userController.getCurrentUserPreferences);
+router.get('/api/users/fetch/current/saved_blogs', authMiddleware, userController.getCurrentUserSavedBlogIds);
 router.get('/api/users/fetch/current/:property', authMiddleware, userController.fetchCurrentUserProperty);
 
 // POST routes

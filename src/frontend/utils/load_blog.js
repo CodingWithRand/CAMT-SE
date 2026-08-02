@@ -27,7 +27,7 @@ export async function postHTMLTemplate(data) {
         if (!currentUserSavedBlogs.ok) throw new Error(`${currentUserSavedBlogs.status} (${currentUserSavedBlogs.statusText}): ${(await currentUserSavedBlogs.json()).error}`)
         currentUserUid = await currentUserUidResponse?.json()
         currentUserSavedBlogs = await currentUserSavedBlogs?.json()
-        if(currentUserSavedBlogs.user.saved_blogs?.includes(data.blog.blogid)) data.blog.isSaved = true;
+        if(currentUserSavedBlogs.savedBlogIds?.includes(data.blog.blogid)) data.blog.isSaved = true;
     } catch (error) {
         // pass
     }
@@ -75,7 +75,7 @@ export async function postHTMLTemplate(data) {
             <div class="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm">
                 <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
                     <i class="mdi mdi-heart text-lg"></i>
-                    <span>${data.blog.likedBy?.length || 0}</span>
+                    <span>${data.blog.likes || 0}</span>
                 </button>
                 <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
                     <i class="mdi mdi-comment text-lg"></i>
@@ -245,6 +245,7 @@ export async function loadMoreBlogs(btn, apiEndpoint) {
             // console.log(blog)
             try {
                 // Process each blog post
+                if(blog.blogs_with_likes_count) blog = blog.blogs_with_likes_count
                 const post = document.createElement('article');
                 post.className = "post relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 group";
                 post.dataset.blogId = blog.blogid;
@@ -255,6 +256,7 @@ export async function loadMoreBlogs(btn, apiEndpoint) {
                 addEditEventListeners(post, csred.owner);
                 addSearchData(post)
             } catch (err) {
+                console.error(err);
                 showToast(err);
                 return;
             }
@@ -265,6 +267,7 @@ export async function loadMoreBlogs(btn, apiEndpoint) {
         // Remove loading spinner on error
         loadingSpinner.remove();
         showToast(err.message || notfmsg("toasts", "load_error"));
+        console.error(err);
     }
 }
 

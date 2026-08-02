@@ -387,7 +387,7 @@
       if (!currentUserSavedBlogs.ok) throw new Error(`${currentUserSavedBlogs.status} (${currentUserSavedBlogs.statusText}): ${(await currentUserSavedBlogs.json()).error}`);
       currentUserUid = await currentUserUidResponse?.json();
       currentUserSavedBlogs = await currentUserSavedBlogs?.json();
-      if (currentUserSavedBlogs.user.saved_blogs?.includes(data.blog.blogid)) data.blog.isSaved = true;
+      if (currentUserSavedBlogs.savedBlogIds?.includes(data.blog.blogid)) data.blog.isSaved = true;
     } catch (error3) {
     }
     if (currentUserUid && currentUserUid.user.uid === data.blog.authorid) {
@@ -433,7 +433,7 @@
             <div class="flex items-center gap-6 pt-4 border-t border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm">
                 <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
                     <i class="mdi mdi-heart text-lg"></i>
-                    <span>${data.blog.likedBy?.length || 0}</span>
+                    <span>${data.blog.likes || 0}</span>
                 </button>
                 <button class="flex items-center gap-1 hover:text-blue-600 transition-colors duration-300">
                     <i class="mdi mdi-comment text-lg"></i>
@@ -562,6 +562,7 @@
       }
       await Promise.all(blogsQueryData.baps.map(async (blog, i) => {
         try {
+          if (blog.blogs_with_likes_count) blog = blog.blogs_with_likes_count;
           const post = document.createElement("article");
           post.className = "post relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg dark:hover:shadow-blue-900/50 transition-all duration-300 group";
           post.dataset.blogId = blog.blogid;
@@ -572,6 +573,7 @@
           addEditEventListeners(post, csred.owner);
           addSearchData(post);
         } catch (err) {
+          console.error(err);
           showToast2(err);
           return;
         }
@@ -580,6 +582,7 @@
     } catch (err) {
       loadingSpinner.remove();
       showToast2(err.message || notfmsg2("toasts", "load_error"));
+      console.error(err);
     }
   }
   function registerAutoLoad(btn) {
@@ -3805,7 +3808,7 @@
                     <div class="flex gap-4 text-sm text-slate-600 dark:text-slate-400">
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" data-id="${d.comment.cid}">
                             <i class="mdi mdi-heart"></i>
-                            <span>${d.comment.likedBy?.length || 0}</span>
+                            <span>${d.comment.likes || 0}</span>
                         </button>
                         <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" data-comment-id="${d.comment.commentid}">
                             <i class="mdi mdi-reply"></i>

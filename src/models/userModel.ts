@@ -114,6 +114,24 @@ export class UserModel {
   }
 
   /**
+   * Get user's saved blogs ids
+   */
+  static async getUserSavedBlogIds(supabase: SupabaseClient<any, "public", "public", any, any>, userId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('saved_blogs')
+        .select('blogid')
+        .eq('uid', userId);
+
+      if (error) throw new DatabaseError(error.message);
+      return data?.map((item: any) => item.blogid) || [];
+    } catch (error) {
+      if (error instanceof DatabaseError) throw error;
+      throw new DatabaseError((error as any).message);
+    }
+  }
+
+  /**
    * Get post count of a user.
    */
   static async getPostCount(authorId: string) {

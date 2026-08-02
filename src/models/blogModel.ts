@@ -81,8 +81,8 @@ export class BlogModel {
   static async getBlogById(blogId: number) {
     try {
       const { data, error } = await supabase
-        .from('blogs')
-        .select('*, profiles(*, user_preferences(visible_profile))')
+        .from('blogs_with_likes_count')
+        .select('*, profiles!blogs_authorid_fkey(*, user_preferences(visible_profile))')
         .eq('profiles.user_preferences.visible_profile', true)
         .eq('blogid', blogId);
 
@@ -102,8 +102,8 @@ export class BlogModel {
   static async getAllBlogs(page: number = 0, limit: number = PAGINATION.BLOGS_PER_PAGE) {
     try {
       const { data, error } = await supabase
-        .from('blogs')
-        .select('*, profiles!inner(*, user_preferences!inner(visible_profile))')
+        .from('blogs_with_likes_count')
+        .select('*, profiles!blogs_authorid_fkey(*, user_preferences!inner(visible_profile))')
         .eq('visibility', 2) // Only public blogs
         .eq('profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
         .order('postedon', { ascending: false })
@@ -117,22 +117,21 @@ export class BlogModel {
     }
   }
 
-  static async getAllSavedBlogs(userId: string, page: number = 0, limit: number = PAGINATION.BLOGS_PER_PAGE) {
+  static async getAllSavedBlogs(supabase: SupabaseClient<any, "public", "public", any, any>, userId: string, page: number = 0, limit: number = PAGINATION.BLOGS_PER_PAGE) {
     try {
-      const { saved_blogs } = await UserModel.getProfileProperty(userId, 'saved_blogs');
-      if(!saved_blogs || saved_blogs.length === 0) return [];
+      // const { saved_blogs } = await UserModel.getProfileProperty(userId, 'saved_blogs');
+      // if(!saved_blogs || saved_blogs.length === 0) return [];
 
       const savedBlogsQuery = await supabase
-        .from('blogs')
-        .select('*, profiles!inner(*, user_preferences!inner(visible_profile))')
-        .in('blogid', saved_blogs)
-        .eq('visibility', 2) // Only public blogs
-        .eq('profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
-        .order('postedon', { ascending: false })
+        .from('saved_blogs')
+        .select('blogs_with_likes_count!saved_blogs_blogid_fkey(*, profiles!blogs_authorid_fkey(*, user_preferences!inner(visible_profile)))')
+        .eq('uid', userId)
+        .eq('blogs_with_likes_count.profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
+        .order('saved_at', { ascending: false })
         .range(page * limit, (page + 1) * limit - 1);
 
       if (savedBlogsQuery.error) throw new DatabaseError(savedBlogsQuery.error.message);
-      return savedBlogsQuery.data || [];
+      return savedBlogsQuery.data as { blogs_with_likes_count: any }[] || [];
     } catch (error) {
       if (error instanceof DatabaseError) throw error;
       throw new DatabaseError((error as any).message);
@@ -146,7 +145,7 @@ export class BlogModel {
     try {
       const { data, error } = await supabase
         .from('blogs_with_likes_count')
-        .select(`*, profiles!inner(*, user_preferences!inner(visible_profile))`)
+        .select(`*, profiles!blogs_authorid_fkey(*, user_preferences!inner(visible_profile))`)
         .eq('profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
         .eq('visibility', 2) // Only public blogs
         .order('likes', { ascending: false })
@@ -175,7 +174,7 @@ export class BlogModel {
     try {
       const { data, error } = await supabase
         .from('blogs_with_likes_count')
-        .select('*, profiles!inner(*, user_preferences!inner(visible_profile))')
+        .select('*, profiles!blogs_authorid_fkey(*, user_preferences!inner(visible_profile))')
         .eq('visibility', 2) // Only public blogs
         .eq('profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
         .order('postedon', { ascending: false })
@@ -246,7 +245,7 @@ export class BlogModel {
   static async getBlogsByAuthor(authorId: string, currentUserId?: string, page: number = 0, limit: number = PAGINATION.BLOGS_PER_PAGE) {
     try {
       const table = supabase
-        .from('blogs');
+        .from('blogs_with_likes_count');
       let query;
         
         // If viewing own profile, show all (public, unlisted, private)
@@ -258,7 +257,7 @@ export class BlogModel {
           .eq('authorid', authorId);
       } else {
         query = table
-          .select('*, profiles!inner(*, user_preferences!inner(visible_profile))')
+          .select('*, profiles!blogs_authorid_fkey(*, user_preferences!inner(visible_profile))')
           .range(page * limit, (page + 1) * limit - 1) // Include author profile
           .eq('authorid', authorId)
           .eq('profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
@@ -283,8 +282,8 @@ export class BlogModel {
       const searchTerm = `%${searchQuery}%`;
       
       const { data, error } = await supabase
-        .from('blogs')
-        .select('*, profiles!inner(*, user_preferences!inner(visible_profile))')
+        .from('blogs_with_likes_count')
+        .select('*, profiles!blogs_authorid_fkey(*, user_preferences!inner(visible_profile))')
         .eq('visibility', 2) // Only public blogs
         .eq('profiles.user_preferences.visible_profile', true) // Only from authors with visible profiles
         .or(`title.ilike.${searchTerm},description.ilike.${searchTerm}`)

@@ -43,8 +43,8 @@ export class CommentModel {
   ) {
     try {
       const { data, error } = await supabase
-        .from('comments')
-        .select('*, profiles(*, user_preferences(visible_profile))')
+        .from('comments_with_likes_count')
+        .select('*, profiles!comments_authorid_fkey(*, user_preferences(visible_profile))')
         .eq('blogid', blogId)
         .is('replyto', null)
         .order('createdat', { ascending: false })
@@ -87,8 +87,8 @@ export class CommentModel {
   ) {
     try {
       const { data, error } = await supabase
-        .from('comments')
-        .select('*, profiles(*, user_preferences(visible_profile))')
+        .from('comments_with_likes_count')
+        .select('*, profiles!comments_authorid_fkey(*, user_preferences(visible_profile))')
         .eq('blogid', blogId)
         .eq('replyto', parentCommentId)
         .order('createdat', { ascending: false })
@@ -145,8 +145,8 @@ export class CommentModel {
   static async getCommentById(commentId: string) {
     try {
       const { data, error } = await supabase
-        .from('comments')
-        .select('cid, likedBy, authorid')
+        .from('comments_with_likes_count')
+        .select('cid, likes, authorid')
         .eq('cid', commentId)
         .single();
 

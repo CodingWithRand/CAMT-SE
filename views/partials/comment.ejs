@@ -117,7 +117,7 @@ function getTimeAgo(stamp) {
                 <% if(user) { %>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" data-id="<%= ocap.cid %>">
                         <i class="mdi mdi-heart"></i>
-                        <span><%= ocap.likedBy?.length || 0 %></span>
+                        <span><%= ocap.likes || 0 %></span>
                     </button>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn">
                         <i class="mdi mdi-reply"></i>
@@ -126,7 +126,7 @@ function getTimeAgo(stamp) {
                 <% } else { %>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 like-comment-btn" disabled title="Sign in to reply">
                         <i class="mdi mdi-heart"></i>
-                        <span><%= ocap.likedBy?.length || 0 %></span>
+                        <span><%= ocap.likes || 0 %></span>
                     </button>
                     <button class="min-h-auto flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 reply-btn" disabled title="Sign in to reply">
                         <i class="mdi mdi-reply"></i>

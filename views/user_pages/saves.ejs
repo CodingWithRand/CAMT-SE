@@ -73,9 +73,10 @@ function getTimeAgo(stamp) {
                         </div>
                     </div>
                 <% } else { %>
+                    <% console.log(savedPosts) %>
                     <div id="blogs-container" class="space-y-6">
                         <% savedPosts.forEach((item, index) => { %>
-                            <%- include("../partials/saves/postcard-v2", { blog: item, author: authors[index], cc: commentCounts[index] }) %>
+                            <%- include("../partials/saves/postcard-v2", { blog: item.blogs_with_likes_count, author: authors[index], cc: commentCounts[index] }) %>
                         <% }) %>
                     </div>
                 <% } %>
