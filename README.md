@@ -33,3 +33,4 @@ Review File
     C:/.../CAMT-SE> javac ./Midterm/review_ch2/_Stream.java
     C:/.../CAMT-SE> java Midterm/review_ch2/_Stream
     ```
+3. Folder: [Chapter 3](./Midterm/review_ch3/), Review File: [Concurrency and Acceleration.md](./Midterm/review_ch3/src/main/java/se233/review_ch3/Concurrency%20and%20Acceleration.md)
