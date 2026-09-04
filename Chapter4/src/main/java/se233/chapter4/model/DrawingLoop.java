@@ -2,6 +2,8 @@ package se233.chapter4.model;
 
 import se233.chapter4.view.GameStage;
 
+import java.util.List;
+
 public class DrawingLoop implements Runnable {
     private GameStage gameStage;
     private int frameRate;
@@ -13,13 +15,15 @@ public class DrawingLoop implements Runnable {
         interval = 1000.0f / frameRate;
         running = true;
     }
-    private void checkDrawCollisions(GameCharacter gameCharacter) {
-        gameCharacter.checkReachGameWall();
-        gameCharacter.checkReachHighest();
-        gameCharacter.checkReachFloor();
+    private void checkDrawCollisions(List<GameCharacter> gameCharacter) {
+        for(GameCharacter gc: gameCharacter) {
+            gc.checkReachGameWall();
+            gc.checkReachHighest();
+            gc.checkReachFloor();
+        }
     }
-    private void paint(GameCharacter gameCharacter) {
-        gameCharacter.repaint();
+    private void paint(List<GameCharacter> gameCharacter) {
+        for(GameCharacter gc: gameCharacter) gc.repaint();
     }
     @Override
     public void run() {

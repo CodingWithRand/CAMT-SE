@@ -10,8 +10,8 @@ import se233.chapter4.view.GameStage;
 
 public class GameCharacter extends Pane {
     private static final Logger logger = LogManager.getLogger(GameCharacter.class);
-    public static final int CHARACTER_WIDTH = 32;
-    public static final int CHARACTER_HEIGHT = 64;
+    public static int CHARACTER_WIDTH = 32;
+    public static int CHARACTER_HEIGHT = 64;
     private Image gameCharacterImg;
     private AnimatedSprite imageView;
     private int x;
@@ -28,17 +28,21 @@ public class GameCharacter extends Pane {
     boolean isJumping = false;
     int xAcceleration = 1;
     int yAcceleration = 1;
-    int xMaxVelocity = 7;
-    int yMaxVelocity = 17;
-    public GameCharacter(int x, int y, int offsetX, int offsetY, KeyCode leftKey, KeyCode rightKey, KeyCode upKey) {
+    int xMaxVelocity;
+    int yMaxVelocity;
+    public GameCharacter(String name, int spriteCount, int spriteColumns, int spriteRows, int spriteAnimWidth, int spriteAnimHeight, int x, int y, int offsetX, int offsetY, int xmv, int ymv, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, Integer customSpriteWidth, Integer customSpriteHeight) {
         this.x = x;
         this.y = y;
+        this.xMaxVelocity = xmv;
+        this.yMaxVelocity = ymv;
         this.setTranslateX(x);
         this.setTranslateY(y);
-        this.gameCharacterImg = new Image(Launcher.class.getResourceAsStream("assets/MarioSheet.png"));
-        this.imageView = new AnimatedSprite(gameCharacterImg, 4, 4, 1, offsetX, offsetY, 16, 32);
-        this.imageView.setFitWidth(CHARACTER_WIDTH);
-        this.imageView.setFitHeight(CHARACTER_HEIGHT);
+        this.gameCharacterImg = new Image(Launcher.class.getResourceAsStream("assets/" + name + ".png"));
+        this.imageView = new AnimatedSprite(gameCharacterImg, spriteCount, spriteColumns, spriteRows, offsetX, offsetY, spriteAnimWidth, spriteAnimHeight);
+        this.CHARACTER_WIDTH = customSpriteWidth != null ? customSpriteWidth : this.CHARACTER_WIDTH;
+        this.CHARACTER_HEIGHT = customSpriteHeight!= null ? customSpriteHeight : this.CHARACTER_WIDTH;
+        this.imageView.setFitWidth(this.CHARACTER_WIDTH);
+        this.imageView.setFitHeight(this.CHARACTER_HEIGHT);
         this.leftKey = leftKey;
         this.rightKey = rightKey;
         this.upKey = upKey;
@@ -85,8 +89,13 @@ public class GameCharacter extends Pane {
         isMoveRight = false;
     }
     public void checkReachGameWall() {
-        if(x <= 0) x = 0;
-        else if(x + getWidth() >= GameStage.WIDTH) x = GameStage.WIDTH - (int) getWidth();
+        if(x <= 0) {
+            x = 0;
+            logger.debug("Hit game wall on the left.");
+        } else if(x + getWidth() >= GameStage.WIDTH) {
+            x = GameStage.WIDTH - (int) getWidth();
+            logger.debug("Hit game wall on the right.");
+        }
     }
     public void jump() {
         if (canJump) {

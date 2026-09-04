@@ -3,6 +3,8 @@ package se233.chapter4.controller;
 import se233.chapter4.model.GameCharacter;
 import se233.chapter4.view.GameStage;
 
+import java.util.List;
+
 public class GameLoop implements Runnable {
     private GameStage gameStage;
     private int frameRate;
@@ -15,25 +17,27 @@ public class GameLoop implements Runnable {
         interval = 1000.0f / frameRate;
         running = true;
     }
-    private void update(GameCharacter gameCharacter) {
-        boolean leftPressed = gameStage.getKeys().isPressed(gameCharacter.getLeftKey());
-        boolean rightPressed = gameStage.getKeys().isPressed(gameCharacter.getRightKey());
-        boolean upPressed = gameStage.getKeys().isPressed(gameCharacter.getUpKey());
+    private void update(List<GameCharacter> gameCharacter) {
+        for(GameCharacter gc: gameCharacter) {
+            boolean leftPressed = gameStage.getKeys().isPressed(gc.getLeftKey());
+            boolean rightPressed = gameStage.getKeys().isPressed(gc.getRightKey());
+            boolean upPressed = gameStage.getKeys().isPressed(gc.getUpKey());
 
-        if (leftPressed && rightPressed) gameCharacter.stop();
-        else if (leftPressed) {
-            gameCharacter.getImageView().tick();
-            gameCharacter.moveLeft();
-            gameStage.getGameCharacter().trace();
-        }
-        else if (rightPressed) {
-            gameCharacter.getImageView().tick();
-            gameCharacter.moveRight();
-            gameStage.getGameCharacter().trace();
-        }
-        else gameCharacter.stop();
+            if (leftPressed && rightPressed) gc.stop();
+            else if (leftPressed) {
+                gc.getImageView().tick();
+                gc.moveLeft();
+                gc.trace();
+            }
+            else if (rightPressed) {
+                gc.getImageView().tick();
+                gc.moveRight();
+                gc.trace();
+            }
+            else gc.stop();
 
-        if(upPressed) gameCharacter.jump();
+            if(upPressed) gc.jump();
+        }
     }
     @Override
     public void run() {
