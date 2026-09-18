@@ -88,10 +88,12 @@ public class GameCharacter extends Pane {
         }
     }
     public void checkReachGameWall() {
+        int renderedCharWidth = getWidth() != 0 ? (int) getWidth() : (int) (getCharacterWidth() * 1.2);
+//        System.out.println(x+renderedCharWidth + " " + renderedCharWidth + " " + GameStage.WIDTH);
         if(x <= 0) {
             x = 0;
-        } else if( x+getWidth() >= GameStage.WIDTH) {
-            x = GameStage.WIDTH-(int)getWidth();
+        } else if( x+renderedCharWidth >= GameStage.WIDTH) {
+            x = GameStage.WIDTH-renderedCharWidth;
         }
     }
     public void jump() {

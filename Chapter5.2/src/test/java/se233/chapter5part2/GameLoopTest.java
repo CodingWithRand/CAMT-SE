@@ -21,7 +21,6 @@ public class GameLoopTest {
     private Snake snake;
     private Food food;
     private GameLoop gameLoop;
-
 //    @BeforeAll
 //    public static void initJfxRuntime() {
 //        javafx.application.Platform.startup(() -> {});

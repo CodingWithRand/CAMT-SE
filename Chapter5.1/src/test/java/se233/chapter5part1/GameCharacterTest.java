@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se233.chapter5part1.model.GameCharacter;
+import se233.chapter5part1.view.GameStage;
 
 import java.lang.reflect.Field;
 
@@ -67,5 +68,38 @@ public class GameCharacterTest {
         gameCharacter.moveY();
         int yAcceleration2 = yAccelerationField.getInt(gameCharacter);
         assertTrue(yAcceleration1 == yAcceleration2, "Acceleration is not change");
+    }
+    @Test
+    public void hitWallOnLeftSide_andCharacterPositionStayTheSame() {
+        gameCharacter = new GameCharacter(0, 0, 0, "assets/Character1.png", 4, 3, 2, 111, 97, KeyCode.A, KeyCode.D, KeyCode.W);
+        int beforeMoveLeft = gameCharacter.getX();
+        gameCharacter.moveLeft();
+        gameCharacter.moveX();
+        gameCharacter.checkReachGameWall();
+        int afterMoveLeft = gameCharacter.getX();
+        System.out.println(afterMoveLeft);
+        assertTrue(beforeMoveLeft == afterMoveLeft && afterMoveLeft == 0, "Character hit the wall on the left and doesn't move even push it");
+    }
+    @Test
+    public void hitWallOnRightSide_andCharacterPositionStayTheSame() {
+        gameCharacter = new GameCharacter(0, GameStage.WIDTH - (int)(111 * 1.2), 0, "assets/Character1.png", 4, 3, 2, 111, 97, KeyCode.A, KeyCode.D, KeyCode.W);
+//        gameCharacter.applyCss();
+//        gameCharacter.layout();
+        int beforeMoveRight = gameCharacter.getX();
+        gameCharacter.moveRight();
+        gameCharacter.moveX();
+        gameCharacter.checkReachGameWall();
+        int afterMoveRight = gameCharacter.getX();
+        System.out.println(beforeMoveRight + " " + afterMoveRight);
+        assertTrue(beforeMoveRight == afterMoveRight && afterMoveRight == (GameStage.WIDTH - (int)(111 * 1.2)), "Character hit the wall on the right and doesn't move even push it");
+    }
+    @Test
+    public void successfullyJumpOnGround() {
+        gameCharacter.checkReachFloor(); // make sure it's on ground.
+
+    }
+    @Test
+    public void cannotJumpWhenAirborne() {
+
     }
 }

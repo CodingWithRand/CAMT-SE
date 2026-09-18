@@ -34,3 +34,12 @@ Review File
     C:/.../CAMT-SE> java Midterm/review_ch2/_Stream
     ```
 3. Folder: [Chapter 3](./Midterm/review_ch3/), Review File: [Concurrency and Acceleration.md](./Midterm/review_ch3/src/main/java/se233/review_ch3/Concurrency%20and%20Acceleration.md)
+
+## Lab 4
+Mario. Simple platformer game without platform -.-<br>
+but it did introduce to debugging tool like log4j (that's the name I think.) [Lab Folder](./Chapter4/)
+
+## Lab 5
+Unit testing.
+1. 2-player fighting game. Template from [Lab 4](#lab-4) [Lab Folder](./Chapter5.1/)
+2. Snake game [Lab Folder](./Chapter5.2/)
