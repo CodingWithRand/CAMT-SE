@@ -177,3 +177,9 @@ You wrote: *"Manager is a nobody outside warehouse management. They must activel
 #### **Final Verdict**
 
 You have mastered the entire pipeline: **Extracting Rules from Raw Specs $\rightarrow$ Designing ER/EER Diagrams $\rightarrow$ Relational Schema Table Mapping.** You are 100% ready for your exam!
+
+## Lab 6 & Lab 7
+Term project proposal. [Outline to pitch](https://docs.google.com/document/d/1gKKdSXWbWmp1qSXJB26q6dKibmRz-eP1FJ56laDReg8/edit?tab=t.0) [Full after pitch](https://docs.google.com/document/d/1oVw5Aye5lyN4SM1tOYNALk6woh0ijekHbnupKLw7Pyg/edit?tab=t.0)
+
+## Lab 8
+Finally got to work on SQL, MySQL code again after 3 years. But damn you xampp. [Lab Folder](./Lab8/)
