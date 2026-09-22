@@ -193,4 +193,12 @@ public class GameCharacter extends Pane {
     public int getScore() {
         return score;
     }
+
+    public boolean isCanJump() {
+        return canJump;
+    }
+
+    public boolean isJumping() {
+        return isJumping;
+    }
 }

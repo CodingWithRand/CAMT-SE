@@ -5,7 +5,7 @@ import javafx.scene.input.KeyCode;
 import java.util.HashMap;
 
 public class Keys {
-    private  HashMap<KeyCode,Boolean> keys;
+    private HashMap<KeyCode,Boolean> keys;
     public Keys() {
         keys = new HashMap<>();
     }
