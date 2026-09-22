@@ -8,12 +8,25 @@ import java.util.Random;
 public class Food {
     private Point2D position;
     private Random rn;
+    private int point;
 
-    public Food(Point2D position) {
+    public Food(Point2D position, int point) {
+        this.point = point;
         this.rn = new Random();
         this.position = position;
     }
+    public Food(Point2D position) {
+        this.point = 1;
+        this.rn = new Random();
+        this.position = position;
+    }
+    public Food(int point) {
+        this.point = point;
+        this.rn = new Random();
+        this.position = new Point2D(rn.nextInt(GameStage.WIDTH), rn.nextInt(GameStage.HEIGHT));
+    }
     public Food() {
+        this.point = 1;
         this.rn = new Random();
         this.position = new Point2D(rn.nextInt(GameStage.WIDTH), rn.nextInt(GameStage.HEIGHT));
     }
@@ -26,4 +39,5 @@ public class Food {
     public Point2D getPosition() {
         return position;
     }
+    public int getFoodPoint() { return point; }
 }

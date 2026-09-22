@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import se233.chapter5part2.Launcher;
 import se233.chapter5part2.model.Food;
 import se233.chapter5part2.model.Snake;
@@ -27,7 +28,7 @@ public class GameStage extends Pane {
         canvas = new Canvas(TILE_SIZE * WIDTH, TILE_SIZE * HEIGHT);
         this.getChildren().add(canvas);
     }
-    public void render(Snake snake, Food food) {
+    public void render(Snake snake, Food food, Food specialFood) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         gc.setFill(Color.BLUE);
@@ -36,6 +37,14 @@ public class GameStage extends Pane {
         });
         gc.setFill(Color.RED);
         gc.fillRect(food.getPosition().getX() * TILE_SIZE, food.getPosition().getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        gc.setFill(Color.GREEN);
+        gc.fillRect(specialFood.getPosition().getX() * TILE_SIZE, specialFood.getPosition().getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    }
+    public void gameEnd() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        gc.setFont(new Font(null, 30));
+        gc.fillText("Game Over", WIDTH * TILE_SIZE / 4.0,  (HEIGHT * TILE_SIZE) / 2.0);
     }
     public KeyCode getKey() { return key; }
     public void setKey(KeyCode key) { this.key = key; }

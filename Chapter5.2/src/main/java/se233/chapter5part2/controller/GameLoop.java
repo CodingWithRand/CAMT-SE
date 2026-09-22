@@ -12,12 +12,14 @@ public class GameLoop implements Runnable {
     private GameStage gameStage;
     private Snake snake;
     private Food food;
+    private Food specialFood;
     private float interval = 1000.0f / 10;
     private boolean running;
-    public GameLoop(GameStage gameStage, Snake snake, Food food) {
+    public GameLoop(GameStage gameStage, Snake snake, Food food, Food specialFood) {
         this.snake = snake;
         this.gameStage = gameStage;
         this.food = food;
+        this.specialFood = specialFood;
         running = true;
     }
     private void keyProcess() {
@@ -38,9 +40,13 @@ public class GameLoop implements Runnable {
             snake.grow();
             food.respawn();
         }
+        if (snake.collided(specialFood)) {
+            for(int i = 0; i<specialFood.getFoodPoint(); i++) snake.grow();
+            specialFood.respawn();
+        }
         if (snake.checkDead()) { running = false; }
     }
-    private void redraw() { gameStage.render(snake, food); }
+    private void redraw() { gameStage.render(snake, food, specialFood); }
     @Override
     public void run() {
         while (running) {
@@ -53,5 +59,6 @@ public class GameLoop implements Runnable {
                 e.printStackTrace();
             }
         }
+        gameStage.gameEnd();
     }
 }

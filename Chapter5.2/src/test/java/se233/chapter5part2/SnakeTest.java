@@ -44,9 +44,27 @@ public class SnakeTest {
         assertTrue(snake.getBody().contains(cur_head));
     }
     @Test
-    public void collided_withSnake_shouldBeDetected() {
+    public void foodCollided_withSnake_shouldBeDetected() {
         Food food = new Food(new Point2D(0, 0));
         assertTrue(snake.collided(food));
+    }
+    //decide or ask later whether score should be in the global gameloop/gamestage or stay in each snake separately (in case you want multiplayer battle in the future)
+    //yet to implement showing score on ui. just count the snake length pixel for now lulz.
+    @Test
+    public void foodCollided_withSnake_shouldIncreaseScoreBy1() {
+        Food food = new Food(new Point2D(0,0));
+        int score_before_food = snake.getScore();
+        snake.collided(food);
+        int score_after_food = snake.getScore();
+        assertEquals(score_before_food, score_after_food - 1);
+    }
+    @Test
+    public void specialFoodCollided_withSnake_shouldIncreaseScoreBy5() {
+        Food food = new Food(new Point2D(0,0), 5);
+        int score_before_food = snake.getScore();
+        snake.collided(food);
+        int score_after_food = snake.getScore();
+        assertEquals(score_before_food, score_after_food - 5);
     }
     @Test
     public void checkDead_ifHitGameBorder_snakeWillDie() {

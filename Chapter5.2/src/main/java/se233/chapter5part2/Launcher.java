@@ -16,7 +16,8 @@ public class Launcher extends Application {
         GameStage gameStage = new GameStage();
         Snake snake = new Snake(new Point2D(gameStage.WIDTH/2, gameStage.HEIGHT/2));
         Food food = new Food();
-        GameLoop gameLoop = new GameLoop(gameStage, snake, food);
+        Food specialFood = new Food(5);
+        GameLoop gameLoop = new GameLoop(gameStage, snake, food, specialFood);
         Scene scene = new Scene(gameStage, gameStage.WIDTH*gameStage.TILE_SIZE, gameStage.HEIGHT*gameStage.TILE_SIZE);
         scene.setOnKeyPressed(event-> gameStage.setKey(event.getCode()));
         scene.setOnKeyReleased(event -> gameStage.setKey(null));
