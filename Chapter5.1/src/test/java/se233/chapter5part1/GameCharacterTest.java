@@ -115,8 +115,13 @@ public class GameCharacterTest {
     @Test
     public void whenACharacterCollideWithAnotherOneHorizontally_itsXPositionStayTheSame() throws IllegalAccessException {
         // hit from the right by anotherGameCharacter
-        GameCharacter anotherGameCharacter = new GameCharacter(1, characterWidthField.getInt(gameCharacter) + gameCharacter.getX(), 0, "assets/Character2.png", 4, 4 ,1, 129,66, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP);
+        GameCharacter anotherGameCharacter = new GameCharacter(1, characterWidthField.getInt(gameCharacter) + gameCharacter.getX(), 30, "assets/Character2.png", 4, 4 ,1, 129,66, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP);
+//        System.out.println(characterWidthField.getInt(gameCharacter) + " " + gameCharacter.getX());
+//        System.out.println(anotherGameCharacter.getX());
         int caseAPosBeforeMovedToOverlappedFromRight = anotherGameCharacter.getX();
+//        System.out.println(gameCharacter.getBoundsInParent().intersects(anotherGameCharacter.getBoundsInParent()));
+//        System.out.println(gameCharacter.getBoundsInParent().toString());
+//        System.out.println(anotherGameCharacter.getBoundsInParent().toString());
         anotherGameCharacter.moveLeft();
         anotherGameCharacter.moveX();
         // suppose after the move, anotherGameCharacter will overlap with gameCharacter, with gameCharacter as being passive while anotherGameCharacter being active.
@@ -129,15 +134,21 @@ public class GameCharacterTest {
         // }
 
         // subject status know -> anotherGameCharacter collide into gameCharacter
-        if (gameCharacter.getBoundsInParent().intersects(anotherGameCharacter.getBoundsInParent())) anotherGameCharacter.collided(gameCharacter);
+
+
+        if (gameCharacter.getBoundsInParent().intersects(anotherGameCharacter.getBoundsInParent()))
+            anotherGameCharacter.collided(gameCharacter);
         int caseAPosAfterCollisionCheck = anotherGameCharacter.getX();
 
         // hit from the left by gameCharacter
         int caseBPosBeforeMovedToOverlappedFromLeft = gameCharacter.getX();
         gameCharacter.moveRight();
         gameCharacter.moveX();
-        if (anotherGameCharacter.getBoundsInParent().intersects(gameCharacter.getBoundsInParent())) gameCharacter.collided(anotherGameCharacter);
+        if (anotherGameCharacter.getBoundsInParent().intersects(gameCharacter.getBoundsInParent()))
+            gameCharacter.collided(anotherGameCharacter);
         int caseBPosAfterCollisionCheck = gameCharacter.getX();
+
+//        System.out.println(caseAPosBeforeMovedToOverlappedFromRight + " " + caseAPosAfterCollisionCheck + " " + caseBPosBeforeMovedToOverlappedFromLeft + " " + caseBPosAfterCollisionCheck);
 
         assertTrue(caseAPosBeforeMovedToOverlappedFromRight == caseAPosAfterCollisionCheck && caseBPosBeforeMovedToOverlappedFromLeft == caseBPosAfterCollisionCheck);
     }

@@ -50,15 +50,15 @@ public class GameCharacter extends Pane {
         this.rightKey = rightKey;
         this.upKey = upKey;
         this.getChildren().addAll(this.imageView);
-        setScaleX(id % 2 * 2 - 1);
+        this.imageView.setScaleX(id % 2 * 2 - 1);
     }
     public void moveLeft() {
-        setScaleX(1);
+        this.imageView.setScaleX(1);
         isMoveLeft = true;
         isMoveRight = false;
     }
     public void moveRight() {
-        setScaleX(-1);
+        this.imageView.setScaleX(-1);
         isMoveLeft = false;
         isMoveRight = true;
     }
@@ -123,6 +123,7 @@ public class GameCharacter extends Pane {
         moveY();
     }
     public boolean collided(GameCharacter c) {
+//        System.out.println(this.x + " " + c.getX());
         if (this.isMoveLeft && this.x > c.getX()) {
             this.x = Math.max(this.x, c.getX() + c.getCharacterWidth());
             this.stop();
