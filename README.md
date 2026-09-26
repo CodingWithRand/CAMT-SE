@@ -183,3 +183,6 @@ Term project proposal. [Outline to pitch](https://docs.google.com/document/d/1gK
 
 ## Lab 8
 Finally got to work on SQL, MySQL code again after 3 years. But damn you xampp. [Lab Folder](./Lab8/)
+
+## Lab 9
+Last week we were doing simple DDL and DML. This week is mainly joining. [Lab Folder](./Lab9/)
