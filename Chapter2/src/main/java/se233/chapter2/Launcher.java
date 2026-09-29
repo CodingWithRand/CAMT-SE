@@ -39,6 +39,10 @@ public class Launcher extends Application {
         Launcher.baseCurrencyCode = baseCurrencyCode;
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws ExecutionException, InterruptedException {
         primaryStage = stage;

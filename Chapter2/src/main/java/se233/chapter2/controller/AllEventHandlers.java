@@ -2,6 +2,8 @@ package se233.chapter2.controller;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import se233.chapter2.Launcher;
 import se233.chapter2.model.Currency;
@@ -12,6 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class AllEventHandlers {
+    private static final Logger logger = LogManager.getLogger(AllEventHandlers.class);
     public static void onBaseChange() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Change base currency");
@@ -69,6 +72,7 @@ public class AllEventHandlers {
                 c.setHistorical(cList);
                 c.setCurrency(cList.get(cList.size() - 1));
                 currencyList.add(c);
+                logger.info("Added {} currency", c.getShortCode());
                 Launcher.setCurrencyList(currencyList);
                 Launcher.refreshPane();
             }
@@ -96,7 +100,9 @@ public class AllEventHandlers {
                 }
             }
             if (index != -1) {
+                Currency removingCurrency = currencyList.get(index);
                 currencyList.remove(index);
+                logger.info("Removed {} currency", removingCurrency.getShortCode());
                 Launcher.setCurrencyList(currencyList);
                 Launcher.refreshPane();
             }
