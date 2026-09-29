@@ -43,3 +43,17 @@ but it did introduce to debugging tool like log4j (that's the name I think.) [La
 Unit testing.
 1. 2-player fighting game. Template from [Lab 4](#lab-4) [Lab Folder](./Chapter5.1/)
 2. Snake game [Lab Folder](./Chapter5.2/)
+
+## Lab 6
+Build. With Maven. Package to `.jar` Check [Case Study Folder](./Chapter6/) (A copy of [Chapter5.2](./Chapter5.2/))
+
+For the lab, you put debugging logging to [Lab1](#lab-1), [Lab2](#lab-1), [Lab3](#lab-1). And build `.jar` for every lab we did.
+
+Steps
+- Open Maven tab in IntelliJ
+- Expand the Maven project
+- Expand the Lifecycle config
+- Double click on package
+- Wait for the build finished
+- Open terminal, `cd` to `target` folder
+- Run `java -jar <The build jar file>`

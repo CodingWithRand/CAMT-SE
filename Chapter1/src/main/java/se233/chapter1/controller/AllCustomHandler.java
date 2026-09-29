@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se233.chapter1.Launcher;
 import se233.chapter1.model.character.BasedCharacter;
 import se233.chapter1.model.item.Armor;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 
 public class AllCustomHandler {
     private static boolean dragCompleted;
+    private static final Logger logger = LogManager.getLogger(AllCustomHandler.class);
 
     private static void unequipallbtn() {
         ArrayList<BasedEquipment> allEquipments = Launcher.getAllEquipments();
@@ -95,6 +98,7 @@ public class AllCustomHandler {
             lbl.setText(retrievedEquipment.getClass().getSimpleName() + ":\n" + retrievedEquipment.getName());
             imgView.setImage(new Image(Launcher.class.getResource(retrievedEquipment.getImagepath()).toString()));
             imgGroup.getChildren().add(imgView);
+            logger.info("User equipped {}", retrievedEquipment.getName());
             dragCompleted = true;
         }
         event.setDropCompleted(dragCompleted);

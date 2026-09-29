@@ -13,6 +13,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se233.chapter3.Launcher;
 import se233.chapter3.model.FileFreq;
 import se233.chapter3.model.PdfDocument;
@@ -30,6 +32,7 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class MainViewController {
+    private static final Logger logger = LogManager.getLogger(MainViewController.class);
     LinkedHashMap<String, List<FileFreq>> uniqueSets;
     ArrayList<String> inputList = new ArrayList<>();
     @FXML
@@ -103,6 +106,7 @@ public class MainViewController {
                         try {
                             String filePath = inputList.get(i);
                             PdfDocument p = new PdfDocument(filePath);
+                            logger.info("Processing {}...", p.getName());
                             completionService.submit(new WordCountMapTask(p));
                         } catch (IOException e) {
                             e.printStackTrace();
