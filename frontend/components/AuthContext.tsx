@@ -25,8 +25,8 @@ export function AuthContext({ children }: { children: React.ReactNode }) {
             setSession(session || null);
         });
 
-        // mockSignIn(); // for testing User view
-        mockModSignIn(); // for testing Mod view
+        mockSignIn(); // for testing User view
+        // mockModSignIn(); // for testing Mod view
         return () => subscription.unsubscribe();
     }, []);
 

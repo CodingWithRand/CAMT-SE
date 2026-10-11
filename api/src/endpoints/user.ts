@@ -27,9 +27,21 @@ router.get('/user/current/fetch', auth, async (req, res) => {
 })
 
 router.get('/user/:uid/fetch', async (req, res) => {
+    const { uid } = req.params;
     try {
-        const { uid } = req.params;
         const data = await getUserData(uid);
+        res.status(200).json(data);
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
+    }
+})
+
+router.post('/user/:uid/user_interests', auth, async (req, res) => {
+    const { uid } = req.params;
+    const { cate_id } = req.body;
+    try {
+        const { data, error } = await supabase.rpc("user_interests_op", { uid, cate_id })
+        if(error) throw error;
         res.status(200).json(data);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
