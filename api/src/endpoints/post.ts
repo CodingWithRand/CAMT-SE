@@ -16,14 +16,14 @@ const upload = multer({
     storage: multer.memoryStorage(),
 })
 
-async function uploadPostMedia(pid: Post['id'], m: any, mt: "images" | "videos") {
+async function uploadPostMedia(pid: Post['id'], m: Express.Multer.File, mt: "image" | "video") {
     // Generate file hash and path
     const filehash = crypto
         .createHash('md5')
         .update(m.buffer)
         .digest('hex');
-    const ext = path.extname(m.originalname);
-    const fileName = `/${parseInt(pid)}/${mt}s/${filehash}${ext}`;
+    const ext = path.extname(m.originalname).toLowerCase();
+    const fileName = `${pid}/${mt}s/${filehash}${ext}`;
     const { data, error } = await supabase.storage
         .from('post_medias')
         .upload(fileName, m.buffer, {
@@ -31,21 +31,40 @@ async function uploadPostMedia(pid: Post['id'], m: any, mt: "images" | "videos")
             upsert: true
         });
     if(error) throw error;
-    return data;
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+        .from('post_medias')
+        .getPublicUrl(data.path);
+    return { post_id: pid, file_url: publicUrl, media_type: mt };
 }
 
 router.post("/post/create", 
     auth,
     upload.fields([{ name: "images", maxCount: 10 }, { name: "videos", maxCount: 1 }]), 
     async (req: Request, res: Response) => {
-    const { user_id, title, content, is_important, category_id }: Post = req.body;
+    const { title, content } = req.body;
+
+    // multipart/form-data sends everything as text: a lone category_id arrives as
+    // a string instead of an array, and is_important as "true" / "false".
+    const category_id: string[] = [req.body.category_id ?? []].flat();
+    const is_important = req.body.is_important === true || req.body.is_important === "true";
+
+    const files = (req.files ?? {}) as { [field: string]: Express.Multer.File[] };
+    const images = files['images'] ?? [];
+    const videos = files['videos'] ?? [];
+
+    // Checked before anything is written, so a bad request leaves no half-made post behind.
+    if (category_id.length === 0) return res.status(400).json({ message: "At least one category is required." });
+    if (images.some((img) => !img.mimetype.startsWith("image/"))) return res.status(400).json({ message: "images must be image files." });
+    if (videos.some((vid) => !vid.mimetype.startsWith("video/"))) return res.status(400).json({ message: "videos must be video files." });
 
     // const postdata: Post = req.body;
     try {
         // INSERT INTO posts VALUES(id, user_id, title, content, is_important);
         const { data, error } = await supabase
             .from('posts')
-            .insert({ user_id, title, content, is_important })
+            .insert({ user_id: req.userId, title, content, is_important })
             // .insert(postdata)
             .select()
             .single();
@@ -60,38 +79,24 @@ router.post("/post/create",
         
         if (cderr) throw cderr;
         
-        if(req.files) {
-            const uploadedImgs = await Promise.all(req.files?['images']: [].map((img) => uploadPostMedia(data.id, img, "images")));
-            const uploadedVids = await Promise.all(req.files?['videos']: [].map((vid) => uploadPostMedia(data.id, vid, "videos")));
+        if (images.length || videos.length) {
+            const uploaded = await Promise.all([
+                ...images.map((img) => uploadPostMedia(data.id, img, "image")),
+                ...videos.map((vid) => uploadPostMedia(data.id, vid, "video")),
+            ]);
 
-            const imgsURL = uploadedImgs.map((img) => {
-                // Get public URL
-                const { data: { publicUrl } } = supabase!.storage
-                    .from('post_medias')
-                    .getPublicUrl((img as any).path);
-                return publicUrl;
-            })
-
-            const vidsURL = uploadedVids.map((vid) => {
-                // Get public URL
-                const { data: { publicUrl } } = supabase!.storage
-                    .from('post_medias')
-                    .getPublicUrl((vid as any).path);
-                return publicUrl;
-            })
-
-            const { data: data2, error: error2 } = await supabase
-                .from('posts')
-                .update({ media: [...imgsURL, ...vidsURL] })
-                .eq('id', data.id);
+            // INSERT INTO media (post_id, file_url, media_type) VALUES (pid, url, type);
+            const { error: mderr } = await supabase
+                .from('media')
+                .insert(uploaded);
             
-            if (error2) throw error2;
+            if (mderr) throw mderr;
         }
 
+        res.status(200).json(data);
     } catch (error: any) {
         res.status(500).json({ code: error?.code, message: error?.message });
     }
-    res.status(200).send();
 })
 
 /**

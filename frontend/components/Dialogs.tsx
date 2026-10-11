@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { CATS, ME, REASONS, STATUSES, type Post, type ReportStatus } from '@/lib/data';
 import { chipStyle, statusLook } from '@/lib/ui';
 import type { AppState, SetState } from './WhongNaiMor';
@@ -17,6 +17,8 @@ const trackStyle = (on: boolean, enabled = true): CSSProperties => ({
 });
 
 const API_URL = "http://localhost:3030";
+const MAX_IMAGES = 10;
+const MAX_IMAGE_BYTES = 50 * 1024 * 1024;
 
 function CatPicker({ cats, selected, onToggle }: { cats: typeof CATS, selected: string[]; onToggle: (name: string) => void }) {
   return (
@@ -64,11 +66,30 @@ interface ComposeProps {
 export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, flash, nextPostId, nextMediaId }: ComposeProps) {
   const { user, session } = useAuthContext();
 
+  const filePicker = useRef<HTMLInputElement>(null);
+  const [sending, setSending] = useState(false);
+
   const close = () => set({ composeOpen: false });
 
-  const addMedia = (type: 'image' | 'video') => set((prev) => {
-    const n = prev.newMedia.filter((x) => x.type === type).length + 1;
-    return { newMedia: [...prev.newMedia, { id: nextMediaId(), type, label: type === 'video' ? `วิดีโอ ${n}.mp4` : `รูปภาพ ${n}.jpg` }] };
+  // Same caps the API enforces (multer: 10 images, 50 MB each), checked here so
+  // the user hears about it before waiting on an upload that would be rejected.
+  const addImages = (picked: File[]) => {
+    const images = picked.filter((f) => f.type.startsWith('image/'));
+    if (images.length < picked.length) flash('แนบได้เฉพาะไฟล์รูปภาพ');
+    const fits = images.filter((f) => f.size <= MAX_IMAGE_BYTES);
+    if (fits.length < images.length) flash('รูปภาพต้องมีขนาดไม่เกิน 50 MB ต่อไฟล์');
+    const room = MAX_IMAGES - st.newMedia.length;
+    if (fits.length > room) flash(`แนบรูปได้สูงสุด ${MAX_IMAGES} รูปต่อโพสต์`);
+    const added = fits.slice(0, Math.max(room, 0)).map((file) => ({
+      id: nextMediaId(), type: 'image' as const, label: file.name, file, url: URL.createObjectURL(file),
+    }));
+    if (added.length) set((prev) => ({ newMedia: [...prev.newMedia, ...added] }));
+  };
+
+  const removeMedia = (id: string) => set((prev) => {
+    const gone = prev.newMedia.find((x) => x.id === id);
+    if (gone) URL.revokeObjectURL(gone.url);
+    return { newMedia: prev.newMedia.filter((x) => x.id !== id) };
   });
 
   const submit = async () => {
@@ -89,20 +110,35 @@ export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, fl
     //   notified: imp ? 1204 : 0,
     // };
     // console.log(st.newCats.map((c) => st.CATS.find((x) => x.name === c)?.id).filter((x): x is string => !!x));
-    const res = await fetch(`${API_URL}/post/create`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session?.access_token}`
-      },
-      body: JSON.stringify({
-        user_id: user?.id,
-        title,
-        content: text,
-        is_important: imp,
-        category_id: st.newCats.map((c) => st.CATS.find((x) => x.name === c)?.id).filter((x): x is string => !!x),
-      })
-    })
+    // multipart/form-data so the image files travel with the post. No
+    // Content-Type header: the browser has to set it, boundary included.
+    const form = new FormData();
+    form.append('title', title);
+    form.append('content', text);
+    form.append('is_important', String(imp));
+    st.newCats
+      .map((c) => st.CATS.find((x) => x.name === c)?.id)
+      .filter((x): x is string => !!x)
+      .forEach((id) => form.append('category_id', id));
+    st.newMedia.forEach((m) => form.append('images', m.file, m.file.name));
+
+    setSending(true);
+    try {
+      const res = await fetch(`${API_URL}/post/create`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session?.access_token}` },
+        body: form,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.message ?? `HTTP ${res.status}`);
+      }
+    } catch (err) {
+      console.error('create post', err);
+      setSending(false);
+      return flash('เผยแพร่โพสต์ไม่สำเร็จ ลองใหม่อีกครั้ง');
+    }
+    st.newMedia.forEach((m) => URL.revokeObjectURL(m.url));
     // console.log(res.status)
     // console.log(await res.json())
     // set((prev) => ({ posts: [np, ...prev.posts], composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false }));
@@ -157,18 +193,17 @@ export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, fl
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <label style={{ ...labelStyle, flex: 1 }}>สื่อประกอบ · แนบได้หลายไฟล์ ทั้งรูปและวิดีโอ</label>
+            <label style={{ ...labelStyle, flex: 1 }}>รูปภาพประกอบ · แนบได้สูงสุด {MAX_IMAGES} รูป</label>
             <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>{st.newMedia.length ? `${st.newMedia.length} ไฟล์` : 'ยังไม่มีไฟล์'}</span>
           </div>
 
           {st.newMedia.length > 0 && (
             <div style={{ display: 'grid', gap: 8, gridTemplateColumns: 'repeat(auto-fill,minmax(112px,1fr))' }}>
               {st.newMedia.map((m) => (
-                <div key={m.id} style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', background: '#e5ccf3', border: '1px solid var(--color-divider)', height: 84, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 8 }}>
-                  <span style={{ position: 'absolute', top: 6, left: 7, fontSize: 9, letterSpacing: '.14em', textTransform: 'uppercase', color: '#6c4194' }}>{m.type}</span>
-                  <span style={{ fontSize: 11, color: '#3e2259', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.label}</span>
+                <div key={m.id} title={m.label} style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', background: '#e5ccf3', border: '1px solid var(--color-divider)', height: 84 }}>
+                  <img src={m.url} alt={m.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   <button
-                    onClick={() => set((prev) => ({ newMedia: prev.newMedia.filter((x) => x.id !== m.id) }))}
+                    onClick={() => removeMedia(m.id)}
                     title="ลบไฟล์นี้"
                     style={{ position: 'absolute', top: 5, right: 5, cursor: 'pointer', border: 0, width: 20, height: 20, borderRadius: 999, background: 'rgba(62,34,89,.78)', color: '#fff', fontSize: 11, lineHeight: 1, display: 'grid', placeItems: 'center' }}
                   >
@@ -180,11 +215,20 @@ export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, fl
           )}
 
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {([['image', '+ เพิ่มรูปภาพ'], ['video', '+ เพิ่มวิดีโอ']] as const).map(([t, l]) => (
-              <button key={t} className="hov-border" onClick={() => addMedia(t)} style={{ cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 12.5, padding: '9px 15px', borderRadius: 999, border: '1.5px dashed var(--color-divider)', background: 'transparent', color: 'var(--color-text)' }}>
-                {l}
-              </button>
-            ))}
+            <input
+              ref={filePicker}
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              onChange={(e) => {
+                addImages(Array.from(e.target.files ?? []));
+                e.target.value = ''; // so picking the same file again still fires onChange
+              }}
+            />
+            <button className="hov-border" onClick={() => filePicker.current?.click()} disabled={st.newMedia.length >= MAX_IMAGES} style={{ cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 12.5, padding: '9px 15px', borderRadius: 999, border: '1.5px dashed var(--color-divider)', background: 'transparent', color: 'var(--color-text)' }}>
+              + เพิ่มรูปภาพ
+            </button>
           </div>
           <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>แต่ละไฟล์เก็บเป็นระเบียน Media หนึ่งแถว (FileURL, MediaType) ผูกกับโพสต์นี้</span>
         </div>
@@ -198,7 +242,7 @@ export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, fl
 
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={close}>ยกเลิก</button>
-          <button className="btn btn-primary" onClick={submit}>เผยแพร่</button>
+          <button className="btn btn-primary" onClick={submit} disabled={sending}>{sending ? 'กำลังเผยแพร่…' : 'เผยแพร่'}</button>
         </div>
       </div>
     </div>

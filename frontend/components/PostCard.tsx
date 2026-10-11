@@ -93,7 +93,9 @@ export default function PostCard(props: PostCardProps) {
         <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: 'var(--color-neutral-800)', textWrap: 'pretty' }}>{p.body}</p>
         {media.length > 0 && (
           <div style={{ display: 'grid', gap: 6, gridTemplateColumns: media.length > 1 ? '1fr 1fr' : '1fr' }}>
-            {media.map((m, i) => (
+            {media.map((m, i) => m.url && m.type === 'image' ? (
+              <img key={i} src={m.url} alt={m.label || p.title} loading="lazy" style={{ width: '100%', height: media.length > 2 ? 110 : media.length > 1 ? 130 : undefined, maxHeight: media.length > 1 ? undefined : 420, objectFit: 'cover', borderRadius: 12, display: 'block', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }} />
+            ) : (
               <div key={i} style={{ height: media.length > 2 ? 110 : media.length > 1 ? 130 : 150, borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: '#e5ccf3', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }}>
                 <span style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: '#6c4194' }}>{m.type === 'video' ? 'video' : 'image'}</span>
                 <span style={{ fontSize: 12, color: '#3e2259', textAlign: 'center', padding: '0 8px' }}>{m.label}</span>

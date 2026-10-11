@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   CATS, COMMENTS, ME, NOTIFS, POSTS, QA, STATUSES,
-  updateCommentLikesById,
+  catDots, updateCommentLikesById,
   type Comment, type Post, type ReactionType, type ReportStatus,
 } from '@/lib/data';
 import { ACCENT_MAP, avatarStyle, likeCount, statusLook } from '@/lib/ui';
@@ -16,7 +16,8 @@ import { ComposeDialog, EditDialog, ReportDialog } from './Dialogs';
 export type ViewerRole = 'student' | 'moderator' | 'guest';
 type View = 'home' | 'announce' | 'interests' | 'questions';
 
-export interface NewMedia { id: string; type: 'image' | 'video'; label: string }
+/** A file picked in the composer; `url` is an object URL used only for the preview. */
+export interface NewMedia { id: string; type: 'image' | 'video'; label: string; file: File; url: string }
 
 export interface AppState {
   view: View;
@@ -176,7 +177,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       const newCatsRes = await fetch(`${API_URL}/misc/categories`);
       const newCats = await newCatsRes.json();
       
-      setRaw((prev) => ({ ...prev, CATS: newCats.map((c: any) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: "#f91013" /* <-- place holder cats color */ })) }));
+      const dots = catDots(newCats.map((c: any) => String(c.id)));
+      setRaw((prev) => ({ ...prev, CATS: newCats.map((c: any) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: dots[c.id] })) }));
     })()
   }, [])
 
@@ -203,7 +205,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           role: p.role,
           cats: p.categories.map((c: any) => c.name),
           likes: p.reaction_count,
-          media: p.medias.map((m: any) => m.file_url),
+          media: (p.medias ?? []).map((m: any) => ({ type: m.media_type, label: '', url: m.file_url })),
         });
       })
       // my_reaction comes from the API, so the filled heart survives a reload.
