@@ -76,22 +76,40 @@ router.post("/comment/:pid/replyto/:cid", auth, async (req: Request, res: Respon
     }
 })
 
+// RPC this one.
 router.post("/comment/:cid/react", auth, async (req: Request, res: Response) => {
     const { cid } = req.params;
-    const { reaction_type } = req.body;
-
-    if (reaction_type !== null && !isReactionType(reaction_type)) {
-        return res.status(400).json({
-            message: `reaction_type must be null or one of: ${REACTION_TYPES.join(", ")}`,
-        });
-    }
-
+    const { reaction_type, change } = req.body;
     try {
-        const result = await setReaction(COMMENT_TARGET, cid as string, req.userId!, reaction_type);
-        res.status(200).json(result); // { reaction_count, my_reaction }
+        const { data, error } = await supabase.rpc("react_to_comment", {
+            cid,
+            uid: req.userId,
+            rtype: reaction_type,
+            change_reaction: change || false
+        })
+        if(error) throw error;
+        res.status(200).json(data); // reaction count send to the frontend.
     } catch (error: any) {
         res.status(500).json({ code: error?.code, message: error?.message });
     }
 })
+
+// router.post("/comment/:cid/react", auth, async (req: Request, res: Response) => {
+//     const { cid } = req.params;
+//     const { reaction_type } = req.body;
+
+//     if (reaction_type !== null && !isReactionType(reaction_type)) {
+//         return res.status(400).json({
+//             message: `reaction_type must be null or one of: ${REACTION_TYPES.join(", ")}`,
+//         });
+//     }
+
+//     try {
+//         const result = await setReaction(COMMENT_TARGET, cid as string, req.userId!, reaction_type);
+//         res.status(200).json(result); // { reaction_count, my_reaction }
+//     } catch (error: any) {
+//         res.status(500).json({ code: error?.code, message: error?.message });
+//     }
+// })
 
 export default router;

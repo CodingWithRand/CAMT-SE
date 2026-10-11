@@ -25,7 +25,7 @@ interface Props {
   /** POST a reply under `parentId`. */
   onReply: (postId: string, parentId: string, text: string) => Promise<boolean>;
   /** Toggle this viewer's reaction on one comment or reply. */
-  onReactComment: (commentId: string, r: ReactionType) => void;
+  onReactComment: (postId: string, commentId: string, r: ReactionType, change: boolean) => void;
 }
 
 /** Textareas grow with their content so the box reads like a single line until it needs more. */
@@ -76,7 +76,7 @@ export default function PostModal({ st, set, active, card, isGuest, isMod, meNam
   };
 
   // Posting the reaction is the parent's job; it owns the API call and the reload.
-  const toggleLike = (id: string, r: ReactionType) => onReactComment(id, r);
+  const toggleLike = (id: string, r: ReactionType, change: boolean) => onReactComment(active.id, id, r, change);
 
   const openReplyBox = (c: Comment) => (isGuest ? gate() : set({ replyTo: c.id, replyDraft: '' }));
 
@@ -90,7 +90,7 @@ export default function PostModal({ st, set, active, card, isGuest, isMod, meNam
         // viewer's own reaction — adding one for it would double-count.
         count={baseLikes}
         disabled={isGuest}
-        onReact={(r) => toggleLike(id, r)}
+        onReact={(r, change) => toggleLike(id, r, change)}
         onBlocked={gate}
       />
       {onReply && (

@@ -5,6 +5,7 @@ import { Post } from "../model";
 import supabase from "../db";
 import path from "path";
 import { auth, optionalAuth } from "../middleware";
+import { getUserData } from "./user";
 import {
     POST_TARGET, REACTION_TYPES, isReactionType, myReactions, setReaction,
 } from "../reactions";
@@ -153,39 +154,42 @@ router.get("/post/fetch/notification", async (req: Request, res: Response) => {
     }
 })
 
-/**
- * Toggle this user's reaction on one post.
- *
- * `auth` is required: without it req.userId is undefined, supabase-js drops the
- * key, and PostgREST answers PGRST202 for a react_to_post(pid, rtype) overload
- * that does not exist.
- *
- * The rows are written directly rather than through the react_to_post RPC. That
- * function fails with 42804 — it feeds `rtype` as text into the enum column
- * without a cast — and repairing it needs DDL access to the Supabase project.
- * The route and its request body are unchanged; only the implementation moved.
- */
+// RPC this one.
 router.post("/post/:pid/react", auth, async (req: Request, res: Response) => {
     const { pid } = req.params;
-    const { reaction_type } = req.body;
-
-    // null clears the reaction; anything else must be a real enum member.
-    if (reaction_type !== null && !isReactionType(reaction_type)) {
-        return res.status(400).json({
-            message: `reaction_type must be null or one of: ${REACTION_TYPES.join(", ")}`,
-        });
-    }
-
+    const { reaction_type, change } = req.body;
     try {
-        const result = await setReaction(POST_TARGET, pid as string, req.userId!, reaction_type);
-        res.status(200).json(result); // { reaction_count, my_reaction }
+        const { data, error } = await supabase.rpc("react_to_post", {
+            pid,
+            uid: req.userId,
+            rtype: reaction_type,
+            change_reaction: change || false
+        })
+        if(error) throw error;
+        res.status(200).json(data); // reaction count send to the frontend.
     } catch (error: any) {
         res.status(500).json({ code: error?.code, message: error?.message });
     }
 })
 
-// router.post("/post/search/category", async (req: Request, res: Response) => {
-    
-// }) 
+router.post("/post/:pid/edit", auth, async (req: Request, res: Response) => {
+    const { pid } = req.params;
+    const { title, content } = req.body;
+
+    try {
+        const userData = await getUserData(req.userId!);
+        if(!userData.is_mod) return res.status(403).json({ message: "Only mods are allowed edit posts." });
+
+        const { data, error } = await supabase
+            .from('posts')
+            .update({ title, content })
+            .eq('id', pid)
+            .select();
+        if (error) throw error;
+        res.status(200).json(data);
+    } catch (error: any) {
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
 
 export default router;

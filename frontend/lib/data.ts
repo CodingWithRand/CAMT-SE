@@ -45,6 +45,28 @@ export interface Post {
 export interface Reply { id: string; a: string; i: string; t: number; time: string; text: string; likes?: number }
 export interface Comment extends Reply { r: Role; likes: number; replies: Reply[] }
 
+export function updateCommentLikesById(
+  comments: Record<string, Comment[]>,
+  cid: string,
+  like_count: number,
+): Comment | Reply | undefined {
+  for (const postComments of Object.values(comments)) {
+    for (const comment of postComments) {
+      if (comment.id === cid) {
+        comment.likes = like_count;
+        return comment;
+      }
+
+      const reply = comment.replies.find((item) => item.id === cid);
+      if (reply) {
+        reply.likes = like_count;
+        return reply;
+      }
+    }
+  }
+  return undefined;
+}
+
 export const TINTS: [string, string][] = [
   ['#eadff7', '#3e2259'], ['#f8dde8', '#66324a'], ['#e1eecc', '#3d472b'],
   ['#dbe7f5', '#2c3f57'], ['#fbeccd', '#5c4718'], ['#f7ddd6', '#6b2f1c'],

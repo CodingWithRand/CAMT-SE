@@ -11,7 +11,7 @@ interface Props {
   /** Smaller variant used inside comment threads. */
   compact?: boolean;
   /** Called with the reaction tapped; sending `mine` again clears it server-side. */
-  onReact: (r: ReactionType) => void;
+  onReact: (r: ReactionType, change: boolean) => void;
   /** Called instead of onReact when the viewer may not react (guests). */
   onBlocked?: () => void;
 }
@@ -35,10 +35,11 @@ export default function ReactionBar({ mine, count, disabled, compact, onReact, o
   const look = mine ? REACTION_LOOK[mine] : null;
   const size = compact ? 12 : 12.5;
 
-  const fire = (r: ReactionType) => {
+  const fire = (r: ReactionType, change?: boolean) => {
     setOpen(false);
     if (disabled) return onBlocked?.();
-    onReact(r);
+    console.log("ReactionBar fire", r, change);
+    onReact(r, change || false);
   };
 
   // Hover opens the picker on pointer devices; the delay stops it flickering
@@ -94,7 +95,7 @@ export default function ReactionBar({ mine, count, disabled, compact, onReact, o
               role="menuitem"
               title={REACTION_LOOK[r].label}
               aria-label={REACTION_LOOK[r].label}
-              onClick={() => fire(r)}
+              onClick={() => fire(r, true)}
               style={{
                 cursor: 'pointer', border: 0, background: mine === r ? 'var(--color-accent-100)' : 'transparent',
                 borderRadius: 999, padding: '4px 6px', fontSize: 17, lineHeight: 1,

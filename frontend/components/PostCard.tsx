@@ -13,7 +13,7 @@ export interface PostCardProps {
   reportStatus?: ReportStatus;
   isGuest: boolean;
   isMod: boolean;
-  onReact: (r: ReactionType) => void;
+  onReact: (r: ReactionType, change: boolean) => void;
   onGate: () => void;
   onOpen: () => void;
   onEdit: () => void;

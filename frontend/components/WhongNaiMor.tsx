@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   CATS, COMMENTS, ME, NOTIFS, POSTS, QA, STATUSES,
+  updateCommentLikesById,
   type Comment, type Post, type ReactionType, type ReportStatus,
 } from '@/lib/data';
 import { ACCENT_MAP, avatarStyle, likeCount, statusLook } from '@/lib/ui';
@@ -471,12 +472,12 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
    * uid: undefined. Both are server-side fixes; this code needs no change once
    * they land.
    */
-  const react = useCallback(async (kind: 'post' | 'comment', id: string, type: ReactionType = 'like') => {
+  const react = useCallback(async (kind: 'post' | 'comment', id: string, type: ReactionType = 'like', change: boolean) => {
     const url = kind === 'post' ? `${API_URL}/post/${id}/react` : `${API_URL}/comment/${id}/react`;
     const res = await fetch(url, {
       method: 'POST',
       headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ reaction_type: type }),
+      body: JSON.stringify({ reaction_type: type, change}),
     });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
@@ -490,6 +491,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       };
       throw new Error(known[body?.code] ?? body?.message ?? `HTTP ${res.status}`);
     }
+    return await res.json(); 
   }, [session]);
 
   /** Drop the key entirely when the reaction is cleared, so lookups stay falsy. */
@@ -499,14 +501,18 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     return copy;
   };
 
-  const reactToPost = useCallback(async (pid: string, type: ReactionType) => {
+  const reactToPost = useCallback(async (pid: string, type: ReactionType, change: boolean) => {
     const before = st.likes[pid];
     // Tapping the one already held clears it — same rule the endpoint applies.
     const next = before === type ? undefined : type;
-    set((prev) => ({ likes: withReaction(prev.likes, pid, next) }));
+    console.log(before, next, change, (before && !!next) && change);
+    // return;
+
+    // set((prev) => ({ likes: withReaction(prev.likes, pid, next) }));
     try {
-      await react('post', pid, type);
-      await loadPosts();                       // counts come back from the server
+      const newLikeCount = await react('post', pid, type, (before && !!next) && change);
+      set((prev) => ({ ...prev, likes: withReaction(prev.likes, pid, next), posts: prev.posts.map((p) => p.id === pid ? { ...p, likes: newLikeCount } : p) }));
+      // await loadPosts();                       // counts come back from the server (slow don't do it)
     } catch (err: any) {
       console.error('reactToPost', err);
       set((prev) => ({ likes: withReaction(prev.likes, pid, before) }));
@@ -514,13 +520,28 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     }
   }, [react, loadPosts, set, flash, st.likes]);
 
-  const reactToComment = useCallback(async (cid: string, type: ReactionType) => {
+  const reactToComment = useCallback(async (pid: string, cid: string, type: ReactionType, change: boolean) => {
     const before = st.cLikes[cid];
     const next = before === type ? undefined : type;
-    set((prev) => ({ cLikes: withReaction(prev.cLikes, cid, next) }));
+    // set((prev) => ({ cLikes: withReaction(prev.cLikes, cid, next) }));
+    console.log(before, next, change, (before && !!next) && change);
     try {
-      await react('comment', cid, type);
-      await loadComments(st.posts);
+      const newCommentLikeCount = await react('comment', cid, type, (before && !!next) && change);
+      console.log('newCommentLikeCount', newCommentLikeCount);
+      // st.comments[cid];
+      // updateCommentLikesById(st.comments, cid, newCommentLikeCount);
+      set((prev) => ({ 
+        ...prev, 
+        cLikes: withReaction(prev.cLikes, cid, next),
+        comments: {
+          ...prev.comments,
+          [pid]: prev.comments[pid].map((c) => 
+            c.id === cid ? { ...c, likes: newCommentLikeCount } : 
+            { ...c, replies: c.replies?.map((r) => r.id === cid ? { ...r, likes: newCommentLikeCount } : r) }
+          )
+        } 
+      }));
+      // await loadComments(st.posts);
     } catch (err: any) {
       console.error('reactToComment', err);
       set((prev) => ({ cLikes: withReaction(prev.cLikes, cid, before) }));
@@ -536,7 +557,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     reportStatus: st.reportStatus[p.id],
     isGuest,
     isMod,
-    onReact: (r: ReactionType) => reactToPost(p.id, r),
+    onReact: (r: ReactionType, change: boolean) => reactToPost(p.id, r, change),
     onGate: gate,
     onOpen: () => openPost(p.id),
     onEdit: () => openEdit(p.id),
