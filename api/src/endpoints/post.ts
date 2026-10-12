@@ -130,6 +130,20 @@ router.get("/post/fetch", optionalAuth, async (req: Request, res: Response) => {
     }
 })
 
+router.get("/post/fetch/categories", auth, async (req: Request, res: Response) => {
+    const { category_id } = req.body; // array of category_ids
+
+    try {
+        const { data, error } = await supabase.rpc('get_post_from_cate', {
+            cate_id: category_id
+        })
+        if (error) throw error;
+        res.status(200).json(data);
+    } catch (error: any) {
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
+
 router.get("/post/fetch/announcement", optionalAuth, async (req: Request, res: Response) => {
     try {
         const { data: announcement, error: error1 } = await supabase
