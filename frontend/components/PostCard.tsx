@@ -1,18 +1,19 @@
 'use client';
 
 import type { CSSProperties } from 'react';
-import { ANNOUNCE_CAT, CATS, QA, STATUSES, type Post, type ReportStatus } from '@/lib/data';
+import { ANNOUNCE_CAT, CATS, QA, STATUSES, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
 import { avatarStyle, likeCount, statusLook } from '@/lib/ui';
+import ReactionBar from './ReactionBar';
 
 export interface PostCardProps {
   CATS: typeof CATS;
   post: Post;
-  liked: boolean;
+  liked: ReactionType | null;
   commentCount: number;
   reportStatus?: ReportStatus;
   isGuest: boolean;
   isMod: boolean;
-  onLike: () => void;
+  onReact: (r: ReactionType, change: boolean) => void;
   onGate: () => void;
   onOpen: () => void;
   onEdit: () => void;
@@ -60,7 +61,7 @@ export default function PostCard(props: PostCardProps) {
   }
 
   const media = p.media || [];
-  const likes = likeCount(p, liked);
+  const likes = likeCount(p);
 
   return (
     <article style={{ position: 'relative', overflow: 'hidden', background: 'var(--color-surface)', borderRadius: 16, boxShadow: '0 1px 3px rgba(62,34,89,.09)', border: '1px solid var(--color-divider)', padding: '16px 18px 10px', display: 'flex', flexDirection: 'column', gap: 11 }}>
@@ -92,7 +93,9 @@ export default function PostCard(props: PostCardProps) {
         <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: 'var(--color-neutral-800)', textWrap: 'pretty' }}>{p.body}</p>
         {media.length > 0 && (
           <div style={{ display: 'grid', gap: 6, gridTemplateColumns: media.length > 1 ? '1fr 1fr' : '1fr' }}>
-            {media.map((m, i) => (
+            {media.map((m, i) => m.url && m.type === 'image' ? (
+              <img key={i} src={m.url} alt={m.label || p.title} loading="lazy" style={{ width: '100%', height: media.length > 2 ? 110 : media.length > 1 ? 130 : undefined, maxHeight: media.length > 1 ? undefined : 420, objectFit: 'cover', borderRadius: 12, display: 'block', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }} />
+            ) : (
               <div key={i} style={{ height: media.length > 2 ? 110 : media.length > 1 ? 130 : 150, borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: '#e5ccf3', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }}>
                 <span style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: '#6c4194' }}>{m.type === 'video' ? 'video' : 'image'}</span>
                 <span style={{ fontSize: 12, color: '#3e2259', textAlign: 'center', padding: '0 8px' }}>{m.label}</span>
@@ -106,20 +109,15 @@ export default function PostCard(props: PostCardProps) {
       </div>
 
       <footer style={{ display: 'flex', alignItems: 'center', gap: 4, paddingTop: 8, borderTop: '1px solid var(--color-divider)' }}>
-        <button
-          className="btn btn-ghost"
-          style={{ flex: 'none', fontSize: 12.5, padding: '5px 9px', color: liked ? 'var(--color-accent)' : 'var(--color-neutral-700)' }}
-          onClick={() => (isGuest ? props.onGate() : props.onLike())}
-          aria-pressed={liked}
-          title={liked ? 'เลิกถูกใจ' : 'ถูกใจ'}
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 20.4l-1.5-1.36C5.4 14.4 2.5 11.8 2.5 8.6A4.6 4.6 0 0 1 7.1 4c1.7 0 3.2.9 4.9 3 1.7-2.1 3.2-3 4.9-3a4.6 4.6 0 0 1 4.6 4.6c0 3.2-2.9 5.8-8 10.44z" />
-          </svg>
-          ถูกใจ
-        </button>
+        <ReactionBar
+          mine={liked}
+          count={0 /* the total is spelled out beside the button instead */}
+          disabled={isGuest}
+          onReact={props.onReact}
+          onBlocked={props.onGate}
+        />
         <span style={{ fontSize: 12, color: 'var(--color-neutral-600)', flex: '1 1 auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {likes > 0 ? `${likes.toLocaleString()} คนถูกใจ` : 'ยังไม่มีใครถูกใจ'}
+          {likes > 0 ? `${likes.toLocaleString()} รีแอค` : 'ยังไม่มีใครรีแอค'}
         </span>
 
         <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12.5, color: 'var(--color-neutral-700)', whiteSpace: 'nowrap' }} onClick={props.onOpen}>

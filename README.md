@@ -5,7 +5,7 @@
 3. [Backend](./api/) ✅ *20/09/2026*
 4. [Frontend](./frontend/) ✅ *23/09/2026*
 5. Integration ⏰
-6. Testing ❌
+6. Testing ⏰
 7. Deployment ❌
 8. Release ❌
 9. Full doc ❌

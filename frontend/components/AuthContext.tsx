@@ -2,7 +2,7 @@
 
 import { Session, User } from '@supabase/supabase-js';
 import { createContext, useState, useEffect, useContext } from 'react';
-import { supabase, mockSignIn } from '@/lib/dbauth';
+import { supabase, mockSignIn, mockModSignIn } from '@/lib/dbauth'; // mockModSignIn / mockSignIn for testing User/Mod view
 
 const authContext = createContext<{
     session: any | Session | null;
@@ -25,7 +25,8 @@ export function AuthContext({ children }: { children: React.ReactNode }) {
             setSession(session || null);
         });
 
-        mockSignIn();
+        // mockSignIn(); // for testing User view
+        mockModSignIn(); // for testing Mod view
         return () => subscription.unsubscribe();
     }, []);
 

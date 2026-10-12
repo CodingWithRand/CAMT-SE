@@ -5,3 +5,6 @@ next-env.d.ts
 .claude
 
 .env*
+
+AGENTS.md
+CLAUDE.md

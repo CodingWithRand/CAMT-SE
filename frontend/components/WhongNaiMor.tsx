@@ -3,18 +3,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   CATS, COMMENTS, ME, POSTS, QA, STATUSES,
-  type Comment, type Post, type ReportStatus,
+  catDots, updateCommentLikesById,
+  type Comment, type Post, type ReactionType, type ReportStatus,
 } from '@/lib/data';
 import { ACCENT_MAP, avatarStyle, likeCount, statusLook } from '@/lib/ui';
+import { useAuthContext } from './AuthContext';
+import { supabase } from '@/lib/dbauth';
 import PostCard from './PostCard';
 import PostModal from './PostModal';
 import { ComposeDialog, EditDialog, ReportDialog } from './Dialogs';
-import { useAuthContext } from './AuthContext';
 
 export type ViewerRole = 'student' | 'moderator' | 'guest';
 type View = 'home' | 'announce' | 'interests' | 'questions';
 
-export interface NewMedia { id: string; type: 'image' | 'video'; label: string }
+/** A file picked in the composer; `url` is an object URL used only for the preview. */
+export interface NewMedia { id: string; type: 'image' | 'video'; label: string; file: File; url: string }
 
 export interface Notif { id: string; post_id: string; message: string; is_read: boolean; created_at: string }
 
@@ -23,16 +26,17 @@ export interface AppState {
   activeId: string | null;
   cat: string | null;
   q: string;
-  likes: Record<string, boolean>;
-  cLikes: Record<string, boolean>;
+  likes: Record<string, ReactionType>;      // post id -> this viewer's reaction
+  cLikes: Record<string, ReactionType>;     // comment id -> this viewer's reaction
   comments: Record<string, Comment[]>;
   posts: Post[];
   announce: Post[];
   extraPosts: Post[];
   notifs: Notif[];
   interests: string[];
-  reportStatus: Record<string, ReportStatus>;
-  reportReason: Record<string, string>;
+  reportStatus: Record<string, ReportStatus>;   // keyed by post id
+  reportReason: Record<string, string>;         // keyed by post id
+  reportId: Record<string, string>;             // post id -> reports.id
   draft: string;
   composerOpen: boolean;
   replyTo: string | null;
@@ -62,9 +66,13 @@ export type SetState = (patch: Partial<AppState> | ((prev: AppState) => Partial<
 
 const INITIAL: AppState = {
   view: 'home', activeId: null, cat: null, q: '',
-  likes: {}, cLikes: {}, comments: COMMENTS, posts: POSTS, announce: [], extraPosts: [], notifs: [], interests: ['เรียน / Academics'],
-  reportStatus: { p10: 'Open' },
-  reportReason: { p10: 'คุกคามหรือใช้ถ้อยคำรุนแรง' },
+  // posts/comments start empty and are filled from the API. Seeding them with
+  // the mock rows fired /comment/fetch/p1 before the real posts arrived, and the
+  // API rejects a non-uuid id — the error body then crashed the thread builder.
+  likes: {}, cLikes: {}, comments: {}, posts: [], announce: [], extraPosts: [], notifs: [], interests: ['เรียน / Academics'],
+  reportStatus: {},
+  reportReason: {},
+  reportId: {},
   draft: '', composerOpen: false, replyTo: null, replyDraft: '', openReplies: {}, shown: 12,
   composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false,
   reportFor: null, reason: null,
@@ -82,9 +90,8 @@ interface Props {
 
 const API_URL = "http://localhost:3030";
 
-export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'student', laneMode = 'single' }: Props) {
+export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneMode = 'single' }: Props) {
   const [st, setRaw] = useState<AppState>(INITIAL);
-  const { session } = useAuthContext();
   const set: SetState = useCallback((patch) => {
     setRaw((prev) => ({ ...prev, ...(typeof patch === 'function' ? patch(prev) : patch) }));
   }, []);
@@ -92,7 +99,48 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const ids = useRef({ comment: 0, post: 0, media: 0 });
 
-  const role = viewerRole;
+  // Needed to sign the comment / reply / reaction writes; reads stay public,
+  // but a signed-in reader also gets my_reaction back on the fetch routes.
+  const { user, session } = useAuthContext();
+
+  const authHeaders = useCallback((extra: Record<string, string> = {}): Record<string, string> =>
+    (session?.access_token ? { ...extra, Authorization: `Bearer ${session.access_token}` } : extra),
+    [session]);
+
+  /**
+   * Who is viewing, taken from users.is_mod.
+   *
+   * Read straight from Supabase rather than through /user/current/fetch: that
+   * endpoint filters v_user_all_data on a `uid` column the view does not have,
+   * so it fails for every user. The table is the same source either way.
+   */
+  const [me, setMe] = useState<{ display_name: string; is_mod: boolean } | null>(null);
+  const [roleLoaded, setRoleLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!user?.id) { setMe(null); setRoleLoaded(true); return; }
+    let cancelled = false;
+    (async () => {
+      const res = await fetch(`${API_URL}/user/current/fetch`, { headers: authHeaders({ "Content-Type": "application/json" }) });
+      console.log(res.status);
+
+      if (cancelled) return;
+      if (!res.ok) {
+        const errorBody = await res.json();
+        console.error('load viewer', res.status, errorBody);
+        setMe(null);
+        setRoleLoaded(true);
+        return;
+      }
+      const data = await res.json();
+      setMe({ display_name: data.display_name, is_mod: !!data.is_mod });
+      setRoleLoaded(true);
+    })();
+    return () => { cancelled = true; };
+  }, [user?.id]);
+
+  // The prop still wins, so a role can be forced while demoing.
+  const role: ViewerRole = viewerRole ?? (me ? (me.is_mod ? 'moderator' : 'student') : 'guest');
   const isGuest = role === 'guest';
   const isMod = role === 'moderator';
 
@@ -133,7 +181,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
       const newCatsRes = await fetch(`${API_URL}/misc/categories`);
       const newCats = await newCatsRes.json();
       
-      setRaw((prev) => ({ ...prev, CATS: newCats.map((c: any) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: "#f91013" /* <-- place holder cats color */ })) }));
+      const dots = catDots(newCats.map((c: any) => String(c.id)));
+      setRaw((prev) => ({ ...prev, CATS: newCats.map((c: any) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: dots[c.id] })) }));
     })()
   }, [])
 
@@ -152,18 +201,25 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
     role: p.role,
     cats: p.categories.map((c: any) => c.name),
     likes: p.reaction_count,
-    media: p.medias.map((m: any) => m.file_url),
+    media: (p.medias ?? []).map((m: any) => ({ type: m.media_type, label: '', url: m.file_url })),
   });
 
   // Load post (comment count doesn't show)
-  useEffect(() => {
-    // return;
-    fetch(`${API_URL}/post/fetch`).then((posts) => {
-      posts.json().then((ps) => {
-        set({ posts: ps.map(toFrontendPost) });
-      });
-    }).catch((err) => console.error(err));
-  }, [])
+  const loadPosts = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/post/fetch`, { headers: authHeaders() });
+      const ps = await res.json();
+      if (!Array.isArray(ps)) throw new Error(ps?.message ?? 'bad /post/fetch payload');
+      const frontendPosts: Post[] = ps.map(toFrontendPost);
+      // my_reaction comes from the API, so the filled heart survives a reload.
+      // Without it the next tap would remove a reaction the UI thinks it is adding.
+      const mine: Record<string, ReactionType> = {};
+      ps.forEach((p: any) => { if (p.my_reaction) mine[p.id] = p.my_reaction; });
+      set({ posts: frontendPosts, likes: mine });
+    } catch (err) { console.error(err); }
+  }, [set, session])
+
+  useEffect(() => { loadPosts(); }, [loadPosts])
 
   // Load announcements separately from the feed, so they show even when not in the feed
   useEffect(() => {
@@ -181,7 +237,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
       return;
     }
     fetch(`${API_URL}/notification/fetch/`, {
-      headers: { 'Authorization': `Bearer ${session.access_token}` },
+      headers: authHeaders(),
     }).then(async (res) => {
       if (!res.ok) return;
       set({ notifs: await res.json() });
@@ -189,15 +245,12 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
   }, [session?.access_token])
 
   // load comment per post
-  useEffect(() => {
-    (async() => {
-      // skip mock posts (p1, p2, ...) - only real posts have uuid ids
-      const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-      const allPosts = [...st.posts, ...st.announce, ...st.extraPosts]
-      const realPosts = allPosts.filter((p, i) => UUID_RE.test(String(p.id)) && allPosts.findIndex((x) => x.id === p.id) === i)
-      const cress = await Promise.all(realPosts.map((p) => fetch(`${API_URL}/comment/fetch/${p.id}`)))
-      let fetchedComments = await Promise.all(cress.map((c) => c.ok ? c.json() : []))
-      
+  const loadComments = useCallback(async (posts: Post[]) => {
+      // Signed in, the API tags each row with my_reaction; signed out it sends null.
+      const cress = await Promise.all(posts.map((p) => fetch(`${API_URL}/comment/fetch/${p.id}`, { headers: authHeaders() })))
+      let fetchedComments = await Promise.all(cress.map((c) => c.json()))
+      const mineC: Record<string, ReactionType> = {};
+
       interface CommentNode {
         id: string | number;
         post_id: string;
@@ -206,13 +259,19 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
         role: string;
         content: string;
         created_at: string;
+        reaction_count?: number;
+        my_reaction?: string | null;
         replies?: CommentNode[];
       }
       const rootComments: CommentNode[] & Comment[] = [];
       const postComments: { [pid: string]: CommentNode[] & Comment[] } = {};
 
       for(let pcs of fetchedComments) {
-        if(pcs.length === 0) continue
+        // A failed fetch answers with { code, message }, which has no .length —
+        // the old `pcs.length === 0` check let it through and .map then threw.
+        if(!Array.isArray(pcs) || pcs.length === 0) continue
+        // Remember which of these the viewer has reacted to before reshaping.
+        pcs.forEach((c: any) => { if (c.my_reaction) mineC[c.id] = c.my_reaction; });
         pcs = pcs.map((c: CommentNode) => ({
           post_id: c.post_id,
           id: c.id,
@@ -222,7 +281,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
           i: c.display_name.slice(0, 2),
           time: getTimeAgo(c.created_at),
           text: c.content,
-          likes: 0, //placeholder
+          likes: c.reaction_count ?? 0,
           t: 3, //placeholder
         }))
 
@@ -251,9 +310,85 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
         rootComments.length = 0;
       }
       // console.log(postComments['33333333-3333-3333-3333-333333333332'][0].id)
-      set({ comments: postComments });
-    })()
+      set({ comments: postComments, cLikes: mineC });
+  }, [set, session]);
+
+  // Comments for every loaded post: the feed, the announcement rail and posts opened from a notification
+  const loadedPosts = useMemo(() => {
+    const all = [...st.posts, ...st.announce, ...st.extraPosts];
+    return all.filter((p, i) => all.findIndex((x) => x.id === p.id) === i);
   }, [st.posts, st.announce, st.extraPosts]);
+
+  useEffect(() => { loadComments(loadedPosts); }, [loadedPosts, loadComments]);
+
+  /**
+   * POST a comment, or a reply when parentId is given, then re-read the thread.
+   *
+   * Both create endpoints answer with an empty 200, and the row the UI needs
+   * carries joined fields (display_name, role) that the insert does not return —
+   * so the thread is re-fetched instead of being patched together on the client.
+   */
+  const postComment = useCallback(async (postId: string, text: string, parentId?: string) => {
+    const url = parentId
+      ? `${API_URL}/comment/${postId}/replyto/${parentId}`
+      : `${API_URL}/comment/${postId}`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ content: text }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      await loadComments(loadedPosts);
+      return true;
+    } catch (err) {
+      console.error('postComment', err);
+      return false;
+    }
+  }, [session, loadComments, loadedPosts]);
+
+  /**
+   * Load the moderation queue, for moderators only.
+   *
+   * Read straight from the reports table rather than through /report/fetch,
+   * which gates on getUserData() and so hits the same broken `uid` filter.
+   * A post can hold several tickets; the newest one represents it in the queue.
+   */
+  const loadReports = useCallback(async () => {
+    if (!isMod) return;
+
+    const res = await fetch(`${API_URL}/report/fetch`, { 
+      method: 'GET',
+      headers: authHeaders({"Content-Type": "application/json"})
+    });
+    // console.log(res.status);
+    // console.log(await res.json());
+
+    // don't use supabase here
+    // const { data, error } = await supabase
+    //   .from('reports')
+    //   .select('id, post_id, reason, status, created_at')
+    //   .order('created_at', { ascending: true });
+    // if (error) return console.error('loadReports', error);
+    if (!res.ok) {
+      const errorBody = await res.json();
+      console.error('loadReports', res.status, errorBody);
+      return;
+    }
+    const data = await res.json();
+
+    const status: Record<string, ReportStatus> = {};
+    const reason: Record<string, string> = {};
+    const rid: Record<string, string> = {};
+    (data ?? []).forEach((r: any) => {
+      status[r.post_id] = r.status;
+      reason[r.post_id] = r.reason;
+      rid[r.post_id] = r.id;
+    });
+    set({ reportStatus: status, reportReason: reason, reportId: rid });
+  }, [isMod, set]);
+
+  useEffect(() => { loadReports(); }, [loadReports]);
 
   // Accent palette
   useEffect(() => {
@@ -333,8 +468,41 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
   };
   const unreadNotifs = st.notifs.filter((n) => !n.is_read).length;
 
-  const setStatus = (id: string, next: ReportStatus) => {
+  /**
+   * `id` is the post id; the ticket it maps to is what gets updated.
+   *
+   * Heads up: this write currently fails for everyone with
+   *   42703 record "new" has no field "reviewed_by"
+   * A trigger on `reports` reads NEW.reviewed_by, but the table only has
+   * reviewed_at. It is a database-side fix, so until it lands the UI rolls the
+   * chip back and says so rather than pretending the change stuck.
+   */
+  const setStatus = async (id: string, next: ReportStatus) => {
+    const rid = st.reportId[id];
+    if (!rid) return flash('ไม่พบตั๋วรายงานของโพสต์นี้');
+
+    const before = st.reportStatus[id];
     set((prev) => ({ reportStatus: { ...prev.reportStatus, [id]: next } }));
+
+    // const { error } = await supabase
+    //   .from('reports')
+    //   .update({ status: next, reviewed_at: new Date().toISOString() })
+    //   .eq('id', rid);
+    const res = await fetch(`${API_URL}/report/update/${rid}`, {
+      method: 'PUT',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ status: next }),
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      console.error('setStatus', error);
+      set((prev) => ({ reportStatus: { ...prev.reportStatus, [id]: before } }));
+      flash(error.code === '42703'
+        ? 'เปลี่ยนสถานะไม่ได้ · ติดที่ trigger ฝั่ง DB (reviewed_by)'
+        : 'เปลี่ยนสถานะไม่สำเร็จ');
+      return;
+    }
     flash(`เปลี่ยนสถานะรายงานเป็น ${next}`);
   };
 
@@ -344,15 +512,107 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
     set({ editFor: id, editTitle: p.title, editBody: p.body, editCats: [...(p.cats || [])], editImportant: !!p.important });
   };
 
+  /**
+   * Toggle this viewer's reaction through the API.
+   *
+   * POST /post/:pid/react and POST /comment/:cid/react both wrap an RPC that
+   * flips the reaction server-side, so the body only names the type. The reply
+   * shape is whatever that RPC returns, so rather than reading it we re-pull the
+   * rows afterwards and take the counts from there.
+   *
+   * Heads up: both RPCs currently fail with
+   *   42804 column "reaction_type" is of type reaction_type but expression is of type text
+   * (the function passes `rtype` into the enum column without a cast), and
+   * /post/:pid/react is also missing its auth middleware, so it sends
+   * uid: undefined. Both are server-side fixes; this code needs no change once
+   * they land.
+   */
+  const react = useCallback(async (kind: 'post' | 'comment', id: string, type: ReactionType = 'like', change: boolean) => {
+    const url = kind === 'post' ? `${API_URL}/post/${id}/react` : `${API_URL}/comment/${id}/react`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ reaction_type: type, change}),
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      // The two routes fail differently today, and the codes say which bug it is:
+      //   42804   the RPC puts `rtype` text into the enum column without a cast
+      //   PGRST202 no uid reached the RPC, so PostgREST looked for a 2-arg
+      //            overload — /post/:pid/react is missing its auth middleware
+      const known: Record<string, string> = {
+        '42804': 'รีแอคไม่ได้ · RPC ฝั่ง DB ยังไม่ cast reaction_type',
+        PGRST202: 'รีแอคไม่ได้ · /post/:pid/react ยังไม่มี auth เลยส่ง uid ไปไม่ครบ',
+      };
+      throw new Error(known[body?.code] ?? body?.message ?? `HTTP ${res.status}`);
+    }
+    return await res.json(); 
+  }, [session]);
+
+  /** Drop the key entirely when the reaction is cleared, so lookups stay falsy. */
+  const withReaction = (map: Record<string, ReactionType>, id: string, next?: ReactionType) => {
+    const copy = { ...map };
+    if (next) copy[id] = next; else delete copy[id];
+    return copy;
+  };
+
+  const reactToPost = useCallback(async (pid: string, type: ReactionType, change: boolean) => {
+    const before = st.likes[pid];
+    // Tapping the one already held clears it — same rule the endpoint applies.
+    const next = before === type ? undefined : type;
+    console.log(before, next, change, (before && !!next) && change);
+    // return;
+
+    // set((prev) => ({ likes: withReaction(prev.likes, pid, next) }));
+    try {
+      const newLikeCount = await react('post', pid, type, (before && !!next) && change);
+      set((prev) => ({ ...prev, likes: withReaction(prev.likes, pid, next), posts: prev.posts.map((p) => p.id === pid ? { ...p, likes: newLikeCount } : p) }));
+      // await loadPosts();                       // counts come back from the server (slow don't do it)
+    } catch (err: any) {
+      console.error('reactToPost', err);
+      set((prev) => ({ likes: withReaction(prev.likes, pid, before) }));
+      flash(err.message);
+    }
+  }, [react, loadPosts, set, flash, st.likes]);
+
+  const reactToComment = useCallback(async (pid: string, cid: string, type: ReactionType, change: boolean) => {
+    const before = st.cLikes[cid];
+    const next = before === type ? undefined : type;
+    // set((prev) => ({ cLikes: withReaction(prev.cLikes, cid, next) }));
+    console.log(before, next, change, (before && !!next) && change);
+    try {
+      const newCommentLikeCount = await react('comment', cid, type, (before && !!next) && change);
+      console.log('newCommentLikeCount', newCommentLikeCount);
+      // st.comments[cid];
+      // updateCommentLikesById(st.comments, cid, newCommentLikeCount);
+      set((prev) => ({ 
+        ...prev, 
+        cLikes: withReaction(prev.cLikes, cid, next),
+        comments: {
+          ...prev.comments,
+          [pid]: prev.comments[pid].map((c) => 
+            c.id === cid ? { ...c, likes: newCommentLikeCount } : 
+            { ...c, replies: c.replies?.map((r) => r.id === cid ? { ...r, likes: newCommentLikeCount } : r) }
+          )
+        } 
+      }));
+      // await loadComments(st.posts);
+    } catch (err: any) {
+      console.error('reactToComment', err);
+      set((prev) => ({ cLikes: withReaction(prev.cLikes, cid, before) }));
+      flash(err.message);
+    }
+  }, [react, loadComments, set, flash, st.cLikes, st.posts]);
+
   const cardProps = (p: Post) => ({
     CATS: st.CATS,
     post: p,
-    liked: !!st.likes[p.id],
+    liked: st.likes[p.id] ?? null,
     commentCount: (st.comments[p.id] || []).length,
     reportStatus: st.reportStatus[p.id],
     isGuest,
     isMod,
-    onLike: () => set((prev) => ({ likes: { ...prev.likes, [p.id]: !prev.likes[p.id] } })),
+    onReact: (r: ReactionType, change: boolean) => reactToPost(p.id, r, change),
     onGate: gate,
     onOpen: () => openPost(p.id),
     onEdit: () => openEdit(p.id),
@@ -364,9 +624,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
     .sort((a, b) => (b.priority ? 1 : 0) - (a.priority ? 1 : 0) || b.likes - a.likes)
     .slice(0, 4);
 
-  const meInitials = isGuest ? 'G' : ME.initials;
+  // Real display_name once it loads; ME is only the fallback in between.
+  const meName = isGuest ? 'ผู้เยี่ยมชม' : (me?.display_name ?? ME.name);
+  const meInitials = isGuest ? 'G' : meName.slice(0, 2);
   const meAvatar = avatarStyle(isGuest ? 3 : ME.tint, 34);
-  const meName = isGuest ? 'ผู้เยี่ยมชม' : ME.name;
 
   const roleBanner = isMod
     ? 'โหมดผู้ดูแล · แตะชิปสถานะบนโพสต์ที่ถูกรายงานเพื่อเปลี่ยน Open → Reviewed → Dismissed'
@@ -534,7 +795,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
                   >
                     {p.priority === 'urgent' ? 'ประกาศด่วน' : 'ประกาศ'}
                   </span>
-                  <span style={{ fontSize: 10.5, color: 'var(--color-neutral-700)' }}>{likeCount(p, st.likes[p.id]).toLocaleString()} ถูกใจ</span>
+                  <span style={{ fontSize: 10.5, color: 'var(--color-neutral-700)' }}>{likeCount(p).toLocaleString()} ถูกใจ</span>
                 </span>
                 <span style={{ fontSize: 12.5, lineHeight: 1.4, display: 'block', fontWeight: 600 }}>{p.title}</span>
                 <span style={{ fontSize: 11, color: 'var(--color-neutral-700)' }}>{p.name}</span>
@@ -613,7 +874,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
           meAvatar={meAvatar}
           gate={gate}
           flash={flash}
-          nextCommentId={() => `n${++ids.current.comment}`}
+          onComment={(pid, text) => postComment(pid, text)}
+          onReply={(pid, parentId, text) => postComment(pid, text, parentId)}
+          onReactComment={reactToComment}
           onClose={goHome}
         />
       )}

@@ -9,8 +9,16 @@ export function avatarStyle(tint: number, size = 38): CSSProperties {
   };
 }
 
-export function likeCount(p: Post, liked?: boolean) {
-  return p.likes + (liked ? 1 : 0);
+/**
+ * Total reactions on a post.
+ *
+ * p.likes is reaction_count straight from the server and already includes the
+ * viewer's own reaction, so nothing is added here. It used to take a `liked`
+ * flag and add one, back when reactions were never persisted and the count
+ * could not know about them — keeping that would double-count.
+ */
+export function likeCount(p: Post) {
+  return p.likes;
 }
 
 export function statusLook(status?: ReportStatus): [string, string] {

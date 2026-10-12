@@ -14,6 +14,7 @@ router.get("/report/fetch", auth, async (req: Request, res: Response) => {
         const { data, error } = await supabase
             .from("reports")
             .select("*")
+            .order('created_at', { ascending: true });
             ;
         if(error) throw error;
         res.status(200).json(data);
@@ -42,7 +43,7 @@ router.post("/report/createticket", auth, async (req: Request, res: Response) =>
     }
 });
 
-router.put("/report/update/:rid", auth, async (req: Request, res: Response) => {
+router.put("/report/review/:rid", auth, async (req: Request, res: Response) => {
     const { rid } = req.params;
     const { status, reviewer } = req.body;
 
@@ -57,7 +58,7 @@ router.put("/report/update/:rid", auth, async (req: Request, res: Response) => {
         // UPDATE reports SET status = status WHERE id = rid;
         const { data, error } = await supabase
             .from("reports")
-            .update({ status, reviewed_at: new Date() })
+            .update({ status, reviewed_by: req.userId, reviewed_at: new Date() })
             .eq("id", rid)
             .select();
         if(error) throw error;

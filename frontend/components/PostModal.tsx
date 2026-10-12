@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef, type CSSProperties } from 'react';
-import { ME, ROLE_LABEL, ROLE_STYLE, type Comment, type Post, type Reply } from '@/lib/data';
+import { useRef, useState, type CSSProperties } from 'react';
+import ReactionBar from './ReactionBar';
+import { ME, ROLE_LABEL, ROLE_STYLE, type Comment, type Post, type ReactionType, type Reply } from '@/lib/data';
 import { avatarStyle } from '@/lib/ui';
 import PostCard, { type PostCardProps } from './PostCard';
 import type { AppState, SetState } from './WhongNaiMor';
@@ -18,8 +19,13 @@ interface Props {
   meAvatar: CSSProperties;
   gate: () => void;
   flash: (t: string) => void;
-  nextCommentId: () => string;
   onClose: () => void;
+  /** POST a top-level comment; resolves false if the write failed. */
+  onComment: (postId: string, text: string) => Promise<boolean>;
+  /** POST a reply under `parentId`. */
+  onReply: (postId: string, parentId: string, text: string) => Promise<boolean>;
+  /** Toggle this viewer's reaction on one comment or reply. */
+  onReactComment: (postId: string, commentId: string, r: ReactionType, change: boolean) => void;
 }
 
 /** Textareas grow with their content so the box reads like a single line until it needs more. */
@@ -31,51 +37,36 @@ const autoGrow = (el: HTMLTextAreaElement) => {
 type BoxRef = React.RefObject<HTMLTextAreaElement | null>;
 const shrink = (r: BoxRef) => { if (r.current) r.current.style.height = 'auto'; };
 
-function ThumbIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M7 10.5v9H4.5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z" />
-      <path d="M7 10.5l4.2-7.1a1.6 1.6 0 0 1 2.9 1.2l-.9 4.2h5a2 2 0 0 1 2 2.4l-1.3 6.2a2 2 0 0 1-2 1.6H7z" />
-    </svg>
-  );
-}
-
-export default function PostModal({ st, set, active, card, isGuest, isMod, meName, meInitials, meAvatar, gate, flash, nextCommentId, onClose }: Props) {
+export default function PostModal({ st, set, active, card, isGuest, isMod, meName, meInitials, meAvatar, gate, flash, onClose, onComment, onReply, onReactComment }: Props) {
   const draftBox = useRef<HTMLTextAreaElement>(null);
   const replyBox = useRef<HTMLTextAreaElement>(null);
+  const [sending, setSending] = useState(false);
 
   const all = st.comments[active.id] || [];
   const shownCount = Math.min(st.shown, all.length);
   const thread = all.slice(0, shownCount);
 
-  const makeEntry = (text: string) => ({
-    id: nextCommentId(), a: ME.name, i: ME.initials, t: ME.tint, time: 'เมื่อสักครู่', text,
-  });
-
-  const submitComment = () => {
+  const submitComment = async () => {
     const text = st.draft.trim();
     if (!text) return flash('ยังไม่ได้พิมพ์ความเห็น');
-    const nc: Comment = { ...makeEntry(text), r: isMod ? 'mod' : 'student', likes: 0, replies: [] };
-    set((prev) => {
-      const next = [...(prev.comments[active.id] || []), nc];
-      return {
-        comments: { ...prev.comments, [active.id]: next },
-        draft: '', composerOpen: false, shown: Math.max(prev.shown, next.length),
-      };
-    });
+    setSending(true);
+    const ok = await onComment(active.id, text);
+    setSending(false);
+    if (!ok) return flash('ส่งความเห็นไม่สำเร็จ ลองใหม่อีกครั้ง');
+    // Cleared only once the write succeeded, so a failure keeps what was typed.
+    set((prev) => ({ draft: '', composerOpen: false, shown: Math.max(prev.shown, shownCount + 1) }));
     shrink(draftBox);
     flash('ส่งความเห็นแล้ว');
   };
 
-  const submitReply = (parent: Comment) => {
+  const submitReply = async (parent: Comment) => {
     const text = st.replyDraft.trim();
     if (!text) return flash('ยังไม่ได้พิมพ์คำตอบ');
-    const nr: Reply = { ...makeEntry(text), likes: 0 };
+    setSending(true);
+    const ok = await onReply(active.id, parent.id, text);
+    setSending(false);
+    if (!ok) return flash('ตอบกลับไม่สำเร็จ ลองใหม่อีกครั้ง');
     set((prev) => ({
-      comments: {
-        ...prev.comments,
-        [active.id]: (prev.comments[active.id] || []).map((c) => (c.id === parent.id ? { ...c, replies: [...(c.replies || []), nr] } : c)),
-      },
       replyTo: null,
       replyDraft: '',
       openReplies: { ...prev.openReplies, [parent.id]: true },
@@ -84,34 +75,31 @@ export default function PostModal({ st, set, active, card, isGuest, isMod, meNam
     flash('ตอบกลับแล้ว');
   };
 
-  const toggleLike = (id: string) => set((prev) => ({ cLikes: { ...prev.cLikes, [id]: !prev.cLikes[id] } }));
+  // Posting the reaction is the parent's job; it owns the API call and the reload.
+  const toggleLike = (id: string, r: ReactionType, change: boolean) => onReactComment(active.id, id, r, change);
 
   const openReplyBox = (c: Comment) => (isGuest ? gate() : set({ replyTo: c.id, replyDraft: '' }));
 
   /** The like / reply action row that sits under every comment and reply, YouTube style. */
-  const actionRow = (id: string, baseLikes: number, onReply?: () => void) => {
-    const liked = !!st.cLikes[id];
-    const n = baseLikes + (liked ? 1 : 0);
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginTop: 4 }}>
-        <button
-          className="btn btn-ghost"
-          onClick={() => (isGuest ? gate() : toggleLike(id))}
-          aria-pressed={liked}
-          title={liked ? 'เลิกถูกใจ' : 'ถูกใจ'}
-          style={{ fontSize: 12, padding: '5px 8px', color: liked ? 'var(--color-accent)' : 'var(--color-neutral-600)' }}
-        >
-          <ThumbIcon filled={liked} />
-          {n > 0 ? n : ''}
+  const actionRow = (id: string, baseLikes: number, onReply?: () => void) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginTop: 4 }}>
+      <ReactionBar
+        compact
+        mine={st.cLikes[id] ?? null}
+        // baseLikes is the server's reaction_count, which already counts this
+        // viewer's own reaction — adding one for it would double-count.
+        count={baseLikes}
+        disabled={isGuest}
+        onReact={(r, change) => toggleLike(id, r, change)}
+        onBlocked={gate}
+      />
+      {onReply && (
+        <button className="btn btn-ghost" onClick={onReply} style={{ fontSize: 12, fontWeight: 600, padding: '5px 10px', color: 'var(--color-neutral-700)' }}>
+          ตอบกลับ
         </button>
-        {onReply && (
-          <button className="btn btn-ghost" onClick={onReply} style={{ fontSize: 12, fontWeight: 600, padding: '5px 10px', color: 'var(--color-neutral-700)' }}>
-            ตอบกลับ
-          </button>
-        )}
-      </div>
-    );
-  };
+      )}
+    </div>
+  );
 
   return (
     <div className="dialog-backdrop" style={{ zIndex: 39, animation: 'wnm-pop .16s ease both' }} onClick={(e) => { if (e.target === e.currentTarget) set({ activeId: null, replyTo: null }); }}>
@@ -151,7 +139,7 @@ export default function PostModal({ st, set, active, card, isGuest, isMod, meNam
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
                       <span style={{ fontSize: 11.5, color: 'var(--color-neutral-600)', marginRight: 'auto' }}>โพสต์ในชื่อ {meName}</span>
                       <button className="btn btn-ghost" onClick={() => { shrink(draftBox); set({ draft: '', composerOpen: false }); }} style={{ fontSize: 12.5, padding: '7px 14px', color: 'var(--color-neutral-700)' }}>ยกเลิก</button>
-                      <button className="btn btn-primary" onClick={submitComment} disabled={!st.draft.trim()} style={{ padding: '7px 16px', fontSize: 12.5 }}>แสดงความเห็น</button>
+                      <button className="btn btn-primary" onClick={submitComment} disabled={!st.draft.trim() || sending} style={{ padding: '7px 16px', fontSize: 12.5 }}>แสดงความเห็น</button>
                     </div>
                   )}
                 </div>
@@ -193,7 +181,7 @@ export default function PostModal({ st, set, active, card, isGuest, isMod, meNam
                           />
                           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 8 }}>
                             <button className="btn btn-ghost" onClick={() => { shrink(replyBox); set({ replyTo: null, replyDraft: '' }); }} style={{ fontSize: 12.5, padding: '6px 14px', color: 'var(--color-neutral-700)' }}>ยกเลิก</button>
-                            <button className="btn btn-primary" onClick={() => submitReply(c)} disabled={!st.replyDraft.trim()} style={{ padding: '6px 16px', fontSize: 12.5 }}>ตอบกลับ</button>
+                            <button className="btn btn-primary" onClick={() => submitReply(c)} disabled={!st.replyDraft.trim() || sending} style={{ padding: '6px 16px', fontSize: 12.5 }}>ตอบกลับ</button>
                           </div>
                         </div>
                       </div>

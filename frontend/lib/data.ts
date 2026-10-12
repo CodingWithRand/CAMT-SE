@@ -3,7 +3,21 @@ import type { CSSProperties } from 'react';
 export type Role = 'org' | 'staff' | 'mod' | 'student';
 export type ReportStatus = 'Open' | 'Reviewed' | 'Dismissed';
 
-export interface Media { type: 'image' | 'video'; label: string }
+// Mirrors the Postgres enum public.reaction_type, which the react endpoints accept.
+export const REACTIONS = ['like', 'love', 'haha', 'sad', 'angry', 'care'] as const;
+export type ReactionType = typeof REACTIONS[number];
+
+/** Emoji + Thai label for each reaction, in picker order. */
+export const REACTION_LOOK: Record<ReactionType, { icon: string; label: string }> = {
+  like: { icon: '👍', label: 'ถูกใจ' },
+  love: { icon: '❤️', label: 'รักเลย' },
+  haha: { icon: '😄', label: 'ฮา' },
+  sad: { icon: '😢', label: 'เศร้า' },
+  angry: { icon: '😠', label: 'โกรธ' },
+  care: { icon: '🤗', label: 'ห่วงใย' },
+};
+
+export interface Media { type: 'image' | 'video'; label: string; url?: string }
 
 export interface Post {
   id: string;
@@ -31,10 +45,46 @@ export interface Post {
 export interface Reply { id: string; a: string; i: string; t: number; time: string; text: string; likes?: number }
 export interface Comment extends Reply { r: Role; likes: number; replies: Reply[] }
 
+export function updateCommentLikesById(
+  comments: Record<string, Comment[]>,
+  cid: string,
+  like_count: number,
+): Comment | Reply | undefined {
+  for (const postComments of Object.values(comments)) {
+    for (const comment of postComments) {
+      if (comment.id === cid) {
+        comment.likes = like_count;
+        return comment;
+      }
+
+      const reply = comment.replies.find((item) => item.id === cid);
+      if (reply) {
+        reply.likes = like_count;
+        return reply;
+      }
+    }
+  }
+  return undefined;
+}
+
 export const TINTS: [string, string][] = [
   ['#eadff7', '#3e2259'], ['#f8dde8', '#66324a'], ['#e1eecc', '#3d472b'],
   ['#dbe7f5', '#2c3f57'], ['#fbeccd', '#5c4718'], ['#f7ddd6', '#6b2f1c'],
 ];
+
+// The categories table has no colour column, so each category takes a dot colour
+// from this palette. Ordered so neighbours are easy to tell apart.
+export const CAT_DOTS = ['#7d50a8', '#c9603f', '#3f7ea8', '#5f8f5a', '#c9913f', '#cd7e9f', '#2f9c95', '#a2988f'];
+
+/**
+ * Colour per category id. Ranked by id rather than by position in the response,
+ * so a category keeps its colour even if the API returns the rows in another order.
+ */
+export function catDots(ids: string[]): Record<string, string> {
+  const out: Record<string, string> = {};
+  [...ids].sort().forEach((id, i) => { out[id] = CAT_DOTS[i % CAT_DOTS.length]; });
+  return out;
+}
 
 // Category rows are seeded by the dev team only (CategoryName + Priority).
 export const CATS: { id: any; name: string; pri: number; dot: string }[] = [
