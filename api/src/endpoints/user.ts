@@ -48,6 +48,61 @@ router.post('/user/:uid/user_interests', auth, async (req, res) => {
     }
 })
 
-//considering letting template user creation in prototype stage.
+const EMAIL_DOMAIN = "@cmu.ac.th";
+
+/**
+ * Register a @cmu.ac.th account: creates the Supabase Auth user and its row in `users`.
+ *
+ * The domain is checked here, not only in the browser, since the browser check can be skipped.
+ * The account is created already confirmed: no confirmation email is sent, because
+ * Supabase's built-in mailer does not deliver to outside addresses without custom SMTP.
+ */
+router.post('/user/register', async (req: Request, res: Response) => {
+    const email = String(req.body?.email ?? "").trim().toLowerCase();
+    const password = String(req.body?.password ?? "");
+    const display_name = String(req.body?.display_name ?? "").trim();
+
+    if (!/^[^\s@]+@cmu\.ac\.th$/.test(email)) {
+        return res.status(400).json({ message: `Only ${EMAIL_DOMAIN} accounts can register` });
+    }
+    if (password.length < 8) {
+        return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
+    if (display_name.length < 2 || display_name.length > 50) {
+        return res.status(400).json({ message: "Display name must be 2-50 characters" });
+    }
+
+    try {
+        const { data, error } = await supabase.auth.admin.createUser({
+            email,
+            password,
+            email_confirm: true,
+            user_metadata: { display_name },
+        });
+        if (error) {
+            if (error.code === "email_exists" || /already (been )?registered|already exists/i.test(error.message)) {
+                return res.status(409).json({ message: "This email already has an account" });
+            }
+            throw error;
+        }
+
+        const { error: profileError } = await supabase.from("users").insert({
+            id: data.user.id,
+            cmu_account: email,
+            email,
+            display_name,
+            is_mod: false, // never taken from the request
+        });
+        if (profileError) {
+            // Don't leave an auth user without a profile behind.
+            await supabase.auth.admin.deleteUser(data.user.id);
+            throw profileError;
+        }
+
+        res.status(201).json({ id: data.user.id });
+    } catch (error: any) {
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
 
 export default router;

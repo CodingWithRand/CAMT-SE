@@ -2,36 +2,49 @@
 
 import { Session, User } from '@supabase/supabase-js';
 import { createContext, useState, useEffect, useContext } from 'react';
-import { supabase, mockSignIn, mockModSignIn } from '@/lib/dbauth'; // mockModSignIn / mockSignIn for testing User/Mod view
+import { supabase } from '@/lib/dbauth';
 
 const authContext = createContext<{
     session: any | Session | null;
     user: any | User | null;
     setUser: React.Dispatch<React.SetStateAction<any | null>>;
     setSession: React.Dispatch<React.SetStateAction<any | Session | null>>;
+    /** Resolves to an error message, or null when signed in. */
+    signIn: (email: string, password: string) => Promise<string | null>;
+    signOut: () => Promise<void>;
 }>({
     session: null,
     user: null,
     setUser: () => {},
-    setSession: () => {}
+    setSession: () => {},
+    signIn: async () => null,
+    signOut: async () => {},
 });
+
 export function AuthContext({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<any | null>(null);
     const [session, setSession] = useState<any | Session | null>(null);
 
     useEffect(() => {
+        // Supabase keeps the session in localStorage, so a reload stays signed in.
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user || null);
             setSession(session || null);
         });
-
-        // mockSignIn(); // for testing User view
-        mockModSignIn(); // for testing Mod view
         return () => subscription.unsubscribe();
     }, []);
 
+    const signIn = async (email: string, password: string) => {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        return error ? error.message : null;
+    };
+
+    const signOut = async () => {
+        await supabase.auth.signOut();
+    };
+
     return (
-        <authContext.Provider value={{ user, session, setUser, setSession }}>
+        <authContext.Provider value={{ user, session, setUser, setSession, signIn, signOut }}>
             {children}
         </authContext.Provider>
     );

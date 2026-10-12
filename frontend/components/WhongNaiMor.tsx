@@ -12,6 +12,9 @@ import { supabase } from '@/lib/dbauth';
 import PostCard from './PostCard';
 import PostModal from './PostModal';
 import { ComposeDialog, EditDialog, ReportDialog } from './Dialogs';
+import { LoginDialog, type AuthMode } from './LoginDialog';
+import { AccountMenu } from './AccountMenu';
+import { TopBar } from './TopBar';
 
 export type ViewerRole = 'student' | 'moderator' | 'guest';
 type View = 'home' | 'announce' | 'interests' | 'questions';
@@ -57,6 +60,7 @@ export interface AppState {
   editCats: string[];
   editImportant: boolean;
   notifOpen: boolean;
+  login: AuthMode | null;   // which tab of the login dialog is open, if any
   toast: string | null;
   CATS: { id: any; name: string; pri: number; dot: string }[];
   w: number;
@@ -77,7 +81,7 @@ const INITIAL: AppState = {
   composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false,
   reportFor: null, reason: null,
   editFor: null, editTitle: '', editBody: '', editCats: [], editImportant: false,
-  notifOpen: false, toast: null,
+  notifOpen: false, login: null, toast: null,
   CATS: CATS,
   w: 1280,
 };
@@ -101,7 +105,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   // Needed to sign the comment / reply / reaction writes; reads stay public,
   // but a signed-in reader also gets my_reaction back on the fetch routes.
-  const { user, session } = useAuthContext();
+  const { user, session, signOut } = useAuthContext();
+  const [accountOpen, setAccountOpen] = useState(false);
 
   const authHeaders = useCallback((extra: Record<string, string> = {}): Record<string, string> =>
     (session?.access_token ? { ...extra, Authorization: `Bearer ${session.access_token}` } : extra),
@@ -149,7 +154,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => set({ toast: null }), 2400);
   }, [set]);
-  const gate = () => flash('ผู้ใช้ภายนอกอ่านได้เท่านั้น · ต้องเข้าสู่ระบบด้วยบัญชี @cmu.ac.th');
+  // A guest trying to write gets the login window instead of a dead end.
+  const gate = () => set({ login: 'login', notifOpen: false });
 
   function getTimeAgo(stamp: Date | string) {
     const now = new Date().getTime();
@@ -355,7 +361,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
    * A post can hold several tickets; the newest one represents it in the queue.
    */
   const loadReports = useCallback(async () => {
-    if (!isMod) return;
+    // Not a moderator (or just signed out): drop any queue left from a mod session.
+    if (!isMod) return set({ reportStatus: {}, reportReason: {}, reportId: {} });
 
     const res = await fetch(`${API_URL}/report/fetch`, { 
       method: 'GET',
@@ -414,7 +421,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   }, [set]);
 
   // Modal scroll lock
-  const locked = !!(st.activeId || st.composeOpen || st.editFor || st.reportFor);
+  const locked = !!(st.activeId || st.composeOpen || st.editFor || st.reportFor || st.login);
   useEffect(() => {
     document.body.classList.toggle('wnm-locked', locked);
     document.documentElement.style.overflow = locked ? 'hidden' : '';
@@ -635,6 +642,11 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   const openCompose = () => (isGuest ? gate() : set({ composeOpen: true, notifOpen: false }));
   const goHome = () => set({ activeId: null, replyTo: null, notifOpen: false });
+  const closeLogin = useCallback(() => set({ login: null }), [set]);
+  const onLoginDone = useCallback((registered: boolean) => {
+    set({ login: null });
+    flash(registered ? 'สร้างบัญชีเรียบร้อย · ยินดีต้อนรับสู่ WhongNaiMor' : 'เข้าสู่ระบบแล้ว');
+  }, [set, flash]);
 
   const active = findPost(st.activeId);
 
@@ -648,49 +660,46 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-bg)', paddingBottom: 60 }}>
       {/* ── Top bar ── */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 20, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', padding: '11px clamp(14px,2.5vw,26px)', background: 'var(--color-bg)', borderBottom: '1px solid var(--color-divider)' }}>
-        <div onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
-          <span style={{ width: 26, height: 26, flex: 'none', display: 'grid', placeItems: 'center', borderRadius: 999, background: 'var(--color-accent)', color: '#fff', fontSize: 13, fontWeight: 700 }}>ว</span>
-          <span style={{ fontSize: 16.5, fontWeight: 700, letterSpacing: '-0.01em' }}>WhongNaiMor</span>
-        </div>
-
-        <input
-          className="input"
-          value={st.q}
-          onChange={(e) => set({ q: e.target.value })}
-          placeholder="ค้นหาโพสต์ หมวดหมู่ หรือผู้ใช้ · search posts, categories"
-          style={{ flex: '1 1 200px', maxWidth: 420, margin: '0 auto', background: 'var(--color-surface)', fontSize: 13, padding: '9px 16px' }}
-        />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative' }}>
-          <button className="btn btn-ghost" onClick={() => set({ notifOpen: !st.notifOpen })} style={{ fontSize: 13, color: 'var(--color-neutral-800)', padding: '6px 8px' }}>
-            การแจ้งเตือน
-            {unreadNotifs > 0 && (
-              <span style={{ minWidth: 17, height: 17, padding: '0 5px', display: 'grid', placeItems: 'center', borderRadius: 999, background: 'var(--pri)', color: '#fff', fontSize: 10, fontWeight: 700 }}>{unreadNotifs}</span>
-            )}
-          </button>
-          <span style={meAvatar}>{meInitials}</span>
-
-          {st.notifOpen && (
-            <div style={{ position: 'absolute', right: 0, top: 44, width: 'min(340px,82vw)', background: 'var(--color-surface)', borderRadius: 16, boxShadow: 'var(--shadow-lg)', border: '1px solid var(--color-divider)', padding: 12, display: 'flex', flexDirection: 'column', gap: 2, animation: 'wnm-pop .16s ease both' }}>
-              <span style={{ fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', padding: '2px 6px 8px' }}>แจ้งเตือนจากโพสต์ประกาศ</span>
-              {st.notifs.length === 0 && (
-                <span style={{ fontSize: 13, color: 'var(--color-neutral-600)', padding: '9px 10px' }}>ยังไม่มีการแจ้งเตือน</span>
-              )}
-              {st.notifs.map((n) => (
-                <button key={n.id} className="hov-bg" onClick={() => openNotif(n)} style={{ cursor: 'pointer', textAlign: 'left', border: 0, background: 'transparent', borderRadius: 12, padding: '9px 10px', fontFamily: 'var(--font-body)', color: 'var(--color-text)' }}>
-                  <span style={{ fontSize: 13, lineHeight: 1.45, display: 'block' }}>{n.message}</span>
-                  <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>{getTimeAgo(n.created_at)}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </nav>
+      <TopBar
+        w={st.w}
+        query={st.q}
+        onQuery={(q) => set({ q })}
+        onHome={goHome}
+        signedIn={!!user}
+        canPost={!isGuest}
+        onCompose={openCompose}
+        onLogin={(mode) => set({ login: mode, notifOpen: false })}
+        notifs={st.notifs}
+        unread={unreadNotifs}
+        notifOpen={st.notifOpen}
+        onNotifOpen={(o) => { if (o) setAccountOpen(false); set({ notifOpen: o }); }}
+        onOpenNotif={openNotif}
+        timeAgo={getTimeAgo}
+        account={user && (
+          <AccountMenu
+            name={meName}
+            initials={meInitials}
+            email={user.email ?? ''}
+            isMod={isMod}
+            avatar={meAvatar}
+            compact={st.w < 640}
+            unread={unreadNotifs}
+            open={accountOpen}
+            onOpenChange={(o) => { setAccountOpen(o); if (o) set({ notifOpen: false }); }}
+            onNotifications={() => set({ notifOpen: true })}
+            onInterests={() => set({ view: 'interests', activeId: null, replyTo: null })}
+            onSignOut={async () => {
+              await signOut();
+              setAccountOpen(false);
+              flash('ออกจากระบบแล้ว · แล้วพบกันใหม่');
+            }}
+          />
+        )}
+      />
 
       <div style={{ maxWidth: 1220, margin: '0 auto', padding: 'clamp(14px,2vw,22px) clamp(12px,2.5vw,26px)', display: 'grid', gap: 'clamp(12px,1.6vw,20px)', gridTemplateColumns: shellCols, alignItems: 'start' }}>
         {/* ── Left: views + categories ── */}
-        <aside style={{ display: 'flex', gap: wide ? 14 : 8, flexDirection: wide ? 'column' : 'row', flexWrap: 'wrap', position: wide ? 'sticky' : 'static', top: 76, minWidth: 0 }}>
+        <aside style={{ display: 'flex', gap: wide ? 14 : 8, flexDirection: wide ? 'column' : 'row', flexWrap: 'wrap', position: wide ? 'sticky' : 'static', top: 84, minWidth: 0 }}>
           <nav style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: wide ? 16 : 999, padding: wide ? 8 : '5px 6px', display: 'flex', flexDirection: wide ? 'column' : 'row', gap: wide ? 2 : 4, flex: 'none' }}>
             {([['home', 'หน้าแรก'], ['announce', 'ประกาศ'], ['interests', 'หมวดที่ฉันสนใจ']] as const).map(([k, l]) => (
               <button
@@ -780,7 +789,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         </main>
 
         {/* ── Right rail ── */}
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: 12, position: wide ? 'sticky' : 'static', top: 76, minWidth: 0 }}>
+        <aside style={{ display: 'flex', flexDirection: 'column', gap: 12, position: wide ? 'sticky' : 'static', top: 84, minWidth: 0 }}>
           <section style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 16, padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div>
               <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700 }}>ประกาศ</h5>
@@ -898,6 +907,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       {st.editFor && <EditDialog st={st} set={set} flash={flash} setStatus={setStatus} />}
 
       {st.reportFor && <ReportDialog st={st} set={set} flash={flash} />}
+      {st.login && <LoginDialog initialMode={st.login} onClose={closeLogin} onDone={onLoginDone} />}
 
       {st.toast && (
         <div style={{ position: 'fixed', left: 0, right: 0, bottom: 24, zIndex: 50, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
