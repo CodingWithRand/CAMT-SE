@@ -120,15 +120,17 @@ router.get("/post/fetch/announcement", async (req: Request, res: Response) => {
     }
 })
 
-router.get("/post/fetch/notification", async (req: Request, res: Response) => {
+router.get("/post/:pid/fetch", async (req: Request, res: Response) => {
+    const { pid } = req.params;
     try {
-        const { data: announcement, error: error1 } = await supabase
-            .from('v_notification') // post + notification
+        const { data: post, error } = await supabase
+            .from('v_post_all_data')
             .select("*")
-            .order('notified_at', { ascending: false })
-            .limit(5);
-        if (error1) throw error1;
-        res.status(200).json(announcement);
+            .eq('id', pid)
+            .maybeSingle();
+        if (error) throw error;
+        if (!post) return res.status(404).json({ message: "Post not found" });
+        res.status(200).json(post);
     } catch (error: any) {
         res.status(500).json({ code: error?.code, message: error?.message });
     }

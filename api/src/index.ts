@@ -8,6 +8,7 @@ import post from './endpoints/post';
 import user from './endpoints/user';
 import report from './endpoints/report';
 import misc from './endpoints/misc';
+import notification from './endpoints/notification';
 
 const app = express();
 const PORT = 3030;
@@ -24,6 +25,7 @@ app.use("/", comment);
 app.use("/", user);
 app.use("/", report);
 app.use("/", misc);
+app.use("/", notification);
 
 app.listen(PORT, () => {
     console.log("Server running on port " + PORT);

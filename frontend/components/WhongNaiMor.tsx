@@ -2,18 +2,21 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  CATS, COMMENTS, ME, NOTIFS, POSTS, QA, STATUSES,
+  CATS, COMMENTS, ME, POSTS, QA, STATUSES,
   type Comment, type Post, type ReportStatus,
 } from '@/lib/data';
 import { ACCENT_MAP, avatarStyle, likeCount, statusLook } from '@/lib/ui';
 import PostCard from './PostCard';
 import PostModal from './PostModal';
 import { ComposeDialog, EditDialog, ReportDialog } from './Dialogs';
+import { useAuthContext } from './AuthContext';
 
 export type ViewerRole = 'student' | 'moderator' | 'guest';
 type View = 'home' | 'announce' | 'interests' | 'questions';
 
 export interface NewMedia { id: string; type: 'image' | 'video'; label: string }
+
+export interface Notif { id: string; post_id: string; message: string; is_read: boolean; created_at: string }
 
 export interface AppState {
   view: View;
@@ -24,6 +27,9 @@ export interface AppState {
   cLikes: Record<string, boolean>;
   comments: Record<string, Comment[]>;
   posts: Post[];
+  announce: Post[];
+  extraPosts: Post[];
+  notifs: Notif[];
   interests: string[];
   reportStatus: Record<string, ReportStatus>;
   reportReason: Record<string, string>;
@@ -47,7 +53,6 @@ export interface AppState {
   editCats: string[];
   editImportant: boolean;
   notifOpen: boolean;
-  readNotif: boolean;
   toast: string | null;
   CATS: { id: any; name: string; pri: number; dot: string }[];
   w: number;
@@ -57,14 +62,14 @@ export type SetState = (patch: Partial<AppState> | ((prev: AppState) => Partial<
 
 const INITIAL: AppState = {
   view: 'home', activeId: null, cat: null, q: '',
-  likes: {}, cLikes: {}, comments: COMMENTS, posts: POSTS, interests: ['เรียน / Academics'],
+  likes: {}, cLikes: {}, comments: COMMENTS, posts: POSTS, announce: [], extraPosts: [], notifs: [], interests: ['เรียน / Academics'],
   reportStatus: { p10: 'Open' },
   reportReason: { p10: 'คุกคามหรือใช้ถ้อยคำรุนแรง' },
   draft: '', composerOpen: false, replyTo: null, replyDraft: '', openReplies: {}, shown: 12,
   composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false,
   reportFor: null, reason: null,
   editFor: null, editTitle: '', editBody: '', editCats: [], editImportant: false,
-  notifOpen: false, readNotif: false, toast: null,
+  notifOpen: false, toast: null,
   CATS: CATS,
   w: 1280,
 };
@@ -79,6 +84,7 @@ const API_URL = "http://localhost:3030";
 
 export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'student', laneMode = 'single' }: Props) {
   const [st, setRaw] = useState<AppState>(INITIAL);
+  const { session } = useAuthContext();
   const set: SetState = useCallback((patch) => {
     setRaw((prev) => ({ ...prev, ...(typeof patch === 'function' ? patch(prev) : patch) }));
   }, []);
@@ -135,37 +141,62 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
     console.log(st.CATS);
   }, [st.CATS])
 
+  const toFrontendPost = (p: any): Post => ({
+    id: p.id,
+    important: p.is_important,
+    name: p.author_name,
+    time: getTimeAgo(p.created_at),
+    initials: p.author_name.slice(0, 2),
+    title: p.title,
+    body: p.content,
+    role: p.role,
+    cats: p.categories.map((c: any) => c.name),
+    likes: p.reaction_count,
+    media: p.medias.map((m: any) => m.file_url),
+  });
+
   // Load post (comment count doesn't show)
   useEffect(() => {
     // return;
     fetch(`${API_URL}/post/fetch`).then((posts) => {
       posts.json().then((ps) => {
-        let frontendPosts: Post[] = [];
-        ps.forEach((p: any) => {
-          frontendPosts.push({
-            id: p.id,
-            important: p.is_important,
-            name: p.author_name,
-            time: getTimeAgo(p.created_at),
-            initials: p.author_name.slice(0, 2),
-            title: p.title,
-            body: p.content,
-            role: p.role,
-            cats: p.categories.map((c: any) => c.name),
-            likes: p.reaction_count,
-            media: p.medias.map((m: any) => m.file_url),
-          });
-        })
-        set({ posts: frontendPosts });
+        set({ posts: ps.map(toFrontendPost) });
       });
     }).catch((err) => console.error(err));
   }, [])
 
+  // Load announcements separately from the feed, so they show even when not in the feed
+  useEffect(() => {
+    fetch(`${API_URL}/post/fetch/announcement`).then(async (res) => {
+      if (!res.ok) return;
+      const ps = await res.json();
+      set({ announce: ps.map(toFrontendPost) });
+    }).catch((err) => console.error(err));
+  }, [])
+
+  // Load notifications of the signed in user (from the notifications table)
+  useEffect(() => {
+    if (!session?.access_token) {
+      set({ notifs: [] });
+      return;
+    }
+    fetch(`${API_URL}/notification/fetch/`, {
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+    }).then(async (res) => {
+      if (!res.ok) return;
+      set({ notifs: await res.json() });
+    }).catch((err) => console.error(err));
+  }, [session?.access_token])
+
   // load comment per post
   useEffect(() => {
     (async() => {
-      const cress = await Promise.all(st.posts.map((p) => fetch(`${API_URL}/comment/fetch/${p.id}`)))
-      let fetchedComments = await Promise.all(cress.map((c) => c.json()))
+      // skip mock posts (p1, p2, ...) - only real posts have uuid ids
+      const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+      const allPosts = [...st.posts, ...st.announce, ...st.extraPosts]
+      const realPosts = allPosts.filter((p, i) => UUID_RE.test(String(p.id)) && allPosts.findIndex((x) => x.id === p.id) === i)
+      const cress = await Promise.all(realPosts.map((p) => fetch(`${API_URL}/comment/fetch/${p.id}`)))
+      let fetchedComments = await Promise.all(cress.map((c) => c.ok ? c.json() : []))
       
       interface CommentNode {
         id: string | number;
@@ -222,7 +253,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
       // console.log(postComments['33333333-3333-3333-3333-333333333332'][0].id)
       set({ comments: postComments });
     })()
-  }, [st.posts]);
+  }, [st.posts, st.announce, st.extraPosts]);
 
   // Accent palette
   useEffect(() => {
@@ -278,7 +309,29 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
     [visible],
   );
 
-  const openPost = (id: string) => set({ activeId: id, notifOpen: false, replyTo: null, replyDraft: '', composerOpen: false, shown: 12 });
+  const findPost = (id: string | null) =>
+    st.posts.find((p) => p.id === id) || st.announce.find((p) => p.id === id) || st.extraPosts.find((p) => p.id === id);
+  const openPost = async (id: string) => {
+    if (!findPost(id)) {
+      // post is not in the feed or announcements (e.g. from a notification), so load it by itself
+      const res = await fetch(`${API_URL}/post/${id}/fetch`);
+      if (!res.ok) return flash('ไม่พบโพสต์นี้แล้ว');
+      const p = toFrontendPost(await res.json());
+      set((prev) => ({ extraPosts: [...prev.extraPosts, p] }));
+    }
+    set({ activeId: id, notifOpen: false, replyTo: null, replyDraft: '', composerOpen: false, shown: 12 });
+  };
+  const openNotif = (n: Notif) => {
+    if (!n.is_read && session?.access_token) {
+      set((prev) => ({ notifs: prev.notifs.map((x) => (x.id === n.id ? { ...x, is_read: true } : x)) }));
+      fetch(`${API_URL}/notification/${n.id}/read`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session.access_token}` },
+      }).catch((err) => console.error(err));
+    }
+    openPost(n.post_id);
+  };
+  const unreadNotifs = st.notifs.filter((n) => !n.is_read).length;
 
   const setStatus = (id: string, next: ReportStatus) => {
     set((prev) => ({ reportStatus: { ...prev.reportStatus, [id]: next } }));
@@ -307,7 +360,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
     onSetStatus: (s: ReportStatus) => setStatus(p.id, s),
   });
 
-  const railAnnounce = st.posts.filter((p) => p.important)
+  const railAnnounce = [...st.announce]
     .sort((a, b) => (b.priority ? 1 : 0) - (a.priority ? 1 : 0) || b.likes - a.likes)
     .slice(0, 4);
 
@@ -322,7 +375,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
   const openCompose = () => (isGuest ? gate() : set({ composeOpen: true, notifOpen: false }));
   const goHome = () => set({ activeId: null, replyTo: null, notifOpen: false });
 
-  const active = st.posts.find((p) => p.id === st.activeId);
+  const active = findPost(st.activeId);
 
   const modQueue = Object.keys(st.reportStatus)
     .map((id) => ({ id, post: st.posts.find((p) => p.id === id), status: st.reportStatus[id] }))
@@ -349,10 +402,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
         />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative' }}>
-          <button className="btn btn-ghost" onClick={() => set({ notifOpen: !st.notifOpen, readNotif: true })} style={{ fontSize: 13, color: 'var(--color-neutral-800)', padding: '6px 8px' }}>
+          <button className="btn btn-ghost" onClick={() => set({ notifOpen: !st.notifOpen })} style={{ fontSize: 13, color: 'var(--color-neutral-800)', padding: '6px 8px' }}>
             การแจ้งเตือน
-            {!st.readNotif && (
-              <span style={{ minWidth: 17, height: 17, padding: '0 5px', display: 'grid', placeItems: 'center', borderRadius: 999, background: 'var(--pri)', color: '#fff', fontSize: 10, fontWeight: 700 }}>3</span>
+            {unreadNotifs > 0 && (
+              <span style={{ minWidth: 17, height: 17, padding: '0 5px', display: 'grid', placeItems: 'center', borderRadius: 999, background: 'var(--pri)', color: '#fff', fontSize: 10, fontWeight: 700 }}>{unreadNotifs}</span>
             )}
           </button>
           <span style={meAvatar}>{meInitials}</span>
@@ -360,10 +413,13 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole = 'stu
           {st.notifOpen && (
             <div style={{ position: 'absolute', right: 0, top: 44, width: 'min(340px,82vw)', background: 'var(--color-surface)', borderRadius: 16, boxShadow: 'var(--shadow-lg)', border: '1px solid var(--color-divider)', padding: 12, display: 'flex', flexDirection: 'column', gap: 2, animation: 'wnm-pop .16s ease both' }}>
               <span style={{ fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', padding: '2px 6px 8px' }}>แจ้งเตือนจากโพสต์ประกาศ</span>
-              {NOTIFS.map((n) => (
-                <button key={n.go} className="hov-bg" onClick={() => openPost(n.go)} style={{ cursor: 'pointer', textAlign: 'left', border: 0, background: 'transparent', borderRadius: 12, padding: '9px 10px', fontFamily: 'var(--font-body)', color: 'var(--color-text)' }}>
-                  <span style={{ fontSize: 13, lineHeight: 1.45, display: 'block' }}>{n.text}</span>
-                  <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>{n.time}</span>
+              {st.notifs.length === 0 && (
+                <span style={{ fontSize: 13, color: 'var(--color-neutral-600)', padding: '9px 10px' }}>ยังไม่มีการแจ้งเตือน</span>
+              )}
+              {st.notifs.map((n) => (
+                <button key={n.id} className="hov-bg" onClick={() => openNotif(n)} style={{ cursor: 'pointer', textAlign: 'left', border: 0, background: 'transparent', borderRadius: 12, padding: '9px 10px', fontFamily: 'var(--font-body)', color: 'var(--color-text)' }}>
+                  <span style={{ fontSize: 13, lineHeight: 1.45, display: 'block' }}>{n.message}</span>
+                  <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>{getTimeAgo(n.created_at)}</span>
                 </button>
               ))}
             </div>
