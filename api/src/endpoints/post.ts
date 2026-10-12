@@ -177,9 +177,9 @@ router.post("/post/:pid/react", auth, async (req: Request, res: Response) => {
     }
 })
 
-router.post("/post/:pid/edit", auth, async (req: Request, res: Response) => {
+router.put("/post/:pid/edit", auth, async (req: Request, res: Response) => {
     const { pid } = req.params;
-    const { title, content } = req.body;
+    const { title, content, is_important, category_names } = req.body;
 
     try {
         const userData = await getUserData(req.userId!);
@@ -187,7 +187,37 @@ router.post("/post/:pid/edit", auth, async (req: Request, res: Response) => {
 
         const { data, error } = await supabase
             .from('posts')
-            .update({ title, content })
+            .update({ title, content, is_important })
+            .eq('id', pid)
+            .select()
+        if (error) throw error;
+        // INSERT INTO post_categories VALUES(pid, cid);
+
+        // rpc update post_cate
+
+        const { data: cd, error: cderr } = await supabase
+            .rpc('update_post_cate', {
+                pid,
+                cate_name: category_names
+            })
+        
+        if (cderr) throw cderr;
+        res.status(200).send();
+    } catch (error: any) {
+        console.log(error);
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
+
+router.delete("/post/:pid/delete", auth, async (req: Request, res: Response) => {
+    const { pid } = req.params;
+    try {
+        const userData = await getUserData(req.userId!);
+        if(!userData.is_mod) return res.status(403).json({ message: "Only mods are allowed delete posts." });
+
+        const { data, error } = await supabase
+            .from('posts')
+            .delete()
             .eq('id', pid)
             .select();
         if (error) throw error;

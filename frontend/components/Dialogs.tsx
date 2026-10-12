@@ -259,6 +259,7 @@ interface EditProps {
 }
 
 export function EditDialog({ st, set, flash, setStatus }: EditProps) {
+  const { user, session } = useAuthContext();
   const id = st.editFor!;
   const post = st.posts.find((p) => p.id === id);
   const status = st.reportStatus[id];
@@ -269,19 +270,43 @@ export function EditDialog({ st, set, flash, setStatus }: EditProps) {
     const title = st.editTitle.trim();
     if (!title) return flash('หัวเรื่องต้องไม่ว่าง');
     if (!st.editCats.length) return flash('ต้องเลือกหมวดหมู่อย่างน้อย 1 หมวด');
-    set((prev) => ({
-      editFor: null,
-      posts: prev.posts.map((p) => (p.id === id ? {
-        ...p, title, body: prev.editBody.trim(),
-        cats: prev.editCats, important: prev.editImportant,
-        priority: prev.editImportant ? p.priority : null,
-        edited: 'แก้ไขโดยผู้ดูแล',
-      } : p)),
-    }));
+
+    set((prev) => {
+      fetch(`${API_URL}/post/${id}/edit`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}` 
+        },
+        body: JSON.stringify({
+          title,
+          content: prev.editBody.trim(),
+          is_important: prev.editImportant,
+          category_names: prev.editCats
+        })
+      }).then(() => {
+        console.log('jhi')        
+      }).catch(err => console.error(err));
+      return {
+        editFor: null,
+        posts: prev.posts.map((p) => (p.id === id ? {
+          ...p, title, body: prev.editBody.trim(),
+          cats: prev.editCats, important: prev.editImportant,
+          priority: prev.editImportant ? p.priority : null,
+          edited: 'แก้ไขโดยผู้ดูแล',
+        } : p)),
+      }
+    });
     flash('บันทึกการแก้ไขแล้ว');
   };
 
-  const remove = () => {
+  const remove = async () => {
+    console.log(id);
+    await fetch(`${API_URL}/post/${id}/delete`, { 
+      method: 'DELETE', 
+      headers: { Authorization: `Bearer ${session.access_token}` 
+    } });
+    // /post/:pid/delete
     set((prev) => ({ editFor: null, activeId: prev.activeId === id ? null : prev.activeId, posts: prev.posts.filter((p) => p.id !== id) }));
     flash('ลบโพสต์แล้ว');
   };
