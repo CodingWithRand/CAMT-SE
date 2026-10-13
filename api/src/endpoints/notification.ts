@@ -35,4 +35,20 @@ router.post("/notification/:nid/read", auth, async (req: Request, res: Response)
     }
 })
 
+/** Mark every unread notification of the signed-in user as read. */
+router.post("/notification/read-all", auth, async (req: Request, res: Response) => {
+    try {
+        const { data, error } = await supabase
+            .from("notifications")
+            .update({ is_read: true })
+            .eq("user_id", req.userId!)
+            .eq("is_read", false)
+            .select("id");
+        if (error) throw error;
+        res.status(200).json({ marked: data?.length ?? 0 });
+    } catch (error: any) {
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
+
 export default router;
