@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { REPORT_LABEL, fullDate, statusLook, timeAgo } from '@/lib/ui';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { REPORT_LABEL, fullDate, statusLook, timeAgo, panel } from '@/lib/ui';
 import { useApi } from './AuthContext';
 
 /** Mirrors ModAction in api/src/modlog.ts. */
@@ -47,7 +47,6 @@ const LOOK: Record<Action, { group: Group; label: string; verb: string; icon: st
 
 const GROUPS: [Group | 'all', string][] = [['all', 'ทั้งหมด'], ['reports', 'รายงาน'], ['posts', 'โพสต์และความเห็น'], ['categories', 'หมวดหมู่'], ['roles', 'สิทธิ์']];
 
-const card: CSSProperties = { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 18 };
 
 /** Who did what, and when: every moderator action, newest first. */
 export function ModerationHistory({ revision, onOpenPost }: { revision: number; onOpenPost: (id: string) => void }) {
@@ -68,7 +67,7 @@ export function ModerationHistory({ revision, onOpenPost }: { revision: number; 
 
   return (
     <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ ...card, padding: 12, display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ ...panel, padding: 12, display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
         <div className="mod-tabs" role="tablist" aria-label="กรองตามประเภท" style={{ flex: 'none', maxWidth: '100%', overflowX: 'auto' }}>
           {GROUPS.map(([k, l]) => (
             <button key={k} role="tab" aria-selected={group === k} onClick={() => setGroup(k)} style={{ flex: 'none' }}>{l}</button>
@@ -82,12 +81,12 @@ export function ModerationHistory({ revision, onOpenPost }: { revision: number; 
       </div>
 
       {data && !data.complete && (
-        <div role="note" style={{ ...card, padding: '10px 14px', fontSize: 12, lineHeight: 1.5, background: 'var(--warn-soft)', color: 'var(--warn-ink)', borderColor: 'transparent' }}>
+        <div role="note" style={{ ...panel, padding: '10px 14px', fontSize: 12, lineHeight: 1.5, background: 'var(--warn-soft)', color: 'var(--warn-ink)', borderColor: 'transparent' }}>
           ยังไม่ได้เปิดบันทึกประวัติแบบเต็ม จึงเห็นเฉพาะการตัดสินล่าสุดของแต่ละรายงานและโพสต์ที่ยังถูกซ่อน · รัน <code>api/sql/2026-10-13_moderation_log.sql</code> ใน Supabase เพื่อบันทึกทุกการกระทำต่อจากนี้
         </div>
       )}
 
-      <div style={{ ...card, overflow: 'hidden' }}>
+      <div style={{ ...panel, overflow: 'hidden' }}>
         {data === null && <div style={{ padding: 24, fontSize: 13, color: 'var(--color-neutral-600)' }}>กำลังโหลด…</div>}
         {data && shown.length === 0 && <div style={{ padding: 24, fontSize: 13, color: 'var(--color-neutral-600)' }}>ยังไม่มีประวัติในตัวกรองนี้</div>}
         {shown.map((e, i) => {

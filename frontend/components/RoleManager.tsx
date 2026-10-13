@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState, type CSSProperties } from 'react';
-import { avatarStyle } from '@/lib/ui';
+import { useCallback, useEffect, useState } from 'react';
+import { avatarStyle, panel } from '@/lib/ui';
 import { SearchIcon, ShieldIcon } from './AuthIcons';
 import { useApi } from './AuthContext';
 
@@ -21,7 +21,6 @@ const MOD_POWERS = [
   'มอบหรือถอนสิทธิ์ผู้ดูแลของคนอื่น',
 ];
 
-const card: CSSProperties = { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 18 };
 
 export function RoleManager({ flash, myId, revision }: {
   flash: (t: string) => void;
@@ -65,7 +64,7 @@ export function RoleManager({ flash, myId, revision }: {
 
   return (
     <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ ...card, padding: 14, display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ ...panel, padding: 14, display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
         <label className="topbar-search" style={{ flex: '1 1 240px', width: 'auto', justifySelf: 'stretch', minHeight: 40 }}>
           <SearchIcon />
           <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="ค้นหาด้วยชื่อหรืออีเมล" aria-label="ค้นหาผู้ใช้" />
@@ -76,7 +75,7 @@ export function RoleManager({ flash, myId, revision }: {
         </div>
       </div>
 
-      <div style={{ ...card, overflow: 'hidden' }}>
+      <div style={{ ...panel, overflow: 'hidden' }}>
         {members === null && <div style={{ padding: 24, fontSize: 13, color: 'var(--color-neutral-600)' }}>กำลังโหลด…</div>}
         {members && shown.length === 0 && <div style={{ padding: 24, fontSize: 13, color: 'var(--color-neutral-600)' }}>ไม่พบผู้ใช้ที่ตรงกับคำค้น</div>}
         {shown.map((m, i) => {

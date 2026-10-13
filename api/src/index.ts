@@ -3,7 +3,9 @@ import cors from 'cors';
 
 // Routes
 import comment from './endpoints/comment';
+import feed from './endpoints/feed';
 import post from './endpoints/post';
+import moderation from './endpoints/moderation';
 import user from './endpoints/user';
 import report from './endpoints/report';
 import misc from './endpoints/misc';
@@ -21,7 +23,9 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors({ origin: FRONTEND_ORIGIN }));
 app.use(liveUpdates);
 
+app.use("/", feed);
 app.use("/", post);
+app.use("/", moderation);
 app.use("/", comment);
 app.use("/", user);
 app.use("/", report);

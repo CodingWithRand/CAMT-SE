@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { TINTS, type Post, type ReportStatus } from './data';
+import { TINTS, type ReportStatus } from './data';
 
 export function avatarStyle(tint: number, size = 38): CSSProperties {
   const [bg, fg] = TINTS[tint % TINTS.length];
@@ -23,6 +23,9 @@ export function statusLook(status?: ReportStatus): [string, string] {
     default: return ['var(--color-neutral-200)', 'var(--color-neutral-800)'];
   }
 }
+
+/** The surface card used by the profile, moderation and settings pages. */
+export const panel: CSSProperties = { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 18 };
 
 export function chipStyle(active: boolean): CSSProperties {
   return {

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useApi } from '@/components/AuthContext';
 import type { Post, ReactionType, ReportStatus } from '@/lib/data';
+import type { PostPage, PostRow } from '@/lib/apiTypes';
 import { buildThreads, groupModReports, toCategories, toPost } from '@/lib/mappers';
 import type { SetState } from '@/lib/state';
 
@@ -52,7 +53,7 @@ export function useFeedData(set: SetState, opts: {
   }, [api, set]);
 
   /** Merge a page of API rows into the feed; my_reaction comes along so the viewer's reaction survives a reload. */
-  const takeRows = useCallback((rows: any[]) => {
+  const takeRows = useCallback((rows: PostRow[]) => {
     const likes: Record<string, ReactionType> = {};
     rows.forEach((p) => { if (p.my_reaction) likes[p.id] = p.my_reaction; });
     return { posts: rows.filter((p) => !hiddenLocally(p.id)).map(toPost), likes };
@@ -105,7 +106,7 @@ export function useFeedData(set: SetState, opts: {
     const res = await api(`/post/fetch?limit=${PAGE}&before=${encodeURIComponent(nextBefore)}${filter ? `&${filter}` : ''}`).catch(() => null);
     setLoadingMore(false);
     if (!res?.ok || feedKey.current !== key) return;
-    const body = await res.json();
+    const body: PostPage = await res.json();
     const page = takeRows(body.posts ?? []);
     pages.current += 1;
     set((prev) => ({
@@ -143,11 +144,11 @@ export function useFeedData(set: SetState, opts: {
   const loadAnnouncements = useCallback(async () => {
     const res = await api('/post/fetch/announcement').catch(() => null);
     if (!res?.ok) return;
-    const rows = await res.json();
+    const rows: PostRow[] = await res.json();
     const sig = JSON.stringify(rows);
     if (sig === lastPayload.current.announce) return;
     lastPayload.current.announce = sig;
-    set({ announce: rows.filter((p: any) => !hiddenLocally(p.id)).map(toPost) });
+    set({ announce: rows.filter((p) => !hiddenLocally(p.id)).map(toPost) });
   }, [api, set, hiddenLocally]);
 
   /** Load the comment threads of `posts` in one request; threads of other posts are kept. */

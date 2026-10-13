@@ -1,43 +1,4 @@
-export type Post = {
-    id: string;
-    title: string;
-    user_id: string;
-    content: any;
-    category_id: string[];
-    is_important?: boolean;
-    created_at?: Date;
-    updated_at?: Date;
-}
-
-export type PostView = {
-    id: string;
-    author_name: string;
-    content: any;
-    is_important?: boolean;
-    category: {
-        name: string;
-        description: string;
-        priority: number;
-    }[]; // after coalsces()
-    media?: {
-        url: string;
-        type: string;
-    }[]; // after coalsces()
-    reaction_count: number;
-    report_count: number;
-    comment_count: number;
-    engagement_score: number;
-}
-
-export type User = {
-    id: string;
-    cmu_account: string;
-    display_name: string;
-    email: string;
-    is_cmu_p: boolean;
-    is_mod: boolean;
-    created_at?: Date;
-}
+/** Rows the API writes, as they are in the database. */
 
 export type Comment = {
     id?: string;
@@ -54,6 +15,7 @@ export type Report = {
     user_id: string;
     reason: string;
     status: "Open" | "Reviewed" | "Dismissed";
-    reviewed_at?: Date;
+    reviewed_by?: string | null;
+    reviewed_at?: Date | null;
     created_at?: Date;
 }

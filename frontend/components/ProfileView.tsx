@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import type { Category, Post, ReportStatus } from '@/lib/data';
-import { REPORT_LABEL, fullDate, statusLook, timeAgo } from '@/lib/ui';
+import { REPORT_LABEL, fullDate, statusLook, timeAgo, panel } from '@/lib/ui';
 import { useApi } from './AuthContext';
 import { ShieldIcon } from './AuthIcons';
 
@@ -19,8 +19,7 @@ interface MyReport {
 
 type Tab = 'posts' | 'reports' | 'interests';
 
-const card: CSSProperties = { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 18 };
-const empty: CSSProperties = { ...card, padding: '26px 18px', textAlign: 'center', fontSize: 13, color: 'var(--color-neutral-600)' };
+const empty: CSSProperties = { ...panel, padding: '26px 18px', textAlign: 'center', fontSize: 13, color: 'var(--color-neutral-600)' };
 
 /** "โปรไฟล์ของฉัน": display name, own posts, reports sent with their status, followed categories. */
 export function ProfileView({ name, email, isMod, avatar, initials, posts, cats, interests, revision, renderPost, flash, onRenamed, onOpenPost, onEditInterests }: {
@@ -73,7 +72,7 @@ export function ProfileView({ name, email, isMod, avatar, initials, posts, cats,
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0 }}>
-      <section style={{ ...card, padding: 18, display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+      <section style={{ ...panel, padding: 18, display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
         <span style={{ ...avatar, width: 64, height: 64, fontSize: 21 }}>{initials}</span>
         <div style={{ flex: '1 1 220px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
           {editing === null ? (
@@ -125,7 +124,7 @@ export function ProfileView({ name, email, isMod, avatar, initials, posts, cats,
         reports === null ? <div style={empty}>กำลังโหลด…</div>
           : reports.length === 0 ? <div style={empty}>คุณยังไม่เคยรายงานโพสต์</div>
           : (
-            <div style={{ ...card, overflow: 'hidden' }}>
+            <div style={{ ...panel, overflow: 'hidden' }}>
               {openReports > 0 && (
                 <div style={{ padding: '10px 14px', fontSize: 12, background: 'var(--color-accent-100)', color: 'var(--color-accent-900)' }}>
                   มี {openReports} รายงานที่รอผู้ดูแลตรวจ · คุณจะได้รับแจ้งเตือนเมื่อตรวจเสร็จ
@@ -153,7 +152,7 @@ export function ProfileView({ name, email, isMod, avatar, initials, posts, cats,
       )}
 
       {tab === 'interests' && (
-        <div style={{ ...card, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ ...panel, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <span style={{ fontSize: 12.5, color: 'var(--color-neutral-700)', lineHeight: 1.5 }}>เมื่อมีโพสต์ใหม่ในหมวดเหล่านี้ คุณจะได้รับแจ้งเตือนที่ 🔔</span>
           {interests.length === 0
             ? <span style={{ fontSize: 13, color: 'var(--color-neutral-600)' }}>ยังไม่ได้ติดตามหมวดไหน</span>

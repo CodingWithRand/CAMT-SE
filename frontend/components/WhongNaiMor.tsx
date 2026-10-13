@@ -1,12 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { QA, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
+import { QA, type Post, type ReactionType } from '@/lib/data';
 import { toPost } from '@/lib/mappers';
-import { INITIAL, findPostIn, mapAllPosts, postLists, type AppState, type Notif, type SetState, type ViewerRole } from '@/lib/state';
+import { INITIAL, findPostIn, type AppState, type SetState, type ViewerRole } from '@/lib/state';
 import { ACCENT_MAP, avatarStyle } from '@/lib/ui';
-import { rateLimitMessage } from '@/lib/api';
 import { useFeedData } from '@/hooks/useFeedData';
+import { useInterests } from '@/hooks/useInterests';
+import { useNotifications } from '@/hooks/useNotifications';
+import { usePostActions } from '@/hooks/usePostActions';
+import { useReactions } from '@/hooks/useReactions';
 import { useLiveUpdates } from '@/hooks/useLiveUpdates';
 import { usePostUrl } from '@/hooks/usePostUrl';
 import { useToast } from '@/hooks/useToast';
@@ -27,7 +30,7 @@ import { ModerationHistory } from './ModerationHistory';
 import { ModerationView } from './ModerationView';
 import PostCard from './PostCard';
 import { DeleteDialog, HideDialog } from './PostActionDialogs';
-import PostModal, { type WriteResult } from './PostModal';
+import PostModal from './PostModal';
 import { ProfileView } from './ProfileView';
 import { ReportDialog } from './ReportDialog';
 import { RightRail } from './RightRail';
@@ -43,19 +46,6 @@ interface Props {
 }
 
 const UNDO_MS = 5000;
-
-const STATUS_TOAST: Record<ReportStatus, string> = {
-  Open: 'ส่งกลับไปรอตรวจแล้ว',
-  Reviewed: 'จัดการแล้ว · แจ้งผลให้ผู้รายงานแล้ว',
-  Dismissed: 'ไม่พบปัญหา · แจ้งผลให้ผู้รายงานแล้ว',
-};
-
-/** Drop the key entirely when the reaction is cleared, so lookups stay falsy. */
-const withReaction = (map: Record<string, ReactionType>, id: string, next?: ReactionType) => {
-  const copy = { ...map };
-  if (next) copy[id] = next; else delete copy[id];
-  return copy;
-};
 
 export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneMode = 'single' }: Props) {
   const [st, setRaw] = useState<AppState>(INITIAL);
@@ -99,36 +89,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   useEffect(() => { if (st.interestsOpen && !data.interestsLoaded) data.loadInterests(); }, [st.interestsOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /** Replace the followed categories with these ids (PUT /user/interests, the user_interests_op RPC); false if the API refused. */
-  const putInterests = async (ids: string[]) => {
-    const res = await api('/user/interests', { method: 'PUT', json: { cate_id: ids } }).catch(() => null);
-    return !!res?.ok;
-  };
-
-  const saveInterests = async (ids: string[]) => {
-    if (!(await putInterests(ids))) { flash('บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง'); return false; }
-    set({ interests: ids });
-    data.loadCats();   // follower counts
-    flash(ids.length ? `ติดตาม ${ids.length} หมวดแล้ว · จะได้รับแจ้งเตือนเมื่อมีโพสต์ใหม่ในหมวดเหล่านี้` : 'เลิกติดตามทุกหมวดแล้ว');
-    return true;
-  };
-
-  const toggleInterest = async (id: string) => {
-    const name = st.cats.find((c) => c.id === id)?.name ?? 'หมวดนี้';
-    if (isGuest) return gate();
-    // Saving replaces the whole list, so it must start from what the server has.
-    if (!data.interestsLoaded) { data.loadInterests(); return flash('กำลังโหลดหมวดที่ติดตาม ลองอีกครั้งในอีกสักครู่'); }
-    const before = st.interests;
-    const has = before.includes(id);
-    const next = has ? before.filter((x) => x !== id) : [...before, id];
-    set({ interests: next });
-    if (!(await putInterests(next))) {
-      set({ interests: before });
-      return flash('บันทึกความสนใจไม่สำเร็จ ลองใหม่อีกครั้ง');
-    }
-    data.loadCats();
-    flash(has ? `เลิกติดตาม ${name} แล้ว` : `ติดตาม ${name} แล้ว · จะได้รับแจ้งเตือนเมื่อมีโพสต์ใหม่ในหมวดนี้`);
-  };
+  const interests = useInterests({
+    interests: st.interests, cats: st.cats, loaded: data.interestsLoaded, set, flash, isGuest,
+    onGuest: gate, reload: data.loadInterests, onSaved: data.loadCats,   // follower counts
+  });
 
   /* ── Posts and comments ── */
 
@@ -161,197 +125,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   usePostUrl(st.activeId, openPost, closePost);
 
-  /**
-   * Comment writes, then re-read that post's thread: the create endpoints answer with an
-   * empty 200, and the row the page needs carries joined fields (display_name, role).
-   */
-  const writeComment = async (postId: string, path: string, opts: Parameters<typeof api>[1]): Promise<WriteResult> => {
-    const res = await api(path, opts).catch(() => null);
-    if (!res?.ok) return (await rateLimitMessage(res)) ?? '';
-    await loadComments([{ id: postId }]);
-    return true;
-  };
-  const postComment = (postId: string, text: string, parentId?: string) =>
-    writeComment(postId, parentId ? `/comment/${postId}/replyto/${parentId}` : `/comment/${postId}`, { method: 'POST', json: { content: text } });
-  const editComment = (postId: string, commentId: string, text: string) =>
-    writeComment(postId, `/comment/${commentId}`, { method: 'PUT', json: { content: text } });
-  const deleteComment = (postId: string, commentId: string) =>
-    writeComment(postId, `/comment/${commentId}`, { method: 'DELETE' });
-
-  /** Toggle this viewer's reaction; the API flips it and answers with the new total. */
-  const react = async (kind: 'post' | 'comment', id: string, type: ReactionType, change: boolean): Promise<number> => {
-    const res = await api(`/${kind}/${id}/react`, { method: 'POST', json: { reaction_type: type, change } });
-    if (!res.ok) throw new Error((await res.json().catch(() => null))?.message ?? `HTTP ${res.status}`);
-    return res.json();
-  };
-
-  const reactToPost = async (pid: string, type: ReactionType, change: boolean) => {
-    const before = st.likes[pid];
-    // Tapping the one already held clears it — same rule the endpoint applies.
-    const next = before === type ? undefined : type;
-    // Show the result right away; the server's count replaces it after.
-    const delta = before && !next ? -1 : !before && next ? 1 : 0;
-    const setCount = (count: (p: Post) => number) => set((prev) => mapAllPosts(prev, (list) =>
-      list.map((p) => (p.id === pid ? { ...p, likes: Math.max(0, count(p)) } : p))));
-    set((prev) => ({ likes: withReaction(prev.likes, pid, next) }));
-    setCount((p) => p.likes + delta);
-    try {
-      const total = await react('post', pid, type, !!before && !!next && change);
-      setCount(() => total);
-    } catch (err: any) {
-      console.error('reactToPost', err);
-      set((prev) => ({ likes: withReaction(prev.likes, pid, before) }));
-      setCount((p) => p.likes - delta);
-      flash('รีแอคไม่สำเร็จ ลองใหม่อีกครั้ง');
-    }
-  };
-
-  const reactToComment = async (pid: string, cid: string, type: ReactionType, change: boolean) => {
-    const before = st.cLikes[cid];
-    const next = before === type ? undefined : type;
-    try {
-      const total = await react('comment', cid, type, !!before && !!next && change);
-      set((prev) => ({
-        cLikes: withReaction(prev.cLikes, cid, next),
-        comments: {
-          ...prev.comments,
-          [pid]: (prev.comments[pid] ?? []).map((c) => c.id === cid
-            ? { ...c, likes: total }
-            : { ...c, replies: c.replies.map((r) => (r.id === cid ? { ...r, likes: total } : r)) }),
-        },
-      }));
-    } catch (err: any) {
-      console.error('reactToComment', err);
-      flash('รีแอคไม่สำเร็จ ลองใหม่อีกครั้ง');
-    }
-  };
-
-  /* ── Notifications ── */
-
-  const openNotif = (n: Notif) => {
-    if (!n.is_read && user) {
-      set((prev) => ({ notifs: prev.notifs.map((x) => (x.id === n.id ? { ...x, is_read: true } : x)) }));
-      api(`/notification/${n.id}/read`, { method: 'POST' }).catch((err) => console.error(err));
-    }
-    openPost(n.post_id);
-  };
-
-  /** Mark every notification read: the badge clears at once, and comes back if the API refuses. */
-  const readAllNotifs = async () => {
-    const before = st.notifs;
-    set({ notifs: before.map((n) => ({ ...n, is_read: true })) });
-    const res = await api('/notification/read-all', { method: 'POST' }).catch(() => null);
-    if (!res?.ok) {
-      set({ notifs: before });
-      return flash('อ่านทั้งหมดไม่สำเร็จ ลองใหม่อีกครั้ง');
-    }
-    flash('อ่านการแจ้งเตือนทั้งหมดแล้ว');
-  };
-
-  const unreadNotifs = st.notifs.filter((n) => !n.is_read).length;
-
-  /* ── Reports and moderation ── */
-
-  /** Send a report; resolves to an error message, or null on success. */
-  const submitReport = async (postId: string, reason: string) => {
-    const res = await api('/report/createticket', { method: 'POST', json: { post_id: postId, reason } }).catch(() => null);
-    if (res?.status === 409) {
-      await refreshReports();
-      return 'คุณรายงานโพสต์นี้ไปแล้ว · รอผู้ดูแลตรวจสอบ';
-    }
-    if (!res?.ok) {
-      console.error('submitReport', res?.status);
-      return (await rateLimitMessage(res)) ?? 'ส่งรายงานไม่สำเร็จ ลองใหม่อีกครั้ง';
-    }
-    await refreshReports();
-    return null;
-  };
-
-  /** An undoable request that throws when the API refuses (see useUndoableWrites). */
-  const commitTo = (path: string, method: 'PUT' | 'DELETE', json?: unknown) => async (keepalive?: boolean) => {
-    const res = await api(path, { method, json, keepalive });
-    if (!res.ok) throw new Error(`${method} ${path} ${res.status}`);
-  };
-
-  /** Set the report status of post `id` (all of its tickets). The reporters get a notification. */
-  const setStatus = (id: string, next: ReportStatus) => {
-    const before = st.reportStatus[id];
-    const beforeQueue = st.modReports.find((r) => r.post_id === id)?.status;
-    if ((beforeQueue ?? before) === next) return;
-    // Flip the chip and the queue now, roll back each to its own old value on undo or failure.
-    const apply = (chip: ReportStatus | undefined, queue: ReportStatus | undefined) => set((prev) => ({
-      reportStatus: chip ? { ...prev.reportStatus, [id]: chip } : prev.reportStatus,
-      modReports: prev.modReports.map((r) => (r.post_id === id && queue ? { ...r, status: queue } : r)),
-    }));
-    defer(`status:${id}`, {
-      message: STATUS_TOAST[next],
-      apply: () => apply(next, next),
-      revert: () => apply(before, beforeQueue),
-      commit: commitTo(`/report/post/${id}/status`, 'PUT', { status: next }),
-      failMessage: 'เปลี่ยนสถานะไม่สำเร็จ',
-      after: refreshReports,
-    });
-  };
-
-  /** Hide a post (moderators): it leaves the feed, its open reports close as Reviewed, reporters and author are told. */
-  const hidePost = async (id: string, reason: string) => {
-    const snapshot = { ...postLists(st), modReports: st.modReports, reportStatus: st.reportStatus };
-    const drop = (list: Post[]) => list.filter((p) => p.id !== id);
-    const flag = (list: Post[]) => list.map((p) => (p.id === id ? { ...p, hidden: { reason: reason || null } } : p));
-    defer(`hide:${id}`, {
-      message: 'ซ่อนโพสต์แล้ว · ผู้รายงานและเจ้าของโพสต์จะได้รับแจ้ง',
-      apply: () => set((prev) => ({
-        hideFor: null,
-        activeId: prev.activeId === id ? null : prev.activeId,
-        posts: drop(prev.posts),
-        announce: drop(prev.announce),
-        results: prev.results && drop(prev.results),
-        // Still listed where the author or a moderator looks at it, now marked hidden.
-        extraPosts: flag(prev.extraPosts),
-        mine: prev.mine && flag(prev.mine),
-        // The API closes open reports as Reviewed; show that already.
-        modReports: prev.modReports.map((r) => (r.post_id === id ? { ...r, hidden: true, hiddenReason: reason, status: r.status === 'Open' ? 'Reviewed' : r.status } : r)),
-        reportStatus: prev.reportStatus[id] === 'Open' ? { ...prev.reportStatus, [id]: 'Reviewed' } : prev.reportStatus,
-      })),
-      revert: () => set(snapshot),
-      commit: commitTo(`/post/${id}/hide`, 'PUT', { reason }),
-      failMessage: 'ซ่อนโพสต์ไม่สำเร็จ',
-      after: refreshReports,
-    });
-  };
-
-  /** Delete a post for good: the author's own, or any post for a moderator. */
-  const deletePost = async (id: string) => {
-    const snapshot = postLists(st);
-    defer(`delete:${id}`, {
-      message: 'ลบโพสต์แล้ว',
-      apply: () => set((prev) => ({
-        deleteFor: null,
-        activeId: prev.activeId === id ? null : prev.activeId,
-        ...mapAllPosts(prev, (list) => list.filter((p) => p.id !== id)),
-      })),
-      revert: () => set(snapshot),
-      commit: commitTo(`/post/${id}/delete`, 'DELETE'),
-      failMessage: 'ลบโพสต์ไม่สำเร็จ',
-      after: refreshReports,
-    });
-  };
-
-  /** Show a hidden post again (moderators). */
-  const unhidePost = async (id: string) => {
-    const res = await api(`/post/${id}/unhide`, { method: 'PUT' }).catch(() => null);
-    if (!res?.ok) {
-      console.error('unhidePost', res?.status);
-      return flash('แสดงโพสต์อีกครั้งไม่สำเร็จ');
-    }
-    set((prev) => ({
-      editFor: null,
-      extraPosts: prev.extraPosts.map((p) => (p.id === id ? { ...p, hidden: undefined } : p)),
-    }));
-    flash('โพสต์กลับมาแสดงแล้ว');
-    loadPosts();
-    refreshReports();
-  };
+  const reactions = useReactions(st, set, flash);
+  const actions = usePostActions({ st, set, flash, defer, loadComments, loadPosts, refreshReports });
+  const notifications = useNotifications(st.notifs, set, flash, !!user, openPost);
 
   const openEdit = async (id: string) => {
     const p = await ensurePost(id);
@@ -446,7 +222,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     commentCount: (st.comments[p.id] || []).length,
     reportStatus: st.reportStatus[p.id],
     isGuest,
-    onReact: (r: ReactionType, change: boolean) => reactToPost(p.id, r, change),
+    onReact: (r: ReactionType, change: boolean) => reactions.onPost(p.id, r, change),
     onGate: gate,
     onOpen: () => openPost(p.id),
     canEdit: !isGuest && (isMod || !!p.mine),
@@ -492,11 +268,11 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         onCompose={openCompose}
         onLogin={(mode) => set({ login: mode, notifOpen: false })}
         notifs={st.notifs}
-        unread={unreadNotifs}
+        unread={notifications.unread}
         notifOpen={st.notifOpen}
         onNotifOpen={(o) => { if (o) setAccountOpen(false); set({ notifOpen: o }); }}
-        onOpenNotif={openNotif}
-        onReadAll={readAllNotifs}
+        onOpenNotif={notifications.open}
+        onReadAll={notifications.readAll}
         account={user && (
           <AccountMenu
             name={viewer.name}
@@ -505,7 +281,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
             isMod={isMod}
             avatar={meAvatar}
             compact={st.w < 640}
-            unread={unreadNotifs}
+            unread={notifications.unread}
             open={accountOpen}
             onOpenChange={(o) => { setAccountOpen(o); if (o) set({ notifOpen: false }); }}
             onNotifications={() => set({ notifOpen: true })}
@@ -532,7 +308,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           interests={st.interests}
           onView={(view) => set({ view, activeId: null, replyTo: null })}
           onCat={(cat) => set({ cat, activeId: null })}
-          onToggleInterest={toggleInterest}
+          onToggleInterest={interests.toggle}
         />
 
         {st.view === 'moderation' && isMod ? (
@@ -546,11 +322,11 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
                 blocked={locked}
                 ensurePost={ensurePost}
                 renderPost={(p) => <PostCard {...cardProps(p)} />}
-                onDismiss={(id) => setStatus(id, 'Dismissed')}
+                onDismiss={(id) => actions.setStatus(id, 'Dismissed')}
                 onEdit={openEdit}
                 onHide={(id) => set({ hideFor: id })}
-                onUnhide={unhidePost}
-                onReopen={(id) => setStatus(id, 'Open')}
+                onUnhide={actions.unhidePost}
+                onReopen={(id) => actions.setStatus(id, 'Open')}
                 onRefresh={() => { refreshReports(); flash('โหลดรายงานล่าสุดแล้ว'); }}
               />
             )}
@@ -588,7 +364,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
             view={st.view}
             category={(() => {
               const c = st.cats.find((x) => x.id === st.cat);
-              return c ? { name: c.name, dot: c.dot, followers: c.followers ?? 0, followed: st.interests.includes(c.id), onToggle: () => toggleInterest(c.id) } : null;
+              return c ? { name: c.name, dot: c.dot, followers: c.followers ?? 0, followed: st.interests.includes(c.id), onToggle: () => interests.toggle(c.id) } : null;
             })()}
             posts={feed}
             status={searchMode ? (st.results === null ? 'loading' : 'ready') : data.feedStatus}
@@ -632,11 +408,11 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           meAvatar={meAvatar}
           gate={gate}
           flash={flash}
-          onComment={(pid, text) => postComment(pid, text)}
-          onReply={(pid, parentId, text) => postComment(pid, text, parentId)}
-          onReactComment={reactToComment}
-          onEditComment={editComment}
-          onDeleteComment={deleteComment}
+          onComment={(pid, text) => actions.postComment(pid, text)}
+          onReply={(pid, parentId, text) => actions.postComment(pid, text, parentId)}
+          onReactComment={reactions.onComment}
+          onEditComment={actions.editComment}
+          onDeleteComment={actions.deleteComment}
           onClose={closePost}
         />
       )}
@@ -655,8 +431,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         />
       )}
       {st.editFor && (
-        <EditDialog st={st} set={set} flash={flash} setStatus={setStatus} isMod={isMod}
-          onHide={(id) => set({ editFor: null, hideFor: id })} onUnhide={unhidePost} onDelete={(id) => set({ editFor: null, deleteFor: id })} />
+        <EditDialog st={st} set={set} flash={flash} setStatus={actions.setStatus} isMod={isMod}
+          onHide={(id) => set({ editFor: null, hideFor: id })} onUnhide={actions.unhidePost} onDelete={(id) => set({ editFor: null, deleteFor: id })} />
       )}
       {st.interestsOpen && (
         <InterestsDialog
@@ -664,13 +440,13 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           selected={st.interests}
           loaded={data.interestsLoaded}
           welcome={st.interestsOpen === 'welcome'}
-          onSave={saveInterests}
+          onSave={interests.save}
           onClose={() => set({ interestsOpen: false })}
         />
       )}
-      {st.deleteFor && <DeleteDialog st={st} set={set} isMod={isMod} onDelete={deletePost} />}
-      {st.hideFor && <HideDialog st={st} set={set} onHide={hidePost} />}
-      {st.reportFor && <ReportDialog st={st} set={set} flash={flash} onSubmit={submitReport} />}
+      {st.deleteFor && <DeleteDialog st={st} set={set} isMod={isMod} onDelete={actions.deletePost} />}
+      {st.hideFor && <HideDialog st={st} set={set} onHide={actions.hidePost} />}
+      {st.reportFor && <ReportDialog st={st} set={set} flash={flash} onSubmit={actions.submitReport} />}
       {st.login && <LoginDialog initialMode={st.login} onClose={closeLogin} onDone={onLoginDone} />}
 
       {st.lightbox && (
@@ -685,7 +461,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         <BottomNav
           view={st.view}
           notifOpen={st.notifOpen}
-          unread={unreadNotifs}
+          unread={notifications.unread}
           onView={(view) => { set({ view, activeId: null, replyTo: null, notifOpen: false }); window.scrollTo({ top: 0 }); }}
           onCompose={openCompose}
           onNotifications={() => { setAccountOpen(false); set({ notifOpen: true }); }}

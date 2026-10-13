@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import { panel } from '@/lib/ui';
 import { useApi } from './AuthContext';
 
 const MAX_NAME = 40;
@@ -26,7 +27,6 @@ const chipLook = (priority: number): CSSProperties => priority <= 2
   ? { background: 'var(--color-accent-100)', color: 'var(--color-accent-800)' }
   : { background: 'var(--color-neutral-200)', color: 'var(--color-neutral-800)' };
 
-const card: CSSProperties = { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 18 };
 const label: CSSProperties = { fontSize: 11.5, color: 'var(--color-neutral-700)', display: 'flex', justifyContent: 'space-between' };
 const field: CSSProperties = { background: 'var(--color-neutral-100)', fontSize: 13.5, borderRadius: 12 };
 
@@ -85,7 +85,7 @@ export function CategoryManager({ flash, dotFor, revision, onChanged }: {
   };
 
   const editor = draft && (
-    <div style={{ ...card, padding: 16, display: 'flex', flexDirection: 'column', gap: 12, borderColor: 'var(--color-accent-300)' }}>
+    <div style={{ ...panel, padding: 16, display: 'flex', flexDirection: 'column', gap: 12, borderColor: 'var(--color-accent-300)' }}>
       <strong style={{ fontSize: 14 }}>{draft.id ? 'แก้ไขหมวดหมู่' : 'เพิ่มหมวดหมู่ใหม่'}</strong>
 
       <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -148,7 +148,7 @@ export function CategoryManager({ flash, dotFor, revision, onChanged }: {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {cats?.map((c) => draft?.id === c.id ? <div key={c.id}>{editor}</div> : (
-          <div key={c.id} style={{ ...card, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div key={c.id} style={{ ...panel, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
               <span style={{ width: 10, height: 10, borderRadius: 999, flex: 'none', background: dotFor(c.id) ?? 'var(--color-neutral-400)' }} />
               <span className="tag" style={{ ...chipLook(c.priority), fontSize: 12.5, fontWeight: 600 }}>{c.category_name}</span>
