@@ -33,6 +33,8 @@ export interface Post {
   media?: Media[];
   notified?: number;
   reports?: number;
+  hidden?: { reason: string | null };
+  mine?: boolean;   // written by the viewer, who may edit and delete it   // hidden by a moderator; only the author still gets it
   edited?: string;
 
   // belows are out of scope for now.

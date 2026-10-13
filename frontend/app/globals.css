@@ -419,3 +419,36 @@ body.wnm-locked { overflow: hidden !important; }
   .auth-logo { flex-direction: row !important; align-items: center !important; }
   .auth-logo img { width: 104px !important; }
 }
+
+/* — moderation center — */
+.mod-shell {
+  display: grid; grid-template-columns: minmax(250px, 340px) minmax(0, 1fr); gap: 14px; align-items: start;
+}
+.mod-panel { background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: 18px; overflow: hidden; }
+.mod-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--color-neutral-200); }
+.mod-tabs button {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 0; cursor: pointer;
+  padding: 7px 8px; border-radius: 999px; background: transparent; font-family: var(--font-body); font-size: 12.5px; color: var(--color-neutral-700);
+  white-space: nowrap;
+}
+.mod-tabs button[aria-selected="true"] { background: var(--color-surface); color: var(--color-accent-800); font-weight: 600; box-shadow: var(--shadow-sm); }
+.mod-count { min-width: 18px; height: 18px; padding: 0 5px; display: inline-grid; place-items: center; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: var(--color-neutral-300); color: var(--color-neutral-800); }
+.mod-tabs button[aria-selected="true"] .mod-count { background: var(--color-accent); color: #fff; }
+.mod-item {
+  width: 100%; display: flex; gap: 10px; align-items: flex-start; text-align: left; cursor: pointer; border: 0;
+  padding: 12px 14px; background: transparent; border-left: 3px solid transparent; font-family: var(--font-body); color: var(--color-text);
+  border-bottom: 1px solid var(--color-divider);
+}
+.mod-item:hover { background: var(--color-accent-100); }
+.mod-item[aria-current="true"] { background: var(--color-accent-200); border-left-color: var(--color-accent); }
+.mod-action {
+  flex: 1 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 42px; padding: 0 16px; cursor: pointer;
+  border-radius: 12px; border: 1.5px solid transparent; font-family: var(--font-body); font-size: 13.5px; font-weight: 600; white-space: nowrap;
+  transition: filter .15s, transform .1s;
+}
+.mod-action:hover { filter: brightness(.96); }
+.mod-action:active { transform: translateY(1px); }
+.mod-action kbd { font-family: var(--font-body); font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, #000 10%, transparent); }
+@media (max-width: 879px) {
+  .mod-shell { grid-template-columns: 1fr; }
+}

@@ -8,6 +8,8 @@ router.get("/misc/categories", async (req: Request, res: Response) => {
         const { data, error } = await supabase
             .from('categories')
             .select("*")
+            .order("priority")
+            .order("category_name")
 
         if (error) throw error;
         res.status(200).json(data);

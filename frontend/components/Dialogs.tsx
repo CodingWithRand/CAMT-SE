@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState, type CSSProperties } from 'react';
-import { CATS, ME, REASONS, STATUSES, type Post, type ReportStatus } from '@/lib/data';
-import { chipStyle, statusLook } from '@/lib/ui';
+import { CATS, ME, REASONS, type Post, type ReportStatus } from '@/lib/data';
+import { REPORT_LABEL, chipStyle, statusLook } from '@/lib/ui';
 import type { AppState, SetState } from './WhongNaiMor';
 import { useAuthContext } from './AuthContext';
 
@@ -61,9 +61,11 @@ interface ComposeProps {
   flash: (t: string) => void;
   nextPostId: () => string;
   nextMediaId: () => string;
+  /** Called after the post is saved, so the feed shows it without reloading the page. */
+  onPosted: () => void;
 }
 
-export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, flash, nextPostId, nextMediaId }: ComposeProps) {
+export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, flash, nextPostId, nextMediaId, onPosted }: ComposeProps) {
   const { user, session } = useAuthContext();
 
   const filePicker = useRef<HTMLInputElement>(null);
@@ -139,11 +141,10 @@ export function ComposeDialog({ st, set, isMod, meName, meInitials, meAvatar, fl
       return flash('เผยแพร่โพสต์ไม่สำเร็จ ลองใหม่อีกครั้ง');
     }
     st.newMedia.forEach((m) => URL.revokeObjectURL(m.url));
-    // console.log(res.status)
-    // console.log(await res.json())
-    // set((prev) => ({ posts: [np, ...prev.posts], composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false }));
+    setSending(false);
+    set({ composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false });
     flash(imp ? 'เผยแพร่เป็นประกาศและส่งแจ้งเตือนแล้ว' : 'เผยแพร่โพสต์แล้ว');
-    setTimeout(() => window.location.reload(), 1000); // <== find a better way to refresh after posted.
+    onPosted();
   };
 
   const importantNote = isMod
@@ -256,70 +257,68 @@ interface EditProps {
   set: SetState;
   flash: (t: string) => void;
   setStatus: (id: string, s: ReportStatus) => void;
+  isMod: boolean;
+  onHide: (id: string) => void;
+  onUnhide: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export function EditDialog({ st, set, flash, setStatus }: EditProps) {
-  const { user, session } = useAuthContext();
+export function EditDialog({ st, set, flash, setStatus, isMod, onHide, onUnhide, onDelete }: EditProps) {
+  const { session } = useAuthContext();
   const id = st.editFor!;
-  const post = st.posts.find((p) => p.id === id);
+  const post = [...st.posts, ...st.announce, ...st.extraPosts].find((p) => p.id === id);
+  const mine = !!post?.mine;
+  const asMod = isMod && !mine;   // a moderator editing someone else's post
   const status = st.reportStatus[id];
   const reason = st.reportReason[id];
-  const close = () => set({ editFor: null });
+  const [busy, setBusy] = useState(false);
+  const close = () => { if (!busy) set({ editFor: null }); };
 
-  const save = () => {
+  const save = async () => {
     const title = st.editTitle.trim();
     if (!title) return flash('หัวเรื่องต้องไม่ว่าง');
     if (!st.editCats.length) return flash('ต้องเลือกหมวดหมู่อย่างน้อย 1 หมวด');
 
-    set((prev) => {
-      fetch(`${API_URL}/post/${id}/edit`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}` 
-        },
-        body: JSON.stringify({
-          title,
-          content: prev.editBody.trim(),
-          is_important: prev.editImportant,
-          category_names: prev.editCats
-        })
-      }).then(() => {
-        console.log('jhi')        
-      }).catch(err => console.error(err));
-      return {
-        editFor: null,
-        posts: prev.posts.map((p) => (p.id === id ? {
-          ...p, title, body: prev.editBody.trim(),
-          cats: prev.editCats, important: prev.editImportant,
-          priority: prev.editImportant ? p.priority : null,
-          edited: 'แก้ไขโดยผู้ดูแล',
-        } : p)),
-      }
-    });
-    flash('บันทึกการแก้ไขแล้ว');
-  };
+    setBusy(true);
+    const body = st.editBody.trim();
+    const res = await fetch(`${API_URL}/post/${id}/edit`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
+      body: JSON.stringify({ title, content: body, is_important: st.editImportant, category_names: st.editCats }),
+    }).catch(() => null);
+    setBusy(false);
+    if (!res?.ok) {
+      return flash(res?.status === 403 ? 'แก้ไขได้เฉพาะโพสต์ของคุณ' : 'บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง');
+    }
 
-  const remove = async () => {
-    console.log(id);
-    await fetch(`${API_URL}/post/${id}/delete`, { 
-      method: 'DELETE', 
-      headers: { Authorization: `Bearer ${session.access_token}` 
-    } });
-    // /post/:pid/delete
-    set((prev) => ({ editFor: null, activeId: prev.activeId === id ? null : prev.activeId, posts: prev.posts.filter((p) => p.id !== id) }));
-    flash('ลบโพสต์แล้ว');
+    set((prev) => {
+      // Only a moderator can switch a post to or from an announcement; the API ignores it otherwise.
+      const important = isMod ? prev.editImportant : undefined;
+      const edit = (list: Post[]) => list.map((p) => (p.id === id ? {
+        ...p, title, body, cats: prev.editCats,
+        ...(important === undefined ? {} : { important, priority: important ? p.priority : null }),
+        edited: asMod ? 'แก้ไขโดยผู้ดูแล' : 'แก้ไขแล้ว',
+      } : p));
+      return { editFor: null, posts: edit(prev.posts), announce: edit(prev.announce), extraPosts: edit(prev.extraPosts) };
+    });
+    // A moderator editing a reported post is how it gets fixed, so that closes its open reports.
+    // An author editing their own reported post does not.
+    if (isMod && st.reportStatus[id] === 'Open') setStatus(id, 'Reviewed');
+    else flash('บันทึกการแก้ไขแล้ว');
   };
 
   return (
-    <div className="dialog-backdrop" style={{ zIndex: 42, animation: 'wnm-pop .16s ease both' }}>
-      <div className="dialog" style={{ width: 'min(560px,100%)', maxHeight: '92vh', overflow: 'auto', gap: 13, borderRadius: 20 }}>
+    <div className="dialog-backdrop" style={{ zIndex: 42, animation: 'wnm-pop .16s ease both' }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
+      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="edit-title" style={{ width: 'min(560px,100%)', maxHeight: '92vh', overflow: 'auto', gap: 13, borderRadius: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <h4 className="dialog-title" style={{ margin: 0, flex: 1, fontSize: 16 }}>แก้ไขโพสต์ (ผู้ดูแล)</h4>
-          <button className="btn btn-secondary btn-icon" onClick={close}>✕</button>
+          <h4 id="edit-title" className="dialog-title" style={{ margin: 0, flex: 1, fontSize: 16 }}>{asMod ? 'แก้ไขโพสต์ (ผู้ดูแล)' : 'แก้ไขโพสต์ของคุณ'}</h4>
+          <button className="btn btn-secondary btn-icon" onClick={close} aria-label="ปิด">✕</button>
         </div>
         <p style={{ margin: 0, fontSize: 12, lineHeight: 1.5, color: 'var(--color-neutral-700)' }}>
-          โพสต์ของ {post?.name ?? ''} · การแก้ไขจะบันทึกผู้แก้ไขและเวลาไว้กับโพสต์
+          {asMod
+            ? `โพสต์ของ ${post?.name ?? ''} · โพสต์จะขึ้นป้าย "แก้ไขโดยผู้ดูแล"`
+            : 'โพสต์จะขึ้นป้าย "แก้ไขแล้ว" ให้ผู้อ่านทราบ'}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -334,35 +333,149 @@ export function EditDialog({ st, set, flash, setStatus }: EditProps) {
 
         <CatPicker cats={st.CATS} selected={st.editCats} onToggle={(name) => set((prev) => ({ editCats: toggle(prev.editCats, name) }))} />
 
-        {status && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 7, background: 'var(--peach)', borderRadius: 14, padding: '12px 14px' }}>
-            <span style={{ fontSize: 11.5, color: 'var(--color-neutral-800)' }}>
-              สถานะรายงานปัจจุบัน: {status}{reason ? ` · ${reason}` : ''}
-            </span>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {STATUSES.map((x) => {
-                const on = status === x;
-                const [bg, fg] = statusLook(x);
-                return (
-                  <button key={x} className="hov-border" onClick={() => setStatus(id, x)} style={{ cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 12, padding: '7px 14px', borderRadius: 999, border: `1.5px solid ${on ? 'var(--color-accent)' : 'transparent'}`, background: on ? bg : 'var(--color-surface)', color: on ? fg : 'var(--color-neutral-800)' }}>
-                    {x}
-                  </button>
-                );
-              })}
+        {isMod && status && (() => {
+          const [bg, fg] = statusLook(status);
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, background: 'var(--peach)', borderRadius: 14, padding: '12px 14px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+                สถานะรายงาน
+                <span className="tag" style={{ background: bg, color: fg, fontWeight: 700 }}>{REPORT_LABEL[status]}</span>
+              </span>
+              {reason && <span style={{ fontSize: 11.5, color: 'var(--color-neutral-800)' }}>เหตุผลล่าสุด: {reason}</span>}
+              <span style={{ fontSize: 11, color: 'var(--color-neutral-700)', lineHeight: 1.5 }}>
+                {status === 'Open'
+                  ? `กดบันทึกแล้ว รายงานจะเปลี่ยนเป็น "${REPORT_LABEL.Reviewed}" และแจ้งผู้รายงาน · เปลี่ยนสถานะอื่นได้ที่ศูนย์ผู้ดูแล`
+                  : 'เปลี่ยนสถานะได้ที่ศูนย์ผู้ดูแล'}
+              </span>
             </div>
-          </div>
+          );
+        })()}
+
+        {isMod && (
+          <AnnounceToggle
+            note={st.editImportant ? 'แสดงในเลนประกาศและส่งแจ้งเตือน' : 'แสดงเป็นโพสต์ทั่วไป'}
+            on={st.editImportant}
+            onToggle={() => set((prev) => ({ editImportant: !prev.editImportant }))}
+          />
         )}
 
-        <AnnounceToggle
-          note={st.editImportant ? 'แสดงในเลนประกาศและส่งแจ้งเตือน' : 'แสดงเป็นโพสต์ทั่วไป'}
-          on={st.editImportant}
-          onToggle={() => set((prev) => ({ editImportant: !prev.editImportant }))}
-        />
+        <div className="dialog-actions" style={{ flexWrap: 'wrap' }}>
+          <span style={{ marginRight: 'auto', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+            {mine ? (
+              <button className="btn btn-ghost" onClick={() => onDelete(id)} disabled={busy} style={{ color: '#8a3a1c' }}>ลบโพสต์</button>
+            ) : isMod && (
+              <>
+                {post?.hidden
+                  ? <button className="btn btn-ghost" onClick={() => onUnhide(id)} disabled={busy}>แสดงโพสต์อีกครั้ง</button>
+                  : <button className="btn btn-ghost" onClick={() => onHide(id)} disabled={busy} style={{ color: '#8a3a1c' }}>ซ่อนโพสต์</button>}
+                <button className="btn btn-ghost" onClick={() => onDelete(id)} disabled={busy} style={{ color: '#8a3a1c' }}>ลบถาวร</button>
+              </>
+            )}
+          </span>
+          <button className="btn btn-secondary" onClick={close} disabled={busy}>ยกเลิก</button>
+          <button className="btn btn-primary" onClick={save} disabled={busy}>{busy ? 'กำลังบันทึก…' : 'บันทึก'}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
+/* ── Delete ── */
+
+export function DeleteDialog({ st, set, isMod, onDelete }: {
+  st: AppState;
+  set: SetState;
+  isMod: boolean;
+  onDelete: (id: string) => Promise<void>;
+}) {
+  const id = st.deleteFor!;
+  const post = [...st.posts, ...st.announce, ...st.extraPosts].find((p) => p.id === id);
+  const mine = !!post?.mine;
+  const [busy, setBusy] = useState(false);
+  const close = () => { if (!busy) set({ deleteFor: null }); };
+
+  return (
+    <div className="dialog-backdrop" style={{ zIndex: 44, animation: 'wnm-pop .16s ease both' }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
+      <div className="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" style={{ gap: 12, borderRadius: 20 }}>
+        <h4 id="delete-title" className="dialog-title" style={{ margin: 0, fontSize: 16 }}>{mine ? 'ลบโพสต์นี้?' : 'ลบโพสต์นี้ถาวร?'}</h4>
+        <div style={{ fontSize: 12.5, lineHeight: 1.5, background: 'var(--color-neutral-100)', borderRadius: 12, padding: '9px 12px' }}>
+          <strong style={{ display: 'block' }}>{post?.title ?? 'โพสต์'}</strong>
+          {!mine && <span style={{ color: 'var(--color-neutral-700)' }}>{post?.name ?? ''}</span>}
+        </div>
+        <p className="dialog-body" style={{ margin: 0, fontSize: 13 }}>
+          โพสต์ ความคิดเห็น และรีแอคทั้งหมดของโพสต์นี้จะถูกลบ และกู้คืนไม่ได้
+          {!mine && isMod && ' · ถ้าแค่ต้องการเอาออกจากฟีด แนะนำให้ "ซ่อนโพสต์" แทน เพราะเก็บประวัติรายงานไว้ และแสดงโพสต์อีกครั้งได้'}
+        </p>
         <div className="dialog-actions">
-          <button className="btn btn-ghost" onClick={remove} style={{ marginRight: 'auto', color: '#8a3a1c' }}>ลบโพสต์</button>
-          <button className="btn btn-secondary" onClick={close}>ยกเลิก</button>
-          <button className="btn btn-primary" onClick={save}>บันทึก</button>
+          <button className="btn btn-secondary" onClick={close} disabled={busy}>ยกเลิก</button>
+          <button className="btn" disabled={busy} autoFocus
+            onClick={async () => { setBusy(true); await onDelete(id); setBusy(false); }}
+            style={{ background: '#a2391c', color: '#fff', fontWeight: 600 }}>
+            {busy ? 'กำลังลบ…' : 'ลบโพสต์'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Hide (moderators) ── */
+
+const HIDE_REASONS = ['ละเมิดกฎชุมชน', 'ข้อมูลเท็จหรือทำให้เข้าใจผิด', 'คุกคามหรือใช้ถ้อยคำรุนแรง', 'สแปมหรือโฆษณา', 'โพสต์ซ้ำ'];
+
+export function HideDialog({ st, set, onHide }: {
+  st: AppState;
+  set: SetState;
+  onHide: (id: string, reason: string) => Promise<void>;
+}) {
+  const id = st.hideFor!;
+  const post = [...st.posts, ...st.announce, ...st.extraPosts].find((p) => p.id === id);
+  const queued = st.modReports.find((r) => r.post_id === id);
+  const [reason, setReason] = useState<string | null>(null);
+  const [other, setOther] = useState('');
+  const [busy, setBusy] = useState(false);
+  const close = () => { if (!busy) set({ hideFor: null }); };
+  const finalReason = reason === 'อื่น ๆ' ? other.trim() : reason ?? '';
+
+  const submit = async () => {
+    if (!finalReason || busy) return;
+    setBusy(true);
+    await onHide(id, finalReason);
+    setBusy(false);
+  };
+
+  return (
+    <div className="dialog-backdrop" style={{ zIndex: 43, animation: 'wnm-pop .16s ease both' }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
+      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="hide-title" style={{ gap: 12, borderRadius: 20 }}>
+        <h4 id="hide-title" className="dialog-title" style={{ margin: 0, fontSize: 16 }}>ซ่อนโพสต์นี้</h4>
+        <div style={{ fontSize: 12.5, lineHeight: 1.5, background: 'var(--color-neutral-100)', borderRadius: 12, padding: '9px 12px' }}>
+          <strong style={{ display: 'block' }}>{post?.title ?? queued?.title ?? 'โพสต์'}</strong>
+          <span style={{ color: 'var(--color-neutral-700)' }}>{post?.name ?? ''}</span>
+        </div>
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, lineHeight: 1.6, color: 'var(--color-neutral-800)' }}>
+          <li>โพสต์จะหายจากฟีดและประกาศ แต่ไม่ถูกลบ · กดแสดงอีกครั้งได้ภายหลัง</li>
+          {queued && queued.status === 'Open' && <li>รายงาน {queued.tickets.length} รายการจะเปลี่ยนเป็น &ldquo;{REPORT_LABEL.Reviewed}&rdquo; และแจ้งผู้รายงาน</li>}
+          <li>เจ้าของโพสต์จะได้รับแจ้งเตือนพร้อมเหตุผลด้านล่าง</li>
+        </ul>
+        <div role="radiogroup" aria-label="เหตุผลที่ซ่อน" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {[...HIDE_REASONS, 'อื่น ๆ'].map((r) => (
+            <button key={r} role="radio" aria-checked={reason === r} className="tag" onClick={() => setReason(r)} style={{ ...chipStyle(reason === r), cursor: 'pointer', fontSize: 12, padding: '6px 12px' }}>
+              {r}
+            </button>
+          ))}
+        </div>
+        {reason === 'อื่น ๆ' && (
+          <input className="input" autoFocus maxLength={300} value={other} onChange={(e) => setOther(e.target.value)}
+            placeholder="ระบุเหตุผลที่เจ้าของโพสต์จะเห็น" style={{ background: 'var(--color-neutral-100)', fontSize: 13 }} />
+        )}
+        <div className="dialog-actions">
+          <button className="btn btn-secondary" onClick={close} disabled={busy}>ยกเลิก</button>
+          <button className="btn" onClick={submit} disabled={!finalReason || busy}
+            style={{ background: '#a2391c', color: '#fff', fontWeight: 600 }}>
+            {busy ? 'กำลังซ่อน…' : 'ซ่อนโพสต์'}
+          </button>
         </div>
       </div>
     </div>
@@ -371,39 +484,55 @@ export function EditDialog({ st, set, flash, setStatus }: EditProps) {
 
 /* ── Report ── */
 
-export function ReportDialog({ st, set, flash }: { st: AppState; set: SetState; flash: (t: string) => void }) {
+export function ReportDialog({ st, set, flash, onSubmit }: {
+  st: AppState;
+  set: SetState;
+  flash: (t: string) => void;
+  /** Resolves to an error message, or null when the report was saved. */
+  onSubmit: (postId: string, reason: string) => Promise<string | null>;
+}) {
   const id = st.reportFor!;
-  const close = () => set({ reportFor: null, reason: null });
-  const submit = () => {
-    set((prev) => ({
-      reportFor: null, reason: null,
-      reportStatus: { ...prev.reportStatus, [id]: prev.reportStatus[id] || 'Open' },
-      reportReason: { ...prev.reportReason, [id]: prev.reason! },
-      posts: prev.posts.map((p) => (p.id === id ? { ...p, reports: (p.reports || 0) + 1 } : p)),
-    }));
-    flash('บันทึกรายงานแล้ว · สถานะ Open รอผู้ดูแลตรวจสอบ');
+  const [details, setDetails] = useState('');
+  const [busy, setBusy] = useState(false);
+  const close = () => { if (!busy) set({ reportFor: null, reason: null }); };
+
+  const submit = async () => {
+    if (!st.reason || busy) return;
+    setBusy(true);
+    const reason = details.trim() ? `${st.reason} · ${details.trim()}` : st.reason;
+    const err = await onSubmit(id, reason);
+    setBusy(false);
+    set({ reportFor: null, reason: null });
+    flash(err ?? 'ส่งรายงานแล้ว · ผู้ดูแลจะตรวจสอบและแจ้งผลให้คุณทราบ');
   };
 
   return (
-    <div className="dialog-backdrop" style={{ zIndex: 41, animation: 'wnm-pop .16s ease both' }}>
-      <div className="dialog" style={{ gap: 12, borderRadius: 20 }}>
-        <h4 className="dialog-title" style={{ margin: 0, fontSize: 16 }}>รายงานโพสต์นี้</h4>
+    <div className="dialog-backdrop" style={{ zIndex: 41, animation: 'wnm-pop .16s ease both' }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
+      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="report-title" style={{ gap: 12, borderRadius: 20 }}>
+        <h4 id="report-title" className="dialog-title" style={{ margin: 0, fontSize: 16 }}>รายงานโพสต์นี้</h4>
         <p className="dialog-body" style={{ margin: 0, fontSize: 13 }}>
-          รายงานจะถูกบันทึกด้วยสถานะเริ่มต้น Open และแสดงบนโพสต์ให้ทุกคนเห็น มีเพียงผู้ดูแล (isMod) ที่เปลี่ยนสถานะเป็น Reviewed หรือ Dismissed ได้
+          ผู้ดูแลจะเห็นเหตุผลของคุณ แต่คนอื่นจะไม่รู้ว่าใครรายงาน โพสต์จะขึ้นสถานะ &ldquo;รอตรวจสอบ&rdquo; และคุณจะได้รับการแจ้งเตือนเมื่อผู้ดูแลตรวจเสร็จ
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+        <div role="radiogroup" aria-label="เหตุผล" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
           {REASONS.map((r) => {
             const on = st.reason === r;
             return (
-              <button key={r} className="hov-border" onClick={() => set({ reason: r })} style={{ cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', fontSize: 13, padding: '11px 15px', borderRadius: 999, background: on ? 'var(--color-accent-100)' : 'var(--color-neutral-100)', border: `1.5px solid ${on ? 'var(--color-accent)' : 'transparent'}`, color: 'var(--color-text)' }}>
+              <button key={r} role="radio" aria-checked={on} className="hov-border" onClick={() => set({ reason: r })} style={{ cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', fontSize: 13, padding: '11px 15px', borderRadius: 999, background: on ? 'var(--color-accent-100)' : 'var(--color-neutral-100)', border: `1.5px solid ${on ? 'var(--color-accent)' : 'transparent'}`, color: 'var(--color-text)' }}>
                 {r}
               </button>
             );
           })}
         </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <label htmlFor="report-details" style={labelStyle}>รายละเอียดเพิ่มเติม (ไม่บังคับ)</label>
+          <textarea id="report-details" className="input" maxLength={200} value={details} onChange={(e) => setDetails(e.target.value)}
+            placeholder="ช่วยให้ผู้ดูแลเข้าใจปัญหาได้เร็วขึ้น" style={{ borderRadius: 14, minHeight: 64, background: 'var(--color-neutral-100)', fontSize: 13 }} />
+          <span style={{ alignSelf: 'flex-end', fontSize: 10.5, color: 'var(--color-neutral-600)' }}>{details.length}/200</span>
+        </div>
         <div className="dialog-actions">
-          <button className="btn btn-secondary" onClick={close}>ยกเลิก</button>
-          <button className="btn btn-primary" onClick={submit} disabled={!st.reason}>ส่งรายงาน</button>
+          <button className="btn btn-secondary" onClick={close} disabled={busy}>ยกเลิก</button>
+          <button className="btn btn-primary" onClick={submit} disabled={!st.reason || busy}>{busy ? 'กำลังส่ง…' : 'ส่งรายงาน'}</button>
         </div>
       </div>
     </div>

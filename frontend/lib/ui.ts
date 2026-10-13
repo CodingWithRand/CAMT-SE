@@ -21,6 +21,13 @@ export function likeCount(p: Post) {
   return p.likes;
 }
 
+/** Report status words, used everywhere a status is shown (post chip, moderation center, dialogs). */
+export const REPORT_LABEL: Record<ReportStatus, string> = {
+  Open: 'รอตรวจ',
+  Reviewed: 'จัดการแล้ว',     // a moderator edited or hid the post
+  Dismissed: 'ไม่พบปัญหา',   // checked, nothing wrong
+};
+
 export function statusLook(status?: ReportStatus): [string, string] {
   switch (status) {
     case 'Open': return ['#f2c6b6', '#6f2f14'];

@@ -1,8 +1,9 @@
 import { Router, Request, Response } from "express";
 import supabase from "../db";
-import { auth } from "../middleware";
+import { auth, uuidParam } from "../middleware";
 
 const router = Router();
+router.param("nid", uuidParam);
 
 router.get("/notification/fetch/", auth, async (req: Request, res: Response) => {
     try {

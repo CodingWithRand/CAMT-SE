@@ -35,3 +35,10 @@ export async function optionalAuth(req: Request, res: Response, next: NextFuncti
     }
     next();
 }
+export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** router.param handler: a malformed id in the path is a 400, not a Postgres error turned into a 500. */
+export function uuidParam(req: Request, res: Response, next: NextFunction, value: string) {
+    if (!UUID.test(String(value))) return res.status(400).json({ message: "Invalid id" });
+    next();
+}

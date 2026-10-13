@@ -1,0 +1,58 @@
+import supabase from "./db";
+
+/**
+ * Hiding a post instead of deleting it keeps its reports and notifications,
+ * so moderators can still close reports and tell reporters what happened.
+ * Columns come from api/sql/2026-10-13_hide_posts.sql.
+ */
+export interface HiddenInfo {
+    user_id: string;
+    hidden_reason: string | null;
+    hidden_at: string | null;
+}
+
+/**
+ * The migration has not been run on this database yet: a read reports Postgres
+ * "undefined column" (42703), a write reports PostgREST's "column not in schema cache" (PGRST204).
+ */
+export function isMissingColumn(error: { code?: string } | null | undefined) {
+    return error?.code === "42703" || error?.code === "PGRST204";
+}
+
+/** Hidden posts by id. Empty (rather than an error) until the migration has been run. */
+export async function hiddenPosts(): Promise<Map<string, HiddenInfo>> {
+    const { data, error } = await supabase
+        .from("posts")
+        .select("id, user_id, hidden_reason, hidden_at")
+        .eq("is_hidden", true);
+    if (error) {
+        if (isMissingColumn(error)) return new Map();
+        throw error;
+    }
+    return new Map((data ?? []).map((p) => [p.id, { user_id: p.user_id, hidden_reason: p.hidden_reason, hidden_at: p.hidden_at }]));
+}
+
+/**
+ * Drop hidden posts from a list, except the viewer's own: those stay, flagged,
+ * so the author can see that and why their post was hidden.
+ */
+export function withoutHidden<T extends { id: string }>(rows: T[], hidden: Map<string, HiddenInfo>, viewerId?: string) {
+    return rows.flatMap((row) => {
+        const h = hidden.get(row.id);
+        if (!h) return [row];
+        if (viewerId && h.user_id === viewerId) return [{ ...row, is_hidden: true, hidden_reason: h.hidden_reason, hidden_at: h.hidden_at }];
+        return [];
+    });
+}
+
+/** Whether a post is hidden. Hidden posts take no new comments or reactions. */
+export async function isHidden(postId: string) {
+    const { data, error } = await supabase.from("posts").select("is_hidden").eq("id", postId).maybeSingle();
+    if (error) {
+        if (isMissingColumn(error)) return false;
+        throw error;
+    }
+    return !!data?.is_hidden;
+}
+
+export const HIDDEN_POST_MESSAGE = "This post is hidden; it takes no new comments or reactions.";

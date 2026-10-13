@@ -6,21 +6,34 @@ import {
   catDots, updateCommentLikesById,
   type Comment, type Post, type ReactionType, type ReportStatus,
 } from '@/lib/data';
-import { ACCENT_MAP, avatarStyle, likeCount, statusLook } from '@/lib/ui';
+import { ACCENT_MAP, REPORT_LABEL, avatarStyle, likeCount, statusLook } from '@/lib/ui';
 import { useAuthContext } from './AuthContext';
 import { supabase } from '@/lib/dbauth';
 import PostCard from './PostCard';
 import PostModal from './PostModal';
-import { ComposeDialog, EditDialog, ReportDialog } from './Dialogs';
+import { ComposeDialog, DeleteDialog, EditDialog, HideDialog, ReportDialog } from './Dialogs';
 import { LoginDialog, type AuthMode } from './LoginDialog';
 import { AccountMenu } from './AccountMenu';
 import { TopBar } from './TopBar';
+import { ModerationCenter } from './ModerationCenter';
+import { CategoryManager } from './CategoryManager';
+import { RoleManager } from './RoleManager';
 
 export type ViewerRole = 'student' | 'moderator' | 'guest';
-type View = 'home' | 'announce' | 'interests' | 'questions';
+type View = 'home' | 'announce' | 'interests' | 'questions' | 'moderation';
 
 /** A file picked in the composer; `url` is an object URL used only for the preview. */
 export interface NewMedia { id: string; type: 'image' | 'video'; label: string; file: File; url: string }
+
+/** All reports on one post, grouped for the moderator queue. */
+export interface ModReport {
+  post_id: string;
+  title: string;
+  status: ReportStatus;
+  hidden: boolean;
+  hiddenReason?: string | null;
+  tickets: { reason: string; by: string; at: string }[];
+}
 
 export interface Notif { id: string; post_id: string; message: string; is_read: boolean; created_at: string }
 
@@ -37,9 +50,11 @@ export interface AppState {
   extraPosts: Post[];
   notifs: Notif[];
   interests: string[];
-  reportStatus: Record<string, ReportStatus>;   // keyed by post id
-  reportReason: Record<string, string>;         // keyed by post id
-  reportId: Record<string, string>;             // post id -> reports.id
+  reportStatus: Record<string, ReportStatus>;   // keyed by post id, visible to everyone
+  reportCount: Record<string, number>;          // keyed by post id
+  myReports: Record<string, boolean>;           // posts this viewer has reported
+  reportReason: Record<string, string>;         // keyed by post id, newest reason (moderators only)
+  modReports: ModReport[];                      // moderator queue
   draft: string;
   composerOpen: boolean;
   replyTo: string | null;
@@ -55,6 +70,8 @@ export interface AppState {
   reportFor: string | null;
   reason: string | null;
   editFor: string | null;
+  hideFor: string | null;   // post the hide dialog is open for
+  deleteFor: string | null; // post the delete confirmation is open for
   editTitle: string;
   editBody: string;
   editCats: string[];
@@ -73,14 +90,16 @@ const INITIAL: AppState = {
   // posts/comments start empty and are filled from the API. Seeding them with
   // the mock rows fired /comment/fetch/p1 before the real posts arrived, and the
   // API rejects a non-uuid id — the error body then crashed the thread builder.
-  likes: {}, cLikes: {}, comments: {}, posts: [], announce: [], extraPosts: [], notifs: [], interests: ['เรียน / Academics'],
+  likes: {}, cLikes: {}, comments: {}, posts: [], announce: [], extraPosts: [], notifs: [], interests: [],
   reportStatus: {},
   reportReason: {},
-  reportId: {},
+  reportCount: {},
+  myReports: {},
+  modReports: [],
   draft: '', composerOpen: false, replyTo: null, replyDraft: '', openReplies: {}, shown: 12,
   composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false,
   reportFor: null, reason: null,
-  editFor: null, editTitle: '', editBody: '', editCats: [], editImportant: false,
+  editFor: null, hideFor: null, deleteFor: null, editTitle: '', editBody: '', editCats: [], editImportant: false,
   notifOpen: false, login: null, toast: null,
   CATS: CATS,
   w: 1280,
@@ -93,6 +112,12 @@ interface Props {
 }
 
 const API_URL = "http://localhost:3030";
+
+const STATUS_TOAST: Record<ReportStatus, string> = {
+  Open: 'ส่งกลับไปรอตรวจแล้ว',
+  Reviewed: 'จัดการแล้ว · แจ้งผลให้ผู้รายงานแล้ว',
+  Dismissed: 'ไม่พบปัญหา · แจ้งผลให้ผู้รายงานแล้ว',
+};
 
 export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneMode = 'single' }: Props) {
   const [st, setRaw] = useState<AppState>(INITIAL);
@@ -107,6 +132,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   // but a signed-in reader also gets my_reaction back on the fetch routes.
   const { user, session, signOut } = useAuthContext();
   const [accountOpen, setAccountOpen] = useState(false);
+  const [modSection, setModSection] = useState<'reports' | 'categories' | 'roles'>('reports');
+  const [rolesRev, setRolesRev] = useState(0);
 
   const authHeaders = useCallback((extra: Record<string, string> = {}): Record<string, string> =>
     (session?.access_token ? { ...extra, Authorization: `Bearer ${session.access_token}` } : extra),
@@ -122,30 +149,44 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   const [me, setMe] = useState<{ display_name: string; is_mod: boolean } | null>(null);
   const [roleLoaded, setRoleLoaded] = useState(false);
 
-  useEffect(() => {
+  // Reloaded when a moderator changes someone's role (live "roles" hint), so a new
+  // moderator gets their tools without signing in again.
+  const loadMe = useCallback(async (isCancelled: () => boolean = () => false) => {
     if (!user?.id) { setMe(null); setRoleLoaded(true); return; }
-    let cancelled = false;
-    (async () => {
-      const res = await fetch(`${API_URL}/user/current/fetch`, { headers: authHeaders({ "Content-Type": "application/json" }) });
-      console.log(res.status);
-
-      if (cancelled) return;
-      if (!res.ok) {
-        const errorBody = await res.json();
-        console.error('load viewer', res.status, errorBody);
-        setMe(null);
-        setRoleLoaded(true);
-        return;
-      }
-      const data = await res.json();
-      setMe({ display_name: data.display_name, is_mod: !!data.is_mod });
+    const res = await fetch(`${API_URL}/user/current/fetch`, { headers: authHeaders({ "Content-Type": "application/json" }) }).catch(() => null);
+    if (isCancelled()) return;
+    if (!res?.ok) {
+      console.warn('load viewer', res?.status);
+      setMe(null);
       setRoleLoaded(true);
-    })();
+      return;
+    }
+    const data = await res.json();
+    setMe({ display_name: data.display_name, is_mod: !!data.is_mod });
+    setRoleLoaded(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, session?.access_token]);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadMe(() => cancelled);
     return () => { cancelled = true; };
-  }, [user?.id]);
+  }, [loadMe]);
 
   // The prop still wins, so a role can be forced while demoing.
-  const role: ViewerRole = viewerRole ?? (me ? (me.is_mod ? 'moderator' : 'student') : 'guest');
+  // `me` is cleared one render after sign-out, so also require a user: otherwise that render
+  // still counts as a moderator and fires mod-only requests without a token (401).
+  const prevIsMod = useRef<boolean | null>(null);
+  useEffect(() => {
+    const now = me ? me.is_mod : null;
+    if (prevIsMod.current !== null && now !== null && now !== prevIsMod.current) {
+      flash(now ? 'คุณได้รับสิทธิ์ผู้ดูแลแล้ว · เมนู "ศูนย์ผู้ดูแล" อยู่ทางซ้าย' : 'สิทธิ์ผู้ดูแลของคุณถูกยกเลิกแล้ว');
+    }
+    prevIsMod.current = now;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me]);
+
+  const role: ViewerRole = viewerRole ?? (me && user ? (me.is_mod ? 'moderator' : 'student') : 'guest');
   const isGuest = role === 'guest';
   const isMod = role === 'moderator';
 
@@ -181,16 +222,18 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     }
   }
 
-  // preload categories
-  useEffect(() => {
-    (async () => {
-      const newCatsRes = await fetch(`${API_URL}/misc/categories`);
-      const newCats = await newCatsRes.json();
-      
+  // Categories: loaded at start and again when a moderator adds or edits one (live "categories" hint).
+  const loadCats = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/misc/categories`);
+      if (!res.ok) return;
+      const newCats = await res.json();
       const dots = catDots(newCats.map((c: any) => String(c.id)));
       setRaw((prev) => ({ ...prev, CATS: newCats.map((c: any) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: dots[c.id] })) }));
-    })()
+    } catch (err) { console.error('loadCats', err); }
   }, [])
+
+  useEffect(() => { loadCats(); }, [loadCats])
 
   useEffect(() => {
     console.log(st.CATS);
@@ -208,14 +251,25 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     cats: p.categories.map((c: any) => c.name),
     likes: p.reaction_count,
     media: (p.medias ?? []).map((m: any) => ({ type: m.media_type, label: '', url: m.file_url })),
+    hidden: p.is_hidden ? { reason: p.hidden_reason ?? null } : undefined,
+    mine: !!p.is_mine,
+    // Stored edits (api/sql/2026-10-13_post_edits.sql), so the label survives a reload.
+    edited: p.edited_at ? (p.edited_by_mod ? 'แก้ไขโดยผู้ดูแล' : 'แก้ไขแล้ว') : undefined,
   });
 
   // Load post (comment count doesn't show)
+  // Raw API payloads last applied; a refresh that brings the same data skips the update,
+  // so live refreshes don't re-render the feed or re-fetch every comment thread.
+  const lastPayload = useRef<{ posts?: string; announce?: string }>({});
+
   const loadPosts = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/post/fetch`, { headers: authHeaders() });
       const ps = await res.json();
       if (!Array.isArray(ps)) throw new Error(ps?.message ?? 'bad /post/fetch payload');
+      const sig = JSON.stringify(ps);
+      if (sig === lastPayload.current.posts) return;
+      lastPayload.current.posts = sig;
       const frontendPosts: Post[] = ps.map(toFrontendPost);
       // my_reaction comes from the API, so the filled heart survives a reload.
       // Without it the next tap would remove a reaction the UI thinks it is adding.
@@ -228,33 +282,79 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   useEffect(() => { loadPosts(); }, [loadPosts])
 
   // Load announcements separately from the feed, so they show even when not in the feed
-  useEffect(() => {
-    fetch(`${API_URL}/post/fetch/announcement`).then(async (res) => {
+  const loadAnnouncements = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/post/fetch/announcement`);
       if (!res.ok) return;
       const ps = await res.json();
+      const sig = JSON.stringify(ps);
+      if (sig === lastPayload.current.announce) return;
+      lastPayload.current.announce = sig;
       set({ announce: ps.map(toFrontendPost) });
-    }).catch((err) => console.error(err));
-  }, [])
+    } catch (err) { console.error(err); }
+  }, [set])
+
+  useEffect(() => { loadAnnouncements(); }, [loadAnnouncements])
 
   // Load notifications of the signed in user (from the notifications table)
-  useEffect(() => {
-    if (!session?.access_token) {
-      set({ notifs: [] });
-      return;
-    }
-    fetch(`${API_URL}/notification/fetch/`, {
-      headers: authHeaders(),
-    }).then(async (res) => {
+  const loadNotifs = useCallback(async () => {
+    if (!session?.access_token) return set({ notifs: [] });
+    try {
+      const res = await fetch(`${API_URL}/notification/fetch/`, { headers: authHeaders() });
       if (!res.ok) return;
       set({ notifs: await res.json() });
-    }).catch((err) => console.error(err));
-  }, [session?.access_token])
+    } catch (err) { console.error(err); }
+  }, [set, session?.access_token])
+
+  useEffect(() => { loadNotifs(); }, [loadNotifs])
+
+  // The signed-in user's interests, stored in user_interests (they decide who gets announcement notifications).
+  const loadInterests = useCallback(async () => {
+    if (!session?.access_token) return set({ interests: [] });
+    try {
+      const res = await fetch(`${API_URL}/user/interests`, { headers: authHeaders() });
+      if (!res.ok) return;
+      const rows: { category_name: string }[] = await res.json();
+      set({ interests: rows.map((r) => r.category_name).filter(Boolean) });
+    } catch (err) { console.error('loadInterests', err); }
+  }, [set, session?.access_token])
+
+  useEffect(() => { loadInterests(); }, [loadInterests])
+
+  const toggleInterest = async (name: string) => {
+    if (isGuest) return gate();
+    const before = st.interests;
+    const has = before.includes(name);
+    const next = has ? before.filter((x) => x !== name) : [...before, name];
+    set({ interests: next });
+    const ids = next.map((n) => st.CATS.find((c) => c.name === n)?.id).filter(Boolean);
+    const res = await fetch(`${API_URL}/user/interests`, {
+      method: 'PUT',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ category_ids: ids }),
+    }).catch(() => null);
+    if (!res?.ok) {
+      set({ interests: before });
+      return flash('บันทึกความสนใจไม่สำเร็จ ลองใหม่อีกครั้ง');
+    }
+    flash(has ? 'ลบออกจากความสนใจแล้ว' : 'บันทึกเป็นความสนใจแล้ว · จะได้รับแจ้งเตือนประกาศในหมวดนี้');
+  };
 
   // load comment per post
+  /**
+   * Load the comment threads of `posts` in one request and merge them into state;
+   * threads of other posts are kept. (It used to be one request per post, every refresh.)
+   */
   const loadComments = useCallback(async (posts: Post[]) => {
+      const pids = [...new Set(posts.map((p) => p.id))];
+      if (!pids.length) return;
       // Signed in, the API tags each row with my_reaction; signed out it sends null.
-      const cress = await Promise.all(posts.map((p) => fetch(`${API_URL}/comment/fetch/${p.id}`, { headers: authHeaders() })))
-      let fetchedComments = await Promise.all(cress.map((c) => c.json()))
+      const res = await fetch(`${API_URL}/comment/fetch-many?pids=${pids.join(',')}`, { headers: authHeaders() }).catch(() => null);
+      if (!res?.ok) return;
+      const rows: any[] = await res.json();
+      const byPost: Record<string, any[]> = Object.fromEntries(pids.map((id) => [id, []]));
+      rows.forEach((c) => byPost[c.post_id]?.push(c));
+      let fetchedComments: any[][] = Object.values(byPost);
       const mineC: Record<string, ReactionType> = {};
 
       interface CommentNode {
@@ -316,7 +416,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         rootComments.length = 0;
       }
       // console.log(postComments['33333333-3333-3333-3333-333333333332'][0].id)
-      set({ comments: postComments, cLikes: mineC });
+      // Posts asked for but without comments get an empty thread, so a deleted comment disappears.
+      pids.forEach((id) => { if (!postComments[id]) postComments[id] = [] as any; });
+      set((prev) => ({ comments: { ...prev.comments, ...postComments }, cLikes: { ...prev.cLikes, ...mineC } }));
   }, [set, session]);
 
   // Comments for every loaded post: the feed, the announcement rail and posts opened from a notification
@@ -345,7 +447,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         body: JSON.stringify({ content: text }),
       });
       if (!res.ok) throw new Error(String(res.status));
-      await loadComments(loadedPosts);
+      const target = findPost(postId);
+      if (target) await loadComments([target]);
       return true;
     } catch (err) {
       console.error('postComment', err);
@@ -353,49 +456,151 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     }
   }, [session, loadComments, loadedPosts]);
 
-  /**
-   * Load the moderation queue, for moderators only.
-   *
-   * Read straight from the reports table rather than through /report/fetch,
-   * which gates on getUserData() and so hits the same broken `uid` filter.
-   * A post can hold several tickets; the newest one represents it in the queue.
-   */
-  const loadReports = useCallback(async () => {
+  /** Report status of every reported post. Public, so everyone sees which posts are under review. */
+  const loadReportStatus = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/report/status`, { headers: authHeaders() });
+      if (!res.ok) throw new Error(String(res.status));
+      const rows: { post_id: string; status: ReportStatus; report_count: number; reported_by_me: boolean }[] = await res.json();
+      const status: Record<string, ReportStatus> = {};
+      const count: Record<string, number> = {};
+      const mine: Record<string, boolean> = {};
+      rows.forEach((r) => {
+        status[r.post_id] = r.status;
+        count[r.post_id] = r.report_count;
+        if (r.reported_by_me) mine[r.post_id] = true;
+      });
+      set({ reportStatus: status, reportCount: count, myReports: mine });
+    } catch (err) { console.error('loadReportStatus', err); }
+  }, [set, session]);
+
+  /** Every ticket with reasons and reporters, grouped by post. Moderators only. */
+  const loadModReports = useCallback(async () => {
     // Not a moderator (or just signed out): drop any queue left from a mod session.
-    if (!isMod) return set({ reportStatus: {}, reportReason: {}, reportId: {} });
+    if (!isMod || !session?.access_token) return set({ modReports: [], reportReason: {} });
 
-    const res = await fetch(`${API_URL}/report/fetch`, { 
-      method: 'GET',
-      headers: authHeaders({"Content-Type": "application/json"})
-    });
-    // console.log(res.status);
-    // console.log(await res.json());
-
-    // don't use supabase here
-    // const { data, error } = await supabase
-    //   .from('reports')
-    //   .select('id, post_id, reason, status, created_at')
-    //   .order('created_at', { ascending: true });
-    // if (error) return console.error('loadReports', error);
+    const [res, hiddenRes] = await Promise.all([
+      fetch(`${API_URL}/report/fetch`, { headers: authHeaders() }),
+      fetch(`${API_URL}/post/hidden`, { headers: authHeaders() }),
+    ]);
     if (!res.ok) {
-      const errorBody = await res.json();
-      console.error('loadReports', res.status, errorBody);
+      // 401/403: the session just ended or the role changed; the next load sorts it out.
+      const log = res.status === 401 || res.status === 403 ? console.warn : console.error;
+      log('loadModReports', res.status, await res.json().catch(() => null));
       return;
     }
-    const data = await res.json();
+    const data: any[] = await res.json();
 
-    const status: Record<string, ReportStatus> = {};
+    const groups = new Map<string, ModReport>();
     const reason: Record<string, string> = {};
-    const rid: Record<string, string> = {};
-    (data ?? []).forEach((r: any) => {
-      status[r.post_id] = r.status;
+    for (const r of data) {
+      if (!groups.has(r.post_id)) {
+        groups.set(r.post_id, { post_id: r.post_id, title: r.post?.title || 'ไม่มีชื่อ', status: r.status, hidden: !!r.post_hidden, tickets: [] });
+      }
+      const g = groups.get(r.post_id)!;
+      g.tickets.push({ reason: r.reason, by: r.reporter?.display_name ?? 'ไม่ทราบชื่อ', at: r.created_at });
+      // Tickets arrive oldest first, so the last one seen is the newest.
       reason[r.post_id] = r.reason;
-      rid[r.post_id] = r.id;
-    });
-    set({ reportStatus: status, reportReason: reason, reportId: rid });
-  }, [isMod, set]);
+      if (r.status === 'Open') g.status = 'Open';
+      else if (g.status !== 'Open') g.status = r.status;
+    }
+    // Hidden posts belong in the "hidden" tab even without reports (hidden from the edit dialog),
+    // otherwise a moderator could never find them again to unhide.
+    const hidden: any[] = hiddenRes.ok ? await hiddenRes.json() : [];
+    for (const h of hidden) {
+      const g = groups.get(h.id);
+      if (g) { g.hidden = true; g.hiddenReason = h.hidden_reason; continue; }
+      groups.set(h.id, { post_id: h.id, title: h.title || 'ไม่มีชื่อ', status: 'Reviewed', hidden: true, hiddenReason: h.hidden_reason, tickets: [] });
+    }
+    set({ modReports: [...groups.values()], reportReason: reason });
+  }, [isMod, set, session]);
 
-  useEffect(() => { loadReports(); }, [loadReports]);
+  const refreshReports = useCallback(() => Promise.all([loadReportStatus(), loadModReports()]), [loadReportStatus, loadModReports]);
+
+  useEffect(() => { loadReportStatus(); }, [loadReportStatus]);
+
+  /**
+   * Live updates. The API broadcasts which kind of data changed (see api/src/live.ts);
+   * this re-fetches just that. A 30 s poll and a refresh when the tab regains focus
+   * cover a missed broadcast or a dropped connection.
+   */
+  const live = useRef<Record<string, (postId?: string) => void>>({});
+  live.current = {
+    posts: () => { loadPosts(); loadAnnouncements(); },
+    comments: (postId?: string) => {
+      const one = postId ? loadedPosts.find((p) => p.id === postId) : undefined;
+      loadComments(one ? [one] : loadedPosts);
+    },
+    reports: () => { refreshReports(); },
+    notifications: () => { loadNotifs(); },
+    categories: () => { loadCats(); },
+    roles: () => { loadMe(); setRolesRev((v) => v + 1); },
+  };
+  useEffect(() => {
+    const pending = new Set<string>();
+    const commentPosts = new Set<string>();   // threads to reload; empty = all of them
+    let allComments = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    // Several changes in a burst (e.g. hide = post + reports + notifications) become one refresh.
+    const queue = (topics: string[], postId?: string) => {
+      topics.forEach((t) => pending.add(t));
+      if (topics.includes('comments')) { if (postId) commentPosts.add(postId); else allComments = true; }
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const due = [...pending];
+        pending.clear();
+        due.forEach((t) => {
+          if (t !== 'comments') return live.current[t]?.();
+          if (allComments || !commentPosts.size) live.current.comments?.();
+          else commentPosts.forEach((id) => live.current.comments?.(id));
+        });
+        commentPosts.clear();
+        allComments = false;
+      }, 400);
+    };
+
+    const channel = supabase
+      .channel('wnm-live')
+      .on('broadcast', { event: 'changed' }, ({ payload }) => queue(Array.isArray(payload?.topics) ? payload.topics : [], payload?.post_id))
+      .subscribe();
+
+    const everything = ['posts', 'comments', 'reports', 'notifications', 'categories', 'roles'];
+    const poll = setInterval(() => {
+      if (document.visibilityState === 'visible') queue(['posts', 'reports', 'notifications']);
+    }, 30_000);
+    const onBack = () => { if (document.visibilityState === 'visible') queue(everything); };
+    document.addEventListener('visibilitychange', onBack);
+    window.addEventListener('focus', onBack);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(poll);
+      document.removeEventListener('visibilitychange', onBack);
+      window.removeEventListener('focus', onBack);
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  /** Send a report; resolves to an error message, or null on success. */
+  const submitReport = useCallback(async (postId: string, reason: string) => {
+    const res = await fetch(`${API_URL}/report/createticket`, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ post_id: postId, reason }),
+    });
+    if (res.status === 409) {
+      await refreshReports();
+      return 'คุณรายงานโพสต์นี้ไปแล้ว · รอผู้ดูแลตรวจสอบ';
+    }
+    if (!res.ok) {
+      console.error('submitReport', res.status, await res.json().catch(() => null));
+      return 'ส่งรายงานไม่สำเร็จ ลองใหม่อีกครั้ง';
+    }
+    await refreshReports();
+    return null;
+  }, [authHeaders, refreshReports]);
+
+  useEffect(() => { loadModReports(); }, [loadModReports]);
 
   // Accent palette
   useEffect(() => {
@@ -421,7 +626,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   }, [set]);
 
   // Modal scroll lock
-  const locked = !!(st.activeId || st.composeOpen || st.editFor || st.reportFor || st.login);
+  const locked = !!(st.activeId || st.composeOpen || st.editFor || st.hideFor || st.deleteFor || st.reportFor || st.login);
   useEffect(() => {
     document.body.classList.toggle('wnm-locked', locked);
     document.documentElement.style.overflow = locked ? 'hidden' : '';
@@ -453,14 +658,18 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   const findPost = (id: string | null) =>
     st.posts.find((p) => p.id === id) || st.announce.find((p) => p.id === id) || st.extraPosts.find((p) => p.id === id);
+  /** The post, loading it by itself when it is not in the feed or announcements (e.g. from a notification). */
+  const ensurePost = async (id: string): Promise<Post | null> => {
+    const found = findPost(id);
+    if (found) return found;
+    const res = await fetch(`${API_URL}/post/${id}/fetch`);
+    if (!res.ok) return null;
+    const p = toFrontendPost(await res.json());
+    set((prev) => ({ extraPosts: [...prev.extraPosts, p] }));
+    return p;
+  };
   const openPost = async (id: string) => {
-    if (!findPost(id)) {
-      // post is not in the feed or announcements (e.g. from a notification), so load it by itself
-      const res = await fetch(`${API_URL}/post/${id}/fetch`);
-      if (!res.ok) return flash('ไม่พบโพสต์นี้แล้ว');
-      const p = toFrontendPost(await res.json());
-      set((prev) => ({ extraPosts: [...prev.extraPosts, p] }));
-    }
+    if (!(await ensurePost(id))) return flash('ไม่พบโพสต์นี้แล้ว');
     set({ activeId: id, notifOpen: false, replyTo: null, replyDraft: '', composerOpen: false, shown: 12 });
   };
   const openNotif = (n: Notif) => {
@@ -475,47 +684,94 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   };
   const unreadNotifs = st.notifs.filter((n) => !n.is_read).length;
 
-  /**
-   * `id` is the post id; the ticket it maps to is what gets updated.
-   *
-   * Heads up: this write currently fails for everyone with
-   *   42703 record "new" has no field "reviewed_by"
-   * A trigger on `reports` reads NEW.reviewed_by, but the table only has
-   * reviewed_at. It is a database-side fix, so until it lands the UI rolls the
-   * chip back and says so rather than pretending the change stuck.
-   */
+  /** Set the report status of post `id` (all of its tickets). The reporters get a notification. */
   const setStatus = async (id: string, next: ReportStatus) => {
-    const rid = st.reportId[id];
-    if (!rid) return flash('ไม่พบตั๋วรายงานของโพสต์นี้');
-
     const before = st.reportStatus[id];
-    set((prev) => ({ reportStatus: { ...prev.reportStatus, [id]: next } }));
+    const beforeQueue = st.modReports.find((r) => r.post_id === id)?.status;
+    if ((beforeQueue ?? before) === next) return;
+    // Optimistic: flip the chip and the queue now, roll back each to its own old value if the API refuses.
+    const apply = (chip: ReportStatus | undefined, queue: ReportStatus | undefined) => set((prev) => ({
+      reportStatus: chip ? { ...prev.reportStatus, [id]: chip } : prev.reportStatus,
+      modReports: prev.modReports.map((r) => (r.post_id === id && queue ? { ...r, status: queue } : r)),
+    }));
+    apply(next, next);
 
-    // const { error } = await supabase
-    //   .from('reports')
-    //   .update({ status: next, reviewed_at: new Date().toISOString() })
-    //   .eq('id', rid);
-    const res = await fetch(`${API_URL}/report/update/${rid}`, {
+    const res = await fetch(`${API_URL}/report/post/${id}/status`, {
       method: 'PUT',
       headers: authHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ status: next }),
     });
-
     if (!res.ok) {
-      const error = await res.json();
-      console.error('setStatus', error);
-      set((prev) => ({ reportStatus: { ...prev.reportStatus, [id]: before } }));
-      flash(error.code === '42703'
-        ? 'เปลี่ยนสถานะไม่ได้ · ติดที่ trigger ฝั่ง DB (reviewed_by)'
-        : 'เปลี่ยนสถานะไม่สำเร็จ');
-      return;
+      console.error('setStatus', res.status, await res.json().catch(() => null));
+      apply(before, beforeQueue);
+      return flash('เปลี่ยนสถานะไม่สำเร็จ');
     }
-    flash(`เปลี่ยนสถานะรายงานเป็น ${next}`);
+    flash(STATUS_TOAST[next]);
+    refreshReports();
   };
 
-  const openEdit = (id: string) => {
-    const p = st.posts.find((x) => x.id === id);
-    if (!p) return;
+  /** Hide a post (moderators): it leaves the feed, its open reports close as Reviewed, reporters and author are told. */
+  const hidePost = async (id: string, reason: string) => {
+    const res = await fetch(`${API_URL}/post/${id}/hide`, {
+      method: 'PUT',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ reason }),
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      console.error('hidePost', res.status, body);
+      return flash(res.status === 501 ? 'ยังซ่อนไม่ได้ · ต้องรัน api/sql/2026-10-13_hide_posts.sql ใน Supabase ก่อน' : 'ซ่อนโพสต์ไม่สำเร็จ');
+    }
+    const hide = (list: Post[]) => list.filter((p) => p.id !== id);
+    set((prev) => ({
+      hideFor: null,
+      activeId: prev.activeId === id ? null : prev.activeId,
+      posts: hide(prev.posts),
+      announce: hide(prev.announce),
+      extraPosts: prev.extraPosts.map((p) => (p.id === id ? { ...p, hidden: { reason: reason || null } } : p)),
+    }));
+    flash('ซ่อนโพสต์แล้ว · แจ้งผู้รายงานและเจ้าของโพสต์แล้ว');
+    refreshReports();
+  };
+
+  /** Delete a post for good: the author's own, or any post for a moderator. */
+  const deletePost = async (id: string) => {
+    const res = await fetch(`${API_URL}/post/${id}/delete`, { method: 'DELETE', headers: authHeaders() });
+    if (!res.ok) {
+      console.error('deletePost', res.status, await res.json().catch(() => null));
+      set({ deleteFor: null });
+      return flash(res.status === 403 ? 'ลบได้เฉพาะโพสต์ของคุณ' : 'ลบโพสต์ไม่สำเร็จ');
+    }
+    const drop = (list: Post[]) => list.filter((p) => p.id !== id);
+    set((prev) => ({
+      deleteFor: null,
+      activeId: prev.activeId === id ? null : prev.activeId,
+      posts: drop(prev.posts), announce: drop(prev.announce), extraPosts: drop(prev.extraPosts),
+    }));
+    flash('ลบโพสต์แล้ว');
+    refreshReports();
+  };
+
+  /** Show a hidden post again (moderators). */
+  const unhidePost = async (id: string) => {
+    const res = await fetch(`${API_URL}/post/${id}/unhide`, { method: 'PUT', headers: authHeaders() });
+    if (!res.ok) {
+      console.error('unhidePost', res.status, await res.json().catch(() => null));
+      return flash('แสดงโพสต์อีกครั้งไม่สำเร็จ');
+    }
+    set((prev) => ({
+      editFor: null,
+      extraPosts: prev.extraPosts.map((p) => (p.id === id ? { ...p, hidden: undefined } : p)),
+    }));
+    flash('โพสต์กลับมาแสดงแล้ว');
+    loadPosts();
+    refreshReports();
+  };
+
+  const openEdit = async (id: string) => {
+    const p = await ensurePost(id);
+    if (!p) return flash('ไม่พบโพสต์นี้แล้ว');
+    if (!isMod && !p.mine) return flash('แก้ไขได้เฉพาะโพสต์ของคุณ');
     set({ editFor: id, editTitle: p.title, editBody: p.body, editCats: [...(p.cats || [])], editImportant: !!p.important });
   };
 
@@ -567,20 +823,25 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     const before = st.likes[pid];
     // Tapping the one already held clears it — same rule the endpoint applies.
     const next = before === type ? undefined : type;
-    console.log(before, next, change, (before && !!next) && change);
-    // return;
-
-    // set((prev) => ({ likes: withReaction(prev.likes, pid, next) }));
+    // Show the result right away (the API takes a moment); the server's count replaces it after.
+    const delta = before && !next ? -1 : !before && next ? 1 : 0;
+    const withCount = (list: Post[], count: (p: Post) => number) =>
+      list.map((p) => (p.id === pid ? { ...p, likes: Math.max(0, count(p)) } : p));
+    const applyCount = (count: (p: Post) => number) => set((prev) => ({
+      posts: withCount(prev.posts, count), announce: withCount(prev.announce, count), extraPosts: withCount(prev.extraPosts, count),
+    }));
+    set((prev) => ({ likes: withReaction(prev.likes, pid, next) }));
+    applyCount((p) => p.likes + delta);
     try {
-      const newLikeCount = await react('post', pid, type, (before && !!next) && change);
-      set((prev) => ({ ...prev, likes: withReaction(prev.likes, pid, next), posts: prev.posts.map((p) => p.id === pid ? { ...p, likes: newLikeCount } : p) }));
-      // await loadPosts();                       // counts come back from the server (slow don't do it)
+      const serverCount = await react('post', pid, type, (before && !!next) && change);
+      applyCount(() => serverCount);
     } catch (err: any) {
       console.error('reactToPost', err);
       set((prev) => ({ likes: withReaction(prev.likes, pid, before) }));
+      applyCount((p) => p.likes - delta);
       flash(err.message);
     }
-  }, [react, loadPosts, set, flash, st.likes]);
+  }, [react, set, flash, st.likes]);
 
   const reactToComment = useCallback(async (pid: string, cid: string, type: ReactionType, change: boolean) => {
     const before = st.cLikes[cid];
@@ -622,9 +883,14 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     onReact: (r: ReactionType, change: boolean) => reactToPost(p.id, r, change),
     onGate: gate,
     onOpen: () => openPost(p.id),
+    canEdit: !isGuest && (isMod || !!p.mine),
     onEdit: () => openEdit(p.id),
-    onReport: () => (isGuest ? gate() : set({ reportFor: p.id, reason: null })),
-    onSetStatus: (s: ReportStatus) => setStatus(p.id, s),
+    onDelete: () => set({ deleteFor: p.id }),
+    onReport: () => {
+      if (isGuest) return gate();
+      if (st.myReports[p.id] && st.reportStatus[p.id] === 'Open') return flash('คุณรายงานโพสต์นี้แล้ว · รอผู้ดูแลตรวจสอบ');
+      set({ reportFor: p.id, reason: null });
+    },
   });
 
   const railAnnounce = [...st.announce]
@@ -636,9 +902,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   const meInitials = isGuest ? 'G' : meName.slice(0, 2);
   const meAvatar = avatarStyle(isGuest ? 3 : ME.tint, 34);
 
-  const roleBanner = isMod
-    ? 'โหมดผู้ดูแล · แตะชิปสถานะบนโพสต์ที่ถูกรายงานเพื่อเปลี่ยน Open → Reviewed → Dismissed'
-    : isGuest ? 'กำลังดูในฐานะผู้ใช้ภายนอก (Non-CMU) · อ่านได้เท่านั้น' : '';
+  const roleBanner = isGuest ? 'กำลังดูในฐานะผู้ใช้ภายนอก (Non-CMU) · อ่านได้เท่านั้น' : '';
 
   const openCompose = () => (isGuest ? gate() : set({ composeOpen: true, notifOpen: false }));
   const goHome = () => set({ activeId: null, replyTo: null, notifOpen: false });
@@ -650,10 +914,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   const active = findPost(st.activeId);
 
-  const modQueue = Object.keys(st.reportStatus)
-    .map((id) => ({ id, post: st.posts.find((p) => p.id === id), status: st.reportStatus[id] }))
-    .filter((r): r is { id: string; post: Post; status: ReportStatus } => !!r.post)
-    .sort((a, b) => STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status));
+  const openReportCount = st.modReports.filter((r) => r.status === 'Open').length;
+  useEffect(() => { if (!isMod && st.view === 'moderation') set({ view: 'home' }); }, [isMod, st.view, set]);
+
 
   const shellCols = st.w >= 1060 ? '212px minmax(0,1fr) 292px' : wide ? '176px minmax(0,1fr) 224px' : 'minmax(0,1fr)';
 
@@ -700,7 +963,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       <div style={{ maxWidth: 1220, margin: '0 auto', padding: 'clamp(14px,2vw,22px) clamp(12px,2.5vw,26px)', display: 'grid', gap: 'clamp(12px,1.6vw,20px)', gridTemplateColumns: shellCols, alignItems: 'start' }}>
         {/* ── Left: views + categories ── */}
         <aside style={{ display: 'flex', gap: wide ? 14 : 8, flexDirection: wide ? 'column' : 'row', flexWrap: 'wrap', position: wide ? 'sticky' : 'static', top: 84, minWidth: 0 }}>
-          <nav style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: wide ? 16 : 999, padding: wide ? 8 : '5px 6px', display: 'flex', flexDirection: wide ? 'column' : 'row', gap: wide ? 2 : 4, flex: 'none' }}>
+          <nav style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: wide ? 16 : 999, padding: wide ? 8 : '5px 6px', display: 'flex', flexDirection: wide ? 'column' : 'row', gap: wide ? 2 : 4, flex: 'none', maxWidth: '100%', overflowX: wide ? 'visible' : 'auto' }}>
             {([['home', 'หน้าแรก'], ['announce', 'ประกาศ'], ['interests', 'หมวดที่ฉันสนใจ']] as const).map(([k, l]) => (
               <button
                 key={k}
@@ -711,6 +974,18 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
                 {l}
               </button>
             ))}
+            {isMod && (
+              <button
+                className="hov-bg"
+                onClick={() => set({ view: 'moderation', activeId: null, replyTo: null })}
+                style={{ cursor: 'pointer', border: 0, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-body)', fontSize: 13, padding: '9px 12px', borderRadius: 10, background: st.view === 'moderation' ? 'var(--color-accent-200)' : 'transparent', color: st.view === 'moderation' ? 'var(--color-accent-800)' : 'var(--color-neutral-800)', fontWeight: st.view === 'moderation' ? 600 : 400, whiteSpace: 'nowrap' }}
+              >
+                <span style={{ flex: 1 }}>⚑ ศูนย์ผู้ดูแล</span>
+                {openReportCount > 0 && (
+                  <span style={{ minWidth: 20, height: 20, padding: '0 6px', display: 'grid', placeItems: 'center', borderRadius: 999, background: 'var(--pri)', color: '#fff', fontSize: 11, fontWeight: 700 }}>{openReportCount}</span>
+                )}
+              </button>
+            )}
           </nav>
 
           <div style={wide
@@ -739,12 +1014,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
             {st.cat && (
               <button
                 className="btn btn-ghost"
-                onClick={() => {
-                  if (isGuest) return gate();
-                  const has = st.interests.includes(st.cat!);
-                  set((prev) => ({ interests: has ? prev.interests.filter((x) => x !== prev.cat) : [...prev.interests, prev.cat!] }));
-                  flash(has ? 'ลบออกจากความสนใจแล้ว' : 'บันทึกเป็นความสนใจแล้ว · จะได้รับแจ้งเตือนประกาศในหมวดนี้');
-                }}
+                onClick={() => toggleInterest(st.cat!)}
                 style={{ fontSize: 11.5, color: 'var(--color-accent-700)', justifyContent: 'flex-start', padding: '7px 8px', marginTop: 4 }}
               >
                 {st.interests.includes(st.cat) ? 'ลบหมวดนี้จากความสนใจ' : 'บันทึกหมวดนี้เป็นความสนใจ'}
@@ -753,10 +1023,48 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           </div>
         </aside>
 
+        {st.view === 'moderation' && isMod ? (
+          <main style={{ minWidth: 0, gridColumn: wide ? '2 / -1' : 'auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, flex: '1 1 auto' }}>ศูนย์ผู้ดูแล</h3>
+              <div className="mod-tabs" role="tablist" aria-label="ส่วนของศูนย์ผู้ดูแล" style={{ flex: 'none', maxWidth: '100%', overflowX: 'auto' }}>
+                {([['reports', 'รายงาน'], ['categories', 'หมวดหมู่'], ['roles', 'ผู้ใช้และสิทธิ์']] as const).map(([k, l]) => (
+                  <button key={k} role="tab" aria-selected={modSection === k} onClick={() => setModSection(k)} style={{ padding: '7px 14px', flex: 'none' }}>
+                    {l}{k === 'reports' && openReportCount > 0 && <span className="mod-count">{openReportCount}</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {modSection === 'categories' && (
+              <CategoryManager
+                authHeaders={authHeaders}
+                flash={flash}
+                dotFor={(id) => st.CATS.find((c) => String(c.id) === id)?.dot}
+                revision={st.CATS.map((c) => `${c.id}:${c.name}:${c.pri}`).join('|')}
+                onChanged={loadCats}
+              />
+            )}
+            {modSection === 'roles' && <RoleManager authHeaders={authHeaders} flash={flash} myId={user?.id ?? null} revision={rolesRev} />}
+            {modSection === 'reports' && <ModerationCenter
+              reports={st.modReports}
+              compact={st.w < 880}
+              blocked={locked}
+              ensurePost={ensurePost}
+              renderPost={(p) => <PostCard {...cardProps(p)} />}
+              timeAgo={getTimeAgo}
+              onDismiss={(id) => setStatus(id, 'Dismissed')}
+              onEdit={openEdit}
+              onHide={(id) => set({ hideFor: id })}
+              onUnhide={unhidePost}
+              onReopen={(id) => setStatus(id, 'Open')}
+              onRefresh={() => { refreshReports(); flash('โหลดรายงานล่าสุดแล้ว'); }}
+            />}
+          </main>
+        ) : (<>
         {/* ── Center: feed ── */}
         <main style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
           {roleBanner && (
-            <div style={{ padding: '10px 15px', borderRadius: 12, fontSize: 12.5, lineHeight: 1.5, background: isMod ? '#e9f0dc' : 'var(--color-neutral-200)', color: 'var(--color-neutral-900)' }}>{roleBanner}</div>
+            <div style={{ padding: '10px 15px', borderRadius: 12, fontSize: 12.5, lineHeight: 1.5, background: 'var(--color-neutral-200)', color: 'var(--color-neutral-900)' }}>{roleBanner}</div>
           )}
 
           {!isGuest && (
@@ -813,61 +1121,31 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           </section>
 
           {isMod && (
-            <section style={{ background: 'var(--peach)', border: '1px solid var(--color-accent-300)', borderRadius: 16, padding: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <section style={{ background: 'var(--peach)', border: '1px solid var(--color-accent-300)', borderRadius: 16, padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div>
                 <h5 style={{ margin: 0, fontSize: 13, fontWeight: 700 }}>งานของผู้ดูแล</h5>
-                <span style={{ fontSize: 11, color: 'var(--color-neutral-700)', lineHeight: 1.45 }}>คิวรายงานที่ยังไม่ปิด และโพสต์ที่แก้ไขล่าสุด</span>
+                <span style={{ fontSize: 11.5, color: 'var(--color-neutral-700)', lineHeight: 1.45 }}>
+                  {openReportCount ? `มี ${openReportCount} โพสต์รอตรวจ` : 'ไม่มีรายงานค้าง'}
+                </span>
               </div>
-
               <div style={{ display: 'grid', gap: 7, gridTemplateColumns: 'repeat(3,1fr)' }}>
-                {([['Open', 'รอตรวจสอบ'], ['Reviewed', 'ตรวจแล้ว'], ['Dismissed', 'ยกคำร้อง']] as const).map(([k, label]) => {
+                {STATUSES.map((k) => {
                   const [bg, fg] = statusLook(k);
                   return (
                     <div key={k} style={{ background: bg, color: fg, borderRadius: 12, padding: '9px 10px', display: 'flex', flexDirection: 'column', gap: 3 }}>
-                      <span style={{ fontSize: 19, fontWeight: 700, lineHeight: 1 }}>{Object.values(st.reportStatus).filter((v) => v === k).length}</span>
-                      <span style={{ fontSize: 10, color: 'var(--color-neutral-700)', lineHeight: 1.25 }}>{label}</span>
+                      <span style={{ fontSize: 19, fontWeight: 700, lineHeight: 1 }}>{st.modReports.filter((r) => r.tickets.length && r.status === k).length}</span>
+                      <span style={{ fontSize: 10, color: 'var(--color-neutral-700)', lineHeight: 1.25 }}>{REPORT_LABEL[k]}</span>
                     </div>
                   );
                 })}
               </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                <span style={{ fontSize: 10, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>คิวรายงาน</span>
-                {modQueue.map((r) => {
-                  const [bg, fg] = statusLook(r.status);
-                  const actions = [
-                    { label: 'แก้ไขโพสต์', onClick: () => openEdit(r.id) },
-                    ...STATUSES.filter((x) => x !== r.status).map((x) => ({ label: x, onClick: () => setStatus(r.id, x) })),
-                  ];
-                  return (
-                    <div key={r.id} style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 12, padding: '10px 11px', display: 'flex', flexDirection: 'column', gap: 7 }}>
-                      <button className="hov-color" onClick={() => openPost(r.id)} style={{ cursor: 'pointer', border: 0, background: 'transparent', padding: 0, textAlign: 'left', fontFamily: 'var(--font-body)', color: 'var(--color-text)', display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                          <span className="tag" style={{ background: bg, color: fg, fontSize: 10, fontWeight: 700 }}>{r.status}</span>
-                          <span style={{ fontSize: 10.5, color: 'var(--color-neutral-700)' }}>{r.post.reports || 1} รายงาน</span>
-                        </span>
-                        <span style={{ fontSize: 12, lineHeight: 1.4, fontWeight: 600 }}>{r.post.title}</span>
-                        <span style={{ fontSize: 10.5, color: 'var(--color-neutral-700)' }}>
-                          {st.reportReason[r.id] ? `เหตุผล: ${st.reportReason[r.id]}` : 'ไม่ระบุเหตุผล'}
-                        </span>
-                      </button>
-                      <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-                        {actions.map((a) => (
-                          <button key={a.label} className="hov-border" onClick={a.onClick} style={{ cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 10.5, padding: '5px 11px', borderRadius: 999, border: '1px solid var(--color-divider)', background: 'var(--color-neutral-100)', color: 'var(--color-neutral-800)' }}>
-                            {a.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-                {modQueue.length === 0 && (
-                  <p style={{ margin: 0, fontSize: 11.5, color: 'var(--color-neutral-700)', padding: '6px 2px' }}>ไม่มีรายงานที่ยังไม่ปิด</p>
-                )}
-              </div>
+              <button className="btn btn-primary" onClick={() => set({ view: 'moderation', activeId: null })} style={{ fontFamily: 'var(--font-body)', fontSize: 13, width: '100%' }}>
+                เปิดศูนย์ผู้ดูแล →
+              </button>
             </section>
           )}
         </aside>
+        </>)}
       </div>
 
       {active && (
@@ -901,12 +1179,15 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           flash={flash}
           nextPostId={() => `p-new-${++ids.current.post}`}
           nextMediaId={() => `m${++ids.current.media}`}
+          onPosted={() => { loadPosts(); loadAnnouncements(); }}
         />
       )}
 
-      {st.editFor && <EditDialog st={st} set={set} flash={flash} setStatus={setStatus} />}
+      {st.editFor && <EditDialog st={st} set={set} flash={flash} setStatus={setStatus} isMod={isMod} onHide={(id) => set({ editFor: null, hideFor: id })} onUnhide={unhidePost} onDelete={(id) => set({ editFor: null, deleteFor: id })} />}
+      {st.deleteFor && <DeleteDialog st={st} set={set} isMod={isMod} onDelete={deletePost} />}
+      {st.hideFor && <HideDialog st={st} set={set} onHide={hidePost} />}
 
-      {st.reportFor && <ReportDialog st={st} set={set} flash={flash} />}
+      {st.reportFor && <ReportDialog st={st} set={set} flash={flash} onSubmit={submitReport} />}
       {st.login && <LoginDialog initialMode={st.login} onClose={closeLogin} onDone={onLoginDone} />}
 
       {st.toast && (

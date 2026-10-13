@@ -1,8 +1,8 @@
 'use client';
 
 import type { CSSProperties } from 'react';
-import { ANNOUNCE_CAT, CATS, QA, STATUSES, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
-import { avatarStyle, likeCount, statusLook } from '@/lib/ui';
+import { ANNOUNCE_CAT, CATS, QA, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
+import { REPORT_LABEL, avatarStyle, likeCount, statusLook } from '@/lib/ui';
 import ReactionBar from './ReactionBar';
 
 export interface PostCardProps {
@@ -16,16 +16,12 @@ export interface PostCardProps {
   onReact: (r: ReactionType, change: boolean) => void;
   onGate: () => void;
   onOpen: () => void;
+  canEdit: boolean;           // the viewer wrote it, or is a moderator
   onEdit: () => void;
+  onDelete: () => void;       // shown to the author only
   onReport: () => void;
-  onSetStatus: (s: ReportStatus) => void;
 }
 
-const REPORT_CHIP: Record<ReportStatus, string> = {
-  Open: 'ถูกรายงาน · Open',
-  Reviewed: 'ตรวจสอบแล้ว · Reviewed',
-  Dismissed: 'ยกคำร้อง · Dismissed',
-};
 
 export default function PostCard(props: PostCardProps) {
   const { post: p, liked, commentCount, reportStatus: status, isGuest, isMod, CATS } = props;
@@ -57,15 +53,26 @@ export default function PostCard(props: PostCardProps) {
   }
   if (status) {
     const [bg, fg] = statusLook(status);
-    chips.push({ label: REPORT_CHIP[status], style: { background: bg, color: fg, fontWeight: 700 } });
+    // Read-only: status is changed in the moderation center only.
+    chips.push({ label: `รายงาน: ${REPORT_LABEL[status]}`, style: { background: bg, color: fg, fontWeight: 700 } });
   }
 
   const media = p.media || [];
   const likes = likeCount(p);
 
   return (
-    <article style={{ position: 'relative', overflow: 'hidden', background: 'var(--color-surface)', borderRadius: 16, boxShadow: '0 1px 3px rgba(62,34,89,.09)', border: '1px solid var(--color-divider)', padding: '16px 18px 10px', display: 'flex', flexDirection: 'column', gap: 11 }}>
+    <article style={{ position: 'relative', overflow: 'hidden', opacity: p.hidden ? 0.92 : 1, background: 'var(--color-surface)', borderRadius: 16, boxShadow: '0 1px 3px rgba(62,34,89,.09)', border: '1px solid var(--color-divider)', padding: '16px 18px 10px', display: 'flex', flexDirection: 'column', gap: 11 }}>
       {rail && <span style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, background: rail }} />}
+
+      {p.hidden && (
+        <div role="note" style={{ display: 'flex', gap: 9, alignItems: 'flex-start', margin: '-4px -4px 0', padding: '9px 12px', borderRadius: 12, background: 'var(--color-neutral-800)', color: '#fff', fontSize: 12.5, lineHeight: 1.45 }}>
+          <span aria-hidden="true" style={{ fontSize: 14 }}>⦸</span>
+          <span>
+            <strong>ถูกซ่อน</strong> · {p.mine ? 'ผู้ดูแลซ่อนโพสต์นี้ คนอื่นจะมองไม่เห็น (เห็นแค่คุณกับผู้ดูแล)' : 'ผู้ใช้ทั่วไปมองไม่เห็นโพสต์นี้ (เห็นแค่เจ้าของโพสต์กับผู้ดูแล)'}
+            {p.hidden.reason && <span style={{ display: 'block', opacity: 0.85 }}>เหตุผล: {p.hidden.reason}</span>}
+          </span>
+        </div>
+      )}
 
       <header style={{ display: 'flex', alignItems: 'flex-start', gap: 11, flexWrap: 'wrap' }}>
         <div style={avatarStyle(p.tint ?? 0)}>{p.initials}</div>
@@ -123,20 +130,16 @@ export default function PostCard(props: PostCardProps) {
         <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12.5, color: 'var(--color-neutral-700)', whiteSpace: 'nowrap' }} onClick={props.onOpen}>
           ความเห็น {commentCount}
         </button>
-        {isMod && (
-          <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: 'var(--color-accent-700)' }} onClick={props.onEdit} title="แก้ไขโพสต์ (เฉพาะผู้ดูแล)">แก้ไข</button>
+        {props.canEdit && (
+          <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: 'var(--color-accent-700)' }} onClick={props.onEdit}
+            title={p.mine ? 'แก้ไขโพสต์ของคุณ' : 'แก้ไขโพสต์ (ผู้ดูแล)'}>แก้ไข</button>
         )}
-        {isMod && status && (
-          <button
-            className="tag"
-            title="เปลี่ยนสถานะรายงาน (เฉพาะผู้ดูแล)"
-            onClick={() => props.onSetStatus(STATUSES[(STATUSES.indexOf(status) + 1) % STATUSES.length])}
-            style={{ flex: 'none', cursor: 'pointer', fontSize: 10.5, background: statusLook(status)[0], color: statusLook(status)[1] }}
-          >
-            {p.reports || 1} รายงาน · เปลี่ยนสถานะ
-          </button>
+        {p.mine && (
+          <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: '#8a3a1c' }} onClick={props.onDelete} title="ลบโพสต์ของคุณ">ลบ</button>
         )}
-        <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: 'var(--color-neutral-600)' }} onClick={props.onReport}>รายงาน</button>
+        {!p.mine && (
+          <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: 'var(--color-neutral-600)' }} onClick={props.onReport}>รายงาน</button>
+        )}
       </footer>
     </article>
   );

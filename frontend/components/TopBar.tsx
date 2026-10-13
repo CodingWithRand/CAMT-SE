@@ -117,7 +117,7 @@ export function TopBar({
                   {unread > 0 && (
                     <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999, background: 'var(--color-accent-200)', color: 'var(--color-accent-800)' }}>ใหม่ {unread}</span>
                   )}
-                  <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--color-neutral-600)' }}>จากโพสต์ประกาศ</span>
+                  <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--color-neutral-600)' }}>ประกาศ · ผลการรายงาน</span>
                 </div>
 
                 <div style={{ padding: 6, maxHeight: 'min(420px, 60vh)', overflowY: 'auto' }}>

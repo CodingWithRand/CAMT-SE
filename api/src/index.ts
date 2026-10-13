@@ -9,6 +9,8 @@ import user from './endpoints/user';
 import report from './endpoints/report';
 import misc from './endpoints/misc';
 import notification from './endpoints/notification';
+import admin from './endpoints/admin';
+import { broadcast, LiveTopic } from './live';
 
 const app = express();
 const PORT = 3030;
@@ -20,12 +22,36 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }))
 
+// After every successful write, tell open browsers what to re-fetch (see live.ts).
+const LIVE_TOPICS: [RegExp, LiveTopic[]][] = [
+    [/^\/post\/create/, ["posts", "notifications"]],          // announcements notify followers
+    [/^\/post\/[^/]+\/react/, ["posts"]],
+    [/^\/post\//, ["posts", "reports", "notifications"]],     // edit, hide, unhide, delete
+    [/^\/comment\//, ["comments"]],
+    [/^\/report\//, ["reports", "notifications"]],           // closing a report notifies the reporters
+    [/^\/admin\/categories/, ["categories", "posts"]],       // a renamed category shows on posts
+    [/^\/admin\/users/, ["roles"]],                          // the user whose role changed updates at once
+];
+app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.method !== "GET") {
+        res.on("finish", () => {
+            if (res.statusCode >= 300) return;
+            const topics = LIVE_TOPICS.find(([re]) => re.test(req.path))?.[1];
+            // /comment/<post id> and /comment/<post id>/replyto/<comment id> name the post.
+            const postId = /^\/comment\/([0-9a-f-]{36})(\/replyto\/|$)/i.exec(req.path)?.[1];
+            if (topics) broadcast(topics, postId);
+        });
+    }
+    next();
+});
+
 app.use("/", post);
 app.use("/", comment);
 app.use("/", user);
 app.use("/", report);
 app.use("/", misc);
 app.use("/", notification);
+app.use("/", admin);
 
 app.listen(PORT, () => {
     console.log("Server running on port " + PORT);
