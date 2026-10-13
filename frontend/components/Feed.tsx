@@ -11,8 +11,10 @@ const HEADINGS: Partial<Record<View, [string, string]>> = {
 };
 
 /** Center column: prompts above the feed, the posts, and the loading / error / empty states. */
-export function Feed({ view, posts, status, query, searchMode, hasMore, loadingMore, twoLanes, isGuest, showInterestsNudge, me, renderPost, onCompose, onPickInterests, onRetry, onLoadMore }: {
+export function Feed({ view, category, posts, status, query, searchMode, hasMore, loadingMore, twoLanes, isGuest, showInterestsNudge, me, renderPost, onCompose, onPickInterests, onRetry, onLoadMore }: {
   view: View;
+  /** The category the feed is filtered to, with its follow button. */
+  category?: { name: string; dot: string; followers: number; followed: boolean; onToggle: () => void } | null;
   posts: Post[];
   status: FeedStatus;
   query: string;
@@ -54,7 +56,7 @@ export function Feed({ view, posts, status, query, searchMode, hasMore, loadingM
         <div role="note" style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '12px 15px', borderRadius: 14, background: 'var(--color-accent-100)', border: '1px solid var(--color-accent-300)' }}>
           <span aria-hidden="true" style={{ fontSize: 20 }}>🔔</span>
           <span style={{ flex: '1 1 220px', fontSize: 13, lineHeight: 1.5, color: 'var(--color-accent-900)' }}>
-            <strong>ยังไม่ได้ติดตามหมวดไหน</strong> · เลือกหมวดที่สนใจเพื่อรับแจ้งเตือนเมื่อมีประกาศ
+            <strong>ยังไม่ได้ติดตามหมวดไหน</strong> · เลือกหมวดที่สนใจเพื่อรับแจ้งเตือนเมื่อมีโพสต์ใหม่
           </span>
           <button className="btn btn-primary" onClick={onPickInterests} style={{ fontFamily: 'var(--font-body)', fontSize: 13 }}>เลือกหมวด</button>
         </div>
@@ -71,6 +73,22 @@ export function Feed({ view, posts, status, query, searchMode, hasMore, loadingM
             แบ่งปันเรื่องราวกับชุมชน มช. …
           </button>
           <button className="btn btn-primary" onClick={onCompose} style={{ flex: 'none', padding: '8px 20px', fontSize: 13 }}>โพสต์</button>
+        </div>
+      )}
+
+      {category && !searchMode && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '12px 14px', borderRadius: 16, background: 'var(--color-surface)', border: '1px solid var(--color-divider)' }}>
+          <span aria-hidden="true" style={{ width: 12, height: 12, borderRadius: 999, background: category.dot, flex: 'none' }} />
+          <span style={{ flex: '1 1 160px', minWidth: 0 }}>
+            <strong style={{ display: 'block', fontSize: 15 }}>{category.name}</strong>
+            <span style={{ fontSize: 11.5, color: 'var(--color-neutral-600)' }}>
+              {category.followers ? `${category.followers} คนติดตาม · ` : ''}ติดตามแล้วจะได้รับแจ้งเตือนเมื่อมีโพสต์ใหม่ในหมวดนี้
+            </span>
+          </span>
+          <button className={category.followed ? 'btn btn-secondary' : 'btn btn-primary'} aria-pressed={category.followed} onClick={category.onToggle}
+            style={{ fontFamily: 'var(--font-body)', fontSize: 13, flex: 'none' }}>
+            {category.followed ? '★ ติดตามแล้ว' : '☆ ติดตาม'}
+          </button>
         </div>
       )}
 

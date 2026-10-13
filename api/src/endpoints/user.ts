@@ -29,7 +29,7 @@ router.get('/user/:uid/fetch', auth, async (req, res) => {
     }
 })
 
-/** The signed-in user's interests (categories they get announcement notifications for). */
+/** The signed-in user's interests (categories they get notified about: every new post in them). */
 router.get('/user/interests', auth, async (req: Request, res: Response) => {
     const { data, error } = await supabase
         .from("user_interests")

@@ -26,7 +26,7 @@ export function toPost(p: any): Post {
 /** /misc/categories rows -> categories with their dot colours. */
 export function toCategories(rows: any[]): Category[] {
   const dots = catDots(rows.map((c) => String(c.id)));
-  return rows.map((c) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: dots[c.id], desc: c.description }));
+  return rows.map((c) => ({ id: c.id, name: c.category_name, pri: c.priority, dot: dots[c.id], desc: c.description, followers: c.follower_count ?? 0 }));
 }
 
 /**

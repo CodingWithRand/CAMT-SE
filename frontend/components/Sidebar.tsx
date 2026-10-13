@@ -48,29 +48,36 @@ export function Sidebar({ wide, showViews, view, isMod, openReports, cats, cat, 
       >
         {wide && <span style={{ fontSize: 9.5, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', padding: '0 6px 7px' }}>หมวดหมู่</span>}
         {cats.map((c) => {
-          const on = cat === c.name;
-          return (
+          const on = cat === c.id;
+          const followed = interests.includes(c.id);
+          const filter = (
             <button
-              key={c.name}
+              key={c.id}
               className="hov-bg"
-              title={`Priority ${c.pri}`}
-              onClick={() => onCat(on ? null : c.name)}
+              aria-pressed={on}
+              onClick={() => onCat(on ? null : c.id)}
               style={wide
-                ? { cursor: 'pointer', border: 0, display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--font-body)', fontSize: 12.5, padding: '7px 8px', borderRadius: 9, background: on ? 'var(--color-accent-100)' : 'transparent', color: 'var(--color-neutral-800)' }
+                ? { cursor: 'pointer', border: 0, flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--font-body)', fontSize: 12.5, padding: '7px 8px', borderRadius: 9, background: on ? 'var(--color-accent-100)' : 'transparent', color: 'var(--color-neutral-800)', textAlign: 'left' }
                 : { cursor: 'pointer', flex: 'none', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 7, fontFamily: 'var(--font-body)', fontSize: 12, padding: '7px 12px', borderRadius: 999, border: `1px solid ${on ? 'transparent' : 'var(--color-divider)'}`, background: on ? 'var(--color-accent-200)' : 'var(--color-surface)', color: 'var(--color-neutral-800)' }}
             >
               <span style={{ width: 8, height: 8, borderRadius: 999, flex: 'none', background: c.dot }} />
-              <span style={{ flex: 1, textAlign: 'left' }}>{c.name}</span>
-              <span style={{ fontSize: 10.5, color: 'var(--color-accent-700)' }}>{interests.includes(c.name) ? '★' : ''}</span>
+              <span style={{ flex: 1 }}>{c.name}</span>
+              {!wide && followed && <span aria-label="ติดตามอยู่" style={{ fontSize: 10.5, color: 'var(--color-accent-700)' }}>★</span>}
             </button>
           );
+          if (!wide) return filter;
+          // On wide screens the star next to each category follows / unfollows it.
+          return (
+            <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              {filter}
+              <button className="follow-star" aria-pressed={followed} onClick={() => onToggleInterest(c.id)}
+                title={followed ? `เลิกติดตาม ${c.name}` : `ติดตาม ${c.name} · แจ้งเตือนเมื่อมีโพสต์ใหม่`}
+                aria-label={followed ? `เลิกติดตาม ${c.name}` : `ติดตาม ${c.name}`}>
+                {followed ? '★' : '☆'}
+              </button>
+            </div>
+          );
         })}
-        {cat && (
-          <button className="btn btn-ghost" onClick={() => onToggleInterest(cat)}
-            style={{ fontSize: 11.5, color: 'var(--color-accent-700)', justifyContent: 'flex-start', padding: '7px 8px', marginTop: 4 }}>
-            {interests.includes(cat) ? 'ลบหมวดนี้จากความสนใจ' : 'บันทึกหมวดนี้เป็นความสนใจ'}
-          </button>
-        )}
       </div>
     </aside>
   );

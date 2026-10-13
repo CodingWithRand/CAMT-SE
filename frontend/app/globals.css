@@ -507,3 +507,11 @@ body.wnm-locked { overflow: hidden !important; }
   background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-600) 60%, var(--color-accent-2-600) 130%);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--color-accent) 35%, transparent);
 }
+
+/* ── Follow star beside each category (sidebar) ── */
+.follow-star {
+  flex: none; width: 28px; height: 28px; display: grid; place-items: center; cursor: pointer; border: 0; border-radius: 8px;
+  background: transparent; color: var(--color-neutral-600); font-size: 15px; line-height: 1; font-family: var(--font-body);
+}
+.follow-star:hover { background: var(--color-accent-100); color: var(--color-accent-700); }
+.follow-star[aria-pressed="true"] { color: var(--color-accent-700); }

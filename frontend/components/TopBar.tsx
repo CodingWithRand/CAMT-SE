@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Notif } from '@/lib/state';
 import { timeAgo } from '@/lib/ui';
 import type { AuthMode } from './LoginDialog';
-import { BellIcon, ChatIcon, EyeIcon, EyeOffIcon, FlagCheckIcon, FlagIcon, MegaphoneIcon, PlusIcon, SearchIcon, SmallCloseIcon } from './AuthIcons';
+import { BellIcon, ChatIcon, EyeIcon, HeartIcon, EyeOffIcon, FlagCheckIcon, FlagIcon, MegaphoneIcon, PlusIcon, SearchIcon, SmallCloseIcon } from './AuthIcons';
 
 /**
  * Notifications carry only a message, so the kind is read from its wording, written by
@@ -17,12 +17,14 @@ const NOTIF_KINDS = {
   reportClosed: { label: 'ผลการรายงาน',       Icon: FlagIcon,      bg: '#dcdcef', fg: '#36365e' },
   postHidden:   { label: 'โพสต์ของคุณ',        Icon: EyeOffIcon,    bg: 'var(--warn-soft)', fg: 'var(--warn-ink)' },
   postRestored: { label: 'โพสต์ของคุณ',        Icon: EyeIcon,       bg: '#cfe6e0', fg: '#1f4d44' },
+  followed:     { label: 'หมวดที่ติดตาม',     Icon: HeartIcon,     bg: 'var(--color-accent-2-200)', fg: 'var(--color-accent-2-800)' },
   comment:      { label: 'ความเห็น',          Icon: ChatIcon,      bg: 'var(--color-accent-200)', fg: 'var(--color-accent-800)' },
   other:        { label: 'การแจ้งเตือน',        Icon: BellIcon,      bg: 'var(--color-neutral-200)', fg: 'var(--color-neutral-800)' },
 } as const;
 
 function notifKind(message: string): keyof typeof NOTIF_KINDS {
   if (message.startsWith('ประกาศใหม่')) return 'announcement';
+  if (/ โพสต์ใหม่ในหมวด [^:]+: /.test(message)) return 'followed';
   if (/แสดงความเห็นในโพสต์ ".*" ของคุณ$|ตอบกลับความเห็นของคุณในโพสต์/.test(message)) return 'comment';
   if (message.includes('ที่คุณรายงาน')) return message.includes('ไม่พบการละเมิด') ? 'reportClosed' : 'reportDone';
   if (message.includes('ของคุณถูกซ่อน')) return 'postHidden';

@@ -11,6 +11,8 @@ import { MESSAGES, notify, untitled } from "../notify";
 import { logAction } from "../modlog";
 import { limits } from "../rateLimit";
 import { LIMITS, text } from "../validate";
+import { notifyFollowers } from "../followers";
+import { getUserData } from "../users";
 
 const router = Router();
 router.param("pid", uuidParam);
@@ -42,10 +44,13 @@ async function withOwnership<T extends { id: string }>(rows: T[], viewerId?: str
 
 /** Who may change a post: its author, or any moderator. */
 async function postAccess(pid: string, userId: string) {
-    const { data: post, error } = await supabase.from("posts").select("id, user_id, title").eq("id", pid).maybeSingle();
+    const { data: post, error } = await supabase.from("posts").select("id, user_id, title, is_important").eq("id", pid).maybeSingle();
     if (error) throw error;
-    if (!post) return { exists: false, isOwner: false, isMod: false, title: null };
-    return { exists: true, isOwner: post.user_id === userId, isMod: await isModerator(userId), title: post.title as string | null };
+    if (!post) return { exists: false, isOwner: false, isMod: false, title: null, author: null, wasImportant: false };
+    return {
+        exists: true, isOwner: post.user_id === userId, isMod: await isModerator(userId),
+        title: post.title as string | null, author: post.user_id as string, wasImportant: !!post.is_important,
+    };
 }
 
 async function uploadPostMedia(pid: Post['id'], m: Express.Multer.File, mt: "image" | "video") {
@@ -128,6 +133,9 @@ router.post("/post/create",
         if (mderr) throw mderr;
     }
 
+    // Everyone following one of these categories hears about it (announcement or not).
+    const author = (await getUserData(req.userId!)).display_name ?? "มีคน";
+    await notifyFollowers(data, category_id, author);
 
     res.status(200).json(data);
 })
@@ -154,6 +162,29 @@ async function withMyReaction(posts: any[], userId?: string) {
 
 const PAGE_MAX = 100;
 
+/**
+ * Feed filters: ?categories=<id>,<id> (posts in any of them) and ?following=1 (posts in the
+ * viewer's followed categories); both together means both must hold. null = no filter.
+ */
+async function filteredPostIds(req: Request): Promise<string[] | null | "unauthorized"> {
+    const lists: string[][] = [];
+    const inCategories = async (ids: string[]) => {
+        const { data, error } = await supabase.from("post_categories").select("post_id").in("category_id", ids);
+        if (error) throw error;
+        return [...new Set((data ?? []).map((r) => r.post_id as string))];
+    };
+    const wanted = String(req.query.categories ?? "").split(",").map((x) => x.trim()).filter((x) => UUID.test(x));
+    if (wanted.length) lists.push(await inCategories(wanted));
+    if (req.query.following === "1") {
+        if (!req.userId) return "unauthorized";
+        const { data, error } = await supabase.from("user_interests").select("category_id").eq("user_id", req.userId);
+        if (error) throw error;
+        const followed = (data ?? []).map((r) => r.category_id as string);
+        lists.push(followed.length ? await inCategories(followed) : []);
+    }
+    if (!lists.length) return null;
+    return lists.reduce((a, b) => a.filter((id) => b.includes(id)));
+}
 
 /**
  * The feed, newest first. Without `limit` every post comes back as an array (older callers).
@@ -165,8 +196,13 @@ const PAGE_MAX = 100;
 router.get("/post/fetch", optionalAuth, async (req: Request, res: Response) => {
     const limit = Number(req.query.limit);
     const paged = Number.isInteger(limit) && limit > 0;
+    const only = await filteredPostIds(req);
+    if (only === "unauthorized") return res.status(401).json({ message: "Sign in to see posts from followed categories" });
+    if (only && !only.length) return res.status(200).json(paged ? { posts: [], next_before: null } : []);
     let query = supabase.from("v_post_all_data").select("*")
         .order("created_at", { ascending: false }).order("id", { ascending: false });
+    if (only) query = query.in("id", only);
+    if (req.query.important === "1") query = query.eq("is_important", true);
     if (paged) {
         query = query.limit(Math.min(limit, PAGE_MAX) + 1);
         const [at, id] = String(req.query.before ?? "").split("|");
@@ -291,6 +327,14 @@ router.put("/post/:pid/edit", auth, async (req: Request, res: Response) => {
     
     if (cderr) throw cderr;
     if (!access.isOwner) await logAction(req.userId!, "post_edited", { post_id: pid, post_title: title.value });
+
+    // Turned into an announcement now: its followers have not been told it is one.
+    if (access.isMod && !!is_important && !access.wasImportant) {
+        const { data: pc, error: pcError } = await supabase.from("post_categories").select("category_id").eq("post_id", pid);
+        if (pcError) throw pcError;
+        const author = (await getUserData(access.author!)).display_name ?? "มีคน";
+        await notifyFollowers({ id: pid, user_id: access.author!, title: title.value, is_important: true }, (pc ?? []).map((r) => r.category_id), author);
+    }
     res.status(200).send();
 })
 

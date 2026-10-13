@@ -23,7 +23,7 @@ export interface Notif { id: string; post_id: string; message: string; is_read: 
 export interface AppState {
   view: View;
   activeId: string | null;
-  cat: string | null;
+  cat: string | null;                       // category id the feed is filtered to
   q: string;
   cats: Category[];
   likes: Record<string, ReactionType>;      // post id -> this viewer's reaction
@@ -35,7 +35,7 @@ export interface AppState {
   results: Post[] | null;                   // server search results for `q`; null while not searching
   mine: Post[] | null;                      // the viewer's own posts (profile page); null until loaded
   notifs: Notif[];
-  interests: string[];
+  interests: string[];                      // followed category ids
   reportStatus: Record<string, ReportStatus>;   // keyed by post id, visible to everyone
   reportCount: Record<string, number>;          // keyed by post id
   myReports: Record<string, boolean>;           // posts this viewer has reported

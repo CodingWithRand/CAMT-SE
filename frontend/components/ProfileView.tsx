@@ -31,7 +31,7 @@ export function ProfileView({ name, email, isMod, avatar, initials, posts, cats,
   initials: string;
   posts: Post[] | null;              // own posts, from page state (so edits, reactions and deletes show at once)
   cats: Category[];
-  interests: string[];
+  interests: string[];             // followed category ids
   revision: number;                  // bumps on live "reports" hints, to refetch the report list
   renderPost: (p: Post) => ReactNode;
   flash: (t: string) => void;
@@ -154,14 +154,14 @@ export function ProfileView({ name, email, isMod, avatar, initials, posts, cats,
 
       {tab === 'interests' && (
         <div style={{ ...card, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <span style={{ fontSize: 12.5, color: 'var(--color-neutral-700)', lineHeight: 1.5 }}>เมื่อมีประกาศในหมวดเหล่านี้ คุณจะได้รับแจ้งเตือนที่ 🔔</span>
+          <span style={{ fontSize: 12.5, color: 'var(--color-neutral-700)', lineHeight: 1.5 }}>เมื่อมีโพสต์ใหม่ในหมวดเหล่านี้ คุณจะได้รับแจ้งเตือนที่ 🔔</span>
           {interests.length === 0
             ? <span style={{ fontSize: 13, color: 'var(--color-neutral-600)' }}>ยังไม่ได้ติดตามหมวดไหน</span>
             : (
               <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-                {interests.map((n) => (
-                  <span key={n} className="tag" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--color-accent-100)', color: 'var(--color-accent-800)', fontSize: 12 }}>
-                    <span style={{ width: 8, height: 8, borderRadius: 999, background: cats.find((c) => c.name === n)?.dot }} />{n}
+                {cats.filter((c) => interests.includes(c.id)).map((c) => (
+                  <span key={c.id} className="tag" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--color-accent-100)', color: 'var(--color-accent-800)', fontSize: 12 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 999, background: c.dot }} />{c.name}
                   </span>
                 ))}
               </div>

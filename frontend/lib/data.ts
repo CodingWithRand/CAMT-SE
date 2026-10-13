@@ -68,7 +68,7 @@ export function catDots(ids: string[]): Record<string, string> {
 }
 
 /** A category as the page uses it; `dot` is its colour from catDots(). */
-export interface Category { id: string; name: string; pri: number; dot: string; desc?: string | null }
+export interface Category { id: string; name: string; pri: number; dot: string; desc?: string | null; followers?: number }
 
 export const REASONS = [
   'ข้อมูลเท็จ / Misinformation', 'เปิดเผยข้อมูลส่วนบุคคล (PDPA)',

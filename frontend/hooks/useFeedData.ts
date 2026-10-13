@@ -23,9 +23,18 @@ const newerThan = (p: Post, cursor: string) => {
  * Each loader is safe to call again at any time (live updates, polling, after a write).
  * `hiddenLocally` keeps posts that are about to be deleted or hidden (undo window) out of a refresh.
  */
-export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boolean; hiddenLocally: (id: string) => boolean }) {
+export function useFeedData(set: SetState, opts: {
+  signedIn: boolean;
+  isMod: boolean;
+  hiddenLocally: (id: string) => boolean;
+  /** Feed filter as query parameters for /post/fetch (e.g. "categories=<id>&important=1"); '' for everything. */
+  filter: string;
+  /** Changes whenever the filtered feed must start over (the filter, or what "following" means). */
+  filterKey: string;
+}) {
   const api = useApi();
-  const { signedIn, isMod, hiddenLocally } = opts;
+  const { signedIn, isMod, hiddenLocally, filter, filterKey } = opts;
+  const feedKey = useRef<string | null>(null);   // the filterKey the feed on screen belongs to
   const [feedStatus, setFeedStatus] = useState<FeedStatus>('loading');
   const [interestsLoaded, setInterestsLoaded] = useState(false);
   const [nextBefore, setNextBefore] = useState<string | null>(null);   // cursor of the next feed page; null = no more
@@ -54,9 +63,20 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
    * loaded beyond that range stay, so a live refresh never shortens a long scroll.
    */
   const loadPosts = useCallback(async () => {
+    // Another filter: start from an empty first page.
+    if (feedKey.current !== filterKey) {
+      feedKey.current = filterKey;
+      pages.current = 1;
+      lastPayload.current.posts = undefined;
+      setNextBefore(null);
+      setFeedStatus('loading');
+      set({ posts: [] });
+    }
+    const key = filterKey;
     try {
       const limit = Math.min(PAGE * pages.current, REFRESH_MAX);
-      const body = await (await api(`/post/fetch?limit=${limit}`)).json();
+      const body = await (await api(`/post/fetch?limit=${limit}${filter ? `&${filter}` : ''}`)).json();
+      if (feedKey.current !== key) return;   // the filter changed while this was loading
       if (!Array.isArray(body?.posts)) throw new Error(body?.message ?? 'bad /post/fetch payload');
       setFeedStatus('ready');
       const sig = JSON.stringify(body);
@@ -75,15 +95,16 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
       // Keep what is on screen if a later refresh fails; only an empty feed shows the error.
       setFeedStatus((s) => (s === 'ready' ? s : 'error'));
     }
-  }, [api, set, takeRows]);
+  }, [api, set, takeRows, filter, filterKey]);
 
   /** The next (older) page, when scrolling reaches the end of the feed. */
   const loadMore = useCallback(async () => {
     if (!nextBefore || loadingMore) return;
+    const key = feedKey.current;
     setLoadingMore(true);
-    const res = await api(`/post/fetch?limit=${PAGE}&before=${encodeURIComponent(nextBefore)}`).catch(() => null);
+    const res = await api(`/post/fetch?limit=${PAGE}&before=${encodeURIComponent(nextBefore)}${filter ? `&${filter}` : ''}`).catch(() => null);
     setLoadingMore(false);
-    if (!res?.ok) return;
+    if (!res?.ok || feedKey.current !== key) return;
     const body = await res.json();
     const page = takeRows(body.posts ?? []);
     pages.current += 1;
@@ -92,7 +113,7 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
       likes: { ...prev.likes, ...page.likes },
     }));
     setNextBefore(body.next_before ?? null);
-  }, [api, set, takeRows, nextBefore, loadingMore]);
+  }, [api, set, takeRows, nextBefore, loadingMore, filter]);
 
   /** Search every post on the server; an empty query leaves search mode. */
   const searchSeq = useRef(0);   // only the newest search may write its results
@@ -147,14 +168,14 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
     if (res?.ok) set({ notifs: await res.json() });
   }, [api, set, signedIn]);
 
-  // Followed categories (user_interests); they decide who gets announcement notifications.
+  // Followed category ids (user_interests): new posts in them notify the follower.
   const loadInterests = useCallback(async () => {
     setInterestsLoaded(false);
     if (!signedIn) return set({ interests: [] });
     const res = await api('/user/interests').catch(() => null);
     if (!res?.ok) return;
-    const rows: { category_name: string }[] = await res.json();
-    set({ interests: rows.map((r) => r.category_name).filter(Boolean) });
+    const rows: { category_id: string }[] = await res.json();
+    set({ interests: rows.map((r) => r.category_id) });
     setInterestsLoaded(true);
   }, [api, set, signedIn]);
 

@@ -3,18 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 
-interface Cat { id: string; name: string; pri: number; dot: string; desc?: string | null }
+import type { Category } from '@/lib/data';
 
 /**
  * Pick the categories to follow. Following a category is what brings its announcements
  * to the bell, so new members see this right after signing up.
  */
 export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClose }: {
-  cats: Cat[];
-  selected: string[];          // category names currently followed
+  cats: Category[];
+  selected: string[];          // category ids currently followed
   loaded: boolean;             // `selected` came from the server; saving before that would wipe it
   welcome: boolean;            // shown right after sign up
-  onSave: (names: string[]) => Promise<boolean>;
+  onSave: (ids: string[]) => Promise<boolean>;
   onClose: () => void;
 }) {
   const [picked, setPicked] = useState<string[]>(selected);
@@ -30,7 +30,9 @@ export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClo
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose, busy]);
 
-  const toggle = (name: string) => setPicked((p) => (p.includes(name) ? p.filter((x) => x !== name) : [...p, name]));
+  const toggle = (id: string) => setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+  // The three most followed categories get a "ยอดนิยม" hint (only once someone follows them).
+  const popular = new Set([...cats].filter((c) => (c.followers ?? 0) > 0).sort((a, b) => (b.followers ?? 0) - (a.followers ?? 0)).slice(0, 3).map((c) => c.id));
   const changed = picked.length !== selected.length || picked.some((x) => !selected.includes(x));
 
   const save = async () => {
@@ -50,15 +52,15 @@ export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClo
             {welcome ? 'ยินดีต้อนรับ! เลือกหมวดที่คุณสนใจ' : 'หมวดที่ติดตาม'}
           </h4>
           <p style={{ margin: 0, fontSize: 13, color: 'var(--color-neutral-700)', lineHeight: 1.5 }}>
-            เมื่อมีประกาศในหมวดที่ติดตาม คุณจะได้รับแจ้งเตือนที่ 🔔 · โพสต์จากหมวดเหล่านี้ยังรวมอยู่ในเมนู &ldquo;หมวดที่ฉันสนใจ&rdquo;
+            เมื่อมีโพสต์ใหม่ในหมวดที่ติดตาม คุณจะได้รับแจ้งเตือนที่ 🔔 · โพสต์จากหมวดเหล่านี้รวมอยู่ในเมนู &ldquo;หมวดที่ฉันสนใจ&rdquo;
           </p>
         </div>
 
         <div role="group" aria-label="หมวดหมู่" style={{ display: 'grid', gap: 8, gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))' }}>
           {cats.map((c) => {
-            const on = picked.includes(c.name);
+            const on = picked.includes(c.id);
             return (
-              <button key={c.id} type="button" role="checkbox" aria-checked={on} onClick={() => toggle(c.name)}
+              <button key={c.id} type="button" role="checkbox" aria-checked={on} onClick={() => toggle(c.id)}
                 style={{ cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', display: 'flex', gap: 10, alignItems: 'flex-start',
                   padding: '12px 13px', borderRadius: 14, color: 'var(--color-text)',
                   border: `1.5px solid ${on ? 'var(--color-accent)' : 'var(--color-divider)'}`,
@@ -69,7 +71,9 @@ export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClo
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 14, fontWeight: 600 }}>
                     <span style={{ width: 8, height: 8, borderRadius: 999, background: c.dot, flex: 'none' }} />
                     {c.name}
+                    {popular.has(c.id) && <span className="tag" style={{ fontSize: 10, fontWeight: 700, padding: '1px 7px', background: 'var(--alert-soft)', color: 'var(--alert-ink)' }}>ยอดนิยม</span>}
                   </span>
+                  {!!c.followers && <span style={{ display: 'block', fontSize: 11, color: 'var(--color-neutral-600)', marginTop: 1 }}>{c.followers} คนติดตาม</span>}
                   {c.desc && <span style={{ display: 'block', fontSize: 12, color: 'var(--color-neutral-700)', marginTop: 2, lineHeight: 1.4 }}>{c.desc}</span>}
                 </span>
               </button>
@@ -79,7 +83,7 @@ export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClo
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12.5, color: 'var(--color-neutral-700)', marginRight: 'auto' }}>
-            {!loaded ? 'กำลังโหลดหมวดที่ติดตาม…' : picked.length ? `เลือกแล้ว ${picked.length} หมวด` : 'ยังไม่ได้เลือก · จะไม่ได้รับแจ้งเตือนประกาศ'}
+            {!loaded ? 'กำลังโหลดหมวดที่ติดตาม…' : picked.length ? `เลือกแล้ว ${picked.length} หมวด` : 'ยังไม่ได้เลือก · จะไม่ได้รับแจ้งเตือนโพสต์ใหม่'}
           </span>
           <button className="btn btn-secondary" onClick={onClose} disabled={busy} style={{ fontFamily: 'var(--font-body)' }}>
             {welcome ? 'ข้ามไปก่อน' : 'ยกเลิก'}

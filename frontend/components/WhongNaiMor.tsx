@@ -75,7 +75,14 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   // A refresh during the undo window must not bring back a post that is about to be deleted or hidden.
   const hiddenLocally = useCallback((id: string) => isPending(`delete:${id}`) || isPending(`hide:${id}`), [isPending]);
-  const data = useFeedData(set, { signedIn: !!user, isMod, hiddenLocally });
+  // The feed is filtered by the API (so a filter sees every matching post, not just loaded pages).
+  const feedFilter = [
+    st.view === 'announce' && 'important=1',
+    st.view === 'interests' && user && 'following=1',
+    st.cat && `categories=${st.cat}`,
+  ].filter(Boolean).join('&');
+  const feedKey = st.view === 'interests' ? `${feedFilter}|${[...st.interests].sort().join(',')}` : feedFilter;
+  const data = useFeedData(set, { signedIn: !!user, isMod, hiddenLocally, filter: feedFilter, filterKey: feedKey });
   const { loadPosts, loadAnnouncements, loadComments, refreshReports, loadMine, search } = data;
   const searchMode = !!st.q.trim();
 
@@ -92,33 +99,35 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   useEffect(() => { if (st.interestsOpen && !data.interestsLoaded) data.loadInterests(); }, [st.interestsOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /** Replace the followed categories with `names`; false if the API refused. */
-  const putInterests = async (names: string[]) => {
-    const category_ids = names.map((n) => st.cats.find((c) => c.name === n)?.id).filter(Boolean);
+  /** Replace the followed categories with these ids; false if the API refused. */
+  const putInterests = async (category_ids: string[]) => {
     const res = await api('/user/interests', { method: 'PUT', json: { category_ids } }).catch(() => null);
     return !!res?.ok;
   };
 
-  const saveInterests = async (names: string[]) => {
-    if (!(await putInterests(names))) { flash('บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง'); return false; }
-    set({ interests: names });
-    flash(names.length ? `ติดตาม ${names.length} หมวดแล้ว · จะได้รับแจ้งเตือนประกาศในหมวดเหล่านี้` : 'เลิกติดตามทุกหมวดแล้ว');
+  const saveInterests = async (ids: string[]) => {
+    if (!(await putInterests(ids))) { flash('บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง'); return false; }
+    set({ interests: ids });
+    data.loadCats();   // follower counts
+    flash(ids.length ? `ติดตาม ${ids.length} หมวดแล้ว · จะได้รับแจ้งเตือนเมื่อมีโพสต์ใหม่ในหมวดเหล่านี้` : 'เลิกติดตามทุกหมวดแล้ว');
     return true;
   };
 
-  const toggleInterest = async (name: string) => {
+  const toggleInterest = async (id: string) => {
+    const name = st.cats.find((c) => c.id === id)?.name ?? 'หมวดนี้';
     if (isGuest) return gate();
     // Saving replaces the whole list, so it must start from what the server has.
     if (!data.interestsLoaded) { data.loadInterests(); return flash('กำลังโหลดหมวดที่ติดตาม ลองอีกครั้งในอีกสักครู่'); }
     const before = st.interests;
-    const has = before.includes(name);
-    const next = has ? before.filter((x) => x !== name) : [...before, name];
+    const has = before.includes(id);
+    const next = has ? before.filter((x) => x !== id) : [...before, id];
     set({ interests: next });
     if (!(await putInterests(next))) {
       set({ interests: before });
       return flash('บันทึกความสนใจไม่สำเร็จ ลองใหม่อีกครั้ง');
     }
-    flash(has ? 'ลบออกจากความสนใจแล้ว' : 'บันทึกเป็นความสนใจแล้ว · จะได้รับแจ้งเตือนประกาศในหมวดนี้');
+    data.loadCats();
+    flash(has ? `เลิกติดตาม ${name} แล้ว` : `ติดตาม ${name} แล้ว · จะได้รับแจ้งเตือนเมื่อมีโพสต์ใหม่ในหมวดนี้`);
   };
 
   /* ── Posts and comments ── */
@@ -410,19 +419,25 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   /* ── What to show ── */
 
   // Announcements first, then everything else, filtered by view, category and search.
+  // Posts carry category names; the page keeps ids.
+  const catName = st.cats.find((c) => c.id === st.cat)?.name ?? null;
+  const followedNames = useMemo(() => st.cats.filter((c) => st.interests.includes(c.id)).map((c) => c.name), [st.cats, st.interests]);
+
+  // The API already filtered the feed by view and category; this re-applies it to what is on screen
+  // (e.g. right after following or switching, before the new page arrives).
   // While searching, the server's results take the place of the feed (and the search term is not re-checked here).
   const feed = useMemo(() => {
     const needle = searchMode ? '' : st.q.trim().toLowerCase();
     return (searchMode ? st.results ?? [] : st.posts).filter((p) => {
       const cats = p.cats || [];
       if (st.view === 'announce' && !p.important) return false;
-      if (st.view === 'interests' && !cats.some((c) => st.interests.includes(c))) return false;
+      if (st.view === 'interests' && !cats.some((c) => followedNames.includes(c))) return false;
       if (st.view === 'questions' && !cats.includes(QA)) return false;
-      if (st.cat && !cats.includes(st.cat)) return false;
+      if (catName && !cats.includes(catName)) return false;
       if (needle && !`${p.title} ${p.body} ${p.name} ${cats.join(' ')}`.toLowerCase().includes(needle)) return false;
       return true;
     }).sort((a, b) => (b.important ? 1 : 0) - (a.important ? 1 : 0));
-  }, [st.posts, st.results, searchMode, st.view, st.interests, st.cat, st.q]);
+  }, [st.posts, st.results, searchMode, st.view, followedNames, catName, st.q]);
 
   const cardProps = (p: Post) => ({
     cats: st.cats,
@@ -571,6 +586,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
           ) : (
           <Feed
             view={st.view}
+            category={(() => {
+              const c = st.cats.find((x) => x.id === st.cat);
+              return c ? { name: c.name, dot: c.dot, followers: c.followers ?? 0, followed: st.interests.includes(c.id), onToggle: () => toggleInterest(c.id) } : null;
+            })()}
             posts={feed}
             status={searchMode ? (st.results === null ? 'loading' : 'ready') : data.feedStatus}
             query={st.q}
