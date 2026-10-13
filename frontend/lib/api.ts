@@ -21,3 +21,11 @@ export function api(path: string, { method = 'GET', token, json, body, keepalive
 }
 
 export type Api = (path: string, opts?: Omit<ApiOptions, 'token'>) => Promise<Response>;
+
+/** The message for a 429 (too many writes in a minute), or null for any other answer. */
+export async function rateLimitMessage(res: Response | null) {
+  if (res?.status !== 429) return null;
+  const body = await res.clone().json().catch(() => null);
+  const wait = Number(body?.retry_after) || 60;
+  return `ทำรายการถี่เกินไป · รออีก ${wait} วินาทีแล้วลองใหม่`;
+}

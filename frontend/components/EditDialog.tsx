@@ -6,6 +6,7 @@ import { findPostIn, mapAllPosts, type AppState, type SetState } from '@/lib/sta
 import { REPORT_LABEL, statusLook } from '@/lib/ui';
 import { useApi } from './AuthContext';
 import { AnnounceToggle, CatPicker, labelStyle, toggle } from './formParts';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface EditProps {
   st: AppState;
@@ -27,6 +28,7 @@ export function EditDialog({ st, set, flash, setStatus, isMod, onHide, onUnhide,
   const status = st.reportStatus[id];
   const reason = st.reportReason[id];
   const [busy, setBusy] = useState(false);
+  const trap = useFocusTrap<HTMLDivElement>();
   const close = () => { if (!busy) set({ editFor: null }); };
 
   const save = async () => {
@@ -64,7 +66,7 @@ export function EditDialog({ st, set, flash, setStatus, isMod, onHide, onUnhide,
   return (
     <div className="dialog-backdrop" style={{ zIndex: 42, animation: 'wnm-pop .16s ease both' }}
       onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="edit-title" style={{ width: 'min(560px,100%)', maxHeight: '92vh', overflow: 'auto', gap: 13, borderRadius: 20 }}>
+      <div ref={trap} className="dialog" role="dialog" aria-modal="true" aria-labelledby="edit-title" style={{ width: 'min(560px,100%)', maxHeight: '92vh', overflow: 'auto', gap: 13, borderRadius: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h4 id="edit-title" className="dialog-title" style={{ margin: 0, flex: 1, fontSize: 16 }}>{asMod ? 'แก้ไขโพสต์ (ผู้ดูแล)' : 'แก้ไขโพสต์ของคุณ'}</h4>
           <button className="btn btn-secondary btn-icon" onClick={close} aria-label="ปิด">✕</button>
@@ -77,12 +79,12 @@ export function EditDialog({ st, set, flash, setStatus, isMod, onHide, onUnhide,
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={labelStyle}>หัวเรื่อง</label>
-          <input className="input" value={st.editTitle} onChange={(e) => set({ editTitle: e.target.value })} style={{ background: 'var(--color-neutral-100)', fontSize: 13.5 }} />
+          <input className="input" maxLength={120} value={st.editTitle} onChange={(e) => set({ editTitle: e.target.value })} style={{ background: 'var(--color-neutral-100)', fontSize: 13.5 }} />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={labelStyle}>เนื้อหา</label>
-          <textarea className="input" value={st.editBody} onChange={(e) => set({ editBody: e.target.value })} style={{ borderRadius: 16, minHeight: 120, background: 'var(--color-neutral-100)', fontSize: 13.5 }} />
+          <textarea className="input" maxLength={5000} value={st.editBody} onChange={(e) => set({ editBody: e.target.value })} style={{ borderRadius: 16, minHeight: 120, background: 'var(--color-neutral-100)', fontSize: 13.5 }} />
         </div>
 
         <CatPicker cats={st.cats} selected={st.editCats} onToggle={(name) => set((prev) => ({ editCats: toggle(prev.editCats, name) }))} />
@@ -116,13 +118,13 @@ export function EditDialog({ st, set, flash, setStatus, isMod, onHide, onUnhide,
         <div className="dialog-actions" style={{ flexWrap: 'wrap' }}>
           <span style={{ marginRight: 'auto', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
             {mine ? (
-              <button className="btn btn-ghost" onClick={() => onDelete(id)} disabled={busy} style={{ color: '#8a3a1c' }}>ลบโพสต์</button>
+              <button className="btn btn-ghost" onClick={() => onDelete(id)} disabled={busy} style={{ color: 'var(--danger-text)' }}>ลบโพสต์</button>
             ) : isMod && (
               <>
                 {post?.hidden
                   ? <button className="btn btn-ghost" onClick={() => onUnhide(id)} disabled={busy}>แสดงโพสต์อีกครั้ง</button>
-                  : <button className="btn btn-ghost" onClick={() => onHide(id)} disabled={busy} style={{ color: '#8a3a1c' }}>ซ่อนโพสต์</button>}
-                <button className="btn btn-ghost" onClick={() => onDelete(id)} disabled={busy} style={{ color: '#8a3a1c' }}>ลบถาวร</button>
+                  : <button className="btn btn-ghost" onClick={() => onHide(id)} disabled={busy} style={{ color: 'var(--danger-text)' }}>ซ่อนโพสต์</button>}
+                <button className="btn btn-ghost" onClick={() => onDelete(id)} disabled={busy} style={{ color: 'var(--danger-text)' }}>ลบถาวร</button>
               </>
             )}
           </span>

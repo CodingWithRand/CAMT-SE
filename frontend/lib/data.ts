@@ -84,6 +84,6 @@ export const ROLE_LABEL: Record<Role, string> = { org: 'บุคลากร', 
 export const ROLE_STYLE: Record<Role, CSSProperties> = {
   org: { background: 'var(--color-accent-200)', color: 'var(--color-accent-800)' },
   staff: { background: 'var(--color-accent-2-200)', color: 'var(--color-accent-2-800)' },
-  mod: { background: '#e1eecc', color: '#3d472b' },
+  mod: { background: 'var(--success-soft)', color: 'var(--success-ink)' },
   student: { background: 'var(--color-neutral-200)', color: 'var(--color-neutral-800)' },
 };

@@ -93,7 +93,7 @@ export function RoleManager({ flash, myId, revision }: {
                         <ShieldIcon /> ผู้ดูแล
                       </span>
                     )}
-                    {m.is_cmu_p && !m.is_mod && <span className="tag" style={{ background: '#e4efd2', color: '#33401f', fontSize: 10.5 }}>บุคลากร มช.</span>}
+                    {m.is_cmu_p && !m.is_mod && <span className="tag" style={{ background: 'var(--success-soft)', color: 'var(--success-ink)', fontSize: 10.5 }}>บุคลากร มช.</span>}
                     {self && <span className="tag" style={{ background: 'var(--color-neutral-200)', color: 'var(--color-neutral-800)', fontSize: 10.5 }}>คุณ</span>}
                   </span>
                   <span style={{ display: 'block', fontSize: 11.5, color: 'var(--color-neutral-600)', overflowWrap: 'anywhere' }}>{m.email}</span>
@@ -107,7 +107,7 @@ export function RoleManager({ flash, myId, revision }: {
                   <button className="btn" onClick={() => setConfirm(confirm === m.id ? null : m.id)} disabled={busy}
                     style={{ flex: 'none', fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, border: '1px solid',
                       ...(m.is_mod
-                        ? { background: 'transparent', color: '#8a3a1c', borderColor: '#e7b3a0' }
+                        ? { background: 'transparent', color: 'var(--danger-text)', borderColor: 'var(--danger-border)' }
                         : { background: 'var(--color-accent-100)', color: 'var(--color-accent-800)', borderColor: 'var(--color-accent-300)' }) }}>
                     {m.is_mod ? 'ถอนสิทธิ์ผู้ดูแล' : 'ตั้งเป็นผู้ดูแล'}
                   </button>
@@ -115,7 +115,7 @@ export function RoleManager({ flash, myId, revision }: {
               </div>
 
               {confirm === m.id && (
-                <div role="alertdialog" aria-label="ยืนยันการเปลี่ยนสิทธิ์" style={{ borderRadius: 12, padding: 12, display: 'flex', flexDirection: 'column', gap: 8, background: m.is_mod ? '#f8ddd3' : 'var(--color-accent-100)', color: m.is_mod ? '#6f2f14' : 'var(--color-accent-900)' }}>
+                <div role="alertdialog" aria-label="ยืนยันการเปลี่ยนสิทธิ์" style={{ borderRadius: 12, padding: 12, display: 'flex', flexDirection: 'column', gap: 8, background: m.is_mod ? 'var(--danger-soft)' : 'var(--color-accent-100)', color: m.is_mod ? 'var(--danger-ink)' : 'var(--color-accent-900)' }}>
                   <strong style={{ fontSize: 13 }}>
                     {m.is_mod ? `ถอนสิทธิ์ผู้ดูแลของ ${m.display_name}?` : `ตั้ง ${m.display_name} เป็นผู้ดูแล?`}
                   </strong>
@@ -126,7 +126,7 @@ export function RoleManager({ flash, myId, revision }: {
                   <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
                     <button className="btn btn-secondary" onClick={() => setConfirm(null)} disabled={busy} style={{ fontFamily: 'var(--font-body)', fontSize: 12.5 }}>ยกเลิก</button>
                     <button className="btn" onClick={() => setRole(m, !m.is_mod)} disabled={busy} autoFocus
-                      style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, color: '#fff', background: m.is_mod ? '#a2391c' : 'var(--color-accent)' }}>
+                      style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, color: '#fff', background: m.is_mod ? 'var(--danger)' : 'var(--color-accent)' }}>
                       {busy ? 'กำลังบันทึก…' : m.is_mod ? 'ถอนสิทธิ์' : 'ตั้งเป็นผู้ดูแล'}
                     </button>
                   </div>

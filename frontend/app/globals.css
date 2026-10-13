@@ -17,8 +17,8 @@
   --color-accent-2-700: #8c4765; --color-accent-2-800: #66324a; --color-accent-2-900: #40202e;
 
   --color-neutral-100: #f8ece5; --color-neutral-200: #e7d4c8; --color-neutral-300: #d6c2b4;
-  --color-neutral-400: #c2b8ad; --color-neutral-500: #a2988f; --color-neutral-600: #6a625c;
-  --color-neutral-700: #5f5860; --color-neutral-800: #453e4d; --color-neutral-900: #2e2838;
+  --color-neutral-400: #c2b8ad; --color-neutral-500: #a2988f; --color-neutral-600: #5a534e;
+  --color-neutral-700: #4d4650; --color-neutral-800: #453e4d; --color-neutral-900: #2e2838;
 
   --font-heading: var(--font-caprasimo), "Caprasimo", system-ui, sans-serif;
   --font-heading-weight: 400;
@@ -40,6 +40,16 @@
   --shadow-lg: 0 12px 32px color-mix(in srgb, #2e2b25 22%, transparent);
 
   --pri: #c9603f;
+
+  /* Status colours: solid fills, and soft backgrounds with the ink that reads on them. */
+  --danger: #a2391c;            /* destructive buttons (delete, hide, revoke) */
+  --danger-text: #8a3a1c;       /* destructive text buttons */
+  --danger-border: #e7b3a0;
+  --danger-soft: #f8ddd3;       --danger-ink: #6f2f14;    /* confirm boxes */
+  --alert-soft: #f2c6b6;        --alert-ink: #6f2f14;     /* "รอตรวจ", urgent announcements */
+  --success-soft: #e1eecc;      --success-ink: #3d472b;   /* "จัดการแล้ว", moderator badge, CMU staff */
+  --warn-soft: #f6d7a8;         --warn-ink: #6b4210;      /* hidden posts */
+  --on-dark: #fdf8f1;           /* text on the dark toast */
   --peach: #f2e1fa;
 }
 

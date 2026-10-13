@@ -5,6 +5,7 @@ import { QA, type Post, type ReactionType, type ReportStatus } from '@/lib/data'
 import { toPost } from '@/lib/mappers';
 import { INITIAL, findPostIn, mapAllPosts, postLists, type AppState, type Notif, type SetState, type ViewerRole } from '@/lib/state';
 import { ACCENT_MAP, avatarStyle } from '@/lib/ui';
+import { rateLimitMessage } from '@/lib/api';
 import { useFeedData } from '@/hooks/useFeedData';
 import { useLiveUpdates } from '@/hooks/useLiveUpdates';
 import { usePostUrl } from '@/hooks/usePostUrl';
@@ -26,7 +27,7 @@ import { ModerationHistory } from './ModerationHistory';
 import { ModerationView } from './ModerationView';
 import PostCard from './PostCard';
 import { DeleteDialog, HideDialog } from './PostActionDialogs';
-import PostModal from './PostModal';
+import PostModal, { type WriteResult } from './PostModal';
 import { ProfileView } from './ProfileView';
 import { ReportDialog } from './ReportDialog';
 import { RightRail } from './RightRail';
@@ -155,9 +156,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
    * Comment writes, then re-read that post's thread: the create endpoints answer with an
    * empty 200, and the row the page needs carries joined fields (display_name, role).
    */
-  const writeComment = async (postId: string, path: string, opts: Parameters<typeof api>[1]) => {
+  const writeComment = async (postId: string, path: string, opts: Parameters<typeof api>[1]): Promise<WriteResult> => {
     const res = await api(path, opts).catch(() => null);
-    if (!res?.ok) return false;
+    if (!res?.ok) return (await rateLimitMessage(res)) ?? '';
     await loadComments([{ id: postId }]);
     return true;
   };
@@ -251,7 +252,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     }
     if (!res?.ok) {
       console.error('submitReport', res?.status);
-      return 'ส่งรายงานไม่สำเร็จ ลองใหม่อีกครั้ง';
+      return (await rateLimitMessage(res)) ?? 'ส่งรายงานไม่สำเร็จ ลองใหม่อีกครั้ง';
     }
     await refreshReports();
     return null;

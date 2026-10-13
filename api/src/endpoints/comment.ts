@@ -3,7 +3,11 @@ import supabase from "../db";
 import { Comment } from "../model"
 import { auth, isModerator, optionalAuth, uuidParam, UUID } from "../middleware";
 import { HIDDEN_POST_MESSAGE, isHidden } from "../hidden";
-
+import { logAction } from "../modlog";
+import { MESSAGES, notify, untitled } from "../notify";
+import { limits } from "../rateLimit";
+import { getUserData } from "../users";
+import { LIMITS, text } from "../validate";
 import { COMMENT_TARGET, myReactions, reactionCounts } from "../reactions";
 
 const router = Router();
@@ -49,25 +53,51 @@ router.get("/comment/fetch-many", optionalAuth, async (req: Request, res: Respon
     res.status(200).json(await commentsFor(pids, req.userId));
 })
 
-/** Add a comment to post :pid, or a reply under comment :cid. Both answer with an empty 200. */
+/**
+ * Add a comment to post :pid, or a reply under comment :cid. Both answer with an empty 200.
+ * The post's author is notified, and for a reply also the author of the comment answered
+ * (never yourself, never twice).
+ */
 async function createComment(req: Request, res: Response) {
     const pid = String(req.params.pid);
-    if (await isHidden(pid)) return res.status(403).json({ message: HIDDEN_POST_MESSAGE });
+    const content = text(req.body?.content, "content", LIMITS.comment);
+    if ("error" in content) return res.status(400).json({ message: content.error });
+
+    const { data: post, error: postError } = await supabase.from("posts").select("user_id, title, is_hidden").eq("id", pid).maybeSingle();
+    if (postError) throw postError;
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (post.is_hidden) return res.status(403).json({ message: HIDDEN_POST_MESSAGE });
+
+    let parentAuthor: string | null = null;
+    if (req.params.cid) {
+        const { data: parent, error } = await supabase.from("comments").select("user_id, post_id").eq("id", String(req.params.cid)).maybeSingle();
+        if (error) throw error;
+        if (!parent || parent.post_id !== pid) return res.status(404).json({ message: "Comment not found on this post" });
+        parentAuthor = parent.user_id;
+    }
+
     const comment: Comment = {
         post_id: pid,
         user_id: req.userId!,
-        content: req.body.content,
+        content: content.value,
         ...(req.params.cid ? { parent_comment_id: String(req.params.cid) } : {}),
     };
     const { error } = await supabase.from("comments").insert(comment);
     if (error) throw error;
+
+    const who = (await getUserData(req.userId!)).display_name ?? "มีคน";
+    const title = untitled(post.title);
+    const rows: { user_id: string; post_id: string; message: string }[] = [];
+    if (parentAuthor && parentAuthor !== req.userId) rows.push({ user_id: parentAuthor, post_id: pid, message: MESSAGES.replyToYourComment(who, title) });
+    if (post.user_id !== req.userId && post.user_id !== parentAuthor) rows.push({ user_id: post.user_id, post_id: pid, message: MESSAGES.commentOnYourPost(who, title) });
+    await notify(rows);
     res.status(200).send();
 }
 
-router.post("/comment/:pid", auth, createComment);
-router.post("/comment/:pid/replyto/:cid", auth, createComment);
+router.post("/comment/:pid", auth, limits.comment, createComment);
+router.post("/comment/:pid/replyto/:cid", auth, limits.comment, createComment);
 
-router.post("/comment/:cid/react", auth, async (req: Request, res: Response) => {
+router.post("/comment/:cid/react", auth, limits.react, async (req: Request, res: Response) => {
     const { cid } = req.params;
     const { reaction_type, change } = req.body;
     const { data: comment } = await supabase.from("comments").select("post_id").eq("id", String(req.params.cid)).maybeSingle();
@@ -82,13 +112,12 @@ router.post("/comment/:cid/react", auth, async (req: Request, res: Response) => 
     res.status(200).json(data); // reaction count send to the frontend.
 })
 
-const MAX_COMMENT = 1000;
-
 /** Edit your own comment. */
 router.put("/comment/:cid", auth, async (req: Request, res: Response) => {
     const cid = String(req.params.cid);
-    const content = String(req.body?.content ?? "").trim();
-    if (!content || content.length > MAX_COMMENT) return res.status(400).json({ message: `Comment must be 1-${MAX_COMMENT} characters` });
+    const parsed = text(req.body?.content, "content", LIMITS.comment);
+    if ("error" in parsed) return res.status(400).json({ message: parsed.error });
+    const content = parsed.value;
     const { data: c, error } = await supabase.from("comments").select("id, user_id, post_id").eq("id", cid).maybeSingle();
     if (error) throw error;
     if (!c) return res.status(404).json({ message: "Comment not found" });
@@ -105,7 +134,8 @@ router.delete("/comment/:cid", auth, async (req: Request, res: Response) => {
     const { data: c, error } = await supabase.from("comments").select("id, user_id, post_id").eq("id", cid).maybeSingle();
     if (error) throw error;
     if (!c) return res.status(404).json({ message: "Comment not found" });
-    if (c.user_id !== req.userId && !(await isModerator(req.userId))) {
+    const asMod = c.user_id !== req.userId;
+    if (asMod && !(await isModerator(req.userId))) {
         return res.status(403).json({ message: "Only the author or a moderator can delete this comment" });
     }
 
@@ -123,6 +153,10 @@ router.delete("/comment/:cid", auth, async (req: Request, res: Response) => {
     for (const id of [...ids].reverse()) {
         const r = await supabase.from("comments").delete().eq("id", id);
         if (r.error) throw r.error;
+    }
+    if (asMod) {
+        const { data: post } = await supabase.from("posts").select("title").eq("id", c.post_id).maybeSingle();
+        await logAction(req.userId!, "comment_deleted", { post_id: c.post_id, post_title: post?.title, target_id: cid, detail: ids.length > 1 ? `${ids.length} ความเห็นรวมการตอบกลับ` : null });
     }
     res.status(200).json({ id: cid, post_id: c.post_id, deleted: ids.length });
 })

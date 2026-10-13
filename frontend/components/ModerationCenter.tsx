@@ -197,13 +197,13 @@ export function ModerationCenter({
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flexDirection: compact ? 'column' : 'row' }}>
                     {selected.status === 'Open' ? (
                       <>
-                        <button className="mod-action" onClick={() => onDismiss(selected.post_id)} style={{ background: '#e4efd2', color: '#33401f' }}>
+                        <button className="mod-action" onClick={() => onDismiss(selected.post_id)} style={{ background: 'var(--success-soft)', color: 'var(--success-ink)' }}>
                           ✓ ไม่พบปัญหา {!compact && <kbd>D</kbd>}
                         </button>
                         <button className="mod-action" onClick={() => onEdit(selected.post_id)} style={{ background: 'var(--color-accent-100)', color: 'var(--color-accent-800)', borderColor: 'var(--color-accent-300)' }}>
                           ✎ แก้ไขโพสต์ {!compact && <kbd>E</kbd>}
                         </button>
-                        <button className="mod-action" onClick={() => onHide(selected.post_id)} style={{ background: '#a2391c', color: '#fff' }}>
+                        <button className="mod-action" onClick={() => onHide(selected.post_id)} style={{ background: 'var(--danger)', color: '#fff' }}>
                           ⦸ ซ่อนโพสต์ {!compact && <kbd>H</kbd>}
                         </button>
                       </>
@@ -211,7 +211,7 @@ export function ModerationCenter({
                       <>
                         {selected.hidden
                           ? <button className="mod-action" onClick={() => onUnhide(selected.post_id)} style={{ background: 'var(--color-neutral-200)', color: 'var(--color-text)' }}>↺ แสดงโพสต์อีกครั้ง</button>
-                          : <button className="mod-action" onClick={() => onHide(selected.post_id)} style={{ background: '#fbeee8', color: '#8a3a1c', borderColor: '#e7b3a0' }}>⦸ ซ่อนโพสต์</button>}
+                          : <button className="mod-action" onClick={() => onHide(selected.post_id)} style={{ background: '#fbeee8', color: 'var(--danger-text)', borderColor: 'var(--danger-border)' }}>⦸ ซ่อนโพสต์</button>}
                         <button className="mod-action" onClick={() => onEdit(selected.post_id)} style={{ background: 'var(--color-accent-100)', color: 'var(--color-accent-800)' }}>✎ แก้ไขโพสต์</button>
                         {selected.tickets.length > 0 && (
                           <button className="mod-action" onClick={() => onReopen(selected.post_id)} style={{ background: 'var(--color-neutral-100)', color: 'var(--color-neutral-800)', borderColor: 'var(--color-divider)' }}>↺ ตรวจใหม่อีกครั้ง</button>
@@ -235,7 +235,7 @@ export function ModerationCenter({
                       acc[k] = (acc[k] ?? 0) + 1;
                       return acc;
                     }, {})).sort((a, b) => b[1] - a[1]).map(([reason, n]) => (
-                      <span key={reason} className="tag" style={{ background: '#f8ddd3', color: '#6f2f14', fontSize: 11.5, fontWeight: 600, padding: '4px 10px' }}>
+                      <span key={reason} className="tag" style={{ background: 'var(--danger-soft)', color: 'var(--danger-ink)', fontSize: 11.5, fontWeight: 600, padding: '4px 10px' }}>
                         {reason}{n > 1 ? ` ×${n}` : ''}
                       </span>
                     ))}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface Cat { id: string; name: string; pri: number; dot: string; desc?: string | null }
 
@@ -18,6 +19,7 @@ export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClo
 }) {
   const [picked, setPicked] = useState<string[]>(selected);
   const [busy, setBusy] = useState(false);
+  const trap = useFocusTrap<HTMLDivElement>();
 
   // Start from what the server says once it arrives (the dialog may open first).
   useEffect(() => { if (loaded) setPicked(selected); }, [loaded]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -41,7 +43,7 @@ export function InterestsDialog({ cats, selected, loaded, welcome, onSave, onClo
   return (
     <div className="dialog-backdrop" style={{ zIndex: 46, animation: 'wnm-pop .16s ease both' }}
       onMouseDown={(e) => { if (e.target === e.currentTarget && !busy) onClose(); }}>
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="interests-title"
+      <div ref={trap} className="dialog" role="dialog" aria-modal="true" aria-labelledby="interests-title"
         style={{ width: 'min(560px, 100%)', maxHeight: '92vh', overflow: 'auto', gap: 14, borderRadius: 22 }}>
         <div>
           <h4 id="interests-title" style={{ margin: '0 0 4px', fontSize: 19, fontWeight: 700 }}>

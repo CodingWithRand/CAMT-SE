@@ -18,8 +18,8 @@ export const REPORT_LABEL: Record<ReportStatus, string> = {
 
 export function statusLook(status?: ReportStatus): [string, string] {
   switch (status) {
-    case 'Open': return ['#f2c6b6', '#6f2f14'];
-    case 'Reviewed': return ['#dcebc4', '#3d472b'];
+    case 'Open': return ['var(--alert-soft)', 'var(--alert-ink)'];
+    case 'Reviewed': return ['var(--success-soft)', 'var(--success-ink)'];
     default: return ['var(--color-neutral-200)', 'var(--color-neutral-800)'];
   }
 }

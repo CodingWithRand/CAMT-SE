@@ -122,7 +122,7 @@ export function CategoryManager({ flash, dotFor, revision, onChanged }: {
         <span className="tag" style={{ ...chipLook(draft.priority), fontSize: 11.5 }}>{draft.name.trim() || 'ชื่อหมวดหมู่'}</span>
       </div>
 
-      {error && <span role="alert" style={{ fontSize: 12.5, color: '#6f2f14', background: '#f8ddd3', borderRadius: 10, padding: '8px 12px' }}>{error}</span>}
+      {error && <span role="alert" style={{ fontSize: 12.5, color: 'var(--danger-ink)', background: 'var(--danger-soft)', borderRadius: 10, padding: '8px 12px' }}>{error}</span>}
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
         <button className="btn btn-secondary" onClick={() => { setDraft(null); setError(null); }} disabled={busy} style={{ fontFamily: 'var(--font-body)' }}>ยกเลิก</button>
@@ -158,7 +158,7 @@ export function CategoryManager({ flash, dotFor, revision, onChanged }: {
                   style={{ fontFamily: 'var(--font-body)', fontSize: 12.5 }}>แก้ไข</button>
                 <button className="btn btn-ghost" onClick={() => setConfirmDelete(c.id)} disabled={c.post_count > 0}
                   title={c.post_count > 0 ? `มี ${c.post_count} โพสต์ใช้หมวดนี้อยู่ จึงลบไม่ได้ · เปลี่ยนชื่อแทนได้` : 'ลบหมวดหมู่'}
-                  style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: '#8a3a1c' }}>ลบ</button>
+                  style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--danger-text)' }}>ลบ</button>
               </span>
             </div>
             {c.description && <span style={{ fontSize: 12.5, color: 'var(--color-neutral-800)' }}>{c.description}</span>}
@@ -167,12 +167,12 @@ export function CategoryManager({ flash, dotFor, revision, onChanged }: {
               {c.post_count > 0 && ' · ลบไม่ได้เพราะยังมีโพสต์'}
             </span>
             {confirmDelete === c.id && (
-              <div role="alertdialog" aria-label={`ยืนยันการลบ ${c.category_name}`} style={{ background: '#f8ddd3', color: '#6f2f14', borderRadius: 12, padding: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <div role="alertdialog" aria-label={`ยืนยันการลบ ${c.category_name}`} style={{ background: 'var(--danger-soft)', color: 'var(--danger-ink)', borderRadius: 12, padding: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                 <span style={{ flex: 1, fontSize: 12.5 }}>
                   ลบหมวด &ldquo;{c.category_name}&rdquo;?{c.follower_count > 0 && ` ผู้ติดตาม ${c.follower_count} คนจะไม่ได้รับแจ้งเตือนหมวดนี้อีก`}
                 </span>
                 <button className="btn btn-secondary" onClick={() => setConfirmDelete(null)} disabled={busy} style={{ fontFamily: 'var(--font-body)', fontSize: 12.5 }}>ยกเลิก</button>
-                <button className="btn" onClick={() => remove(c)} disabled={busy} autoFocus style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: '#a2391c', color: '#fff' }}>ลบหมวดหมู่</button>
+                <button className="btn" onClick={() => remove(c)} disabled={busy} autoFocus style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: 'var(--danger)', color: '#fff' }}>ลบหมวดหมู่</button>
               </div>
             )}
           </div>

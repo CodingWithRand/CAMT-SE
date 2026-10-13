@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { REASONS } from '@/lib/data';
 import type { AppState, SetState } from '@/lib/state';
 import { labelStyle } from './formParts';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 export function ReportDialog({ st, set, flash, onSubmit }: {
   st: AppState;
@@ -15,6 +16,7 @@ export function ReportDialog({ st, set, flash, onSubmit }: {
   const id = st.reportFor!;
   const [details, setDetails] = useState('');
   const [busy, setBusy] = useState(false);
+  const trap = useFocusTrap<HTMLDivElement>();
   const close = () => { if (!busy) set({ reportFor: null, reason: null }); };
 
   const submit = async () => {
@@ -30,7 +32,7 @@ export function ReportDialog({ st, set, flash, onSubmit }: {
   return (
     <div className="dialog-backdrop" style={{ zIndex: 41, animation: 'wnm-pop .16s ease both' }}
       onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="report-title" style={{ gap: 12, borderRadius: 20 }}>
+      <div ref={trap} className="dialog" role="dialog" aria-modal="true" aria-labelledby="report-title" style={{ gap: 12, borderRadius: 20 }}>
         <h4 id="report-title" className="dialog-title" style={{ margin: 0, fontSize: 16 }}>รายงานโพสต์นี้</h4>
         <p className="dialog-body" style={{ margin: 0, fontSize: 13 }}>
           ผู้ดูแลจะเห็นเหตุผลของคุณ แต่คนอื่นจะไม่รู้ว่าใครรายงาน โพสต์จะขึ้นสถานะ &ldquo;รอตรวจสอบ&rdquo; และคุณจะได้รับการแจ้งเตือนเมื่อผู้ดูแลตรวจเสร็จ

@@ -8,6 +8,9 @@ import { auth, isModerator, optionalAuth, requireMod, uuidParam, UUID } from "..
 import { HIDDEN_POST_MESSAGE, hiddenPosts, isHidden, withoutHidden } from "../hidden";
 import { POST_TARGET, myReactions } from "../reactions";
 import { MESSAGES, notify, untitled } from "../notify";
+import { logAction } from "../modlog";
+import { limits } from "../rateLimit";
+import { LIMITS, text } from "../validate";
 
 const router = Router();
 router.param("pid", uuidParam);
@@ -39,10 +42,10 @@ async function withOwnership<T extends { id: string }>(rows: T[], viewerId?: str
 
 /** Who may change a post: its author, or any moderator. */
 async function postAccess(pid: string, userId: string) {
-    const { data: post, error } = await supabase.from("posts").select("id, user_id").eq("id", pid).maybeSingle();
+    const { data: post, error } = await supabase.from("posts").select("id, user_id, title").eq("id", pid).maybeSingle();
     if (error) throw error;
-    if (!post) return { exists: false, isOwner: false, isMod: false };
-    return { exists: true, isOwner: post.user_id === userId, isMod: await isModerator(userId) };
+    if (!post) return { exists: false, isOwner: false, isMod: false, title: null };
+    return { exists: true, isOwner: post.user_id === userId, isMod: await isModerator(userId), title: post.title as string | null };
 }
 
 async function uploadPostMedia(pid: Post['id'], m: Express.Multer.File, mt: "image" | "video") {
@@ -68,11 +71,15 @@ async function uploadPostMedia(pid: Post['id'], m: Express.Multer.File, mt: "ima
     return { post_id: pid, file_url: publicUrl, media_type: mt };
 }
 
-router.post("/post/create", 
+router.post("/post/create",
     auth,
+    limits.post,
     upload.fields([{ name: "images", maxCount: 10 }, { name: "videos", maxCount: 1 }]), 
     async (req: Request, res: Response) => {
-    const { title, content } = req.body;
+    const title = text(req.body.title, "title", LIMITS.title);
+    const content = text(req.body.content, "content", LIMITS.post);
+    if ("error" in title) return res.status(400).json({ message: title.error });
+    if ("error" in content) return res.status(400).json({ message: content.error });
 
     // multipart/form-data sends everything as text: a lone category_id arrives as
     // a string instead of an array, and is_important as "true" / "false".
@@ -93,7 +100,7 @@ router.post("/post/create",
     // INSERT INTO posts VALUES(id, user_id, title, content, is_important);
     const { data, error } = await supabase
         .from('posts')
-        .insert({ user_id: req.userId, title, content, is_important })
+        .insert({ user_id: req.userId, title: title.value, content: content.value, is_important })
         .select()
         .single();
     
@@ -121,6 +128,7 @@ router.post("/post/create",
         if (mderr) throw mderr;
     }
 
+
     res.status(200).json(data);
 })
 
@@ -145,6 +153,7 @@ async function withMyReaction(posts: any[], userId?: string) {
 }
 
 const PAGE_MAX = 100;
+
 
 /**
  * The feed, newest first. Without `limit` every post comes back as an array (older callers).
@@ -203,16 +212,6 @@ router.get("/post/mine", auth, async (req: Request, res: Response) => {
     res.status(200).json(await decorate(withoutHidden(data ?? [], await hiddenPosts(), req.userId), req.userId));
 })
 
-router.get("/post/fetch/categories", auth, async (req: Request, res: Response) => {
-    const { category_id } = req.body; // array of category_ids
-
-    const { data, error } = await supabase.rpc('get_post_from_cate', {
-        cate_id: category_id
-    })
-    if (error) throw error;
-    res.status(200).json(await withOwnership(withoutHidden(data ?? [], await hiddenPosts(), req.userId), req.userId));
-})
-
 router.get("/post/fetch/announcement", optionalAuth, async (req: Request, res: Response) => {
     const { data: announcement, error: error1 } = await supabase
         .from('v_post_all_data')
@@ -248,7 +247,7 @@ router.get("/post/:pid/fetch", optionalAuth, async (req: Request, res: Response)
     res.status(200).json(mine);
 })
 
-router.post("/post/:pid/react", auth, async (req: Request, res: Response) => {
+router.post("/post/:pid/react", auth, limits.react, async (req: Request, res: Response) => {
     const { pid } = req.params;
     const { reaction_type, change } = req.body;
     if (await isHidden(String(req.params.pid))) return res.status(403).json({ message: HIDDEN_POST_MESSAGE });
@@ -264,14 +263,23 @@ router.post("/post/:pid/react", auth, async (req: Request, res: Response) => {
 
 router.put("/post/:pid/edit", auth, async (req: Request, res: Response) => {
     const pid = String(req.params.pid);
-    const { title, content, is_important, category_names } = req.body;
+    const { is_important, category_names } = req.body;
+    const title = text(req.body?.title, "title", LIMITS.title);
+    const content = text(req.body?.content, "content", LIMITS.post);
+    if ("error" in title) return res.status(400).json({ message: title.error });
+    if ("error" in content) return res.status(400).json({ message: content.error });
+    if (!Array.isArray(category_names) || !category_names.length || category_names.some((n) => typeof n !== "string")) {
+        return res.status(400).json({ message: "category_names must be a non-empty list of category names" });
+    }
 
     const access = await postAccess(pid, req.userId!);
     if (!access.exists) return res.status(404).json({ message: "Post not found" });
     if (!access.isOwner && !access.isMod) return res.status(403).json({ message: "Only the author or a moderator can edit this post." });
 
     // Announcements are a moderator decision; an author editing their own post keeps its current setting.
-    const changes = access.isMod ? { title, content, is_important } : { title, content };
+    const changes = access.isMod
+        ? { title: title.value, content: content.value, is_important: !!is_important }
+        : { title: title.value, content: content.value };
     const { error } = await supabase.from('posts').update({ ...changes, edited_at: new Date(), edited_by: req.userId }).eq('id', pid);
     if (error) throw error;
     // Replaces the post's categories with the named ones.
@@ -282,6 +290,7 @@ router.put("/post/:pid/edit", auth, async (req: Request, res: Response) => {
         })
     
     if (cderr) throw cderr;
+    if (!access.isOwner) await logAction(req.userId!, "post_edited", { post_id: pid, post_title: title.value });
     res.status(200).send();
 })
 
@@ -323,6 +332,7 @@ router.put("/post/:pid/hide", auth, requireMod, async (req: Request, res: Respon
         },
     ]);
 
+    await logAction(req.userId!, "post_hidden", { post_id: pid, post_title: post.title, detail: reason });
     res.status(200).json({ id: pid, is_hidden: true, hidden_reason: reason, reports_closed: closed?.length ?? 0 });
 })
 
@@ -351,6 +361,7 @@ router.put("/post/:pid/unhide", auth, requireMod, async (req: Request, res: Resp
     if (!post) return res.status(404).json({ message: "Post not found" });
 
     await notify([{ user_id: post.user_id, post_id: pid, message: MESSAGES.yourPostRestored(untitled(post.title)) }]);
+    await logAction(req.userId!, "post_unhidden", { post_id: pid, post_title: post.title });
     res.status(200).json({ id: pid, is_hidden: false });
 })
 
@@ -396,6 +407,7 @@ router.delete("/post/:pid/delete", auth, async (req: Request, res: Response) => 
         const { error: storageError } = await supabase.storage.from("post_medias").remove(files);
         if (storageError) console.error("delete post media", pid, storageError.message);
     }
+    if (!access.isOwner) await logAction(req.userId!, "post_deleted", { post_id: pid, post_title: access.title });
     res.status(200).json({ id: pid, deleted: true, files_removed: files.length });
 })
 

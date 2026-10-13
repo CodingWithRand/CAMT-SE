@@ -41,7 +41,8 @@ export function AuthContext({ children }: { children: React.ReactNode }) {
     };
 
     const signOut = async () => {
-        await supabase.auth.signOut();
+        // Only this browser: the default ('global') would also sign the account out everywhere else.
+        await supabase.auth.signOut({ scope: 'local' });
     };
 
     return (

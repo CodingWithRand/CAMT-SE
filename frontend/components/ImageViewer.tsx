@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 /**
  * Full-screen image viewer: arrows / ← → keys / swipe to move between a post's images.
@@ -24,6 +25,7 @@ export function ImageViewer({ images, index, alt, onIndex, onClose }: {
   const swipeFrom = useRef<number | null>(null);
   const swiped = useRef(false);   // the click that ends a swipe must not close the viewer
   const closeBtn = useRef<HTMLButtonElement>(null);
+  const trap = useFocusTrap<HTMLDivElement>();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -44,7 +46,7 @@ export function ImageViewer({ images, index, alt, onIndex, onClose }: {
   );
 
   return (
-    <div role="dialog" aria-modal="true" aria-label={`รูปภาพ ${index + 1} จาก ${images.length}`} className="viewer"
+    <div ref={trap} role="dialog" aria-modal="true" aria-label={`รูปภาพ ${index + 1} จาก ${images.length}`} className="viewer"
       onClick={() => { if (swiped.current) swiped.current = false; else onClose(); }}
       onPointerDown={(e) => { swipeFrom.current = e.clientX; }}
       onPointerUp={(e) => {

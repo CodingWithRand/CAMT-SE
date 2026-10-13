@@ -95,12 +95,12 @@ export function AccountMenu({ name, initials, email, isMod, avatar, compact, unr
                 <div style={{ fontSize: 11.5, opacity: 0.85, marginBottom: 10 }}>คุณจะกลับมาอ่านได้แบบผู้เยี่ยมชม</div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button className="btn btn-secondary" disabled={busy} onClick={() => setConfirming(false)}
-                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, borderColor: 'color-mix(in srgb, #6f2f14 25%, transparent)', color: '#6f2f14' }}>
+                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, borderColor: 'color-mix(in srgb, var(--danger-ink) 25%, transparent)', color: 'var(--danger-ink)' }}>
                     ยกเลิก
                   </button>
                   <button className="btn" disabled={busy} autoFocus
                     onClick={async () => { setBusy(true); try { await onSignOut(); } finally { setBusy(false); } }}
-                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: '#a2391c', color: '#fff' }}>
+                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: 'var(--danger)', color: '#fff' }}>
                     {busy ? 'กำลังออก…' : 'ออกจากระบบ'}
                   </button>
                 </div>

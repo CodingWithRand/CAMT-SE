@@ -11,6 +11,8 @@ export const MESSAGES = {
     reportedPostHidden: (title: string) => `ผู้ดูแลซ่อนโพสต์ "${title}" ที่คุณรายงานแล้ว ขอบคุณที่ช่วยดูแลชุมชน`,
     yourPostHidden: (title: string, reason: string | null) => `โพสต์ "${title}" ของคุณถูกซ่อนโดยผู้ดูแล${reason ? ` · เหตุผล: ${reason}` : ""}`,
     yourPostRestored: (title: string) => `โพสต์ "${title}" ของคุณกลับมาแสดงแล้ว`,
+    commentOnYourPost: (who: string, title: string) => `${who} แสดงความเห็นในโพสต์ "${title}" ของคุณ`,
+    replyToYourComment: (who: string, title: string) => `${who} ตอบกลับความเห็นของคุณในโพสต์ "${title}"`,
 };
 
 export const untitled = (title: string | null | undefined) => title || "ไม่มีชื่อ";

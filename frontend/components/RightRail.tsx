@@ -28,7 +28,7 @@ export function RightRail({ wide, announce, isMod, openReports, reportsByStatus,
           <button key={p.id} className="hov-border" onClick={() => onOpenPost(p.id)} style={{ cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', color: 'var(--color-text)', display: 'flex', flexDirection: 'column', gap: 5, padding: '10px 11px', borderRadius: 12, background: 'var(--color-neutral-100)', border: '1px solid var(--color-divider)' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
               <span className="tag" style={p.priority === 'urgent'
-                ? { background: '#f2c6b6', color: '#6f2f14', fontSize: 10, fontWeight: 700 }
+                ? { background: 'var(--alert-soft)', color: 'var(--alert-ink)', fontSize: 10, fontWeight: 700 }
                 : { background: 'var(--peach)', color: 'var(--color-accent-800)', fontSize: 10, fontWeight: 700 }}
               >
                 {p.priority === 'urgent' ? 'ประกาศด่วน' : 'ประกาศ'}

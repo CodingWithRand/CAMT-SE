@@ -26,7 +26,7 @@ const LIVE_TOPICS: [RegExp, LiveTopic[]][] = [
     [/^\/post\/create/, ["posts", "notifications"]],          // announcements notify followers
     [/^\/post\/[^/]+\/react/, ["posts"]],
     [/^\/post\//, ["posts", "reports", "notifications"]],     // edit, hide, unhide, delete
-    [/^\/comment\//, ["comments"]],
+    [/^\/comment\//, ["comments", "notifications"]],         // new comments notify the post's author
     [/^\/report\//, ["reports", "notifications"]],           // closing a report notifies the reporters
     [/^\/admin\/categories/, ["categories", "posts"]],       // a renamed category shows on posts
     [/^\/admin\/users/, ["roles"]],                          // the user whose role changed updates at once

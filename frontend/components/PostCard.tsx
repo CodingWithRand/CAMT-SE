@@ -44,7 +44,7 @@ export default function PostCard(props: PostCardProps) {
     chips.push({
       label: p.priority === 'urgent' ? 'ประกาศด่วน' : 'ประกาศทางการ',
       style: p.priority === 'urgent'
-        ? { background: '#f2c6b6', color: '#6f2f14', fontWeight: 700 }
+        ? { background: 'var(--alert-soft)', color: 'var(--alert-ink)', fontWeight: 700 }
         : { background: 'var(--peach)', color: 'var(--color-accent-800)', fontWeight: 700 },
     });
   } else if (cats.includes(QA) && commentCount === 0) {
@@ -141,7 +141,7 @@ export default function PostCard(props: PostCardProps) {
             title={p.mine ? 'แก้ไขโพสต์ของคุณ' : 'แก้ไขโพสต์ (ผู้ดูแล)'}>แก้ไข</button>
         )}
         {p.mine && (
-          <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: '#8a3a1c' }} onClick={props.onDelete} title="ลบโพสต์ของคุณ">ลบ</button>
+          <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: 'var(--danger-text)' }} onClick={props.onDelete} title="ลบโพสต์ของคุณ">ลบ</button>
         )}
         {!p.mine && (
           <button className="btn btn-ghost" style={{ flex: 'none', fontSize: 12, color: 'var(--color-neutral-600)' }} onClick={props.onReport}>รายงาน</button>

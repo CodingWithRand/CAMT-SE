@@ -3,6 +3,8 @@ import supabase from "../db";
 import { Report } from "../model";
 import { auth, optionalAuth, requireMod, uuidParam } from "../middleware";
 import { MESSAGES, notify, untitled } from "../notify";
+import { isMissingTable, logAction, type ModAction } from "../modlog";
+import { limits } from "../rateLimit";
 import { hiddenPosts } from "../hidden";
 
 const router = Router();
@@ -73,12 +75,20 @@ router.get("/report/mine", auth, async (req: Request, res: Response) => {
     res.status(200).json((data ?? []).map(({ post, ...r }: any) => ({ ...r, title: post?.title ?? null, post_deleted: !post })));
 });
 
+/** Moderator display names by id, in one query. */
+async function namesOf(ids: string[]) {
+    const unique = [...new Set(ids.filter(Boolean))];
+    if (!unique.length) return new Map<string, string>();
+    const { data, error } = await supabase.from("users").select("id, display_name").in("id", unique);
+    if (error) throw error;
+    return new Map((data ?? []).map((u) => [u.id, u.display_name as string]));
+}
+
 /**
- * Moderation history, newest first: report decisions (one entry per post and decision,
- * since a decision updates every ticket of the post at once) and hidden posts.
- * Only the latest decision per ticket is stored, so reopening a report replaces its entry.
+ * Before moderation_log exists: rebuild what we can from the reports and posts tables —
+ * the latest decision per report (one entry per post and decision) and posts still hidden.
  */
-router.get("/report/history", auth, requireMod, async (_req: Request, res: Response) => {
+async function derivedHistory() {
     const [reports, hidden] = await Promise.all([
         supabase.from("reports").select("post_id, status, reviewed_by, reviewed_at, post:posts(title)")
             .not("reviewed_by", "is", null).neq("status", "Open"),
@@ -91,25 +101,39 @@ router.get("/report/history", auth, requireMod, async (_req: Request, res: Respo
     for (const r of (reports.data ?? []) as any[]) {
         const key = `${r.post_id}|${r.status}|${r.reviewed_by}|${r.reviewed_at}`;
         const d = decisions.get(key);
-        if (d) { d.tickets++; continue; }
-        decisions.set(key, { kind: r.status, post_id: r.post_id, title: r.post?.title ?? null, by: r.reviewed_by, at: r.reviewed_at, tickets: 1 });
+        if (d) { d.count++; continue; }
+        decisions.set(key, { action: r.status === "Reviewed" ? "report_reviewed" : "report_dismissed", post_id: r.post_id, post_title: r.post?.title ?? null, actor_id: r.reviewed_by, created_at: r.reviewed_at, count: 1 });
     }
-    const entries = [
-        ...decisions.values(),
-        ...(hidden.data ?? []).map((p) => ({ kind: "Hidden", post_id: p.id, title: p.title, by: p.hidden_by, at: p.hidden_at, reason: p.hidden_reason })),
-    ].sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 200);
+    return [
+        ...[...decisions.values()].map(({ count, ...d }) => ({ ...d, detail: `${count} รายงาน` })),
+        ...(hidden.data ?? []).map((p) => ({ action: "post_hidden", post_id: p.id, post_title: p.title, actor_id: p.hidden_by, created_at: p.hidden_at, detail: p.hidden_reason })),
+    ].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+}
 
-    // Moderator names in one query.
-    const ids = [...new Set(entries.map((e) => e.by))];
-    const { data: users, error } = ids.length
-        ? await supabase.from("users").select("id, display_name").in("id", ids)
-        : { data: [], error: null };
-    if (error) throw error;
-    const name = new Map((users ?? []).map((u) => [u.id, u.display_name]));
-    res.status(200).json(entries.map((e) => ({ ...e, by_name: name.get(e.by) ?? "ไม่ทราบชื่อ" })));
+/**
+ * Moderation history, newest first, from moderation_log (every action). Until
+ * api/sql/2026-10-13_moderation_log.sql has run, a reconstruction (`complete: false`).
+ */
+router.get("/report/history", auth, requireMod, async (_req: Request, res: Response) => {
+    const LIMIT = 300;
+    let complete = true;
+    let rows: any[];
+    const { data, error } = await supabase.from("moderation_log").select("*").order("created_at", { ascending: false }).limit(LIMIT);
+    if (error && !isMissingTable(error)) throw error;
+    if (error) { complete = false; rows = (await derivedHistory()).slice(0, LIMIT); }
+    else rows = data ?? [];
+
+    const name = await namesOf(rows.map((r) => r.actor_id));
+    res.status(200).json({
+        complete,
+        entries: rows.map((r) => ({
+            action: r.action, post_id: r.post_id ?? null, post_title: r.post_title ?? null, target_id: r.target_id ?? null,
+            detail: r.detail ?? null, at: r.created_at, by: r.actor_id, by_name: name.get(r.actor_id) ?? "ไม่ทราบชื่อ",
+        })),
+    });
 });
 
-router.post("/report/createticket", auth, async (req: Request, res: Response) => {
+router.post("/report/createticket", auth, limits.report, async (req: Request, res: Response) => {
     const post_id = String(req.body?.post_id ?? "");
     const reason = String(req.body?.reason ?? "").trim();
     if (!post_id) return res.status(400).json({ message: "post_id is required" });
@@ -168,6 +192,10 @@ router.put("/report/post/:pid/status", auth, requireMod, async (req: Request, re
         await notify(reporters.map((user_id) => ({ user_id, post_id: String(pid), message: message(title) })));
     }
 
+    const action: Record<Status, ModAction> = { Open: "report_reopened", Reviewed: "report_reviewed", Dismissed: "report_dismissed" };
+    await logAction(req.userId!, action[status], {
+        post_id: String(pid), post_title: (tickets[0] as any).post?.title, detail: `${tickets.length} รายงาน`,
+    });
     res.status(200).json({ post_id: pid, status, updated: tickets.length });
 });
 

@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import supabase from "../db";
 import { auth, requireMod, uuidParam } from "../middleware";
+import { logAction } from "../modlog";
 
 /** Moderator tools: manage categories, and give or take away the moderator role. */
 const router = Router();
@@ -57,6 +58,7 @@ router.post("/admin/categories", auth, requireMod, async (req: Request, res: Res
     if (await nameTaken(parsed.value.category_name!)) return res.status(409).json({ message: "A category with this name already exists" });
     const { data, error } = await supabase.from("categories").insert(parsed.value).select().single();
     if (error) throw error;
+    await logAction(req.userId!, "category_created", { target_id: data.id, detail: data.category_name });
     res.status(201).json(data);
 })
 
@@ -70,6 +72,7 @@ router.put("/admin/categories/:catId", auth, requireMod, async (req: Request, re
     const { data, error } = await supabase.from("categories").update(parsed.value).eq("id", id).select().maybeSingle();
     if (error) throw error;
     if (!data) return res.status(404).json({ message: "Category not found" });
+    await logAction(req.userId!, "category_updated", { target_id: id, detail: data.category_name });
     res.status(200).json(data);
 })
 
@@ -82,9 +85,10 @@ router.delete("/admin/categories/:catId", auth, requireMod, async (req: Request,
 
     const r1 = await supabase.from("user_interests").delete().eq("category_id", id);
     if (r1.error) throw r1.error;
-    const { data, error: e2 } = await supabase.from("categories").delete().eq("id", id).select("id");
+    const { data, error: e2 } = await supabase.from("categories").delete().eq("id", id).select("id, category_name");
     if (e2) throw e2;
     if (!data?.length) return res.status(404).json({ message: "Category not found" });
+    await logAction(req.userId!, "category_deleted", { target_id: id, detail: data[0]?.category_name });
     res.status(200).json({ id, deleted: true });
 })
 
@@ -120,6 +124,7 @@ router.put("/admin/users/:uid/role", auth, requireMod, async (req: Request, res:
     const { data, error } = await supabase.from("users").update({ is_mod }).eq("id", uid).select("id, display_name, is_mod").maybeSingle();
     if (error) throw error;
     if (!data) return res.status(404).json({ message: "User not found" });
+    await logAction(req.userId!, is_mod ? "role_granted" : "role_revoked", { target_id: uid, detail: data.display_name });
     res.status(200).json(data);
 })
 

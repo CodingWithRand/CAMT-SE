@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { findPostIn, type AppState, type SetState } from '@/lib/state';
 import { REPORT_LABEL, chipStyle } from '@/lib/ui';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 /* ── Delete (the author, or a moderator) ── */
 
@@ -16,12 +17,13 @@ export function DeleteDialog({ st, set, isMod, onDelete }: {
   const post = findPostIn(st, id);
   const mine = !!post?.mine;
   const [busy, setBusy] = useState(false);
+  const trap = useFocusTrap<HTMLDivElement>();
   const close = () => { if (!busy) set({ deleteFor: null }); };
 
   return (
     <div className="dialog-backdrop" style={{ zIndex: 44, animation: 'wnm-pop .16s ease both' }}
       onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-      <div className="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" style={{ gap: 12, borderRadius: 20 }}>
+      <div ref={trap} className="dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" style={{ gap: 12, borderRadius: 20 }}>
         <h4 id="delete-title" className="dialog-title" style={{ margin: 0, fontSize: 16 }}>{mine ? 'ลบโพสต์นี้?' : 'ลบโพสต์นี้ถาวร?'}</h4>
         <div style={{ fontSize: 12.5, lineHeight: 1.5, background: 'var(--color-neutral-100)', borderRadius: 12, padding: '9px 12px' }}>
           <strong style={{ display: 'block' }}>{post?.title ?? 'โพสต์'}</strong>
@@ -35,7 +37,7 @@ export function DeleteDialog({ st, set, isMod, onDelete }: {
           <button className="btn btn-secondary" onClick={close} disabled={busy}>ยกเลิก</button>
           <button className="btn" disabled={busy} autoFocus
             onClick={async () => { setBusy(true); await onDelete(id); setBusy(false); }}
-            style={{ background: '#a2391c', color: '#fff', fontWeight: 600 }}>
+            style={{ background: 'var(--danger)', color: '#fff', fontWeight: 600 }}>
             {busy ? 'กำลังลบ…' : 'ลบโพสต์'}
           </button>
         </div>
@@ -59,6 +61,7 @@ export function HideDialog({ st, set, onHide }: {
   const [reason, setReason] = useState<string | null>(null);
   const [other, setOther] = useState('');
   const [busy, setBusy] = useState(false);
+  const trap = useFocusTrap<HTMLDivElement>();
   const close = () => { if (!busy) set({ hideFor: null }); };
   const finalReason = reason === 'อื่น ๆ' ? other.trim() : reason ?? '';
 
@@ -72,7 +75,7 @@ export function HideDialog({ st, set, onHide }: {
   return (
     <div className="dialog-backdrop" style={{ zIndex: 43, animation: 'wnm-pop .16s ease both' }}
       onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-      <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="hide-title" style={{ gap: 12, borderRadius: 20 }}>
+      <div ref={trap} className="dialog" role="dialog" aria-modal="true" aria-labelledby="hide-title" style={{ gap: 12, borderRadius: 20 }}>
         <h4 id="hide-title" className="dialog-title" style={{ margin: 0, fontSize: 16 }}>ซ่อนโพสต์นี้</h4>
         <div style={{ fontSize: 12.5, lineHeight: 1.5, background: 'var(--color-neutral-100)', borderRadius: 12, padding: '9px 12px' }}>
           <strong style={{ display: 'block' }}>{post?.title ?? queued?.title ?? 'โพสต์'}</strong>
@@ -97,7 +100,7 @@ export function HideDialog({ st, set, onHide }: {
         <div className="dialog-actions">
           <button className="btn btn-secondary" onClick={close} disabled={busy}>ยกเลิก</button>
           <button className="btn" onClick={submit} disabled={!finalReason || busy}
-            style={{ background: '#a2391c', color: '#fff', fontWeight: 600 }}>
+            style={{ background: 'var(--danger)', color: '#fff', fontWeight: 600 }}>
             {busy ? 'กำลังซ่อน…' : 'ซ่อนโพสต์'}
           </button>
         </div>

@@ -1,13 +1,29 @@
 'use client';
 
-import { useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { rateLimitMessage } from '@/lib/api';
+import { shrinkImage } from '@/lib/images';
 import type { AppState, SetState } from '@/lib/state';
 import { useApi } from './AuthContext';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { AnnounceToggle, CatPicker, labelStyle, toggle } from './formParts';
 
 const MAX_IMAGES = 10;
 const MAX_IMAGE_BYTES = 50 * 1024 * 1024;
 let mediaIds = 0;
+
+/** Unsent title, text and categories, kept in this browser per account (images are not kept). */
+interface Draft { title: string; text: string; cats: string[] }
+const draftKey = (email: string) => `wnm-draft:${email}`;
+function readDraft(email: string): Draft | null {
+  try { return JSON.parse(localStorage.getItem(draftKey(email)) ?? 'null'); } catch { return null; }
+}
+function writeDraft(email: string, d: Draft | null) {
+  try {
+    if (d && (d.title.trim() || d.text.trim())) localStorage.setItem(draftKey(email), JSON.stringify(d));
+    else localStorage.removeItem(draftKey(email));
+  } catch { /* storage blocked: drafts just are not kept */ }
+}
 
 interface ComposeProps {
   st: AppState;
@@ -27,6 +43,31 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
 
   const filePicker = useRef<HTMLInputElement>(null);
   const [sending, setSending] = useState(false);
+  const [shrinking, setShrinking] = useState(0);   // images still being resized
+  const [restored, setRestored] = useState(false);
+  const trap = useFocusTrap<HTMLDivElement>();
+
+  // Bring back an unsent draft when the composer opens empty (e.g. after a reload).
+  useEffect(() => {
+    if (st.newTitle || st.newText) return;
+    const d = readDraft(email);
+    if (!d) return;
+    set({ newTitle: d.title, newText: d.text, newCats: d.cats.filter((c) => st.cats.some((x) => x.name === c)) });
+    setRestored(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keep the draft as it is typed.
+  useEffect(() => {
+    const t = setTimeout(() => writeDraft(email, { title: st.newTitle, text: st.newText, cats: st.newCats }), 400);
+    return () => clearTimeout(t);
+  }, [email, st.newTitle, st.newText, st.newCats]);
+
+  const discardDraft = () => {
+    writeDraft(email, null);
+    st.newMedia.forEach((m) => URL.revokeObjectURL(m.url));
+    set({ newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false });
+    setRestored(false);
+  };
 
   const close = () => set({ composeOpen: false });
 
@@ -39,10 +80,17 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
     if (fits.length < images.length) flash('รูปภาพต้องมีขนาดไม่เกิน 50 MB ต่อไฟล์');
     const room = MAX_IMAGES - st.newMedia.length;
     if (fits.length > room) flash(`แนบรูปได้สูงสุด ${MAX_IMAGES} รูปต่อโพสต์`);
-    const added = fits.slice(0, Math.max(room, 0)).map((file) => ({
-      id: `m${++mediaIds}`, type: 'image' as const, label: file.name, file, url: URL.createObjectURL(file),
-    }));
-    if (added.length) set((prev) => ({ newMedia: [...prev.newMedia, ...added] }));
+    const take = fits.slice(0, Math.max(room, 0));
+    if (!take.length) return;
+    // Resize first (phone photos are often 5-10 MB), then show and upload the smaller file.
+    setShrinking((n) => n + take.length);
+    take.forEach(async (original) => {
+      const file = await shrinkImage(original);
+      setShrinking((n) => n - 1);
+      set((prev) => (prev.newMedia.length >= MAX_IMAGES ? {} : {
+        newMedia: [...prev.newMedia, { id: `m${++mediaIds}`, type: 'image' as const, label: original.name, file, url: URL.createObjectURL(file) }],
+      }));
+    });
   };
 
   const removeMedia = (id: string) => set((prev) => {
@@ -57,6 +105,7 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
     if (!title) return flash('ยังไม่ได้ใส่หัวเรื่อง');
     if (!text) return flash('ยังไม่มีเนื้อหาโพสต์');
     if (!st.newCats.length) return flash('ต้องเลือกหมวดหมู่อย่างน้อย 1 หมวด');
+    if (shrinking) return flash('กำลังย่อรูปภาพ รอสักครู่');
     const imp = st.newImportant && isMod;
     // multipart/form-data so the image files travel with the post. No
     // Content-Type header: the browser has to set it, boundary included.
@@ -74,6 +123,8 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
     try {
       const res = await api('/post/create', { method: 'POST', body: form });
       if (!res.ok) {
+        const limited = await rateLimitMessage(res);
+        if (limited) { setSending(false); return flash(limited); }
         const body = await res.json().catch(() => ({}));
         throw new Error(body?.message ?? `HTTP ${res.status}`);
       }
@@ -82,6 +133,7 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
       setSending(false);
       return flash('เผยแพร่โพสต์ไม่สำเร็จ ลองใหม่อีกครั้ง');
     }
+    writeDraft(email, null);
     st.newMedia.forEach((m) => URL.revokeObjectURL(m.url));
     setSending(false);
     set({ composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false });
@@ -95,11 +147,18 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
 
   return (
     <div className="dialog-backdrop" style={{ zIndex: 40, animation: 'wnm-pop .16s ease both' }}>
-      <div className="dialog" style={{ width: 'min(560px,100%)', maxHeight: '92vh', overflow: 'auto', gap: 13, borderRadius: 20 }}>
+      <div ref={trap} className="dialog" role="dialog" aria-modal="true" aria-labelledby="compose-title" style={{ width: 'min(560px,100%)', maxHeight: '92vh', overflow: 'auto', gap: 13, borderRadius: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <h4 className="dialog-title" style={{ margin: 0, flex: 1, fontSize: 16 }}>เขียนโพสต์ใหม่</h4>
-          <button className="btn btn-secondary btn-icon" onClick={close}>✕</button>
+          <h4 id="compose-title" className="dialog-title" style={{ margin: 0, flex: 1, fontSize: 16 }}>เขียนโพสต์ใหม่</h4>
+          <button className="btn btn-secondary btn-icon" onClick={close} aria-label="ปิด">✕</button>
         </div>
+
+        {restored && (
+          <div role="note" style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', fontSize: 12.5, padding: '9px 12px', borderRadius: 12, background: 'var(--color-accent-100)', color: 'var(--color-accent-900)' }}>
+            <span style={{ flex: 1 }}>กู้ร่างที่ยังไม่ได้ส่งกลับมาแล้ว (รูปภาพต้องแนบใหม่)</span>
+            <button className="btn btn-ghost" onClick={discardDraft} style={{ fontSize: 12, padding: '4px 10px', color: 'var(--danger)' }}>ทิ้งร่าง</button>
+          </div>
+        )}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={meAvatar}>{meInitials}</span>
@@ -126,6 +185,7 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
           <textarea
             className="input"
             value={st.newText}
+            maxLength={5000}
             onChange={(e) => set({ newText: e.target.value })}
             placeholder="เล่ารายละเอียดให้คนอ่านเข้าใจบริบท…"
             style={{ borderRadius: 16, minHeight: 110, background: 'var(--color-neutral-100)', fontSize: 13.5 }}
@@ -173,7 +233,9 @@ export function ComposeDialog({ st, set, isMod, email, meName, meInitials, meAva
               + เพิ่มรูปภาพ
             </button>
           </div>
-          <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>แต่ละไฟล์เก็บเป็นระเบียน Media หนึ่งแถว (FileURL, MediaType) ผูกกับโพสต์นี้</span>
+          <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>
+            {shrinking ? `กำลังย่อรูป ${shrinking} รูป…` : 'รูปใหญ่จะถูกย่อให้ด้านยาวไม่เกิน 1600 px ก่อนอัปโหลด'}
+          </span>
         </div>
 
         <AnnounceToggle
