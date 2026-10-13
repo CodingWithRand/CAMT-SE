@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from 'react';
 import { ANNOUNCE_CAT, CATS, QA, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
-import { REPORT_LABEL, avatarStyle, likeCount, statusLook } from '@/lib/ui';
+import { REPORT_LABEL, avatarStyle, fullDate, likeCount, statusLook } from '@/lib/ui';
 import ReactionBar from './ReactionBar';
 
 export interface PostCardProps {
@@ -86,7 +86,7 @@ export default function PostCard(props: PostCardProps) {
               </svg>
             )}
           </span>
-          <div style={{ fontSize: 11.5, color: 'var(--color-neutral-600)' }}>{p.meta} · {p.time}</div>
+          <div style={{ fontSize: 11.5, color: 'var(--color-neutral-600)' }}>{p.meta} · <time dateTime={p.at} title={p.at ? fullDate(p.at) : undefined}>{p.time}</time></div>
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
           {chips.map((c, i) => (

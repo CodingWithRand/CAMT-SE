@@ -3,6 +3,7 @@ import supabase from "../db";
 import { Comment } from "../model"
 import { auth, optionalAuth, uuidParam, UUID } from "../middleware";
 import { HIDDEN_POST_MESSAGE, isHidden } from "../hidden";
+import { getUserData } from "./user";
 import {
     COMMENT_TARGET, REACTION_TYPES, isReactionType, myReactions, reactionCounts, setReaction,
 } from "../reactions";
@@ -22,14 +23,18 @@ async function commentsFor(pids: string[], viewerId?: string) {
     // v_comments exposes no reaction data at all, so both the totals and the
     // reader's own reaction are counted here and merged into each row.
     const ids = (data ?? []).map((c: any) => c.id);
-    const [counts, mine] = await Promise.all([
+    const [counts, mine, owners] = await Promise.all([
         reactionCounts(COMMENT_TARGET, ids),
         viewerId ? myReactions(COMMENT_TARGET, ids, viewerId) : Promise.resolve({}),
+        // v_comments has no user_id; the table does, and the page needs it for edit/delete.
+        viewerId && ids.length ? supabase.from("comments").select("id, user_id").in("id", ids) : Promise.resolve({ data: [] as any[] }),
     ]);
+    const ownerOf = new Map(((owners as any).data ?? []).map((r: any) => [r.id, r.user_id]));
     return (data ?? []).map((c: any) => ({
         ...c,
         reaction_count: counts[c.id] ?? 0,
         my_reaction: (mine as any)[c.id] ?? null,
+        is_mine: !!viewerId && ownerOf.get(c.id) === viewerId,
     }));
 }
 
@@ -134,5 +139,58 @@ router.post("/comment/:cid/react", auth, async (req: Request, res: Response) => 
 //         res.status(500).json({ code: error?.code, message: error?.message });
 //     }
 // })
+
+const MAX_COMMENT = 1000;
+
+/** Edit your own comment. */
+router.put("/comment/:cid", auth, async (req: Request, res: Response) => {
+    const cid = String(req.params.cid);
+    const content = String(req.body?.content ?? "").trim();
+    if (!content || content.length > MAX_COMMENT) return res.status(400).json({ message: `Comment must be 1-${MAX_COMMENT} characters` });
+    try {
+        const { data: c, error } = await supabase.from("comments").select("id, user_id, post_id").eq("id", cid).maybeSingle();
+        if (error) throw error;
+        if (!c) return res.status(404).json({ message: "Comment not found" });
+        if (c.user_id !== req.userId) return res.status(403).json({ message: "You can only edit your own comments" });
+        if (await isHidden(c.post_id)) return res.status(403).json({ message: HIDDEN_POST_MESSAGE });
+        const { error: e2 } = await supabase.from("comments").update({ content }).eq("id", cid);
+        if (e2) throw e2;
+        res.status(200).json({ id: cid, post_id: c.post_id, content });
+    } catch (error: any) {
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
+
+/** Delete a comment (its author, or a moderator), together with the replies under it. */
+router.delete("/comment/:cid", auth, async (req: Request, res: Response) => {
+    const cid = String(req.params.cid);
+    try {
+        const { data: c, error } = await supabase.from("comments").select("id, user_id, post_id").eq("id", cid).maybeSingle();
+        if (error) throw error;
+        if (!c) return res.status(404).json({ message: "Comment not found" });
+        if (c.user_id !== req.userId && !(await getUserData(req.userId!)).is_mod) {
+            return res.status(403).json({ message: "Only the author or a moderator can delete this comment" });
+        }
+
+        // Collect the whole thread below it (replies, replies to replies, ...).
+        const ids = [cid];
+        for (let frontier = [cid]; frontier.length; ) {
+            const { data: kids, error: kErr } = await supabase.from("comments").select("id").in("parent_comment_id", frontier);
+            if (kErr) throw kErr;
+            frontier = (kids ?? []).map((k) => k.id);
+            ids.push(...frontier);
+        }
+        const r1 = await supabase.from("comment_reactions").delete().in("comment_id", ids);
+        if (r1.error) throw r1.error;
+        // Deepest first, so no reply is left pointing at a removed parent.
+        for (const id of [...ids].reverse()) {
+            const r = await supabase.from("comments").delete().eq("id", id);
+            if (r.error) throw r.error;
+        }
+        res.status(200).json({ id: cid, post_id: c.post_id, deleted: ids.length });
+    } catch (error: any) {
+        res.status(500).json({ code: error?.code, message: error?.message });
+    }
+})
 
 export default router;

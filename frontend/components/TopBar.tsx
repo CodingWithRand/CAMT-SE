@@ -4,7 +4,28 @@ import Image from 'next/image';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Notif } from './WhongNaiMor';
 import type { AuthMode } from './LoginDialog';
-import { BellIcon, MegaphoneIcon, PlusIcon, SearchIcon, SmallCloseIcon } from './AuthIcons';
+import { BellIcon, EyeIcon, EyeOffIcon, FlagCheckIcon, FlagIcon, MegaphoneIcon, PlusIcon, SearchIcon, SmallCloseIcon } from './AuthIcons';
+
+/**
+ * Notifications carry only a message, so the kind is read from the wording the API and the
+ * announcement trigger write (api/src/endpoints/post.ts, report.ts, sql/…announcement…).
+ */
+const NOTIF_KINDS = {
+  announcement: { label: 'ประกาศ',            Icon: MegaphoneIcon, bg: '#f2c6b6', fg: '#6f2f14' },
+  reportDone:   { label: 'ผลการรายงาน',       Icon: FlagCheckIcon, bg: '#d6e8c4', fg: '#2f4a1c' },
+  reportClosed: { label: 'ผลการรายงาน',       Icon: FlagIcon,      bg: '#dcdcef', fg: '#36365e' },
+  postHidden:   { label: 'โพสต์ของคุณ',        Icon: EyeOffIcon,    bg: '#f6d7a8', fg: '#6b4210' },
+  postRestored: { label: 'โพสต์ของคุณ',        Icon: EyeIcon,       bg: '#cfe6e0', fg: '#1f4d44' },
+  other:        { label: 'การแจ้งเตือน',        Icon: BellIcon,      bg: 'var(--color-neutral-200)', fg: 'var(--color-neutral-800)' },
+} as const;
+
+function notifKind(message: string): keyof typeof NOTIF_KINDS {
+  if (message.startsWith('ประกาศใหม่')) return 'announcement';
+  if (message.includes('ที่คุณรายงาน')) return message.includes('ไม่พบการละเมิด') ? 'reportClosed' : 'reportDone';
+  if (message.includes('ของคุณถูกซ่อน')) return 'postHidden';
+  if (message.includes('ของคุณกลับมาแสดง')) return 'postRestored';
+  return 'other';
+}
 
 interface Props {
   w: number;
@@ -140,18 +161,24 @@ export function TopBar({
                       <span style={{ width: 48, height: 48, display: 'grid', placeItems: 'center', borderRadius: 999, background: 'var(--color-neutral-200)' }}><BellIcon /></span>
                       <span style={{ fontSize: 13 }}>ยังไม่มีการแจ้งเตือน</span>
                     </div>
-                  ) : notifs.map((n) => (
-                    <button key={n.id} className="notif-item" data-unread={!n.is_read} onClick={() => onOpenNotif(n)}>
-                      <span style={{ flex: 'none', width: 34, height: 34, display: 'grid', placeItems: 'center', borderRadius: 12, background: n.is_read ? 'var(--color-neutral-200)' : '#f2c6b6', color: n.is_read ? 'var(--color-neutral-700)' : '#6f2f14' }}>
-                        <MegaphoneIcon />
-                      </span>
-                      <span style={{ flex: 1, minWidth: 0 }}>
-                        <span style={{ display: 'block', fontSize: 13, lineHeight: 1.45, fontWeight: n.is_read ? 400 : 600 }}>{n.message}</span>
-                        <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>{timeAgo(n.created_at)}</span>
-                      </span>
-                      {!n.is_read && <span aria-label="ยังไม่อ่าน" style={{ flex: 'none', width: 8, height: 8, marginTop: 6, borderRadius: 999, background: 'var(--pri)' }} />}
-                    </button>
-                  ))}
+                  ) : notifs.map((n) => {
+                    const kind = NOTIF_KINDS[notifKind(n.message)];
+                    return (
+                      <button key={n.id} className="notif-item" data-unread={!n.is_read} onClick={() => onOpenNotif(n)}>
+                        <span title={kind.label} style={{ flex: 'none', width: 34, height: 34, display: 'grid', placeItems: 'center', borderRadius: 12,
+                          background: kind.bg, color: kind.fg, opacity: n.is_read ? 0.75 : 1 }}>
+                          <kind.Icon />
+                        </span>
+                        <span style={{ flex: 1, minWidth: 0 }}>
+                          <span style={{ display: 'block', fontSize: 13, lineHeight: 1.45, fontWeight: n.is_read ? 400 : 600 }}>{n.message}</span>
+                          <span style={{ fontSize: 11, color: 'var(--color-neutral-600)' }}>
+                            <span style={{ fontWeight: 600, color: kind.fg, opacity: n.is_read ? 0.75 : 1 }}>{kind.label}</span> · {timeAgo(n.created_at)}
+                          </span>
+                        </span>
+                        {!n.is_read && <span aria-label="ยังไม่อ่าน" style={{ flex: 'none', width: 8, height: 8, marginTop: 6, borderRadius: 999, background: 'var(--pri)' }} />}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

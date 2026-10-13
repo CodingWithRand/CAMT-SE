@@ -155,7 +155,7 @@ export function ModerationCenter({
                           : <span className="tag" style={{ background: 'var(--color-neutral-200)', color: 'var(--color-neutral-800)', fontWeight: 700, fontSize: 10 }}>ไม่มีคนรายงาน</span>}
                         {r.hidden && <span className="tag" style={{ background: 'var(--color-neutral-800)', color: '#fff', fontWeight: 700, fontSize: 10 }}>ถูกซ่อน</span>}
                         <span style={{ color: 'var(--color-neutral-600)' }}>
-                          {!r.tickets.length ? 'ผู้ดูแลซ่อนเอง' : r.status === 'Open' ? `รายงานเมื่อ ${timeAgo(r.tickets[0]?.at ?? '')}` : `รายงานล่าสุด ${timeAgo(r.tickets.at(-1)?.at ?? '')}`}
+                          {!r.tickets.length ? 'ผู้ดูแลซ่อนเอง' : r.status === 'Open' ? `รายงาน${timeAgo(r.tickets[0]?.at ?? '') === 'เมื่อสักครู่' ? 'เมื่อสักครู่' : ` ${timeAgo(r.tickets[0]?.at ?? '')}`}` : `รายงานล่าสุด ${timeAgo(r.tickets.at(-1)?.at ?? '')}`}
                         </span>
                       </span>
                     </span>

@@ -37,8 +37,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
         res.on("finish", () => {
             if (res.statusCode >= 300) return;
             const topics = LIVE_TOPICS.find(([re]) => re.test(req.path))?.[1];
-            // /comment/<post id> and /comment/<post id>/replyto/<comment id> name the post.
-            const postId = /^\/comment\/([0-9a-f-]{36})(\/replyto\/|$)/i.exec(req.path)?.[1];
+            // POST /comment/<post id> and /comment/<post id>/replyto/<comment id> name the post.
+            // (PUT/DELETE /comment/<id> carry a comment id, so those reload every thread.)
+            const postId = req.method === "POST" ? /^\/comment\/([0-9a-f-]{36})(\/replyto\/|$)/i.exec(req.path)?.[1] : undefined;
             if (topics) broadcast(topics, postId);
         });
     }

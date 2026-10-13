@@ -34,7 +34,8 @@ export interface Post {
   notified?: number;
   reports?: number;
   hidden?: { reason: string | null };
-  mine?: boolean;   // written by the viewer, who may edit and delete it   // hidden by a moderator; only the author still gets it
+  mine?: boolean;   // written by the viewer, who may edit and delete it
+  at?: string;      // created_at, for the full date on hover   // hidden by a moderator; only the author still gets it
   edited?: string;
 
   // belows are out of scope for now.
@@ -44,7 +45,7 @@ export interface Post {
   tint?: number;
 }
 
-export interface Reply { id: string; a: string; i: string; t: number; time: string; text: string; likes?: number }
+export interface Reply { id: string; a: string; i: string; t: number; time: string; text: string; likes?: number; mine?: boolean }
 export interface Comment extends Reply { r: Role; likes: number; replies: Reply[] }
 
 export function updateCommentLikesById(

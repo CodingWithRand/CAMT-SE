@@ -18,6 +18,8 @@ export const CloseIcon = () => <Icon><path d="M6 6l12 12M18 6 6 18" /></Icon>;
 export const AlertIcon = () => <Icon size={16}><circle cx="12" cy="12" r="9" /><path d="M12 7.5v5.5M12 16.5h.01" /></Icon>;
 export const InfoIcon = () => <Icon size={16}><circle cx="12" cy="12" r="9" /><path d="M12 11v5.5M12 7.5h.01" /></Icon>;
 export const MegaphoneIcon = () => <Icon><path d="M3.5 10v4a1.5 1.5 0 0 0 1.5 1.5h2L13 19V5L7 8.5H5A1.5 1.5 0 0 0 3.5 10Z" /><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11" /></Icon>;
+export const FlagIcon = () => <Icon><path d="M5 21V4.5" /><path d="M5 4.5h11l-2 4 2 4H5" /></Icon>;
+export const FlagCheckIcon = () => <Icon><path d="M5 21V4.5" /><path d="M5 4.5h11l-2 4 2 4H5" /><path d="m14 18 2 2 4-4" /></Icon>;
 export const ChatIcon = () => <Icon><path d="M20 12a7.5 7.5 0 0 1-11.2 6.5L4 20l1.5-4.6A7.5 7.5 0 1 1 20 12Z" /></Icon>;
 export const BellIcon = () => <Icon><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" /><path d="M10 20.5a2.2 2.2 0 0 0 4 0" /></Icon>;
 export const HeartIcon = () => <Icon><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10Z" /></Icon>;

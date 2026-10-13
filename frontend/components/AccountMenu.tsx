@@ -79,7 +79,7 @@ export function AccountMenu({ name, initials, email, isMod, avatar, compact, unr
             </button>
             <button role="menuitem" className="acct-item" onClick={() => { onOpenChange(false); onInterests(); }}>
               <HeartIcon />
-              <span style={{ flex: 1 }}>หมวดที่ฉันสนใจ</span>
+              <span style={{ flex: 1 }}>หมวดที่ติดตาม</span>
             </button>
 
             <div style={{ height: 1, background: 'var(--color-divider)', margin: '6px 8px' }} />
