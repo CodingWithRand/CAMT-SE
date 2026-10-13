@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import { useApi } from './AuthContext';
 
-const API_URL = "http://localhost:3030";
 const MAX_NAME = 40;
 const MAX_DESCRIPTION = 160;
 
@@ -33,13 +33,13 @@ const field: CSSProperties = { background: 'var(--color-neutral-100)', fontSize:
 type Draft = { id: string | null; name: string; description: string; priority: number };
 const EMPTY: Draft = { id: null, name: '', description: '', priority: 3 };
 
-export function CategoryManager({ authHeaders, flash, dotFor, revision, onChanged }: {
-  authHeaders: (extra?: Record<string, string>) => Record<string, string>;
+export function CategoryManager({ flash, dotFor, revision, onChanged }: {
   flash: (t: string) => void;
   dotFor: (id: string) => string | undefined;
   revision: string;   // changes when categories change anywhere (live update), to refetch
   onChanged: () => void;   // reload the categories used across the page right away
 }) {
+  const api = useApi();
   const [cats, setCats] = useState<Category[] | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -47,9 +47,9 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const res = await fetch(`${API_URL}/admin/categories`, { headers: authHeaders() }).catch(() => null);
+    const res = await api('/admin/categories').catch(() => null);
     if (res?.ok) setCats(await res.json());
-  }, [authHeaders]);
+  }, [api]);
 
   useEffect(() => { load(); }, [load, revision]);
 
@@ -59,10 +59,9 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
     if (!name) return setError('ตั้งชื่อหมวดหมู่ก่อน');
     setBusy(true);
     setError(null);
-    const res = await fetch(`${API_URL}/admin/categories${draft.id ? `/${draft.id}` : ''}`, {
+    const res = await api(`/admin/categories${draft.id ? `/${draft.id}` : ''}`, {
       method: draft.id ? 'PUT' : 'POST',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ name, description: draft.description, priority: draft.priority }),
+      json: { name, description: draft.description, priority: draft.priority },
     }).catch(() => null);
     setBusy(false);
     if (!res?.ok) {
@@ -76,7 +75,7 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
 
   const remove = async (c: Category) => {
     setBusy(true);
-    const res = await fetch(`${API_URL}/admin/categories/${c.id}`, { method: 'DELETE', headers: authHeaders() }).catch(() => null);
+    const res = await api(`/admin/categories/${c.id}`, { method: 'DELETE' }).catch(() => null);
     setBusy(false);
     setConfirmDelete(null);
     if (!res?.ok) return flash(res?.status === 409 ? `ลบไม่ได้ · ยังมีโพสต์ในหมวด "${c.category_name}"` : 'ลบไม่สำเร็จ');
@@ -123,7 +122,7 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
         <span className="tag" style={{ ...chipLook(draft.priority), fontSize: 11.5 }}>{draft.name.trim() || 'ชื่อหมวดหมู่'}</span>
       </div>
 
-      {error && <span role="alert" style={{ fontSize: 12.5, color: '#6f2f14', background: '#f8ddd3', borderRadius: 10, padding: '8px 12px' }}>{error}</span>}
+      {error && <span role="alert" style={{ fontSize: 12.5, color: 'var(--danger-ink)', background: 'var(--danger-soft)', borderRadius: 10, padding: '8px 12px' }}>{error}</span>}
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
         <button className="btn btn-secondary" onClick={() => { setDraft(null); setError(null); }} disabled={busy} style={{ fontFamily: 'var(--font-body)' }}>ยกเลิก</button>
@@ -159,7 +158,7 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
                   style={{ fontFamily: 'var(--font-body)', fontSize: 12.5 }}>แก้ไข</button>
                 <button className="btn btn-ghost" onClick={() => setConfirmDelete(c.id)} disabled={c.post_count > 0}
                   title={c.post_count > 0 ? `มี ${c.post_count} โพสต์ใช้หมวดนี้อยู่ จึงลบไม่ได้ · เปลี่ยนชื่อแทนได้` : 'ลบหมวดหมู่'}
-                  style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: '#8a3a1c' }}>ลบ</button>
+                  style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--danger-text)' }}>ลบ</button>
               </span>
             </div>
             {c.description && <span style={{ fontSize: 12.5, color: 'var(--color-neutral-800)' }}>{c.description}</span>}
@@ -168,12 +167,12 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
               {c.post_count > 0 && ' · ลบไม่ได้เพราะยังมีโพสต์'}
             </span>
             {confirmDelete === c.id && (
-              <div role="alertdialog" aria-label={`ยืนยันการลบ ${c.category_name}`} style={{ background: '#f8ddd3', color: '#6f2f14', borderRadius: 12, padding: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <div role="alertdialog" aria-label={`ยืนยันการลบ ${c.category_name}`} style={{ background: 'var(--danger-soft)', color: 'var(--danger-ink)', borderRadius: 12, padding: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                 <span style={{ flex: 1, fontSize: 12.5 }}>
                   ลบหมวด &ldquo;{c.category_name}&rdquo;?{c.follower_count > 0 && ` ผู้ติดตาม ${c.follower_count} คนจะไม่ได้รับแจ้งเตือนหมวดนี้อีก`}
                 </span>
                 <button className="btn btn-secondary" onClick={() => setConfirmDelete(null)} disabled={busy} style={{ fontFamily: 'var(--font-body)', fontSize: 12.5 }}>ยกเลิก</button>
-                <button className="btn" onClick={() => remove(c)} disabled={busy} autoFocus style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: '#a2391c', color: '#fff' }}>ลบหมวดหมู่</button>
+                <button className="btn" onClick={() => remove(c)} disabled={busy} autoFocus style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: 'var(--danger)', color: '#fff' }}>ลบหมวดหมู่</button>
               </div>
             )}
           </div>

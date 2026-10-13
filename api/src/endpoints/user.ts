@@ -1,27 +1,15 @@
 import { Request, Response, Router } from 'express';
 import supabase from '../db';
-import { auth, uuidParam } from '../middleware';
+import { auth, isModerator, uuidParam } from '../middleware';
+import { getUserData } from '../users';
 
 const router = Router();
 router.param("uid", uuidParam);
 
-export async function getUserData(uid: string) {
-    //SELECT * FROM user WHERE uid = uid;
-    const { data, error } = await supabase
-        // .from("user")
-        .from("v_user_all_data") // more data -> user interests
-        .select("*")
-        .eq("id", uid)
-        .single();
-
-    if (error) throw error;
-    return data
-}
-
+// A missing profile row answers 400 rather than 500.
 router.get('/user/current/fetch', auth, async (req, res) => {
     try {
-        const data = await getUserData(req.userId!);
-        res.status(200).json(data);
+        res.status(200).json(await getUserData(req.userId!));
     } catch (error: any) {
         res.status(400).json({ error: error.message });
     }
@@ -33,7 +21,7 @@ router.get('/user/:uid/fetch', auth, async (req, res) => {
         const data = await getUserData(uid);
         // Email and account are private: only the user themselves or a moderator sees them.
         const self = uid === req.userId;
-        const mod = !self && !!(await getUserData(req.userId!)).is_mod;
+        const mod = !self && await isModerator(req.userId);
         if (self || mod) return res.status(200).json(data);
         res.status(200).json({ id: data.id, display_name: data.display_name, is_mod: data.is_mod, is_cmu_p: data.is_cmu_p });
     } catch (error: any) {
@@ -41,20 +29,17 @@ router.get('/user/:uid/fetch', auth, async (req, res) => {
     }
 })
 
-/** The signed-in user's interests (categories they get announcement notifications for). */
+/** The signed-in user's interests (categories they get notified about: every new post in them). */
 router.get('/user/interests', auth, async (req: Request, res: Response) => {
-    try {
-        const { data, error } = await supabase
-            .from("user_interests")
-            .select("category_id, category:categories(category_name)")
-            .eq("user_id", req.userId!);
-        if (error) throw error;
-        res.status(200).json((data ?? []).map((r: any) => ({ category_id: r.category_id, category_name: r.category?.category_name })));
-    } catch (error: any) {
-        res.status(500).json({ code: error?.code, message: error?.message });
-    }
+    const { data, error } = await supabase
+        .from("user_interests")
+        .select("category_id, category:categories(category_name)")
+        .eq("user_id", req.userId!);
+    if (error) throw error;
+    res.status(200).json((data ?? []).map((r: any) => ({ category_id: r.category_id, category_name: r.category?.category_name })));
 })
 
+/** Replace the signed-in user's interests with `cate_id` (category ids), through the user_interests_op RPC. */
 router.put('/user/interests', auth, async (req, res) => {
     const { cate_id } = req.body;
     try {
@@ -64,6 +49,20 @@ router.put('/user/interests', auth, async (req, res) => {
     } catch (error: any) {
         res.status(400).json({ error: error.message });
     }
+})
+
+/** Change the signed-in user's display name (2-50 characters). */
+router.put('/user/me', auth, async (req: Request, res: Response) => {
+    const display_name = String(req.body?.display_name ?? "").trim().replace(/\s+/g, " ");
+    if (display_name.length < 2 || display_name.length > 50) {
+        return res.status(400).json({ message: "Display name must be 2-50 characters" });
+    }
+    const { error } = await supabase.from("users").update({ display_name }).eq("id", req.userId!);
+    if (error) throw error;
+    // Keep the auth metadata in step; the users table is what the site reads.
+    const { error: authError } = await supabase.auth.admin.updateUserById(req.userId!, { user_metadata: { display_name } });
+    if (authError) console.error("update auth display_name", authError.message);
+    res.status(200).json({ display_name });
 })
 
 /** Replace the signed-in user's interests with `category_ids`. Only ever their own. */
@@ -117,37 +116,33 @@ router.post('/user/register', async (req: Request, res: Response) => {
         return res.status(400).json({ message: "Display name must be 2-50 characters" });
     }
 
-    try {
-        const { data, error } = await supabase.auth.admin.createUser({
-            email,
-            password,
-            email_confirm: true,
-            user_metadata: { display_name },
-        });
-        if (error) {
-            if (error.code === "email_exists" || /already (been )?registered|already exists/i.test(error.message)) {
-                return res.status(409).json({ message: "This email already has an account" });
-            }
-            throw error;
+    const { data, error } = await supabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { display_name },
+    });
+    if (error) {
+        if (error.code === "email_exists" || /already (been )?registered|already exists/i.test(error.message)) {
+            return res.status(409).json({ message: "This email already has an account" });
         }
-
-        const { error: profileError } = await supabase.from("users").insert({
-            id: data.user.id,
-            cmu_account: email,
-            email,
-            display_name,
-            is_mod: false, // never taken from the request
-        });
-        if (profileError) {
-            // Don't leave an auth user without a profile behind.
-            await supabase.auth.admin.deleteUser(data.user.id);
-            throw profileError;
-        }
-
-        res.status(201).json({ id: data.user.id });
-    } catch (error: any) {
-        res.status(500).json({ code: error?.code, message: error?.message });
+        throw error;
     }
+
+    const { error: profileError } = await supabase.from("users").insert({
+        id: data.user.id,
+        cmu_account: email,
+        email,
+        display_name,
+        is_mod: false, // never taken from the request
+    });
+    if (profileError) {
+        // Don't leave an auth user without a profile behind.
+        await supabase.auth.admin.deleteUser(data.user.id);
+        throw profileError;
+    }
+
+    res.status(201).json({ id: data.user.id });
 })
 
 export default router;

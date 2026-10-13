@@ -3,13 +3,14 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { useAuthContext } from './AuthContext';
+import { api } from '@/lib/api';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 import {
   AlertIcon, BellIcon, ChatIcon, CheckIcon, CloseIcon, EyeIcon, EyeOffIcon, HeartIcon, InfoIcon,
   LockIcon, MailIcon, MegaphoneIcon, UserIcon,
 } from './AuthIcons';
 import { mockSignIn, mockModSignIn } from '@/lib/dbauth'; 
 
-const API_URL = "http://localhost:3030";
 const EMAIL_DOMAIN = '@cmu.ac.th';
 const MIN_PASSWORD = 8;
 const SUCCESS_MS = 1100;
@@ -98,6 +99,7 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
   }, [onClose, busy]);
 
   // Focus the first field whenever the form switches.
+  const trap = useFocusTrap<HTMLDivElement>();
   useEffect(() => { (isRegister ? nameRef : userRef).current?.focus(); }, [isRegister]);
 
   useEffect(() => {
@@ -170,11 +172,7 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
     setBusy(true);
     try {
       if (isRegister) {
-        const res = await fetch(`${API_URL}/user/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: addr, password, display_name: name.trim() }),
-        });
+        const res = await api('/user/register', { method: 'POST', json: { email: addr, password, display_name: name.trim() } });
         const body = await res.json().catch(() => ({}));
         if (!res.ok) {
           const msg = toThaiError(body?.message ?? `HTTP ${res.status}`);
@@ -210,7 +208,7 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
       style={{ zIndex: 45, animation: 'wnm-pop .16s ease both' }}
       onMouseDown={(e) => { if (e.target === e.currentTarget && !busy) onClose(); }}
     >
-      <div className="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <div ref={trap} className="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
         {/* ── Brand panel ── */}
         <aside className="auth-brand">
           <span className="auth-blob" style={{ width: 180, height: 180, right: -60, top: -50, background: 'color-mix(in srgb, #fff 12%, transparent)' }} />
@@ -242,7 +240,7 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
               <span style={{ marginLeft: 'auto' }}>เมื่อสักครู่</span>
             </div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 999, background: '#f2c6b6', color: '#6f2f14', flex: 'none' }}>ประกาศด่วน</span>
+              <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 999, background: 'var(--alert-soft)', color: 'var(--alert-ink)', flex: 'none' }}>ประกาศด่วน</span>
               <span style={{ fontSize: 12.5, fontWeight: 600, lineHeight: 1.35 }}>ห้องสมุดปิดเร็วขึ้นวันศุกร์นี้</span>
             </div>
           </div>

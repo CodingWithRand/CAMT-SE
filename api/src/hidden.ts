@@ -11,24 +11,13 @@ export interface HiddenInfo {
     hidden_at: string | null;
 }
 
-/**
- * The migration has not been run on this database yet: a read reports Postgres
- * "undefined column" (42703), a write reports PostgREST's "column not in schema cache" (PGRST204).
- */
-export function isMissingColumn(error: { code?: string } | null | undefined) {
-    return error?.code === "42703" || error?.code === "PGRST204";
-}
-
-/** Hidden posts by id. Empty (rather than an error) until the migration has been run. */
+/** Hidden posts by id. */
 export async function hiddenPosts(): Promise<Map<string, HiddenInfo>> {
     const { data, error } = await supabase
         .from("posts")
         .select("id, user_id, hidden_reason, hidden_at")
         .eq("is_hidden", true);
-    if (error) {
-        if (isMissingColumn(error)) return new Map();
-        throw error;
-    }
+    if (error) throw error;
     return new Map((data ?? []).map((p) => [p.id, { user_id: p.user_id, hidden_reason: p.hidden_reason, hidden_at: p.hidden_at }]));
 }
 
@@ -48,10 +37,7 @@ export function withoutHidden<T extends { id: string }>(rows: T[], hidden: Map<s
 /** Whether a post is hidden. Hidden posts take no new comments or reactions. */
 export async function isHidden(postId: string) {
     const { data, error } = await supabase.from("posts").select("is_hidden").eq("id", postId).maybeSingle();
-    if (error) {
-        if (isMissingColumn(error)) return false;
-        throw error;
-    }
+    if (error) throw error;
     return !!data?.is_hidden;
 }
 

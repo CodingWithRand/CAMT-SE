@@ -17,8 +17,8 @@
   --color-accent-2-700: #8c4765; --color-accent-2-800: #66324a; --color-accent-2-900: #40202e;
 
   --color-neutral-100: #f8ece5; --color-neutral-200: #e7d4c8; --color-neutral-300: #d6c2b4;
-  --color-neutral-400: #c2b8ad; --color-neutral-500: #a2988f; --color-neutral-600: #6a625c;
-  --color-neutral-700: #5f5860; --color-neutral-800: #453e4d; --color-neutral-900: #2e2838;
+  --color-neutral-400: #c2b8ad; --color-neutral-500: #a2988f; --color-neutral-600: #5a534e;
+  --color-neutral-700: #4d4650; --color-neutral-800: #453e4d; --color-neutral-900: #2e2838;
 
   --font-heading: var(--font-caprasimo), "Caprasimo", system-ui, sans-serif;
   --font-heading-weight: 400;
@@ -40,6 +40,16 @@
   --shadow-lg: 0 12px 32px color-mix(in srgb, #2e2b25 22%, transparent);
 
   --pri: #c9603f;
+
+  /* Status colours: solid fills, and soft backgrounds with the ink that reads on them. */
+  --danger: #a2391c;            /* destructive buttons (delete, hide, revoke) */
+  --danger-text: #8a3a1c;       /* destructive text buttons */
+  --danger-border: #e7b3a0;
+  --danger-soft: #f8ddd3;       --danger-ink: #6f2f14;    /* confirm boxes */
+  --alert-soft: #f2c6b6;        --alert-ink: #6f2f14;     /* "รอตรวจ", urgent announcements */
+  --success-soft: #e1eecc;      --success-ink: #3d472b;   /* "จัดการแล้ว", moderator badge, CMU staff */
+  --warn-soft: #f6d7a8;         --warn-ink: #6b4210;      /* hidden posts */
+  --on-dark: #fdf8f1;           /* text on the dark toast */
   --peach: #f2e1fa;
 }
 
@@ -452,3 +462,56 @@ body.wnm-locked { overflow: hidden !important; }
 @media (max-width: 879px) {
   .mod-shell { grid-template-columns: 1fr; }
 }
+
+/* — loading placeholders — */
+.skeleton-card {
+  display: flex; flex-direction: column; gap: 11px; padding: 16px 18px; border-radius: 16px;
+  background: var(--color-surface); border: 1px solid var(--color-divider);
+}
+.skeleton {
+  display: block; border-radius: 8px;
+  background: linear-gradient(90deg, var(--color-neutral-200) 0%, var(--color-neutral-100) 50%, var(--color-neutral-200) 100%);
+  background-size: 200% 100%; animation: skeleton-shimmer 1.3s ease-in-out infinite;
+}
+@keyframes skeleton-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+/* ── Search hits ── */
+.search-hit { background: color-mix(in srgb, var(--color-accent) 22%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+/* ── Full-screen image viewer ── */
+.viewer {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; touch-action: pan-y;
+  background: rgba(20, 12, 28, .92); animation: wnm-pop .16s ease both;
+}
+.viewer-btn {
+  width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, .14); color: #fff; font-size: 28px; line-height: 1; font-family: var(--font-body);
+}
+.viewer-btn:hover, .viewer-btn:focus-visible { background: rgba(255, 255, 255, .26); }
+.post-image { cursor: zoom-in; }
+
+/* ── Phone bottom navigation ── */
+.bottom-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); background: var(--color-surface);
+  border-top: 1px solid var(--color-divider); box-shadow: 0 -4px 18px rgba(62, 34, 89, .08);
+}
+.bottom-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; border: 0; background: transparent; cursor: pointer;
+  font-family: var(--font-body); font-size: 10.5px; color: var(--color-neutral-700);
+}
+.bottom-nav-item[aria-current="page"] { color: var(--color-accent-700); font-weight: 600; }
+.bottom-nav-post {
+  justify-self: center; width: 46px; height: 46px; display: grid; place-items: center; border: 0; border-radius: 999px; cursor: pointer; color: #fff;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-600) 60%, var(--color-accent-2-600) 130%);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+
+/* ── Follow star beside each category (sidebar) ── */
+.follow-star {
+  flex: none; width: 28px; height: 28px; display: grid; place-items: center; cursor: pointer; border: 0; border-radius: 8px;
+  background: transparent; color: var(--color-neutral-600); font-size: 15px; line-height: 1; font-family: var(--font-body);
+}
+.follow-star:hover { background: var(--color-accent-100); color: var(--color-accent-700); }
+.follow-star[aria-pressed="true"] { color: var(--color-accent-700); }

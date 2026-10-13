@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { BellIcon, ChevronIcon, HeartIcon, LogoutIcon, ShieldIcon } from './AuthIcons';
+import { BellIcon, ChevronIcon, HeartIcon, LogoutIcon, ShieldIcon, UserIcon } from './AuthIcons';
 
 interface Props {
   name: string;
@@ -14,12 +14,13 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onInterests: () => void;
+  onProfile: () => void;
   onNotifications: () => void;
   onSignOut: () => Promise<void>;
 }
 
 /** Avatar pill in the top bar that opens the account card (profile, shortcuts, sign out). */
-export function AccountMenu({ name, initials, email, isMod, avatar, compact, unread, open, onOpenChange, onInterests, onNotifications, onSignOut }: Props) {
+export function AccountMenu({ name, initials, email, isMod, avatar, compact, unread, open, onOpenChange, onInterests, onProfile, onNotifications, onSignOut }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -70,6 +71,10 @@ export function AccountMenu({ name, initials, email, isMod, avatar, compact, unr
           </div>
 
           <div style={{ padding: 6 }}>
+            <button role="menuitem" className="acct-item" onClick={() => { onOpenChange(false); onProfile(); }}>
+              <UserIcon />
+              <span style={{ flex: 1 }}>โปรไฟล์ของฉัน</span>
+            </button>
             <button role="menuitem" className="acct-item" onClick={() => { onOpenChange(false); onNotifications(); }}>
               <BellIcon />
               <span style={{ flex: 1 }}>การแจ้งเตือน</span>
@@ -79,7 +84,7 @@ export function AccountMenu({ name, initials, email, isMod, avatar, compact, unr
             </button>
             <button role="menuitem" className="acct-item" onClick={() => { onOpenChange(false); onInterests(); }}>
               <HeartIcon />
-              <span style={{ flex: 1 }}>หมวดที่ฉันสนใจ</span>
+              <span style={{ flex: 1 }}>หมวดที่ติดตาม</span>
             </button>
 
             <div style={{ height: 1, background: 'var(--color-divider)', margin: '6px 8px' }} />
@@ -90,12 +95,12 @@ export function AccountMenu({ name, initials, email, isMod, avatar, compact, unr
                 <div style={{ fontSize: 11.5, opacity: 0.85, marginBottom: 10 }}>คุณจะกลับมาอ่านได้แบบผู้เยี่ยมชม</div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button className="btn btn-secondary" disabled={busy} onClick={() => setConfirming(false)}
-                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, borderColor: 'color-mix(in srgb, #6f2f14 25%, transparent)', color: '#6f2f14' }}>
+                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, borderColor: 'color-mix(in srgb, var(--danger-ink) 25%, transparent)', color: 'var(--danger-ink)' }}>
                     ยกเลิก
                   </button>
                   <button className="btn" disabled={busy} autoFocus
                     onClick={async () => { setBusy(true); try { await onSignOut(); } finally { setBusy(false); } }}
-                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: '#a2391c', color: '#fff' }}>
+                    style={{ flex: 1, fontFamily: 'var(--font-body)', fontSize: 12.5, fontWeight: 600, background: 'var(--danger)', color: '#fff' }}>
                     {busy ? 'กำลังออก…' : 'ออกจากระบบ'}
                   </button>
                 </div>

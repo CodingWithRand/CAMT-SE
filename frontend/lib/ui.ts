@@ -9,18 +9,6 @@ export function avatarStyle(tint: number, size = 38): CSSProperties {
   };
 }
 
-/**
- * Total reactions on a post.
- *
- * p.likes is reaction_count straight from the server and already includes the
- * viewer's own reaction, so nothing is added here. It used to take a `liked`
- * flag and add one, back when reactions were never persisted and the count
- * could not know about them — keeping that would double-count.
- */
-export function likeCount(p: Post) {
-  return p.likes;
-}
-
 /** Report status words, used everywhere a status is shown (post chip, moderation center, dialogs). */
 export const REPORT_LABEL: Record<ReportStatus, string> = {
   Open: 'รอตรวจ',
@@ -30,8 +18,8 @@ export const REPORT_LABEL: Record<ReportStatus, string> = {
 
 export function statusLook(status?: ReportStatus): [string, string] {
   switch (status) {
-    case 'Open': return ['#f2c6b6', '#6f2f14'];
-    case 'Reviewed': return ['#dcebc4', '#3d472b'];
+    case 'Open': return ['var(--alert-soft)', 'var(--alert-ink)'];
+    case 'Reviewed': return ['var(--success-soft)', 'var(--success-ink)'];
     default: return ['var(--color-neutral-200)', 'var(--color-neutral-800)'];
   }
 }
@@ -50,3 +38,27 @@ export const ACCENT_MAP: Record<string, string[]> = {
   '#8f6bb5': ['#8f6bb5', '#7a55a2', '#5f3f83', '#ece2f6', '#f8f4fc', '#453166'],
   '#6a3d8f': ['#6a3d8f', '#5a2f7d', '#452363', '#e7dbf3', '#f6f0fb', '#33194d'],
 };
+
+/**
+ * Relative time for the last week ("5 นาทีที่แล้ว", "เมื่อวาน"), then a date ("17 ก.ย."),
+ * with the Buddhist-era year once it is not this year. Hover text comes from fullDate().
+ */
+export function timeAgo(stamp: Date | string) {
+  const t = new Date(stamp);
+  const sec = Math.floor((Date.now() - t.getTime()) / 1000);
+  if (sec < 60) return 'เมื่อสักครู่';
+  if (sec < 3600) return `${Math.floor(sec / 60)} นาทีที่แล้ว`;
+  if (sec < 86400) return `${Math.floor(sec / 3600)} ชั่วโมงที่แล้ว`;
+  // Whole calendar days, so 11 Oct read on 13 Oct is "2 วันที่แล้ว", not "เมื่อวาน".
+  const startOf = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const days = Math.round((startOf(new Date()) - startOf(t)) / 86400000);
+  if (days === 1) return 'เมื่อวาน';
+  if (days < 7) return `${days} วันที่แล้ว`;
+  const sameYear = t.getFullYear() === new Date().getFullYear();
+  return t.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', ...(sameYear ? {} : { year: 'numeric' }) });
+}
+
+/** "17 กันยายน 2569 เวลา 16:11" for tooltips. */
+export function fullDate(stamp: Date | string) {
+  return new Date(stamp).toLocaleString('th-TH', { dateStyle: 'long', timeStyle: 'short' });
+}
