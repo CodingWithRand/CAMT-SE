@@ -21,12 +21,13 @@ interface Props {
   notifOpen: boolean;
   onNotifOpen: (open: boolean) => void;
   onOpenNotif: (n: Notif) => void;
+  onReadAll: () => void;
   timeAgo: (stamp: string) => string;
 }
 
 export function TopBar({
   w, query, onQuery, onHome, signedIn, canPost, onCompose, onLogin, account,
-  notifs, unread, notifOpen, onNotifOpen, onOpenNotif, timeAgo,
+  notifs, unread, notifOpen, onNotifOpen, onOpenNotif, onReadAll, timeAgo,
 }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -117,7 +118,14 @@ export function TopBar({
                   {unread > 0 && (
                     <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999, background: 'var(--color-accent-200)', color: 'var(--color-accent-800)' }}>ใหม่ {unread}</span>
                   )}
-                  <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--color-neutral-600)' }}>ประกาศ · ผลการรายงาน</span>
+                  {signedIn && unread > 0 ? (
+                    <button className="btn btn-ghost" onClick={onReadAll}
+                      style={{ marginLeft: 'auto', fontFamily: 'var(--font-body)', fontSize: 12, padding: '4px 10px', color: 'var(--color-accent-700)' }}>
+                      ✓ อ่านทั้งหมด
+                    </button>
+                  ) : (
+                    <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--color-neutral-600)' }}>ประกาศ · ผลการรายงาน</span>
+                  )}
                 </div>
 
                 <div style={{ padding: 6, maxHeight: 'min(420px, 60vh)', overflowY: 'auto' }}>

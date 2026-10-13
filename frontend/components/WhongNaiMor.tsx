@@ -684,6 +684,18 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   };
   const unreadNotifs = st.notifs.filter((n) => !n.is_read).length;
 
+  /** Mark every notification read: the badge clears at once, and comes back if the API refuses. */
+  const readAllNotifs = async () => {
+    const before = st.notifs;
+    set({ notifs: before.map((n) => ({ ...n, is_read: true })) });
+    const res = await fetch(`${API_URL}/notification/read-all`, { method: 'POST', headers: authHeaders() }).catch(() => null);
+    if (!res?.ok) {
+      set({ notifs: before });
+      return flash('อ่านทั้งหมดไม่สำเร็จ ลองใหม่อีกครั้ง');
+    }
+    flash('อ่านการแจ้งเตือนทั้งหมดแล้ว');
+  };
+
   /** Set the report status of post `id` (all of its tickets). The reporters get a notification. */
   const setStatus = async (id: string, next: ReportStatus) => {
     const before = st.reportStatus[id];
@@ -937,6 +949,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         notifOpen={st.notifOpen}
         onNotifOpen={(o) => { if (o) setAccountOpen(false); set({ notifOpen: o }); }}
         onOpenNotif={openNotif}
+        onReadAll={readAllNotifs}
         timeAgo={getTimeAgo}
         account={user && (
           <AccountMenu
