@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useApi, useAuthContext } from '@/components/AuthContext';
+import { supabase } from '@/lib/dbauth';
 import type { ViewerRole } from '@/lib/state';
 import type { Flash } from './useToast';
 
@@ -18,10 +19,17 @@ export function useViewer(flash: Flash, forced?: ViewerRole) {
     if (!user?.id) return setMe(null);
     const res = await api('/user/current/fetch').catch(() => null);
     if (isCancelled()) return;
+    if (res?.status === 401) {
+      // The session was ended elsewhere (signing out revokes every session), but this tab still
+      // holds its token: sign out here too instead of staying half signed in.
+      await supabase.auth.signOut({ scope: 'local' });
+      flash('เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง');
+      return setMe(null);
+    }
     if (!res?.ok) { console.warn('load viewer', res?.status); return setMe(null); }
     const data = await res.json();
     setMe({ display_name: data.display_name, is_mod: !!data.is_mod });
-  }, [user?.id, api]);
+  }, [user?.id, api, flash]);
 
   useEffect(() => {
     let cancelled = false;

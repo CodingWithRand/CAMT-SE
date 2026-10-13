@@ -2,10 +2,10 @@
 
 import type { ToastState } from '@/hooks/useToast';
 
-export function Toast({ toast, onAction }: { toast: ToastState | null; onAction: () => void }) {
+export function Toast({ toast, onAction, bottom = 24 }: { toast: ToastState | null; onAction: () => void; bottom?: number }) {
   if (!toast) return null;
   return (
-    <div role="status" aria-live="polite" style={{ position: 'fixed', left: 0, right: 0, bottom: 24, zIndex: 50, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+    <div role="status" aria-live="polite" style={{ position: 'fixed', left: 0, right: 0, bottom, zIndex: 50, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--color-accent-800)', color: '#fdf8f1', padding: toast.actionLabel ? '7px 8px 7px 20px' : '11px 20px', borderRadius: 999, boxShadow: 'var(--shadow-lg)', fontSize: 13, animation: 'wnm-rise .2s ease both', maxWidth: '90vw', textAlign: 'center' }}>
         <span>{toast.text}</span>
         {toast.actionLabel && (

@@ -62,6 +62,20 @@ router.put('/user/interests', auth, async (req: Request, res: Response) => {
     res.status(200).json({ category_ids: wanted });
 })
 
+/** Change the signed-in user's display name (2-50 characters). */
+router.put('/user/me', auth, async (req: Request, res: Response) => {
+    const display_name = String(req.body?.display_name ?? "").trim().replace(/\s+/g, " ");
+    if (display_name.length < 2 || display_name.length > 50) {
+        return res.status(400).json({ message: "Display name must be 2-50 characters" });
+    }
+    const { error } = await supabase.from("users").update({ display_name }).eq("id", req.userId!);
+    if (error) throw error;
+    // Keep the auth metadata in step; the users table is what the site reads.
+    const { error: authError } = await supabase.auth.admin.updateUserById(req.userId!, { user_metadata: { display_name } });
+    if (authError) console.error("update auth display_name", authError.message);
+    res.status(200).json({ display_name });
+})
+
 const EMAIL_DOMAIN = "@cmu.ac.th";
 
 /**

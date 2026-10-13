@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { BellIcon, ChevronIcon, HeartIcon, LogoutIcon, ShieldIcon } from './AuthIcons';
+import { BellIcon, ChevronIcon, HeartIcon, LogoutIcon, ShieldIcon, UserIcon } from './AuthIcons';
 
 interface Props {
   name: string;
@@ -14,12 +14,13 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onInterests: () => void;
+  onProfile: () => void;
   onNotifications: () => void;
   onSignOut: () => Promise<void>;
 }
 
 /** Avatar pill in the top bar that opens the account card (profile, shortcuts, sign out). */
-export function AccountMenu({ name, initials, email, isMod, avatar, compact, unread, open, onOpenChange, onInterests, onNotifications, onSignOut }: Props) {
+export function AccountMenu({ name, initials, email, isMod, avatar, compact, unread, open, onOpenChange, onInterests, onProfile, onNotifications, onSignOut }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -70,6 +71,10 @@ export function AccountMenu({ name, initials, email, isMod, avatar, compact, unr
           </div>
 
           <div style={{ padding: 6 }}>
+            <button role="menuitem" className="acct-item" onClick={() => { onOpenChange(false); onProfile(); }}>
+              <UserIcon />
+              <span style={{ flex: 1 }}>โปรไฟล์ของฉัน</span>
+            </button>
             <button role="menuitem" className="acct-item" onClick={() => { onOpenChange(false); onNotifications(); }}>
               <BellIcon />
               <span style={{ flex: 1 }}>การแจ้งเตือน</span>

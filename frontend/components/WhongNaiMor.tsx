@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { QA, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
 import { toPost } from '@/lib/mappers';
-import { INITIAL, findPostIn, mapAllPosts, type AppState, type Notif, type SetState, type ViewerRole } from '@/lib/state';
+import { INITIAL, findPostIn, mapAllPosts, postLists, type AppState, type Notif, type SetState, type ViewerRole } from '@/lib/state';
 import { ACCENT_MAP, avatarStyle } from '@/lib/ui';
 import { useFeedData } from '@/hooks/useFeedData';
 import { useLiveUpdates } from '@/hooks/useLiveUpdates';
@@ -13,17 +13,21 @@ import { useUndoableWrites } from '@/hooks/useUndoableWrites';
 import { useViewer } from '@/hooks/useViewer';
 import { useApi, useAuthContext } from './AuthContext';
 import { AccountMenu } from './AccountMenu';
+import { BottomNav } from './BottomNav';
 import { CategoryManager } from './CategoryManager';
 import { ComposeDialog } from './ComposeDialog';
 import { EditDialog } from './EditDialog';
 import { Feed } from './Feed';
+import { ImageViewer } from './ImageViewer';
 import { InterestsDialog } from './InterestsDialog';
 import { LoginDialog } from './LoginDialog';
 import { ModerationCenter } from './ModerationCenter';
+import { ModerationHistory } from './ModerationHistory';
 import { ModerationView } from './ModerationView';
 import PostCard from './PostCard';
 import { DeleteDialog, HideDialog } from './PostActionDialogs';
 import PostModal from './PostModal';
+import { ProfileView } from './ProfileView';
 import { ReportDialog } from './ReportDialog';
 import { RightRail } from './RightRail';
 import { RoleManager } from './RoleManager';
@@ -66,11 +70,19 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   const { user, isGuest, isMod } = viewer;
   const [accountOpen, setAccountOpen] = useState(false);
   const [rolesRev, setRolesRev] = useState(0);
+  const [liveRev, setLiveRev] = useState(0);   // bumps on live post/report changes, for lists that load themselves
 
   // A refresh during the undo window must not bring back a post that is about to be deleted or hidden.
   const hiddenLocally = useCallback((id: string) => isPending(`delete:${id}`) || isPending(`hide:${id}`), [isPending]);
   const data = useFeedData(set, { signedIn: !!user, isMod, hiddenLocally });
-  const { loadPosts, loadAnnouncements, loadComments, refreshReports } = data;
+  const { loadPosts, loadAnnouncements, loadComments, refreshReports, loadMine, search } = data;
+  const searchMode = !!st.q.trim();
+
+  // Search the server once typing pauses.
+  useEffect(() => {
+    const t = setTimeout(() => search(st.q), 300);
+    return () => clearTimeout(t);
+  }, [st.q, search]);
 
   // A guest trying to write gets the login window instead of a dead end.
   const gate = () => set({ login: 'login', notifOpen: false });
@@ -112,9 +124,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   // Every loaded post: the feed, the announcement rail and posts opened from a link or notification.
   const loadedPosts = useMemo(() => {
-    const all = [...st.posts, ...st.announce, ...st.extraPosts];
+    const all = [...st.posts, ...st.announce, ...st.extraPosts, ...(st.results ?? []), ...(st.mine ?? [])];
     return all.filter((p, i) => all.findIndex((x) => x.id === p.id) === i);
-  }, [st.posts, st.announce, st.extraPosts]);
+  }, [st.posts, st.announce, st.extraPosts, st.results, st.mine]);
 
   useEffect(() => { loadComments(loadedPosts); }, [loadedPosts, loadComments]);
 
@@ -273,8 +285,9 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   /** Hide a post (moderators): it leaves the feed, its open reports close as Reviewed, reporters and author are told. */
   const hidePost = async (id: string, reason: string) => {
-    const snapshot = { posts: st.posts, announce: st.announce, extraPosts: st.extraPosts, modReports: st.modReports, reportStatus: st.reportStatus };
+    const snapshot = { ...postLists(st), modReports: st.modReports, reportStatus: st.reportStatus };
     const drop = (list: Post[]) => list.filter((p) => p.id !== id);
+    const flag = (list: Post[]) => list.map((p) => (p.id === id ? { ...p, hidden: { reason: reason || null } } : p));
     defer(`hide:${id}`, {
       message: 'ซ่อนโพสต์แล้ว · ผู้รายงานและเจ้าของโพสต์จะได้รับแจ้ง',
       apply: () => set((prev) => ({
@@ -282,7 +295,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
         activeId: prev.activeId === id ? null : prev.activeId,
         posts: drop(prev.posts),
         announce: drop(prev.announce),
-        extraPosts: prev.extraPosts.map((p) => (p.id === id ? { ...p, hidden: { reason: reason || null } } : p)),
+        results: prev.results && drop(prev.results),
+        // Still listed where the author or a moderator looks at it, now marked hidden.
+        extraPosts: flag(prev.extraPosts),
+        mine: prev.mine && flag(prev.mine),
         // The API closes open reports as Reviewed; show that already.
         modReports: prev.modReports.map((r) => (r.post_id === id ? { ...r, hidden: true, hiddenReason: reason, status: r.status === 'Open' ? 'Reviewed' : r.status } : r)),
         reportStatus: prev.reportStatus[id] === 'Open' ? { ...prev.reportStatus, [id]: 'Reviewed' } : prev.reportStatus,
@@ -296,7 +312,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   /** Delete a post for good: the author's own, or any post for a moderator. */
   const deletePost = async (id: string) => {
-    const snapshot = { posts: st.posts, announce: st.announce, extraPosts: st.extraPosts };
+    const snapshot = postLists(st);
     defer(`delete:${id}`, {
       message: 'ลบโพสต์แล้ว',
       apply: () => set((prev) => ({
@@ -335,14 +351,21 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   };
 
   const openReports = st.modReports.filter((r) => r.status === 'Open').length;
-  useEffect(() => { if (!isMod && st.view === 'moderation') set({ view: 'home' }); }, [isMod, st.view, set]);
+  useEffect(() => {
+    if ((!isMod && st.view === 'moderation') || (isGuest && st.view === 'profile')) set({ view: 'home' });
+  }, [isMod, isGuest, st.view, set]);
+  useEffect(() => { if (st.view === 'profile') loadMine(); }, [st.view, loadMine]);
 
   /* ── Live updates ── */
 
   useLiveUpdates({
-    posts: () => { loadPosts(); loadAnnouncements(); },
+    posts: () => {
+      loadPosts(); loadAnnouncements(); setLiveRev((v) => v + 1);
+      if (searchMode) search(st.q, true);   // refresh in place
+      if (st.mine) loadMine();
+    },
     comments: (postId) => loadComments(postId ? [{ id: postId }] : loadedPosts),
-    reports: () => { refreshReports(); },
+    reports: () => { refreshReports(); setLiveRev((v) => v + 1); },
     notifications: () => { data.loadNotifs(); },
     categories: () => { data.loadCats(); },
     roles: () => { viewer.reload(); setRolesRev((v) => v + 1); },
@@ -360,7 +383,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   useEffect(() => {
     const onResize = () => set({ w: window.innerWidth });
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') set({ activeId: null, replyTo: null }); };
+    // Escape closes the image viewer first, then the post window under it.
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') set((prev) => (prev.lightbox ? { lightbox: null } : { activeId: null, replyTo: null }));
+    };
     onResize();
     window.addEventListener('resize', onResize);
     window.addEventListener('keydown', onKey);
@@ -370,7 +396,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     };
   }, [set]);
 
-  const locked = !!(st.activeId || st.composeOpen || st.editFor || st.hideFor || st.deleteFor || st.reportFor || st.login || st.interestsOpen);
+  const locked = !!(st.activeId || st.composeOpen || st.editFor || st.hideFor || st.deleteFor || st.reportFor || st.login || st.interestsOpen || st.lightbox);
   useEffect(() => {
     document.body.classList.toggle('wnm-locked', locked);
     document.documentElement.style.overflow = locked ? 'hidden' : '';
@@ -383,9 +409,10 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
   /* ── What to show ── */
 
   // Announcements first, then everything else, filtered by view, category and search.
+  // While searching, the server's results take the place of the feed (and the search term is not re-checked here).
   const feed = useMemo(() => {
-    const needle = st.q.trim().toLowerCase();
-    return st.posts.filter((p) => {
+    const needle = searchMode ? '' : st.q.trim().toLowerCase();
+    return (searchMode ? st.results ?? [] : st.posts).filter((p) => {
       const cats = p.cats || [];
       if (st.view === 'announce' && !p.important) return false;
       if (st.view === 'interests' && !cats.some((c) => st.interests.includes(c))) return false;
@@ -394,7 +421,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       if (needle && !`${p.title} ${p.body} ${p.name} ${cats.join(' ')}`.toLowerCase().includes(needle)) return false;
       return true;
     }).sort((a, b) => (b.important ? 1 : 0) - (a.important ? 1 : 0));
-  }, [st.posts, st.view, st.interests, st.cat, st.q]);
+  }, [st.posts, st.results, searchMode, st.view, st.interests, st.cat, st.q]);
 
   const cardProps = (p: Post) => ({
     cats: st.cats,
@@ -414,6 +441,11 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       if (st.myReports[p.id] && st.reportStatus[p.id] === 'Open') return flash('คุณรายงานโพสต์นี้แล้ว · รอผู้ดูแลตรวจสอบ');
       set({ reportFor: p.id, reason: null });
     },
+    onImage: (index: number) => {
+      const images = (p.media ?? []).filter((m) => m.url && m.type === 'image').map((m) => m.url!);
+      set({ lightbox: { images, index, alt: p.title } });
+    },
+    highlight: searchMode ? st.q : undefined,
   });
 
   const meInitials = isGuest ? 'G' : viewer.name.slice(0, 2);
@@ -429,10 +461,11 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   const active = findPost(st.activeId);
   const wide = st.w >= 880;
+  const phone = st.w < 640;
   const shellCols = st.w >= 1060 ? '212px minmax(0,1fr) 292px' : wide ? '176px minmax(0,1fr) 224px' : 'minmax(0,1fr)';
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--color-bg)', paddingBottom: 60 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-bg)', paddingBottom: phone ? 96 : 60 }}>
       <TopBar
         w={st.w}
         query={st.q}
@@ -461,6 +494,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
             onOpenChange={(o) => { setAccountOpen(o); if (o) set({ notifOpen: false }); }}
             onNotifications={() => set({ notifOpen: true })}
             onInterests={() => set({ interestsOpen: 'edit' })}
+            onProfile={() => set({ view: 'profile', activeId: null, notifOpen: false })}
             onSignOut={async () => {
               await signOut();
               setAccountOpen(false);
@@ -473,6 +507,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       <div style={{ maxWidth: 1220, margin: '0 auto', padding: 'clamp(14px,2vw,22px) clamp(12px,2.5vw,26px)', display: 'grid', gap: 'clamp(12px,1.6vw,20px)', gridTemplateColumns: shellCols, alignItems: 'start' }}>
         <Sidebar
           wide={wide}
+          showViews={!phone}
           view={st.view}
           isMod={isMod}
           openReports={openReports}
@@ -511,14 +546,37 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
                 onChanged={data.loadCats}
               />
             )}
+            history={<ModerationHistory revision={liveRev} onOpenPost={openPost} />}
             roles={<RoleManager flash={flash} myId={user?.id ?? null} revision={rolesRev} />}
           />
         ) : (<>
+          {st.view === 'profile' && user ? (
+            <ProfileView
+              name={viewer.name}
+              email={user.email ?? ''}
+              isMod={isMod}
+              avatar={meAvatar}
+              initials={meInitials}
+              posts={st.mine}
+              cats={st.cats}
+              interests={st.interests}
+              revision={liveRev}
+              renderPost={(p) => <PostCard key={p.id} {...cardProps(p)} />}
+              flash={flash}
+              onRenamed={() => { viewer.reload(); loadPosts(); loadAnnouncements(); loadMine(); loadComments(loadedPosts); }}
+              onOpenPost={openPost}
+              onEditInterests={() => set({ interestsOpen: 'edit' })}
+            />
+          ) : (
           <Feed
             view={st.view}
             posts={feed}
-            status={data.feedStatus}
+            status={searchMode ? (st.results === null ? 'loading' : 'ready') : data.feedStatus}
             query={st.q}
+            searchMode={searchMode}
+            hasMore={data.hasMore}
+            loadingMore={data.loadingMore}
+            onLoadMore={data.loadMore}
             twoLanes={laneMode === 'two'}
             isGuest={isGuest}
             showInterestsNudge={!isGuest && data.interestsLoaded && st.interests.length === 0}
@@ -528,6 +586,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
             onPickInterests={() => set({ interestsOpen: 'edit' })}
             onRetry={data.retryFeed}
           />
+          )}
           <RightRail
             wide={wide}
             announce={st.announce}
@@ -594,7 +653,27 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
       {st.reportFor && <ReportDialog st={st} set={set} flash={flash} onSubmit={submitReport} />}
       {st.login && <LoginDialog initialMode={st.login} onClose={closeLogin} onDone={onLoginDone} />}
 
-      <Toast toast={toast} onAction={runAction} />
+      {st.lightbox && (
+        <ImageViewer
+          {...st.lightbox}
+          onIndex={(index) => set((prev) => ({ lightbox: prev.lightbox && { ...prev.lightbox, index } }))}
+          onClose={() => set({ lightbox: null })}
+        />
+      )}
+
+      {phone && (
+        <BottomNav
+          view={st.view}
+          notifOpen={st.notifOpen}
+          unread={unreadNotifs}
+          onView={(view) => { set({ view, activeId: null, replyTo: null, notifOpen: false }); window.scrollTo({ top: 0 }); }}
+          onCompose={openCompose}
+          onNotifications={() => { setAccountOpen(false); set({ notifOpen: true }); }}
+          onMe={() => (user ? set({ view: 'profile', activeId: null, notifOpen: false }) : gate())}
+        />
+      )}
+
+      <Toast toast={toast} onAction={runAction} bottom={phone ? 92 : 24} />
     </div>
   );
 }

@@ -30,6 +30,7 @@ const LIVE_TOPICS: [RegExp, LiveTopic[]][] = [
     [/^\/report\//, ["reports", "notifications"]],           // closing a report notifies the reporters
     [/^\/admin\/categories/, ["categories", "posts"]],       // a renamed category shows on posts
     [/^\/admin\/users/, ["roles"]],                          // the user whose role changed updates at once
+    [/^\/user\/me$/, ["posts", "comments", "roles"]],        // a new display name shows on posts and comments
 ];
 
 /** After every successful write, broadcast the topics it touched. */

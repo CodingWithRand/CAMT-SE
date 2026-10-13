@@ -6,6 +6,18 @@ import type { SetState } from '@/lib/state';
 
 export type FeedStatus = 'loading' | 'ready' | 'error';
 
+const PAGE = 10;
+const REFRESH_MAX = 100;   // the API's page cap
+const COMMENT_BATCH = 100;   // post ids per /comment/fetch-many request (the API allows 200)
+
+// Page cursors are "<created_at>|<id>" (see GET /post/fetch); only the time matters here.
+const cursorTime = (cursor: string) => new Date(cursor.split('|')[0]).getTime();
+/** Whether `p` sorts at or before the cursor (newest first, id breaking ties), i.e. inside the refreshed range. */
+const newerThan = (p: Post, cursor: string) => {
+  const t = new Date(p.at ?? 0).getTime(), c = cursorTime(cursor);
+  return t > c || (t === c && p.id >= cursor.split('|')[1]);
+};
+
 /**
  * Everything the page reads from the API, written into page state.
  * Each loader is safe to call again at any time (live updates, polling, after a write).
@@ -16,6 +28,10 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
   const { signedIn, isMod, hiddenLocally } = opts;
   const [feedStatus, setFeedStatus] = useState<FeedStatus>('loading');
   const [interestsLoaded, setInterestsLoaded] = useState(false);
+  const [nextBefore, setNextBefore] = useState<string | null>(null);   // cursor of the next feed page; null = no more
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const pages = useRef(1);   // feed pages loaded so far, so a refresh re-reads all of them
 
   // Raw payloads last applied: a refresh that brings the same data skips the update,
   // so live refreshes don't re-render the feed or re-fetch every comment thread.
@@ -26,24 +42,81 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
     if (res?.ok) set({ cats: toCategories(await res.json()) });
   }, [api, set]);
 
+  /** Merge a page of API rows into the feed; my_reaction comes along so the viewer's reaction survives a reload. */
+  const takeRows = useCallback((rows: any[]) => {
+    const likes: Record<string, ReactionType> = {};
+    rows.forEach((p) => { if (p.my_reaction) likes[p.id] = p.my_reaction; });
+    return { posts: rows.filter((p) => !hiddenLocally(p.id)).map(toPost), likes };
+  }, [hiddenLocally]);
+
+  /**
+   * (Re)load the feed from the top, as many pages as are already on screen. Older posts
+   * loaded beyond that range stay, so a live refresh never shortens a long scroll.
+   */
   const loadPosts = useCallback(async () => {
     try {
-      const rows = await (await api('/post/fetch')).json();
-      if (!Array.isArray(rows)) throw new Error(rows?.message ?? 'bad /post/fetch payload');
+      const limit = Math.min(PAGE * pages.current, REFRESH_MAX);
+      const body = await (await api(`/post/fetch?limit=${limit}`)).json();
+      if (!Array.isArray(body?.posts)) throw new Error(body?.message ?? 'bad /post/fetch payload');
       setFeedStatus('ready');
-      const sig = JSON.stringify(rows);
+      const sig = JSON.stringify(body);
       if (sig === lastPayload.current.posts) return;
       lastPayload.current.posts = sig;
-      // my_reaction comes from the API, so the viewer's reaction survives a reload.
-      const likes: Record<string, ReactionType> = {};
-      rows.forEach((p: any) => { if (p.my_reaction) likes[p.id] = p.my_reaction; });
-      set({ posts: rows.filter((p: any) => !hiddenLocally(p.id)).map(toPost), likes });
+      const page = takeRows(body.posts);
+      const cursor: string | null = body.next_before;
+      set((prev) => ({
+        posts: cursor ? [...page.posts, ...prev.posts.filter((p) => !newerThan(p, cursor) && !page.posts.some((x) => x.id === p.id))] : page.posts,
+        likes: { ...prev.likes, ...page.likes },
+      }));
+      // Only move the cursor when the refresh reached past it (first load, or nothing older was loaded).
+      setNextBefore((old) => (old === null || !cursor || cursorTime(cursor) <= cursorTime(old) ? cursor : old));
     } catch (err) {
       console.error('loadPosts', err);
       // Keep what is on screen if a later refresh fails; only an empty feed shows the error.
       setFeedStatus((s) => (s === 'ready' ? s : 'error'));
     }
-  }, [api, set, hiddenLocally]);
+  }, [api, set, takeRows]);
+
+  /** The next (older) page, when scrolling reaches the end of the feed. */
+  const loadMore = useCallback(async () => {
+    if (!nextBefore || loadingMore) return;
+    setLoadingMore(true);
+    const res = await api(`/post/fetch?limit=${PAGE}&before=${encodeURIComponent(nextBefore)}`).catch(() => null);
+    setLoadingMore(false);
+    if (!res?.ok) return;
+    const body = await res.json();
+    const page = takeRows(body.posts ?? []);
+    pages.current += 1;
+    set((prev) => ({
+      posts: [...prev.posts, ...page.posts.filter((p) => !prev.posts.some((x) => x.id === p.id))],
+      likes: { ...prev.likes, ...page.likes },
+    }));
+    setNextBefore(body.next_before ?? null);
+  }, [api, set, takeRows, nextBefore, loadingMore]);
+
+  /** Search every post on the server; an empty query leaves search mode. */
+  const searchSeq = useRef(0);   // only the newest search may write its results
+  const search = useCallback(async (q: string, keepShown = false) => {
+    const seq = ++searchSeq.current;
+    if (!q.trim()) { setSearching(false); return set({ results: null }); }
+    setSearching(true);
+    if (!keepShown) set({ results: null });   // a new term shows the loading cards, not the last term's results
+    const res = await api(`/post/search?q=${encodeURIComponent(q.trim())}`).catch(() => null);
+    const rows = res?.ok ? await res.json() : [];
+    if (seq !== searchSeq.current) return;
+    setSearching(false);
+    const page = takeRows(rows);
+    set((prev) => ({ results: page.posts, likes: { ...prev.likes, ...page.likes } }));
+  }, [api, set, takeRows]);
+
+  /** The viewer's own posts, hidden ones included, for the profile page. */
+  const loadMine = useCallback(async () => {
+    if (!signedIn) return set({ mine: null });
+    const res = await api('/post/mine').catch(() => null);
+    if (!res?.ok) return;
+    const page = takeRows(await res.json());
+    set((prev) => ({ mine: page.posts, likes: { ...prev.likes, ...page.likes } }));
+  }, [api, set, takeRows, signedIn]);
 
   // Announcements load separately from the feed, so they show even when not in the feed.
   const loadAnnouncements = useCallback(async () => {
@@ -59,11 +132,13 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
   /** Load the comment threads of `posts` in one request; threads of other posts are kept. */
   const loadComments = useCallback(async (posts: Pick<Post, 'id'>[]) => {
     const ids = [...new Set(posts.map((p) => p.id))];
-    if (!ids.length) return;
-    const res = await api(`/comment/fetch-many?pids=${ids.join(',')}`).catch(() => null);
-    if (!res?.ok) return;
-    const { threads, mine } = buildThreads(await res.json(), ids);
-    set((prev) => ({ comments: { ...prev.comments, ...threads }, cLikes: { ...prev.cLikes, ...mine } }));
+    for (let i = 0; i < ids.length; i += COMMENT_BATCH) {
+      const batch = ids.slice(i, i + COMMENT_BATCH);
+      const res = await api(`/comment/fetch-many?pids=${batch.join(',')}`).catch(() => null);
+      if (!res?.ok) continue;
+      const { threads, mine } = buildThreads(await res.json(), batch);
+      set((prev) => ({ comments: { ...prev.comments, ...threads }, cLikes: { ...prev.cLikes, ...mine } }));
+    }
   }, [api, set]);
 
   const loadNotifs = useCallback(async () => {
@@ -121,10 +196,13 @@ export function useFeedData(set: SetState, opts: { signedIn: boolean; isMod: boo
   useEffect(() => { loadReportStatus(); }, [loadReportStatus]);
   useEffect(() => { loadModReports(); }, [loadModReports]);
 
+  useEffect(() => { if (!signedIn) set({ mine: null }); }, [signedIn, set]);
+
   const retryFeed = useCallback(() => { setFeedStatus('loading'); loadPosts(); loadAnnouncements(); }, [loadPosts, loadAnnouncements]);
 
   return {
     feedStatus, retryFeed, interestsLoaded,
+    hasMore: nextBefore !== null, loadingMore, loadMore, searching, search, loadMine,
     loadCats, loadPosts, loadAnnouncements, loadComments, loadNotifs, loadInterests, refreshReports,
   };
 }

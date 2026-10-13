@@ -12,8 +12,9 @@ const viewButton = (on: boolean): CSSProperties => ({
 });
 
 /** Left column: the views, the moderation entry, and the category filter. A row of chips on narrow screens. */
-export function Sidebar({ wide, view, isMod, openReports, cats, cat, interests, onView, onCat, onToggleInterest }: {
+export function Sidebar({ wide, showViews, view, isMod, openReports, cats, cat, interests, onView, onCat, onToggleInterest }: {
   wide: boolean;
+  showViews: boolean;   // off on phones, where the bottom bar has them
   view: View;
   isMod: boolean;
   openReports: number;
@@ -26,8 +27,8 @@ export function Sidebar({ wide, view, isMod, openReports, cats, cat, interests, 
 }) {
   return (
     <aside style={{ display: 'flex', gap: wide ? 14 : 8, flexDirection: wide ? 'column' : 'row', flexWrap: 'wrap', position: wide ? 'sticky' : 'static', top: 84, minWidth: 0 }}>
-      <nav style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: wide ? 16 : 999, padding: wide ? 8 : '5px 6px', display: 'flex', flexDirection: wide ? 'column' : 'row', gap: wide ? 2 : 4, flex: 'none', maxWidth: '100%', overflowX: wide ? 'visible' : 'auto' }}>
-        {VIEWS.map(([k, l]) => (
+      {(showViews || isMod) && <nav style={{ background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: wide ? 16 : 999, padding: wide ? 8 : '5px 6px', display: 'flex', flexDirection: wide ? 'column' : 'row', gap: wide ? 2 : 4, flex: 'none', maxWidth: '100%', overflowX: wide ? 'visible' : 'auto' }}>
+        {showViews && VIEWS.map(([k, l]) => (
           <button key={k} className="hov-bg" onClick={() => onView(k)} style={viewButton(view === k)}>{l}</button>
         ))}
         {isMod && (
@@ -39,7 +40,7 @@ export function Sidebar({ wide, view, isMod, openReports, cats, cat, interests, 
             )}
           </button>
         )}
-      </nav>
+      </nav>}
 
       <div style={wide
         ? { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 16, padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 3 }

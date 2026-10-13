@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { Post } from "../model";
 import supabase from "../db";
 import path from "path";
-import { auth, isModerator, optionalAuth, requireMod, uuidParam } from "../middleware";
+import { auth, isModerator, optionalAuth, requireMod, uuidParam, UUID } from "../middleware";
 import { HIDDEN_POST_MESSAGE, hiddenPosts, isHidden, withoutHidden } from "../hidden";
 import { POST_TARGET, myReactions } from "../reactions";
 import { MESSAGES, notify, untitled } from "../notify";
@@ -132,6 +132,10 @@ router.post("/post/create",
  * It cannot live in the view: the API connects with the service_role key, so
  * auth.uid() inside a view is always NULL and only this layer knows the caller.
  */
+/** Everything the page needs on top of the view's row: ownership, edit label, the viewer's reaction. */
+const decorate = async <T extends { id: string }>(rows: T[], viewerId?: string) =>
+    withMyReaction(await withOwnership(rows, viewerId), viewerId);
+
 async function withMyReaction(posts: any[], userId?: string) {
     if (!userId || !posts?.length) {
         return (posts ?? []).map((p) => ({ ...p, my_reaction: null }));
@@ -140,14 +144,63 @@ async function withMyReaction(posts: any[], userId?: string) {
     return posts.map((p) => ({ ...p, my_reaction: mine[p.id] ?? null }));
 }
 
+const PAGE_MAX = 100;
+
+/**
+ * The feed, newest first. Without `limit` every post comes back as an array (older callers).
+ * With `limit` (and `before`, the `next_before` of the previous page) it answers
+ * { posts, next_before } — next_before is null on the last page. Hidden posts are dropped
+ * after the page is cut, so a page can be shorter than `limit` and still not be the last.
+ * The cursor is "<created_at>|<id>": posts can share a timestamp, so the id breaks ties.
+ */
 router.get("/post/fetch", optionalAuth, async (req: Request, res: Response) => {
-    const { data: normalpost, error: error2 } = await supabase
-        .from('v_post_all_data')
+    const limit = Number(req.query.limit);
+    const paged = Number.isInteger(limit) && limit > 0;
+    let query = supabase.from("v_post_all_data").select("*")
+        .order("created_at", { ascending: false }).order("id", { ascending: false });
+    if (paged) {
+        query = query.limit(Math.min(limit, PAGE_MAX) + 1);
+        const [at, id] = String(req.query.before ?? "").split("|");
+        if (at && UUID.test(id ?? "") && !Number.isNaN(Date.parse(at))) {
+            query = query.or(`created_at.lt."${at}",and(created_at.eq."${at}",id.lt.${id})`);
+        }
+    }
+    const { data, error } = await query;
+    if (error) throw error;
+
+    const rows = data ?? [];
+    const more = paged && rows.length > Math.min(limit, PAGE_MAX);
+    const page = more ? rows.slice(0, -1) : rows;
+    const posts = await decorate(withoutHidden(page, await hiddenPosts(), req.userId), req.userId);
+    if (!paged) return res.status(200).json(posts);
+    const last = page[page.length - 1];
+    res.status(200).json({ posts, next_before: more ? `${last.created_at}|${last.id}` : null });
+})
+
+/** Search title, text and author name across every post (not just the ones the page has loaded). */
+router.get("/post/search", optionalAuth, async (req: Request, res: Response) => {
+    // PostgREST's or() filter treats , ( ) as syntax and % * as wildcards; drop them from the term.
+    const q = String(req.query.q ?? "").replace(/[,()%*\\]/g, " ").trim().slice(0, 60);
+    if (!q) return res.status(200).json([]);
+    const { data, error } = await supabase
+        .from("v_post_all_data")
         .select("*")
-        .order('created_at', { ascending: false })
-    if (error2) throw error2;
-    const visible = withoutHidden(normalpost ?? [], await hiddenPosts(), req.userId);
-    res.status(200).json(await withMyReaction(await withOwnership(visible, req.userId), req.userId));
+        .or(`title.ilike.%${q}%,content.ilike.%${q}%,author_name.ilike.%${q}%`)
+        .order("created_at", { ascending: false })
+        .limit(PAGE_MAX);
+    if (error) throw error;
+    res.status(200).json(await decorate(withoutHidden(data ?? [], await hiddenPosts(), req.userId), req.userId));
+})
+
+/** The signed-in user's own posts, hidden ones included (flagged), for the profile page. */
+router.get("/post/mine", auth, async (req: Request, res: Response) => {
+    const { data: own, error } = await supabase.from("posts").select("id").eq("user_id", req.userId!);
+    if (error) throw error;
+    const ids = (own ?? []).map((p) => p.id);
+    if (!ids.length) return res.status(200).json([]);
+    const { data, error: e2 } = await supabase.from("v_post_all_data").select("*").in("id", ids).order("created_at", { ascending: false });
+    if (e2) throw e2;
+    res.status(200).json(await decorate(withoutHidden(data ?? [], await hiddenPosts(), req.userId), req.userId));
 })
 
 router.get("/post/fetch/categories", auth, async (req: Request, res: Response) => {
@@ -170,7 +223,7 @@ router.get("/post/fetch/announcement", optionalAuth, async (req: Request, res: R
     if (error1) throw error1;
     const hidden = await hiddenPosts();
     const visible = (announcement ?? []).filter((p) => !hidden.has(p.id));
-    res.status(200).json(await withMyReaction(await withOwnership(visible, req.userId), req.userId));
+    res.status(200).json(await decorate(visible, req.userId));
 })
 
 router.get("/post/:pid/fetch", optionalAuth, async (req: Request, res: Response) => {

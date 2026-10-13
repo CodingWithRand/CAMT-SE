@@ -62,6 +62,53 @@ router.get("/report/fetch", auth, requireMod, async (req: Request, res: Response
     res.status(200).json((data ?? []).map((r) => ({ ...r, post_hidden: hidden.has(r.post_id) })));
 });
 
+/** The signed-in user's own reports with their status, for the profile page. */
+router.get("/report/mine", auth, async (req: Request, res: Response) => {
+    const { data, error } = await supabase
+        .from("reports")
+        .select("id, post_id, reason, status, created_at, reviewed_at, post:posts(title)")
+        .eq("user_id", req.userId!)
+        .order("created_at", { ascending: false });
+    if (error) throw error;
+    res.status(200).json((data ?? []).map(({ post, ...r }: any) => ({ ...r, title: post?.title ?? null, post_deleted: !post })));
+});
+
+/**
+ * Moderation history, newest first: report decisions (one entry per post and decision,
+ * since a decision updates every ticket of the post at once) and hidden posts.
+ * Only the latest decision per ticket is stored, so reopening a report replaces its entry.
+ */
+router.get("/report/history", auth, requireMod, async (_req: Request, res: Response) => {
+    const [reports, hidden] = await Promise.all([
+        supabase.from("reports").select("post_id, status, reviewed_by, reviewed_at, post:posts(title)")
+            .not("reviewed_by", "is", null).neq("status", "Open"),
+        supabase.from("posts").select("id, title, hidden_by, hidden_at, hidden_reason").eq("is_hidden", true).not("hidden_by", "is", null),
+    ]);
+    if (reports.error) throw reports.error;
+    if (hidden.error) throw hidden.error;
+
+    const decisions = new Map<string, any>();
+    for (const r of (reports.data ?? []) as any[]) {
+        const key = `${r.post_id}|${r.status}|${r.reviewed_by}|${r.reviewed_at}`;
+        const d = decisions.get(key);
+        if (d) { d.tickets++; continue; }
+        decisions.set(key, { kind: r.status, post_id: r.post_id, title: r.post?.title ?? null, by: r.reviewed_by, at: r.reviewed_at, tickets: 1 });
+    }
+    const entries = [
+        ...decisions.values(),
+        ...(hidden.data ?? []).map((p) => ({ kind: "Hidden", post_id: p.id, title: p.title, by: p.hidden_by, at: p.hidden_at, reason: p.hidden_reason })),
+    ].sort((a, b) => String(b.at).localeCompare(String(a.at))).slice(0, 200);
+
+    // Moderator names in one query.
+    const ids = [...new Set(entries.map((e) => e.by))];
+    const { data: users, error } = ids.length
+        ? await supabase.from("users").select("id, display_name").in("id", ids)
+        : { data: [], error: null };
+    if (error) throw error;
+    const name = new Map((users ?? []).map((u) => [u.id, u.display_name]));
+    res.status(200).json(entries.map((e) => ({ ...e, by_name: name.get(e.by) ?? "ไม่ทราบชื่อ" })));
+});
+
 router.post("/report/createticket", auth, async (req: Request, res: Response) => {
     const post_id = String(req.body?.post_id ?? "");
     const reason = String(req.body?.reason ?? "").trim();

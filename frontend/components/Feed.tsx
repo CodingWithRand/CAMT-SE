@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import type { Post } from '@/lib/data';
 import type { View } from '@/lib/state';
 import type { FeedStatus } from '@/hooks/useFeedData';
@@ -11,11 +11,14 @@ const HEADINGS: Partial<Record<View, [string, string]>> = {
 };
 
 /** Center column: prompts above the feed, the posts, and the loading / error / empty states. */
-export function Feed({ view, posts, status, query, twoLanes, isGuest, showInterestsNudge, me, renderPost, onCompose, onPickInterests, onRetry }: {
+export function Feed({ view, posts, status, query, searchMode, hasMore, loadingMore, twoLanes, isGuest, showInterestsNudge, me, renderPost, onCompose, onPickInterests, onRetry, onLoadMore }: {
   view: View;
   posts: Post[];
   status: FeedStatus;
   query: string;
+  searchMode: boolean;   // showing server search results for `query`
+  hasMore: boolean;
+  loadingMore: boolean;
   twoLanes: boolean;
   isGuest: boolean;
   showInterestsNudge: boolean;
@@ -24,9 +27,26 @@ export function Feed({ view, posts, status, query, twoLanes, isGuest, showIntere
   onCompose: () => void;
   onPickInterests: () => void;
   onRetry: () => void;
+  onLoadMore: () => void;
 }) {
-  const [title, subtitle] = HEADINGS[view] ?? ['ฟีดรวม', 'ประกาศขึ้นก่อน แล้วตามด้วยโพสต์ทั่วไป'];
   const q = query.trim();
+  const [title, subtitle] = searchMode
+    ? ['ผลการค้นหา', `"${q}" จากทุกโพสต์ในชุมชน`]
+    : HEADINGS[view] ?? ['ฟีดรวม', 'ประกาศขึ้นก่อน แล้วตามด้วยโพสต์ทั่วไป'];
+
+  // Infinite scroll: load the next page when the end of the list comes near. Observing again
+  // after every page means a short (filtered) list keeps loading while the end stays in view.
+  const end = useRef<HTMLDivElement>(null);
+  const more = useRef(onLoadMore);
+  more.current = onLoadMore;
+  const canLoad = hasMore && !searchMode && status === 'ready';
+  useEffect(() => {
+    const el = end.current;
+    if (!el || !canLoad || loadingMore) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) more.current(); }, { rootMargin: '600px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [canLoad, loadingMore, posts.length]);
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
@@ -90,7 +110,14 @@ export function Feed({ view, posts, status, query, twoLanes, isGuest, showIntere
           <button className="btn btn-primary" onClick={onRetry} style={{ fontFamily: 'var(--font-body)', fontSize: 13 }}>ลองใหม่</button>
         </div>
       )}
-      {posts.length === 0 && status === 'ready' && (
+      <div ref={end} aria-hidden={!loadingMore} style={{ minHeight: 1 }}>
+        {loadingMore && <p style={{ margin: 0, padding: '14px 0', textAlign: 'center', fontSize: 12.5, color: 'var(--color-neutral-600)' }}>กำลังโหลดโพสต์เพิ่ม…</p>}
+        {!searchMode && !hasMore && status === 'ready' && posts.length > 0 && (
+          <p style={{ margin: 0, padding: '14px 0', textAlign: 'center', fontSize: 12, color: 'var(--color-neutral-600)' }}>ดูครบทุกโพสต์แล้ว</p>
+        )}
+      </div>
+
+      {posts.length === 0 && status === 'ready' && (searchMode || !hasMore) && (
         <p style={{ fontSize: 13, color: 'var(--color-neutral-600)', padding: '26px 4px', margin: 0, textAlign: 'center' }}>
           {q ? `ไม่พบโพสต์ที่ตรงกับ "${q}"` : 'ไม่มีโพสต์ที่ตรงกับตัวกรองนี้'}
         </p>

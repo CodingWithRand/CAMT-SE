@@ -4,6 +4,7 @@ import type { CSSProperties } from 'react';
 import { ANNOUNCE_CAT, QA, type Category, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
 import { REPORT_LABEL, avatarStyle, fullDate, statusLook } from '@/lib/ui';
 import ReactionBar from './ReactionBar';
+import { Highlight } from './Highlight';
 
 export interface PostCardProps {
   cats: Category[];
@@ -19,6 +20,8 @@ export interface PostCardProps {
   onEdit: () => void;
   onDelete: () => void;       // shown to the author only
   onReport: () => void;
+  onImage?: (index: number) => void;   // open the full-screen viewer at this image
+  highlight?: string;                 // search term to mark in the title and text
 }
 
 
@@ -57,6 +60,8 @@ export default function PostCard(props: PostCardProps) {
   }
 
   const media = p.media || [];
+  // Position among the post's images (videos are skipped by the viewer).
+  const imageIndex = (i: number) => media.slice(0, i).filter((m) => m.url && m.type === 'image').length;
   const likes = p.likes;
 
   return (
@@ -95,12 +100,14 @@ export default function PostCard(props: PostCardProps) {
       </header>
 
       <div onClick={props.onOpen} style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 9 }}>
-        {p.title && <h4 style={{ margin: 0, fontSize: 15.5, fontWeight: 700, lineHeight: 1.35, letterSpacing: 0, textWrap: 'pretty' }}>{p.title}</h4>}
-        <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: 'var(--color-neutral-800)', textWrap: 'pretty' }}>{p.body}</p>
+        {p.title && <h4 style={{ margin: 0, fontSize: 15.5, fontWeight: 700, lineHeight: 1.35, letterSpacing: 0, textWrap: 'pretty' }}><Highlight text={p.title} query={props.highlight} /></h4>}
+        <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: 'var(--color-neutral-800)', textWrap: 'pretty' }}><Highlight text={p.body} query={props.highlight} /></p>
         {media.length > 0 && (
           <div style={{ display: 'grid', gap: 6, gridTemplateColumns: media.length > 1 ? '1fr 1fr' : '1fr' }}>
             {media.map((m, i) => m.url && m.type === 'image' ? (
-              <img key={i} src={m.url} alt={m.label || p.title} loading="lazy" style={{ width: '100%', height: media.length > 2 ? 110 : media.length > 1 ? 130 : undefined, maxHeight: media.length > 1 ? undefined : 420, objectFit: 'cover', borderRadius: 12, display: 'block', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }} />
+              <img key={i} src={m.url} alt={m.label || p.title} loading="lazy" className={props.onImage ? 'post-image' : undefined}
+                onClick={props.onImage && ((e) => { e.stopPropagation(); props.onImage!(imageIndex(i)); })}
+                style={{ width: '100%', height: media.length > 2 ? 110 : media.length > 1 ? 130 : undefined, maxHeight: media.length > 1 ? undefined : 420, objectFit: 'cover', borderRadius: 12, display: 'block', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }} />
             ) : (
               <div key={i} style={{ height: media.length > 2 ? 110 : media.length > 1 ? 130 : 150, borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: '#e5ccf3', border: '1px solid rgba(42,34,51,.07)', gridColumn: media.length === 3 && i === 0 ? 'span 2' : undefined }}>
                 <span style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: '#6c4194' }}>{m.type === 'video' ? 'video' : 'image'}</span>

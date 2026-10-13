@@ -2,14 +2,15 @@
 
 import { useState, type ReactNode } from 'react';
 
-type Section = 'reports' | 'categories' | 'roles';
-const SECTIONS: [Section, string][] = [['reports', 'รายงาน'], ['categories', 'หมวดหมู่'], ['roles', 'ผู้ใช้และสิทธิ์']];
+type Section = 'reports' | 'history' | 'categories' | 'roles';
+const SECTIONS: [Section, string][] = [['reports', 'รายงาน'], ['history', 'ประวัติ'], ['categories', 'หมวดหมู่'], ['roles', 'ผู้ใช้และสิทธิ์']];
 
-/** ศูนย์ผู้ดูแล: tabs for the report queue, categories, and moderator roles. */
-export function ModerationView({ wide, openReports, reports, categories, roles }: {
+/** ศูนย์ผู้ดูแล: tabs for the report queue, decision history, categories, and moderator roles. */
+export function ModerationView({ wide, openReports, reports, history, categories, roles }: {
   wide: boolean;
   openReports: number;
   reports: ReactNode;
+  history: ReactNode;
   categories: ReactNode;
   roles: ReactNode;
 }) {
@@ -27,6 +28,7 @@ export function ModerationView({ wide, openReports, reports, categories, roles }
         </div>
       </div>
       {section === 'reports' && reports}
+      {section === 'history' && history}
       {section === 'categories' && categories}
       {section === 'roles' && roles}
     </main>

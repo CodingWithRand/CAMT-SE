@@ -2,7 +2,7 @@ import type { AuthMode } from '@/components/LoginDialog';
 import type { Category, Comment, Post, ReactionType, ReportStatus } from './data';
 
 export type ViewerRole = 'student' | 'moderator' | 'guest';
-export type View = 'home' | 'announce' | 'interests' | 'questions' | 'moderation';
+export type View = 'home' | 'announce' | 'interests' | 'questions' | 'moderation' | 'profile';
 
 /** A file picked in the composer; `url` is an object URL used only for the preview. */
 export interface NewMedia { id: string; type: 'image' | 'video'; label: string; file: File; url: string }
@@ -32,6 +32,8 @@ export interface AppState {
   posts: Post[];
   announce: Post[];
   extraPosts: Post[];                       // opened from a link or notification, not in the feed
+  results: Post[] | null;                   // server search results for `q`; null while not searching
+  mine: Post[] | null;                      // the viewer's own posts (profile page); null until loaded
   notifs: Notif[];
   interests: string[];
   reportStatus: Record<string, ReportStatus>;   // keyed by post id, visible to everyone
@@ -66,6 +68,7 @@ export interface AppState {
   notifOpen: boolean;
   login: AuthMode | null;   // which tab of the login dialog is open, if any
   interestsOpen: false | 'welcome' | 'edit';   // the follow-categories dialog
+  lightbox: { images: string[]; index: number; alt: string } | null;   // full-screen image viewer
   w: number;                // viewport width
 }
 
@@ -73,20 +76,28 @@ export type SetState = (patch: Partial<AppState> | ((prev: AppState) => Partial<
 
 export const INITIAL: AppState = {
   view: 'home', activeId: null, cat: null, q: '', cats: [],
-  likes: {}, cLikes: {}, comments: {}, posts: [], announce: [], extraPosts: [], notifs: [], interests: [],
+  likes: {}, cLikes: {}, comments: {}, posts: [], announce: [], extraPosts: [], results: null, mine: null, notifs: [], interests: [],
   reportStatus: {}, reportReason: {}, reportCount: {}, myReports: {}, modReports: [],
   draft: '', composerOpen: false, replyTo: null, replyDraft: '', openReplies: {}, shown: 12,
   composeOpen: false, newTitle: '', newText: '', newCats: [], newMedia: [], newImportant: false,
   reportFor: null, reason: null,
   editFor: null, hideFor: null, deleteFor: null, editTitle: '', editBody: '', editCats: [], editImportant: false,
-  notifOpen: false, login: null, interestsOpen: false,
+  notifOpen: false, login: null, interestsOpen: false, lightbox: null,
   w: 1280,
 };
 
-/** A loaded post by id: from the feed, the announcements, or opened on its own. */
-export const findPostIn = (st: Pick<AppState, 'posts' | 'announce' | 'extraPosts'>, id: string | null) =>
-  st.posts.find((p) => p.id === id) || st.announce.find((p) => p.id === id) || st.extraPosts.find((p) => p.id === id);
+type PostLists = Pick<AppState, 'posts' | 'announce' | 'extraPosts' | 'results' | 'mine'>;
 
-/** Apply `fn` to every copy of a post (it can be in several lists at once). */
-export const mapAllPosts = (st: Pick<AppState, 'posts' | 'announce' | 'extraPosts'>, fn: (list: Post[]) => Post[]) =>
-  ({ posts: fn(st.posts), announce: fn(st.announce), extraPosts: fn(st.extraPosts) });
+/** Every list a post can be in at once. */
+export const postLists = (st: PostLists): PostLists =>
+  ({ posts: st.posts, announce: st.announce, extraPosts: st.extraPosts, results: st.results, mine: st.mine });
+
+/** A loaded post by id: from the feed, announcements, search results, the profile, or opened on its own. */
+export const findPostIn = (st: PostLists, id: string | null) =>
+  [st.posts, st.announce, st.results ?? [], st.mine ?? [], st.extraPosts].flat().find((p) => p.id === id);
+
+/** Apply `fn` to every list (a post can be in several at once). */
+export const mapAllPosts = (st: PostLists, fn: (list: Post[]) => Post[]): PostLists => ({
+  posts: fn(st.posts), announce: fn(st.announce), extraPosts: fn(st.extraPosts),
+  results: st.results && fn(st.results), mine: st.mine && fn(st.mine),
+});

@@ -465,3 +465,35 @@ body.wnm-locked { overflow: hidden !important; }
 }
 @keyframes skeleton-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+/* ── Search hits ── */
+.search-hit { background: color-mix(in srgb, var(--color-accent) 22%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+/* ── Full-screen image viewer ── */
+.viewer {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; touch-action: pan-y;
+  background: rgba(20, 12, 28, .92); animation: wnm-pop .16s ease both;
+}
+.viewer-btn {
+  width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, .14); color: #fff; font-size: 28px; line-height: 1; font-family: var(--font-body);
+}
+.viewer-btn:hover, .viewer-btn:focus-visible { background: rgba(255, 255, 255, .26); }
+.post-image { cursor: zoom-in; }
+
+/* ── Phone bottom navigation ── */
+.bottom-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); background: var(--color-surface);
+  border-top: 1px solid var(--color-divider); box-shadow: 0 -4px 18px rgba(62, 34, 89, .08);
+}
+.bottom-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; border: 0; background: transparent; cursor: pointer;
+  font-family: var(--font-body); font-size: 10.5px; color: var(--color-neutral-700);
+}
+.bottom-nav-item[aria-current="page"] { color: var(--color-accent-700); font-weight: 600; }
+.bottom-nav-post {
+  justify-self: center; width: 46px; height: 46px; display: grid; place-items: center; border: 0; border-radius: 999px; cursor: pointer; color: #fff;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-600) 60%, var(--color-accent-2-600) 130%);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
