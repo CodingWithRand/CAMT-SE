@@ -7,6 +7,7 @@ import {
   AlertIcon, BellIcon, ChatIcon, CheckIcon, CloseIcon, EyeIcon, EyeOffIcon, HeartIcon, InfoIcon,
   LockIcon, MailIcon, MegaphoneIcon, UserIcon,
 } from './AuthIcons';
+import { mockSignIn, mockModSignIn } from '@/lib/dbauth'; 
 
 const API_URL = "http://localhost:3030";
 const EMAIL_DOMAIN = '@cmu.ac.th';
@@ -139,6 +140,20 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
     return e;
   };
 
+  const normalUserSignIn = async (e: any) => {
+    if (busy) return;
+    setBusy(true);
+    await mockSignIn();
+    setBusy(false);
+    setDone({ registered: false });
+  }
+  const modUserSignIn = async (e: any) => {
+    if (busy) return;
+    setBusy(true);
+    await mockModSignIn();
+    setBusy(false);
+    setDone({ registered: false });
+  }
   const submit = async (ev: FormEvent) => {
     ev.preventDefault();
     if (busy) return;
@@ -252,7 +267,7 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
               </p>
             </div>
           ) : (
-            <form onSubmit={submit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <form onSubmit={(e) => e.preventDefault()} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ paddingRight: 30 }}>
                 <h4 id="auth-title" style={{ margin: '0 0 4px', fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}>
                   {isRegister ? 'สร้างบัญชีใหม่' : 'ยินดีต้อนรับกลับมา'}
@@ -262,13 +277,13 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
                 </p>
               </div>
 
-              <div className="auth-seg" role="tablist" aria-label="เลือกการเข้าใช้งาน">
+              {/* <div className="auth-seg" role="tablist" aria-label="เลือกการเข้าใช้งาน">
                 <span className="auth-seg-pill" style={{ transform: isRegister ? 'translateX(100%)' : 'none' }} />
                 <button type="button" role="tab" aria-selected={!isRegister} onClick={() => switchMode('login')}>เข้าสู่ระบบ</button>
                 <button type="button" role="tab" aria-selected={isRegister} onClick={() => switchMode('register')}>สมัครสมาชิก</button>
-              </div>
+              </div> */}
 
-              {isRegister && (
+              {/* {isRegister && (
                 <FieldShell id="auth-name" label="ชื่อที่แสดง" error={errors.name}
                   hint={<span className="auth-hint is-soft">ชื่อนี้จะแสดงบนโพสต์และความคิดเห็นของคุณ</span>}>
                   <UserIcon />
@@ -319,7 +334,9 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
                     onKeyUp={trackCaps} onKeyDown={trackCaps}
                     aria-invalid={!!errors.confirm} aria-describedby={errors.confirm ? 'auth-confirm-err' : undefined} />
                 </FieldShell>
-              )}
+              )} */}
+
+              <p>ในขั้น MVP ตอน demo ใช้บัญชีที่สร้างไว้แล้ว กดปุ่มด้านล่างได้เลย</p>
 
               {banner && (
                 <div className={`auth-banner is-${banner.kind}`} role={banner.kind === 'error' ? 'alert' : 'status'}>
@@ -328,20 +345,26 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
                 </div>
               )}
 
-              <button className="auth-submit" type="submit" disabled={busy}>
+              <button className="auth-submit" type="submit" disabled={busy} onClick={normalUserSignIn}>
                 {busy && <span className="auth-spinner" aria-hidden="true" />}
                 {busy
                   ? (isRegister ? 'กำลังสร้างบัญชี…' : 'กำลังเข้าสู่ระบบ…')
-                  : (isRegister ? 'สร้างบัญชีและเข้าสู่ระบบ' : 'เข้าสู่ระบบ')}
+                  : (isRegister ? 'สร้างบัญชีและเข้าสู่ระบบ' : 'เข้าสู่ระบบ (Normal User)')}
+              </button>
+              <button className="auth-submit" type="submit" disabled={busy} onClick={modUserSignIn}>
+                {busy && <span className="auth-spinner" aria-hidden="true" />}
+                {busy
+                  ? (isRegister ? 'กำลังสร้างบัญชี…' : 'กำลังเข้าสู่ระบบ…')
+                  : (isRegister ? 'สร้างบัญชีและเข้าสู่ระบบ' : 'เข้าสู่ระบบ (Mod User)')}
               </button>
 
-              <p style={{ margin: 0, textAlign: 'center', fontSize: 12.5, color: 'var(--color-neutral-700)' }}>
+              {/* <p style={{ margin: 0, textAlign: 'center', fontSize: 12.5, color: 'var(--color-neutral-700)' }}>
                 {isRegister ? 'มีบัญชีอยู่แล้ว? ' : 'ยังไม่มีบัญชี? '}
                 <button type="button" className="hov-color" onClick={() => switchMode(isRegister ? 'login' : 'register')}
                   style={{ border: 0, background: 'transparent', padding: 0, cursor: 'pointer', font: 'inherit', fontWeight: 600, color: 'var(--color-accent-700)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
                   {isRegister ? 'เข้าสู่ระบบ' : 'สมัครสมาชิกฟรี'}
                 </button>
-              </p>
+              </p> */}
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--color-neutral-600)', fontSize: 11.5 }}>
                 <span style={{ flex: 1, height: 1, background: 'var(--color-divider)' }} />

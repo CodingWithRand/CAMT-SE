@@ -55,32 +55,43 @@ router.get('/user/interests', auth, async (req: Request, res: Response) => {
     }
 })
 
-/** Replace the signed-in user's interests with `category_ids`. Only ever their own. */
-router.put('/user/interests', auth, async (req: Request, res: Response) => {
-    const ids = req.body?.category_ids;
-    if (!Array.isArray(ids) || ids.some((x) => typeof x !== "string")) {
-        return res.status(400).json({ message: "category_ids must be an array of category ids" });
-    }
-    const wanted = [...new Set(ids as string[])];
+router.put('/user/interests', auth, async (req, res) => {
+    const { cate_id } = req.body;
     try {
-        const { data: current, error } = await supabase.from("user_interests").select("category_id").eq("user_id", req.userId!);
-        if (error) throw error;
-        const have = new Set((current ?? []).map((r) => r.category_id));
-        const remove = [...have].filter((id) => !wanted.includes(id));
-        const add = wanted.filter((id) => !have.has(id));
-        if (remove.length) {
-            const r = await supabase.from("user_interests").delete().eq("user_id", req.userId!).in("category_id", remove);
-            if (r.error) throw r.error;
-        }
-        if (add.length) {
-            const r = await supabase.from("user_interests").insert(add.map((category_id) => ({ user_id: req.userId!, category_id })));
-            if (r.error) throw r.error;
-        }
-        res.status(200).json({ category_ids: wanted });
+        const { data, error } = await supabase.rpc("user_interests_op", { uid: req.userId!, cate_id })
+        if(error) throw error;
+        res.status(200).json(data);
     } catch (error: any) {
-        res.status(500).json({ code: error?.code, message: error?.message });
+        res.status(400).json({ error: error.message });
     }
 })
+
+/** Replace the signed-in user's interests with `category_ids`. Only ever their own. */
+// router.put('/user/interests', auth, async (req: Request, res: Response) => {
+//     const ids = req.body?.category_ids;
+//     if (!Array.isArray(ids) || ids.some((x) => typeof x !== "string")) {
+//         return res.status(400).json({ message: "category_ids must be an array of category ids" });
+//     }
+//     const wanted = [...new Set(ids as string[])];
+//     try {
+//         const { data: current, error } = await supabase.from("user_interests").select("category_id").eq("user_id", req.userId!);
+//         if (error) throw error;
+//         const have = new Set((current ?? []).map((r) => r.category_id));
+//         const remove = [...have].filter((id) => !wanted.includes(id));
+//         const add = wanted.filter((id) => !have.has(id));
+//         if (remove.length) {
+//             const r = await supabase.from("user_interests").delete().eq("user_id", req.userId!).in("category_id", remove);
+//             if (r.error) throw r.error;
+//         }
+//         if (add.length) {
+//             const r = await supabase.from("user_interests").insert(add.map((category_id) => ({ user_id: req.userId!, category_id })));
+//             if (r.error) throw r.error;
+//         }
+//         res.status(200).json({ category_ids: wanted });
+//     } catch (error: any) {
+//         res.status(500).json({ code: error?.code, message: error?.message });
+//     }
+// })
 
 const EMAIL_DOMAIN = "@cmu.ac.th";
 

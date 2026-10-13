@@ -331,8 +331,8 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
     const res = await fetch(`${API_URL}/user/interests`, {
       method: 'PUT',
       headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ category_ids: ids }),
-    }).catch(() => null);
+      body: JSON.stringify({ cate_id: ids }),
+    }).catch((err) => console.log(err));
     if (!res?.ok) {
       set({ interests: before });
       return flash('บันทึกความสนใจไม่สำเร็จ ลองใหม่อีกครั้ง');
@@ -640,6 +640,7 @@ export default function WhongNaiMor({ accentColor = '#7d50a8', viewerRole, laneM
 
   const visible = useMemo(() => {
     const needle = st.q.trim().toLowerCase();
+    // This is ok for now (fronend filter), but in the future, fetch certain posts from the backend/db is better.
     return st.posts.filter((p) => {
       const cats = p.cats || [];
       if (st.view === 'announce' && !p.important) return false;
