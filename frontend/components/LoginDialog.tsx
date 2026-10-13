@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { useAuthContext } from './AuthContext';
+import { api } from '@/lib/api';
 import {
   AlertIcon, BellIcon, ChatIcon, CheckIcon, CloseIcon, EyeIcon, EyeOffIcon, HeartIcon, InfoIcon,
   LockIcon, MailIcon, MegaphoneIcon, UserIcon,
 } from './AuthIcons';
 
-const API_URL = "http://localhost:3030";
 const EMAIL_DOMAIN = '@cmu.ac.th';
 const MIN_PASSWORD = 8;
 const SUCCESS_MS = 1100;
@@ -155,11 +155,7 @@ export function LoginDialog({ initialMode = 'login', onClose, onDone }: {
     setBusy(true);
     try {
       if (isRegister) {
-        const res = await fetch(`${API_URL}/user/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: addr, password, display_name: name.trim() }),
-        });
+        const res = await api('/user/register', { method: 'POST', json: { email: addr, password, display_name: name.trim() } });
         const body = await res.json().catch(() => ({}));
         if (!res.ok) {
           const msg = toThaiError(body?.message ?? `HTTP ${res.status}`);

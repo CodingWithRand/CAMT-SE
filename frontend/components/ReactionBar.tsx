@@ -38,7 +38,6 @@ export default function ReactionBar({ mine, count, disabled, compact, onReact, o
   const fire = (r: ReactionType, change?: boolean) => {
     setOpen(false);
     if (disabled) return onBlocked?.();
-    console.log("ReactionBar fire", r, change);
     onReact(r, change || false);
   };
 

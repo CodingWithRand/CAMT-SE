@@ -2,13 +2,14 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import type { Notif } from './WhongNaiMor';
+import type { Notif } from '@/lib/state';
+import { timeAgo } from '@/lib/ui';
 import type { AuthMode } from './LoginDialog';
 import { BellIcon, EyeIcon, EyeOffIcon, FlagCheckIcon, FlagIcon, MegaphoneIcon, PlusIcon, SearchIcon, SmallCloseIcon } from './AuthIcons';
 
 /**
- * Notifications carry only a message, so the kind is read from the wording the API and the
- * announcement trigger write (api/src/endpoints/post.ts, report.ts, sql/…announcement…).
+ * Notifications carry only a message, so the kind is read from its wording, written by
+ * MESSAGES in api/src/notify.ts and by the announcement trigger (api/sql/…announcement…).
  */
 const NOTIF_KINDS = {
   announcement: { label: 'ประกาศ',            Icon: MegaphoneIcon, bg: '#f2c6b6', fg: '#6f2f14' },
@@ -43,12 +44,11 @@ interface Props {
   onNotifOpen: (open: boolean) => void;
   onOpenNotif: (n: Notif) => void;
   onReadAll: () => void;
-  timeAgo: (stamp: string) => string;
 }
 
 export function TopBar({
   w, query, onQuery, onHome, signedIn, canPost, onCompose, onLogin, account,
-  notifs, unread, notifOpen, onNotifOpen, onOpenNotif, onReadAll, timeAgo,
+  notifs, unread, notifOpen, onNotifOpen, onOpenNotif, onReadAll,
 }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);

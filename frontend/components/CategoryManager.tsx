@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import { useApi } from './AuthContext';
 
-const API_URL = "http://localhost:3030";
 const MAX_NAME = 40;
 const MAX_DESCRIPTION = 160;
 
@@ -33,13 +33,13 @@ const field: CSSProperties = { background: 'var(--color-neutral-100)', fontSize:
 type Draft = { id: string | null; name: string; description: string; priority: number };
 const EMPTY: Draft = { id: null, name: '', description: '', priority: 3 };
 
-export function CategoryManager({ authHeaders, flash, dotFor, revision, onChanged }: {
-  authHeaders: (extra?: Record<string, string>) => Record<string, string>;
+export function CategoryManager({ flash, dotFor, revision, onChanged }: {
   flash: (t: string) => void;
   dotFor: (id: string) => string | undefined;
   revision: string;   // changes when categories change anywhere (live update), to refetch
   onChanged: () => void;   // reload the categories used across the page right away
 }) {
+  const api = useApi();
   const [cats, setCats] = useState<Category[] | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -47,9 +47,9 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const res = await fetch(`${API_URL}/admin/categories`, { headers: authHeaders() }).catch(() => null);
+    const res = await api('/admin/categories').catch(() => null);
     if (res?.ok) setCats(await res.json());
-  }, [authHeaders]);
+  }, [api]);
 
   useEffect(() => { load(); }, [load, revision]);
 
@@ -59,10 +59,9 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
     if (!name) return setError('ตั้งชื่อหมวดหมู่ก่อน');
     setBusy(true);
     setError(null);
-    const res = await fetch(`${API_URL}/admin/categories${draft.id ? `/${draft.id}` : ''}`, {
+    const res = await api(`/admin/categories${draft.id ? `/${draft.id}` : ''}`, {
       method: draft.id ? 'PUT' : 'POST',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ name, description: draft.description, priority: draft.priority }),
+      json: { name, description: draft.description, priority: draft.priority },
     }).catch(() => null);
     setBusy(false);
     if (!res?.ok) {
@@ -76,7 +75,7 @@ export function CategoryManager({ authHeaders, flash, dotFor, revision, onChange
 
   const remove = async (c: Category) => {
     setBusy(true);
-    const res = await fetch(`${API_URL}/admin/categories/${c.id}`, { method: 'DELETE', headers: authHeaders() }).catch(() => null);
+    const res = await api(`/admin/categories/${c.id}`, { method: 'DELETE' }).catch(() => null);
     setBusy(false);
     setConfirmDelete(null);
     if (!res?.ok) return flash(res?.status === 409 ? `ลบไม่ได้ · ยังมีโพสต์ในหมวด "${c.category_name}"` : 'ลบไม่สำเร็จ');

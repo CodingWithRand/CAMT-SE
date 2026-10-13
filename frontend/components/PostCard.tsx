@@ -1,18 +1,17 @@
 'use client';
 
 import type { CSSProperties } from 'react';
-import { ANNOUNCE_CAT, CATS, QA, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
-import { REPORT_LABEL, avatarStyle, fullDate, likeCount, statusLook } from '@/lib/ui';
+import { ANNOUNCE_CAT, QA, type Category, type Post, type ReactionType, type ReportStatus } from '@/lib/data';
+import { REPORT_LABEL, avatarStyle, fullDate, statusLook } from '@/lib/ui';
 import ReactionBar from './ReactionBar';
 
 export interface PostCardProps {
-  CATS: typeof CATS;
+  cats: Category[];
   post: Post;
   liked: ReactionType | null;
   commentCount: number;
   reportStatus?: ReportStatus;
   isGuest: boolean;
-  isMod: boolean;
   onReact: (r: ReactionType, change: boolean) => void;
   onGate: () => void;
   onOpen: () => void;
@@ -24,13 +23,13 @@ export interface PostCardProps {
 
 
 export default function PostCard(props: PostCardProps) {
-  const { post: p, liked, commentCount, reportStatus: status, isGuest, isMod, CATS } = props;
+  const { post: p, liked, commentCount, reportStatus: status, isGuest, cats: allCats } = props;
 
   const rail = p.priority === 'urgent' ? 'var(--pri)' : p.priority === 'notice' ? 'var(--color-accent)' : null;
   const cats = p.cats || [];
 
   const chips: { label: string; style: CSSProperties }[] = cats.map((c) => {
-    const row = CATS.find((x) => x.name === c) || { pri: 5 };
+    const row = allCats.find((x) => x.name === c) || { pri: 5 };
     return {
       label: c.split(' / ')[0],
       style: row.pri <= 2
@@ -58,7 +57,7 @@ export default function PostCard(props: PostCardProps) {
   }
 
   const media = p.media || [];
-  const likes = likeCount(p);
+  const likes = p.likes;
 
   return (
     <article style={{ position: 'relative', overflow: 'hidden', opacity: p.hidden ? 0.92 : 1, background: 'var(--color-surface)', borderRadius: 16, boxShadow: '0 1px 3px rgba(62,34,89,.09)', border: '1px solid var(--color-divider)', padding: '16px 18px 10px', display: 'flex', flexDirection: 'column', gap: 11 }}>

@@ -1,5 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
-import supabase from "./db";
+import express from 'express';
 import cors from 'cors';
 
 // Routes
@@ -10,41 +9,17 @@ import report from './endpoints/report';
 import misc from './endpoints/misc';
 import notification from './endpoints/notification';
 import admin from './endpoints/admin';
-import { broadcast, LiveTopic } from './live';
+import { liveUpdates } from './live';
+import { errorHandler } from './middleware';
 
 const app = express();
-const PORT = 3030;
+const PORT = Number(process.env.PORT ?? 3030);
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ?? 'http://localhost:3000';
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-
-app.use(cors({
-    origin: 'http://localhost:3000'
-}))
-
-// After every successful write, tell open browsers what to re-fetch (see live.ts).
-const LIVE_TOPICS: [RegExp, LiveTopic[]][] = [
-    [/^\/post\/create/, ["posts", "notifications"]],          // announcements notify followers
-    [/^\/post\/[^/]+\/react/, ["posts"]],
-    [/^\/post\//, ["posts", "reports", "notifications"]],     // edit, hide, unhide, delete
-    [/^\/comment\//, ["comments"]],
-    [/^\/report\//, ["reports", "notifications"]],           // closing a report notifies the reporters
-    [/^\/admin\/categories/, ["categories", "posts"]],       // a renamed category shows on posts
-    [/^\/admin\/users/, ["roles"]],                          // the user whose role changed updates at once
-];
-app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.method !== "GET") {
-        res.on("finish", () => {
-            if (res.statusCode >= 300) return;
-            const topics = LIVE_TOPICS.find(([re]) => re.test(req.path))?.[1];
-            // POST /comment/<post id> and /comment/<post id>/replyto/<comment id> name the post.
-            // (PUT/DELETE /comment/<id> carry a comment id, so those reload every thread.)
-            const postId = req.method === "POST" ? /^\/comment\/([0-9a-f-]{36})(\/replyto\/|$)/i.exec(req.path)?.[1] : undefined;
-            if (topics) broadcast(topics, postId);
-        });
-    }
-    next();
-});
+app.use(cors({ origin: FRONTEND_ORIGIN }));
+app.use(liveUpdates);
 
 app.use("/", post);
 app.use("/", comment);
@@ -54,9 +29,10 @@ app.use("/", misc);
 app.use("/", notification);
 app.use("/", admin);
 
+app.use(errorHandler);
+
 app.listen(PORT, () => {
-    console.log("Server running on port " + PORT);
-    console.log("http://localhost:3030");
+    console.log(`Server running on http://localhost:${PORT}`);
 })
 
 // TODO next [DOEN]

@@ -2,10 +2,10 @@
 
 import { useRef, useState, type CSSProperties } from 'react';
 import ReactionBar from './ReactionBar';
-import { ME, ROLE_LABEL, ROLE_STYLE, type Comment, type Post, type ReactionType, type Reply } from '@/lib/data';
+import { ROLE_LABEL, ROLE_STYLE, type Comment, type Post, type ReactionType, type Reply } from '@/lib/data';
 import { avatarStyle } from '@/lib/ui';
 import PostCard, { type PostCardProps } from './PostCard';
-import type { AppState, SetState } from './WhongNaiMor';
+import type { AppState, SetState } from '@/lib/state';
 
 interface Props {
   st: AppState;
@@ -239,7 +239,7 @@ export default function PostModal({ st, set, active, card, isGuest, isMod, meNam
 
                     {st.replyTo === c.id && (
                       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginTop: 8 }}>
-                        <span style={avatarStyle(isGuest ? 3 : ME.tint, 26)}>{meInitials}</span>
+                        <span style={avatarStyle(isGuest ? 3 : 0, 26)}>{meInitials}</span>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <textarea
                             ref={replyBox}

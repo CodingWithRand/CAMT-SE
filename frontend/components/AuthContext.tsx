@@ -1,8 +1,9 @@
 "use client"
 
 import { Session, User } from '@supabase/supabase-js';
-import { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { supabase } from '@/lib/dbauth';
+import { api, type Api } from '@/lib/api';
 
 const authContext = createContext<{
     session: any | Session | null;
@@ -56,4 +57,11 @@ export function useAuthContext() {
         throw new Error('useAuthContext must be used within an AuthContext');
     }
     return context;
+}
+
+/** api() signed as the current user (no token when signed out). */
+export function useApi(): Api {
+    const { session } = useAuthContext();
+    const token: string | undefined = session?.access_token;
+    return useCallback((path, opts) => api(path, { ...opts, token }), [token]);
 }

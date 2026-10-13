@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Post } from '@/lib/data';
-import { REPORT_LABEL, statusLook } from '@/lib/ui';
-import type { ModReport } from './WhongNaiMor';
+import { REPORT_LABEL, statusLook, timeAgo } from '@/lib/ui';
+import type { ModReport } from '@/lib/state';
 
 type Tab = 'open' | 'hidden' | 'closed';
 type Sort = 'oldest' | 'most';
@@ -14,7 +14,6 @@ interface Props {
   blocked: boolean;                         // a dialog is open: keyboard shortcuts pause
   ensurePost: (id: string) => Promise<Post | null>;
   renderPost: (p: Post) => ReactNode;
-  timeAgo: (stamp: string) => string;
   onDismiss: (postId: string) => void;      // no problem found
   onEdit: (postId: string) => void;
   onHide: (postId: string) => void;
@@ -42,7 +41,7 @@ const baseReason = (reason: string) => reason.split(' · ')[0];
  * reports and the three decisions on the right. After a decision the next report opens.
  */
 export function ModerationCenter({
-  reports, compact, blocked, ensurePost, renderPost, timeAgo,
+  reports, compact, blocked, ensurePost, renderPost,
   onDismiss, onEdit, onHide, onUnhide, onReopen, onRefresh,
 }: Props) {
   const [tab, setTab] = useState<Tab>('open');

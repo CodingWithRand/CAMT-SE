@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { avatarStyle } from '@/lib/ui';
 import { SearchIcon, ShieldIcon } from './AuthIcons';
-
-const API_URL = "http://localhost:3030";
+import { useApi } from './AuthContext';
 
 interface Member {
   id: string;
@@ -24,12 +23,12 @@ const MOD_POWERS = [
 
 const card: CSSProperties = { background: 'var(--color-surface)', border: '1px solid var(--color-divider)', borderRadius: 18 };
 
-export function RoleManager({ authHeaders, flash, myId, revision }: {
-  authHeaders: (extra?: Record<string, string>) => Record<string, string>;
+export function RoleManager({ flash, myId, revision }: {
   flash: (t: string) => void;
   myId: string | null;
   revision: number;   // bumps on live "roles" hints, to refetch
 }) {
+  const api = useApi();
   const [q, setQ] = useState('');
   const [onlyMods, setOnlyMods] = useState(false);
   const [members, setMembers] = useState<Member[] | null>(null);
@@ -37,9 +36,9 @@ export function RoleManager({ authHeaders, flash, myId, revision }: {
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(async (query: string) => {
-    const res = await fetch(`${API_URL}/admin/users?q=${encodeURIComponent(query)}`, { headers: authHeaders() }).catch(() => null);
+    const res = await api(`/admin/users?q=${encodeURIComponent(query)}`).catch(() => null);
     if (res?.ok) setMembers(await res.json());
-  }, [authHeaders]);
+  }, [api]);
 
   // Search as you type, after a short pause.
   useEffect(() => {
@@ -52,11 +51,7 @@ export function RoleManager({ authHeaders, flash, myId, revision }: {
 
   const setRole = async (m: Member, isMod: boolean) => {
     setBusy(true);
-    const res = await fetch(`${API_URL}/admin/users/${m.id}/role`, {
-      method: 'PUT',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ is_mod: isMod }),
-    }).catch(() => null);
+    const res = await api(`/admin/users/${m.id}/role`, { method: 'PUT', json: { is_mod: isMod } }).catch(() => null);
     setBusy(false);
     setConfirm(null);
     if (!res?.ok) {
