@@ -4,8 +4,8 @@
 2. [Design (rough)](https://claude.ai/artifact/7MsetNp6GZrpnvUvx6ionZ) ✅ *15/09/2026*
 3. [Backend](./api/) ✅ *20/09/2026*
 4. [Frontend](./frontend/) ✅ *23/09/2026*
-5. Integration ⏰
-6. Testing ⏰
-7. Deployment ❌
-8. Release ❌
+5. Integration ✅ *13/10/2026*
+6. Testing ✅ *13/10/2026*
+7. Deployment ✅ *14/10/2026*
+8. Release ✅ *14/10/2026*
 9. Full doc ❌
