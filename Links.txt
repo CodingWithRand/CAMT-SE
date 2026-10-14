@@ -1,0 +1,7 @@
+Development Repository: https://github.com/Nmpipoo/WhongNaiMor-MeTestingSoIdontExplodeMyFriendRepo
+Production Repository: https://github.com/CodingWithRand/CAMT-SE/tree/WhongNaiMor
+
+API URL: https://camt-se-0pel.onrender.com/
+The Website: https://whongnaimor.vercel.app/
+
+Presentation Link: https://www.canva.com/design/DAHUkorLiU0/nD_M6bZTrRqVkh9_HpG9tg/edit

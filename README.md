@@ -8,4 +8,4 @@
 6. Testing ✅ *13/10/2026*
 7. Deployment ✅ *14/10/2026*
 8. Release ✅ *14/10/2026*
-9. Full doc ❌
+9. [Full doc](./WhongNaiMor%20Project%20Report.pdf) ✅ *14/10/2026*
