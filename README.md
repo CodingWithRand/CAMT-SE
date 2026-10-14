@@ -57,3 +57,6 @@ Steps
 - Wait for the build finished
 - Open terminal, `cd` to `target` folder
 - Run `java -jar <The build jar file>`
+
+## Term Project 1
+*See [VectorMagicClone](https://github.com/CodingWithRand/CAMT-SE/tree/VectorMagicClone)*
