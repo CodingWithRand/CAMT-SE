@@ -492,34 +492,47 @@ public class MainController {
             colors = ColorSegmenter.extractPalette(img, fileSettings.getCustomColorCount());
         }
 
+        // Create the vector task instance
         VectorTask vectorTask = new VectorTask(img, colors, fileSettings.isRemoveBackground(), qualitySetting);
-        AtomicReference<String> svgContent = new AtomicReference<>();
 
-        vectorTask.setOnSucceeded(event -> {
-            List<ColorLayer> layers = vectorTask.getValue();
-            svgContent.set(SVGWriter.generateFullSVG(layers, img.getWidth(), img.getHeight(), fileSettings.isRemoveBackground(), new Color(255, 255, 255)));
-            logger.debug("Task ended successfully");
-        });
-
-        vectorTask.setOnFailed(event -> {
-            Throwable exception = vectorTask.getException();
-            logger.error("Vectorization error: " + exception.getMessage());
-            System.err.println("Vectorization error: " + exception.getMessage());
-            exception.printStackTrace();
-        });
-
+        //  Bind it to the UI progress tracking service
         progressTaskService.bindTask(vectorTask, vectorizeProgressBox, vectorizeProgressBar);
 
+        // Start the task on a background thread
         Thread backgroundThread = new Thread(vectorTask);
         backgroundThread.setDaemon(true);
         backgroundThread.start();
 
-        while(svgContent.get() == null){}
+        try {
 
-        String fileName = file.getName();
-        String baseName = fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName;
-        File outputFile = new File(outputPath, baseName + "_vectorized.svg");
-        java.nio.file.Files.writeString(outputFile.toPath(), svgContent.get());
+            // call vectorTask.get(). Since Task implements Future, .get() blocks
+
+            List<ColorLayer> layers = vectorTask.get();
+
+            // 5. Generate the SVG content directly from the resolved layers
+            String svgContent = SVGWriter.generateFullSVG(
+                    layers,
+                    img.getWidth(),
+                    img.getHeight(),
+                    fileSettings.isRemoveBackground(),
+                    new Color(255, 255, 255)
+            );
+
+            //  Write the resulting SVG string to the destination file
+            String fileName = file.getName();
+            String baseName = fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName;
+            File outputFile = new File(outputPath, baseName + "_vectorized.svg");
+            java.nio.file.Files.writeString(outputFile.toPath(), svgContent);
+
+            logger.debug("Successfully exported vectorized file: {}", outputFile.getName());
+
+        } catch (java.util.concurrent.ExecutionException e) {
+            // Handle any exceptions thrown inside the background task cleanly
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            logger.error("Vectorization error during export: {}", cause.getMessage());
+            cause.printStackTrace();
+            throw new IOException("Failed to vectorize file: " + file.getName(), cause);
+        }
     }
 
     @FXML
