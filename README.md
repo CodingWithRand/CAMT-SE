@@ -186,3 +186,9 @@ Finally got to work on SQL, MySQL code again after 3 years. But damn you xampp. 
 
 ## Lab 9
 Last week we were doing simple DDL and DML. This week is mainly joining. [Lab Folder](./Lab9/)
+
+## Lab 10
+More advance joining. [Lab Folder](./Lab10/)
+
+## Term project
+My team picked ลูกช้างมช. 2.0 -> [WhongNaiMor](https://github.com/CodingWithRand/CAMT-SE/tree/WhongNaiMor)
