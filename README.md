@@ -9,3 +9,5 @@
 7. Deployment ✅ *14/10/2026*
 8. Release ✅ *14/10/2026*
 9. [Full doc](./WhongNaiMor%20Project%20Report.pdf) ✅ *14/10/2026*
+
+Shared project with [Nmpipoo](https://github.com/Nmpipoo) and [mel-bryer](https://github.com/mel-bryer)
