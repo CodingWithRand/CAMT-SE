@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import se233.arkanoid.view.GameplayArea?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="448.0" style="-fx-background-color: #150030;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se233.arkanoid.view.Stage">
+   <children>
+      <ImageView fx:id="stageBgImg" fitHeight="523.0" fitWidth="448.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/Fields.png" />
+         </image>
+         <viewport>
+            <Rectangle2D height="240.0" width="224.0" />
+         </viewport>
+      </ImageView>
+      <VBox prefHeight="70.0" prefWidth="448.0">
+         <children>
+            <Label fx:id="highScoreLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="43.0" prefWidth="448.0" text="HIGH SCORE" textFill="#ff0055">
+               <font>
+                  <Font name="Monospaced Regular" size="30.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="448.0" style="-fx-spacing: 40;">
+               <children>
+                  <Label fx:id="highestScore" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="24.0" prefWidth="114.0" text="123232" textFill="WHITE">
+                     <font>
+                        <Font name="Monospaced Regular" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="thisGameScore" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="21.0" prefWidth="114.0" text="100234" textFill="WHITE">
+                     <font>
+                        <Font name="Monospaced Regular" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <GameplayArea fx:id="gameplayArea" layoutX="15.0" layoutY="83.0" prefHeight="467.0" prefWidth="418.0" />
+   </children>
+</AnchorPane>

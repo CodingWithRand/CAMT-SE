@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="topLevel" alignment="CENTER" style="-fx-background-color: #150030;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se233.arkanoid.view.Menu">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <VBox alignment="CENTER" spacing="20.0" style="-fx-spacing: 20; -fx-background-color: #050510; -fx-padding: 40; -fx-border-color: #00FFCC; -fx-border-width: 4;">
+    <Label fx:id="gameTitle" alignment="CENTER" style="-fx-effect: dropshadow(three-pass-box, #00FFFF, 5, 0, 3, 3);" text="ARKANOID" textFill="#ff0055">
+      <font>
+         <Font name="Monospaced Regular" size="36.0" />
+      </font></Label>
+   <Label fx:id="startBtn" text="START" textFill="#888888">
+         <font>
+            <Font name="Monospaced Regular" size="12.0" />
+         </font>
+      </Label>
+   <Label fx:id="highScoreBtn" text="HIGH SCORE" textFill="#888888">
+         <font>
+            <Font name="Monospaced Regular" size="12.0" />
+         </font></Label>
+   <Label fx:id="exitBtn" text="EXIT" textFill="#888888">
+         <font>
+            <Font name="Monospaced Regular" size="12.0" />
+         </font></Label>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+    </VBox>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</StackPane>
