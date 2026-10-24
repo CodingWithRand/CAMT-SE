@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se233.arkanoid.model.GameCharacter;
 import se233.arkanoid.view.GameplayArea;
-import se233.arkanoid.model.GameCharacter;
 //import se233.chapter5part1.view.Score;
 
 import java.util.List;

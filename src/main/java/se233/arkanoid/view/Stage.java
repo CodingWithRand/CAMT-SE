@@ -2,9 +2,11 @@ package se233.arkanoid.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import se233.arkanoid.controller.DrawingLoop;
 import se233.arkanoid.controller.GameLoop;
+import se233.arkanoid.model.PlayerData;
 
 
 public class Stage {
@@ -32,6 +34,9 @@ public class Stage {
             highestScore.setFont(retroFont);
             thisGameScore.setFont(retroFont);
         }
+
+        thisGameScore.setText(Integer.toString(PlayerData.getCurrentScore()));
+        highestScore.setText(Integer.toString(PlayerData.getHighScore()));
 
         gameplayArea.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if(newScene != null) {

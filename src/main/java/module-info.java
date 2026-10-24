@@ -9,4 +9,8 @@ module se233.arkanoid {
     opens se233.arkanoid.controller to javafx.fxml;
     exports se233.arkanoid.view;
     opens se233.arkanoid.view to javafx.fxml;
+    exports se233.arkanoid.model.StageData;
+    opens se233.arkanoid.model.StageData to javafx.fxml;
+    exports se233.arkanoid.event;
+    opens se233.arkanoid.event to javafx.fxml;
 }

@@ -3,8 +3,8 @@ package se233.arkanoid.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se233.arkanoid.model.GameCharacter;
+import se233.arkanoid.model.Vaus;
 import se233.arkanoid.view.GameplayArea;
-import se233.arkanoid.view.Stage;
 
 import java.util.List;
 
@@ -34,18 +34,19 @@ public class DrawingLoop implements Runnable {
 //            }
 //        }
     }
-    private void paint(List<GameCharacter> gameCharacterList) {
+    private void paint(List<GameCharacter> gameCharacterList, long time) {
         for (GameCharacter gameCharacter : gameCharacterList) {
             gameCharacter.repaint();
+            ((Vaus) gameCharacter).interpolate(time);
         }
     }
     @Override
     public void run() {
         while (running) {
-            float time = System.currentTimeMillis();
+            long time = System.currentTimeMillis();
 
             checkDrawCollisions(gameStage.getGameCharacterList());
-            paint(gameStage.getGameCharacterList());
+            paint(gameStage.getGameCharacterList(), time);
 
             time = System.currentTimeMillis() - time;
             if (time < interval) {
