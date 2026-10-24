@@ -20,9 +20,24 @@ public class GameplayArea extends Pane {
     public static ImageView stageBgImg;
     private Keys keys;
     private List<GameCharacter> gameCharacterList;
+
+    public List<Brick> getCurrentObstacles() {
+        return currentObstacles;
+    }
+
+    public void setCurrentObstacles(List<Brick> currentObstacles) {
+        this.currentObstacles = currentObstacles;
+    }
+
     private List<Brick> currentObstacles;
 
     private List<ImageView> lifeIcons;
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    private Ball ball;
 
     public GameplayArea() {
         super();
@@ -32,13 +47,17 @@ public class GameplayArea extends Pane {
         gameCharacterList.add(new Vaus());
 //        scoreList = new ArrayList<>();
         keys = new Keys();
+        ball=new Ball();
 //        gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Background.png"));
 //        scoreList.add(new Score(30, GROUND + 30));
 //        scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
 //        getChildren().add(backgroundImg);
 
         this.addEventHandler(StageChange.NEXT_STAGE, e -> {
+            if (!currentObstacles.isEmpty()) {
             getChildren().removeAll(currentObstacles);
+            currentObstacles.clear();
+            }
             PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
             stageSetup();
         });
@@ -63,8 +82,9 @@ public class GameplayArea extends Pane {
 
         this.addEventHandler(Life.LOSE, e -> {
             PlayerData.setLifeCount(PlayerData.getLifeCount() - 1);
+            if (!lifeIcons.isEmpty()) {
             getChildren().remove(lifeIcons.getLast());
-            lifeIcons.removeLast();
+            lifeIcons.removeLast();}
         });
 
         for(int i = 0; i<PlayerData.getLifeCount(); i++) {
@@ -102,7 +122,7 @@ public class GameplayArea extends Pane {
         });
 
         getChildren().addAll(gameCharacterList);
-        getChildren().addAll(new Ball());
+        getChildren().addAll(ball);
 //        getChildren().addAll(scoreList);
     }
 
@@ -126,5 +146,15 @@ public class GameplayArea extends Pane {
     }
     public List<GameCharacter> getGameCharacterList() {
         return  gameCharacterList;
+    }
+    public void removeDestroyedBricks(List<se233.arkanoid.model.StageData.Brick> bricksToRemove) {
+        if (bricksToRemove.isEmpty()) return;
+
+        javafx.application.Platform.runLater(() -> {
+            // Remove all destroyed brick nodes from the JavaFX scene graph in one batch
+            getChildren().removeAll(bricksToRemove);
+            // Remove them from the active obstacle list
+            currentObstacles.removeAll(bricksToRemove);
+        });
     }
 }

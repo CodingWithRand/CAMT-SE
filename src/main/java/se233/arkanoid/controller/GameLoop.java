@@ -3,6 +3,8 @@ package se233.arkanoid.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se233.arkanoid.model.GameCharacter;
+import se233.arkanoid.model.GameMoveableObject;
+import se233.arkanoid.model.StageData.Brick;
 import se233.arkanoid.view.GameplayArea;
 //import se233.chapter5part1.view.Score;
 
@@ -16,7 +18,7 @@ public class GameLoop implements Runnable {
     private boolean running;
     public GameLoop(GameplayArea gameStage) {
         this.gameStage = gameStage;
-        frameRate = 10;
+        frameRate = 60;
         interval = 1000.0f / frameRate;
         running = true;
     }
@@ -39,8 +41,25 @@ public class GameLoop implements Runnable {
                 gameCharacter.moveRight();
             } else {
                 gameCharacter.stop();
-            }
+            }}
+            GameMoveableObject ball = gameStage.getBall();
+            if (ball != null) {
+                ball.move();
 
+                for (GameCharacter paddle : gameCharacterList) {
+                    ball.checkPaddleCollision(paddle);
+                }
+
+                // Create a frame-local queue for bricks destroyed during this tick
+                List<Brick> bricksToRemove = new java.util.ArrayList<>();
+
+                // Check collisions and collect destroyed bricks
+                ball.checkBrickCollisions(gameStage.getCurrentObstacles(), bricksToRemove);
+
+                // Batch remove destroyed bricks cleanly
+                if (!bricksToRemove.isEmpty()) {
+                    gameStage.removeDestroyedBricks(bricksToRemove);
+                }
 //            if (upPressed) {
 //                gameCharacter.jump();
 //            }

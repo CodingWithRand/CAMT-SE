@@ -38,6 +38,7 @@ public class Stage {
         thisGameScore.setText(Integer.toString(PlayerData.getCurrentScore()));
         highestScore.setText(Integer.toString(PlayerData.getHighScore()));
 
+        thisGameScore.textProperty().bind(PlayerData.currentScoreProperty().asString());
         gameplayArea.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if(newScene != null) {
                 gameplayArea.getScene().setOnKeyPressed(event-> gameplayArea.getKeys().add(event.getCode()));
@@ -50,4 +51,5 @@ public class Stage {
         (new Thread(drawingLoop)).start();
         (new Thread(gameLoop)).start();
     }
+
 }

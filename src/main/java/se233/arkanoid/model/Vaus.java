@@ -44,7 +44,7 @@ public class Vaus extends GameCharacter {
         if ((now - lastFrameTime) >= frameInterval) {
 //            System.out.println('a');
             spriteFrame = (spriteFrame + 1) % 6;
-            this.imageView.setViewport(new Rectangle2D(32, spriteFrame * 8, 32, 8));
+           // this.imageView.setViewport(new Rectangle2D(32, spriteFrame * 8, 32, 8));
             lastFrameTime = now;
         }
     }
