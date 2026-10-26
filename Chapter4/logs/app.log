@@ -1,0 +1,1164 @@
+[ INFO] 2026-09-09 23:12:25.649 [Thread-3] GameCharacter in [trace] at line 141: x:100 y:245 vx:0 vy:0
+[ INFO] 2026-09-09 23:12:25.753 [Thread-3] GameCharacter in [trace] at line 141: x:128 y:245 vx:7 vy:0
+[ INFO] 2026-09-09 23:12:28.569 [Thread-3] GameCharacter in [trace] at line 141: x:30 y:251 vx:0 vy:0
+[ INFO] 2026-09-09 23:12:28.672 [Thread-3] GameCharacter in [trace] at line 141: x:51 y:251 vx:6 vy:0
+[ INFO] 2026-09-09 23:12:29.175 [Thread-3] GameCharacter in [trace] at line 141: x:93 y:251 vx:7 vy:0
+[ INFO] 2026-09-09 23:12:29.277 [Thread-3] GameCharacter in [trace] at line 141: x:44 y:251 vx:7 vy:0
+[ INFO] Wed, 2026-09-09 23:20:11.293 [Thread-3] GameCharacter in [trace] at line 141: x:100 y:245 vx:0 vy:0
+[ INFO] Wed, 2026-09-09 23:20:11.396 [Thread-3] GameCharacter in [trace] at line 141: x:128 y:245 vx:7 vy:0
+[ INFO] Wed, 2026-09-09 23:20:11.504 [Thread-3] GameCharacter in [trace] at line 141: x:185 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:58:19.866 [Thread-3] GameCharacter in [trace] at line 141: x:30 y:251 vx:0 vy:0
+[ INFO] Thu, 2026-09-10 09:58:19.971 [Thread-3] GameCharacter in [trace] at line 141: x:2 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 09:58:20.006 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.023 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.042 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.059 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.077 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.095 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.113 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.132 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.149 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.166 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.184 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.201 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.218 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.235 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.252 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.270 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.288 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.305 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.322 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.340 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.357 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.374 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.392 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.409 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.427 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.444 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.462 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.479 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.496 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.514 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.532 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.549 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.566 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.583 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.600 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.618 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.636 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.653 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.670 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.688 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.706 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.723 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.741 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.758 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.776 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.793 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.810 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.827 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.845 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.863 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.880 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.897 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.915 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.932 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.949 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.966 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:20.984 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.001 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.018 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.035 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.052 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.070 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.088 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.106 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.124 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.142 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.159 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.176 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.193 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.210 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.227 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.244 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.261 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.278 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.296 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.313 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.330 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.347 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.364 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.382 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.399 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.416 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.433 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.451 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.469 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.487 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.504 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.521 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.539 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.556 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.573 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.590 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.608 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.625 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.642 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.659 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.676 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.693 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.710 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.727 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.744 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.762 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:21.780 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 09:58:21.797 [Thread-3] GameCharacter in [trace] at line 141: x:0 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 09:58:21.797 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 09:58:21.898 [Thread-3] GameCharacter in [trace] at line 141: x:42 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 09:58:51.316 [Thread-3] GameCharacter in [trace] at line 141: x:100 y:245 vx:0 vy:0
+[ INFO] Thu, 2026-09-10 09:58:51.419 [Thread-3] GameCharacter in [trace] at line 141: x:121 y:245 vx:6 vy:0
+[ INFO] Thu, 2026-09-10 09:58:51.924 [Thread-3] GameCharacter in [trace] at line 141: x:175 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:58:52.025 [Thread-3] GameCharacter in [trace] at line 141: x:115 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:58:52.929 [Thread-3] GameCharacter in [trace] at line 141: x:55 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 09:58:53.031 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.049 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.066 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.083 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.100 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.117 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.134 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.151 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.168 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.186 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.204 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.221 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.238 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.254 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.273 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.290 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.307 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.325 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.343 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.360 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.378 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.396 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.414 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.432 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.449 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.467 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.484 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.501 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.518 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.536 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.552 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.569 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.586 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.603 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.620 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.638 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.655 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.673 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.689 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.706 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.723 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.741 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.758 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.775 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.793 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.811 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.828 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.845 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.862 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.879 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.896 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.913 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 09:58:53.930 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 09:58:53.935 [Thread-3] GameCharacter in [trace] at line 141: x:0 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 09:58:53.947 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 09:58:55.143 [Thread-3] GameCharacter in [trace] at line 141: x:60 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:58:56.048 [Thread-3] GameCharacter in [trace] at line 141: x:84 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 09:58:56.150 [Thread-3] GameCharacter in [trace] at line 141: x:126 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 09:58:56.955 [Thread-3] GameCharacter in [trace] at line 141: x:120 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:58:57.055 [Thread-3] GameCharacter in [trace] at line 141: x:180 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:21.920 [Thread-3] GameCharacter in [trace] at line 141: x:240 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.023 [Thread-3] GameCharacter in [trace] at line 141: x:300 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.123 [Thread-3] GameCharacter in [trace] at line 141: x:360 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.226 [Thread-3] GameCharacter in [trace] at line 141: x:420 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.327 [Thread-3] GameCharacter in [trace] at line 141: x:480 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.430 [Thread-3] GameCharacter in [trace] at line 141: x:540 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.530 [Thread-3] GameCharacter in [trace] at line 141: x:600 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.633 [Thread-3] GameCharacter in [trace] at line 141: x:660 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 09:59:22.734 [Thread-3] GameCharacter in [trace] at line 141: x:720 y:236 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 09:59:22.787 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.804 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.820 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 09:59:22.834 [Thread-3] GameCharacter in [trace] at line 141: x:746 y:236 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 09:59:22.837 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.854 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.871 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.888 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.905 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.922 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.940 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.957 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.974 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:22.992 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.009 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.025 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.043 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.060 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.077 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.094 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.111 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.127 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.144 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.162 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.179 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.197 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.215 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.232 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.249 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.266 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.283 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.301 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.319 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.335 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.352 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.369 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.386 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.403 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.420 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.437 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.454 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.489 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.506 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 09:59:23.522 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 09:59:23.538 [Thread-3] GameCharacter in [trace] at line 141: x:736 y:236 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 09:59:23.540 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 09:59:23.640 [Thread-3] GameCharacter in [trace] at line 141: x:676 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:07.555 [Thread-3] GameCharacter in [trace] at line 141: x:30 y:251 vx:0 vy:0
+[ INFO] Thu, 2026-09-10 10:17:07.558 [Thread-3] GameCharacter in [trace] at line 141: x:100 y:245 vx:0 vy:0
+[ INFO] Thu, 2026-09-10 10:17:07.659 [Thread-3] GameCharacter in [trace] at line 141: x:51 y:251 vx:6 vy:0
+[ INFO] Thu, 2026-09-10 10:17:07.660 [Thread-3] GameCharacter in [trace] at line 141: x:121 y:245 vx:6 vy:0
+[ INFO] Thu, 2026-09-10 10:17:07.762 [Thread-3] GameCharacter in [trace] at line 141: x:185 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:07.863 [Thread-3] GameCharacter in [trace] at line 141: x:245 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.266 [Thread-3] GameCharacter in [trace] at line 141: x:100 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.266 [Thread-3] GameCharacter in [trace] at line 141: x:305 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.368 [Thread-3] GameCharacter in [trace] at line 141: x:142 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.369 [Thread-3] GameCharacter in [trace] at line 141: x:245 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.470 [Thread-3] GameCharacter in [trace] at line 141: x:184 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.471 [Thread-3] GameCharacter in [trace] at line 141: x:185 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:08.573 [Thread-3] GameCharacter in [trace] at line 141: x:226 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 10:17:09.076 [Thread-3] GameCharacter in [trace] at line 141: x:268 y:251 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 10:17:09.077 [Thread-3] GameCharacter in [trace] at line 141: x:125 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:09.791 [Thread-3] GameCharacter in [trace] at line 141: x:185 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:09.893 [Thread-3] GameCharacter in [trace] at line 141: x:115 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:09.994 [Thread-3] GameCharacter in [trace] at line 141: x:55 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:17:10.095 [Thread-3] GameCharacter in [trace] at line 141: x:-5 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.108 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.127 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.144 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.161 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.178 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.195 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.196 [Thread-3] GameCharacter in [trace] at line 141: x:-10 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.211 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.230 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.247 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.264 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.280 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.297 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.314 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.332 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.349 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.366 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.383 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.397 [Thread-3] GameCharacter in [trace] at line 141: x:226 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.400 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.417 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.435 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.452 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.469 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.488 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.498 [Thread-3] GameCharacter in [trace] at line 141: x:268 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.504 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.523 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.541 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.558 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.574 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.592 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.601 [Thread-3] GameCharacter in [trace] at line 141: x:310 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.609 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.627 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.644 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.661 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.678 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.695 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.701 [Thread-3] GameCharacter in [trace] at line 141: x:352 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.712 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.729 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.746 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.763 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.781 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.797 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.804 [Thread-3] GameCharacter in [trace] at line 141: x:394 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.814 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.831 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.848 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.865 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.881 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.898 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:10.905 [Thread-3] GameCharacter in [trace] at line 141: x:436 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:10.915 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.932 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.950 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.967 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:10.985 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.002 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.006 [Thread-3] GameCharacter in [trace] at line 141: x:478 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.019 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.036 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.053 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.070 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.087 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.104 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.107 [Thread-3] GameCharacter in [trace] at line 141: x:520 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.122 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.139 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.157 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.176 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.193 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.209 [Thread-3] GameCharacter in [trace] at line 141: x:555 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.211 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.228 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.246 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.264 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.282 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.301 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.311 [Thread-3] GameCharacter in [trace] at line 141: x:597 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.318 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.335 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.352 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.369 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.386 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.404 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.412 [Thread-3] GameCharacter in [trace] at line 141: x:639 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.420 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.438 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.457 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.474 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.491 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.509 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.514 [Thread-3] GameCharacter in [trace] at line 141: x:681 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.525 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.543 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.560 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.577 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.594 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.610 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.615 [Thread-3] GameCharacter in [trace] at line 141: x:723 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.627 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.644 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.662 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.679 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.696 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.712 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.715 [Thread-3] GameCharacter in [trace] at line 141: x:765 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.730 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.747 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.747 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.765 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.765 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.782 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.782 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.800 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.800 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:11.816 [Thread-3] GameCharacter in [trace] at line 141: x:775 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:11.818 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.818 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.835 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.835 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.852 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.852 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.869 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.869 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.886 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.886 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.903 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.903 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.920 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.920 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.937 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.937 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.954 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.954 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.971 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.971 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:11.987 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:11.987 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.005 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.005 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.022 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.022 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.039 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.040 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.056 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.056 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.074 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.074 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.091 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.091 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.107 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.107 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.124 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.124 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.142 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.142 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.159 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.159 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.176 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.176 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.194 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.194 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.211 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.211 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.227 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.227 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.244 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.244 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.262 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.262 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.278 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.279 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.296 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.296 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.314 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.314 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.330 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.331 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.348 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.348 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.365 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.369 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.386 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.386 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.404 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.404 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.421 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.421 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.438 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.438 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.454 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.454 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.489 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.489 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.507 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.507 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.524 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.524 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.542 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.542 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.558 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.558 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.575 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.575 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.592 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.592 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.609 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.609 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.628 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.628 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.645 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.645 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.662 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.662 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.680 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.680 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.697 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.697 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.715 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.715 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.733 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.733 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.750 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.750 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.767 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.767 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.784 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.784 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.801 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.801 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.818 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.818 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.836 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.836 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.854 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.854 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.872 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.872 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.889 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.889 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.906 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.906 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.924 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.924 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.940 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.940 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.957 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.957 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.974 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.974 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:12.991 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:12.991 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.008 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.008 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.025 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.025 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.042 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.042 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.059 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.059 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.076 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.076 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.094 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.094 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.111 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.111 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.128 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.128 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.145 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.145 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.162 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.162 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.178 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.178 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.195 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.195 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.212 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.212 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.229 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.229 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.246 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.246 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.263 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.263 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.280 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.280 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.297 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.297 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.314 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.314 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.330 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.330 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.347 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.347 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.364 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.364 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.382 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.382 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.400 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.400 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.418 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.418 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.436 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.436 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.452 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.452 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.470 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.470 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.487 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.487 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.504 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.504 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.521 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.521 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.538 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.538 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.555 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.555 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.572 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.572 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.588 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.588 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.605 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.605 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.623 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.623 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.640 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.640 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.658 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.658 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.675 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.675 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.693 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.693 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.710 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.710 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.727 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.727 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.745 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.745 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.762 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.762 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.779 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.779 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.796 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.796 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.813 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.813 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.830 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.830 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.847 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.847 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.866 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.866 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.882 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.882 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.899 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.899 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.916 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.916 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.933 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.933 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.950 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.950 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.967 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.967 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:13.984 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:13.984 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.001 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.001 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.017 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.017 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.034 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.034 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.050 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.050 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.067 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.067 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.084 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.084 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.101 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.101 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.117 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.118 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.135 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.135 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.151 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.151 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.168 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.168 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.185 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.185 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.202 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.202 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.219 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.219 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.236 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.236 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.252 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.252 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.269 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.269 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.286 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.286 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.303 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.303 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.320 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.320 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.337 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.337 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.353 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.353 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.369 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.369 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.386 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.386 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.403 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.403 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.421 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.421 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.439 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.439 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.455 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.455 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.490 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.490 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.508 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.508 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.525 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.525 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.543 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.543 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.560 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.560 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.577 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.577 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.594 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.594 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.611 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.611 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.628 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.628 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:14.632 [Thread-3] GameCharacter in [trace] at line 141: x:0 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:14.645 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.645 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.661 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.661 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.678 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.678 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.695 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.695 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.712 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.712 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.729 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.729 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.747 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.747 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.765 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.765 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.781 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.781 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.798 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.798 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.814 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.814 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.831 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.831 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.848 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.848 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.865 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.865 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.882 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.882 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.900 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.900 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.917 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.917 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.934 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.934 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.951 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.951 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.968 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.968 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:14.985 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:14.985 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.001 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.001 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.018 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.018 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.035 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.035 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.052 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.052 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.069 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.069 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.085 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.085 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.103 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.103 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.119 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.119 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.136 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.136 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.153 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.153 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.170 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.170 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.187 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.187 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.204 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.204 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.221 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.221 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.237 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.237 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.254 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.254 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.271 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.271 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.288 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.288 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.305 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.305 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.322 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.322 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.339 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.339 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.356 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.356 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.373 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.373 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.390 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.390 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.407 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.407 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.423 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.423 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.440 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.440 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.457 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.457 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.475 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.475 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.492 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.492 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.508 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.508 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.526 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.526 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.543 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.543 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.559 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.559 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.577 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.577 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.594 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.594 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.611 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.611 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.628 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.628 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.645 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.645 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.662 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.662 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.678 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.678 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.695 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.695 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.711 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.711 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.730 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.730 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[ INFO] Thu, 2026-09-10 10:17:15.738 [Thread-3] GameCharacter in [trace] at line 141: x:0 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:15.747 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.747 [Thread-4] GameCharacter in [checkReachGameWall] at line 94: Hit game wall on the left.
+[DEBUG] Thu, 2026-09-10 10:17:15.763 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.780 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.797 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.814 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.831 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:17:15.839 [Thread-3] GameCharacter in [trace] at line 141: x:60 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:15.849 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.866 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.882 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.899 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.917 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.933 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.949 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.966 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.982 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:15.999 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.016 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.033 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.050 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.067 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.085 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.103 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.119 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.137 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.154 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.171 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.188 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.205 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.222 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.239 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.255 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.272 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.289 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.306 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.324 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.340 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.357 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.374 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.391 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.408 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.424 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.441 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.464 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.480 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.498 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.515 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.531 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.548 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.565 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.582 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.599 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.616 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:17:16.634 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:17:16.645 [Thread-3] GameCharacter in [trace] at line 141: x:768 y:251 vx:7 vy:0
+[DEBUG] Thu, 2026-09-10 10:17:16.650 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:18:28.293 [Thread-3] GameCharacter in [trace] at line 141: x:120 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:30.206 [Thread-3] GameCharacter in [trace] at line 141: x:190 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.371 [Thread-3] GameCharacter in [trace] at line 141: x:250 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.472 [Thread-3] GameCharacter in [trace] at line 141: x:310 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.573 [Thread-3] GameCharacter in [trace] at line 141: x:370 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.675 [Thread-3] GameCharacter in [trace] at line 141: x:430 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.776 [Thread-3] GameCharacter in [trace] at line 141: x:490 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.877 [Thread-3] GameCharacter in [trace] at line 141: x:550 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:38.978 [Thread-3] GameCharacter in [trace] at line 141: x:610 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:39.079 [Thread-3] GameCharacter in [trace] at line 141: x:670 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:39.179 [Thread-3] GameCharacter in [trace] at line 141: x:730 y:236 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:18:39.202 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.219 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.236 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.253 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.270 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.286 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.303 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.321 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.339 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.356 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.373 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.389 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.405 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.422 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.439 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.455 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.489 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.506 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.523 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.540 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.557 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.574 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.591 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.609 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.626 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.643 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.660 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.677 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.693 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.710 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.727 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.744 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.761 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.778 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.795 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.812 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.829 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.847 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.864 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.883 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.899 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.916 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.933 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.949 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.966 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:39.983 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:18:39.986 [Thread-3] GameCharacter in [trace] at line 141: x:736 y:236 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:18:40.000 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.017 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.035 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.053 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.069 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.086 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.103 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.121 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.137 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.153 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.170 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.186 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.203 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.221 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.238 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.254 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.271 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.288 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.305 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.321 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.338 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.355 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.372 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.389 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.406 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.422 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.439 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.456 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.472 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.489 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.507 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.523 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.540 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.557 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.574 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.591 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.608 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.624 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.641 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.658 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.675 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.693 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.711 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.727 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.744 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.762 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.779 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.795 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.812 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.828 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.844 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.861 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.878 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.895 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.911 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.928 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.945 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.961 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.978 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:40.995 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.011 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.028 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.044 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.062 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.078 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.095 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.112 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.128 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.145 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.162 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.179 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.196 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.213 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.230 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.246 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.263 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.280 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.296 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.314 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.332 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.348 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.365 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.382 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.399 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.416 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.433 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.450 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.466 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.483 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.500 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.519 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.537 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.554 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.571 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:18:41.588 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:18:41.594 [Thread-3] GameCharacter in [trace] at line 141: x:736 y:236 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:18:41.604 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:18:42.198 [Thread-3] GameCharacter in [trace] at line 141: x:676 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:43.810 [Thread-3] GameCharacter in [trace] at line 141: x:616 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:43.912 [Thread-3] GameCharacter in [trace] at line 141: x:556 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:44.012 [Thread-3] GameCharacter in [trace] at line 141: x:496 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:44.920 [Thread-3] GameCharacter in [trace] at line 141: x:436 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:18:45.825 [Thread-3] GameCharacter in [trace] at line 141: x:376 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:19:26.860 [Thread-3] GameCharacter in [trace] at line 141: x:316 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:19:27.567 [Thread-3] GameCharacter in [trace] at line 141: x:256 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:18.166 [Thread-3] GameCharacter in [trace] at line 141: x:196 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:18.570 [Thread-3] GameCharacter in [trace] at line 141: x:256 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:18.671 [Thread-3] GameCharacter in [trace] at line 141: x:316 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:18.973 [Thread-3] GameCharacter in [trace] at line 141: x:386 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:19.275 [Thread-3] GameCharacter in [trace] at line 141: x:326 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:19.376 [Thread-3] GameCharacter in [trace] at line 141: x:266 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:19.678 [Thread-3] GameCharacter in [trace] at line 141: x:206 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:19.779 [Thread-3] GameCharacter in [trace] at line 141: x:146 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:20.081 [Thread-3] GameCharacter in [trace] at line 141: x:86 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:20.585 [Thread-3] GameCharacter in [trace] at line 141: x:26 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:22.918 [Thread-3] GameCharacter in [trace] at line 141: x:86 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:23.419 [Thread-3] GameCharacter in [trace] at line 141: x:146 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:24.024 [Thread-3] GameCharacter in [trace] at line 141: x:206 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:20:24.628 [Thread-3] GameCharacter in [trace] at line 141: x:266 y:236 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:39.555 [Thread-3] GameCharacter in [trace] at line 141: x:100 y:245 vx:0 vy:0
+[ INFO] Thu, 2026-09-10 10:21:40.663 [Thread-3] GameCharacter in [trace] at line 141: x:128 y:245 vx:7 vy:0
+[ INFO] Thu, 2026-09-10 10:21:41.679 [Thread-3] GameCharacter in [trace] at line 141: x:185 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:42.486 [Thread-3] GameCharacter in [trace] at line 141: x:245 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:43.395 [Thread-3] GameCharacter in [trace] at line 141: x:315 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:44.805 [Thread-3] GameCharacter in [trace] at line 141: x:375 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:47.826 [Thread-3] GameCharacter in [trace] at line 141: x:435 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:48.432 [Thread-3] GameCharacter in [trace] at line 141: x:375 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:49.539 [Thread-3] GameCharacter in [trace] at line 141: x:435 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:50.647 [Thread-3] GameCharacter in [trace] at line 141: x:505 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:51.250 [Thread-3] GameCharacter in [trace] at line 141: x:565 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:52.358 [Thread-3] GameCharacter in [trace] at line 141: x:625 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:52.561 [Thread-3] GameCharacter in [trace] at line 141: x:565 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:52.764 [Thread-3] GameCharacter in [trace] at line 141: x:505 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:53.267 [Thread-3] GameCharacter in [trace] at line 141: x:445 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:53.671 [Thread-3] GameCharacter in [trace] at line 141: x:385 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:53.973 [Thread-3] GameCharacter in [trace] at line 141: x:325 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:55.280 [Thread-3] GameCharacter in [trace] at line 141: x:265 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:56.087 [Thread-3] GameCharacter in [trace] at line 141: x:205 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:56.792 [Thread-3] GameCharacter in [trace] at line 141: x:265 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:57.496 [Thread-3] GameCharacter in [trace] at line 141: x:325 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:21:59.608 [Thread-3] GameCharacter in [trace] at line 141: x:385 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:00.111 [Thread-3] GameCharacter in [trace] at line 141: x:445 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:00.316 [Thread-3] GameCharacter in [trace] at line 141: x:515 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:01.422 [Thread-3] GameCharacter in [trace] at line 141: x:565 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:01.926 [Thread-3] GameCharacter in [trace] at line 141: x:625 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:04.243 [Thread-3] GameCharacter in [trace] at line 141: x:685 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:22:04.347 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.364 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.381 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.398 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.415 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.433 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.450 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.467 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.485 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.502 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.519 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.536 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.553 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.571 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.589 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.606 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.623 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.639 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.657 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.675 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.692 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.710 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.727 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.744 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.762 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.780 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.797 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.814 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.830 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.848 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.865 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.882 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.899 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.917 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.934 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.953 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.971 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:04.988 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.006 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.022 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.039 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.055 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.072 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.090 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.107 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.124 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.140 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.158 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.175 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.192 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.208 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.225 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[DEBUG] Thu, 2026-09-10 10:22:05.242 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:22:05.249 [Thread-3] GameCharacter in [trace] at line 141: x:736 y:245 vx:10 vy:0
+[DEBUG] Thu, 2026-09-10 10:22:05.259 [Thread-4] GameCharacter in [checkReachGameWall] at line 97: Hit game wall on the right.
+[ INFO] Thu, 2026-09-10 10:22:05.451 [Thread-3] GameCharacter in [trace] at line 141: x:676 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:05.653 [Thread-3] GameCharacter in [trace] at line 141: x:616 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:05.856 [Thread-3] GameCharacter in [trace] at line 141: x:556 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:06.158 [Thread-3] GameCharacter in [trace] at line 141: x:496 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:07.064 [Thread-3] GameCharacter in [trace] at line 141: x:436 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:07.468 [Thread-3] GameCharacter in [trace] at line 141: x:366 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:07.871 [Thread-3] GameCharacter in [trace] at line 141: x:306 y:245 vx:10 vy:0
+[ INFO] Thu, 2026-09-10 10:22:08.172 [Thread-3] GameCharacter in [trace] at line 141: x:246 y:245 vx:10 vy:0

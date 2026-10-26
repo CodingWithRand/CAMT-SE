@@ -1,6 +1,6 @@
 # Advance Programming Labs (953233)
 ## Disclaimer
-1. Treat these only as `SOURCE CODES`. DO NOT EXPECT THAT AFTER YOU CLONE THIS BRANCH AND YOU WILL BE ABLE TO RUN THE LAB DIRECTLY!!!! Btw, necessary configuration files and assets are already include in here. So, you can figure out how to set up the project. (Default is a plain JavaFX project.)
+1. ~~Treat these only as `SOURCE CODES`. DO NOT EXPECT THAT AFTER YOU CLONE THIS BRANCH AND YOU WILL BE ABLE TO RUN THE LAB DIRECTLY!!!! Btw, necessary configuration files and assets are already include in here. So, you can figure out how to set up the project. (Default is a plain JavaFX project.)~~ nvm, i guess you can just clone and run it now.
 2. Labs' instructions are in this [book](se233v2026.pdf). You can navigate to `Case Study` and `Exercise` of each unit.
 
 ## Lab 1
