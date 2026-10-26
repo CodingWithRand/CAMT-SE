@@ -10,3 +10,5 @@
 
 /.vercel
 /node_modules
+
+/*/**/target

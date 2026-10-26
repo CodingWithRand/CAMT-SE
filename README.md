@@ -144,7 +144,6 @@ You parsed the raw interview transcript accurately and converted all the convers
 * **Completeness:** Total `{Total}` (You noted: *"All vehicles fit into these 2 categories"*).
 
 
-
 ---
 
 ##### **3. Relationships & Cardinalities (Score: 24/25)**
@@ -192,3 +191,116 @@ More advance joining. [Lab Folder](./Lab10/)
 
 ## Term project
 My team picked ลูกช้างมช. 2.0 -> [WhongNaiMor](https://github.com/CodingWithRand/CAMT-SE/tree/WhongNaiMor)
+
+## Finals Normalization Practice
+### Easy — a wildlife rescue center 🦉
+
+#### Denormalized table
+
+Each animal has a list of its recorded checkups.
+
+| animal_id | animal_name | species_id | species_name | Checkups |
+|---|---|---|---|---|
+| A01 | Pip | S01 | Barn owl | (2026-10-20, V01, Maya, 0801111111, 450); (2026-10-22, V02, Leo, 0802222222, 460) |
+| A02 | Moss | S02 | Hedgehog | (2026-10-20, V01, Maya, 0801111111, 700) |
+| A03 | Luna | S01 | Barn owl | (2026-10-22, V02, Leo, 0802222222, 510) |
+
+Each checkup contains:
+
+```text
+(date, vet_id, vet_name, vet_phone, animal_weight_in_grams)
+```
+
+*All names and phone numbers are fictional.*
+
+#### Rules
+Use these rules—not just the sample rows—to decide your keys:
+
+- Each animal ID identifies one animal, its name, and its species.
+- Each species ID identifies one species name.
+- An animal can have many checkups, but **at most one per date**.
+- Each checkup is performed by exactly one vet and records one weight.
+- Each vet ID identifies one vet name and one phone number.
+- A vet can check several animals on the same date.
+- Names are **not guaranteed to be unique**.
+
+#### Your challenge
+Take it through **1NF → 2NF → 3NF**. For each stage, show:
+- Your tables and their columns.
+- Each table’s primary key.
+- What you moved, and why.
+
+### Hard — company training system
+
+#### Starting table: not yet in 1NF
+
+Each row contains an employee and a list of their training enrollments.
+
+| employee_id | employee_name | department_id | department_name | manager_id | manager_name | Enrollments |
+|---|---|---|---|---|---|---|
+| E01 | Ava | D01 | Engineering | M01 | Nora | (S01, C01, First Aid, 4, I01, Sam, R01, Oak Room, 20, 2026-11-02, Pass); (S02, C02, Cyber Safety, 2, I02, Kai, R02, Pine Room, 30, 2026-11-03, Pass) |
+| E02 | Ben | D01 | Engineering | M01 | Nora | (S01, C01, First Aid, 4, I01, Sam, R01, Oak Room, 20, 2026-11-02, Pending) |
+| E03 | Cleo | D02 | Finance | M02 | Omar | (S02, C02, Cyber Safety, 2, I02, Kai, R02, Pine Room, 30, 2026-11-03, Pass); (S03, C01, First Aid, 4, I03, Lee, R01, Oak Room, 20, 2026-11-05, Pending) |
+
+Each item in `Enrollments` contains these fields, in order:
+
+```text
+session_id
+course_id
+course_title
+course_hours
+instructor_id
+instructor_name
+room_id
+room_name
+room_capacity
+session_date
+result
+```
+
+#### Rules of the system
+
+Use these rules to find dependencies. **The sample rows alone don’t prove them.**
+
+##### Employees and departments
+- Each employee ID identifies one employee name and one current department.
+- Each department ID identifies one department name and one manager.
+- Each manager ID identifies one manager name.
+- A manager may manage several departments.
+
+##### Courses and sessions
+A **course** is the subject being taught. A **session** is one scheduled offering of that course.
+
+- Each course ID identifies one course title and one course length in hours.
+- A course may have several sessions.
+- Each session ID identifies one course, one instructor, one room, and one date.
+- An instructor may teach many sessions.
+- Each instructor ID identifies one instructor name.
+- Each room ID identifies one room name and one capacity.
+- A room may host several sessions, even on the same date.
+
+##### Enrollments
+- An employee may enroll in many sessions.
+- A session may have many employees.
+- An employee can enroll in a particular session **only once**.
+- Each enrollment has one result: `Pass`, `Fail`, or `Pending`.
+- Names, titles, and dates are **not guaranteed to be unique**.
+- For this exercise, store only current department and manager details—no history.
+
+#### Your task
+
+Take this through **1NF → 2NF → 3NF**.
+
+Let’s start with:
+1. How many rows will the **1NF** table have?
+2. What will one row represent?
+3. What is its smallest combined primary key?
+
+Then list your functional dependencies before splitting the tables.
+
+### [Answers](./Finals%20Normalization%20Practice%20Answers.md)
+
+## SQL Summary
+1. [Part 1](./Finals%20SQL.sql)
+2. [Part 2](./Finals%20SQL2.sql)
+3. [Practice Question in Part 2 Answers](./SQL%20Practice%20Answers.md)
