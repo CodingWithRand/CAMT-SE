@@ -307,3 +307,5 @@ Then list your functional dependencies before splitting the tables.
 
 ## PHP
 Go read [here.](https://claude.ai/artifact/Pa5Ko2dvP3XTxvSfjeDMrM#php)
+
+In the end, I annotated some files in [omproject](./omproject/) for additional syntaxes. Plug that folder inside `htdocs` in your `xampp` to test it yourself, k?
