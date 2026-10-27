@@ -199,9 +199,17 @@ SELECT * FROM enrollments;
 -- No where clause, every result field = Pending now.
 -- UPDATE enrollments SET result = "Pending";
 -- SELECT * FROM enrollments;
+-- You can also update multiple columns at the same time. (E.g. insert a wrong record and fix it by updating instead of removing and reinserting)
+UPDATE enrollments SET employee_id = 'E05', session_id = 'S02', result = "Pending" WHERE employee_id = 'E02' and session_id = 'S01';
+SELECT * FROM enrollments;
 
 -- DELETE - Same warning as UPDATE
 DELETE FROM employees WHERE employee_id = 'E05';
+SELECT * FROM employees;
+
+-- TRUNCATE - DELETE but faster + AUTO_INCREMENT reset.
+-- NO WHERE CLAUSE btw.
+TRUNCATE TABLE employees;
 SELECT * FROM employees;
 
 -- Referential Integrity can affect UPDATE and DELETE queries.
@@ -221,6 +229,12 @@ SELECT s.session_id, i.instructor_name, c.course_title
 FROM _sessions AS s -- Alias can also be applied to table name to shorten its name for faster use. (AS is optional btw)
 INNER JOIN instructors i ON s.instructor_id = i.instructor_id -- INNER keyword is optional (default join is inner join)
 JOIN courses c ON s.course_id = c.course_id;
+-- We need to specify the table that column name is from cuz it can be ambiguous when different tables share te same column name.
+-- Implicit JOIN - This give the same result as the above query.
+SELECT s.session_id, i.instructor_name, c.course_title
+FROM _sessions s, instructors i, courses c
+WHERE s.instructor_id = i.instructor_id AND s.course_id = c.course_id;
+-- Again, statement after ON is a condition, which means you may use multiple AND or OR to form a condition. Likewise to WHERE clause.
 
 -- Business query: Who is not enrolling? Layout each employee enrollment.
 SELECT em.employee_name, e.session_id, c.course_title
@@ -235,6 +249,19 @@ LEFT JOIN enrollments e ON em.employee_id = e.employee_id
 LEFT JOIN _sessions s ON e.session_id = s.session_id
 LEFT JOIN courses c ON s.course_id = c.course_id
 WHERE s.session_id IS NULL; -- Use IS NULL to check if a field is NULL or not.
+
+-- To do FULL JOIN in SQL. Not a business query.
+ALTER TABLE employees MODIFY COLUMN department_id VARCHAR(10);
+UPDATE employees SET department_id = 'D01' WHERE employee_name LIKE 'Cl%';
+SELECT *
+FROM employees em
+LEFT JOIN departments d ON em.department_id = d.department_id
+UNION
+SELECT *
+FROM employees em
+RIGHT JOIN departments d ON em.department_id = d.department_id;
+
+-- JOIN can work with any table, including itself, and table in other database. Though you have to give the other one different alias.
 
 -- Business query: I want full info of each employee
 SELECT *
@@ -256,6 +283,7 @@ JOIN managers m USING(manager_id);
 -- Department CROSS Manager
 SELECT d.department_id, d.department_name, m.manager_id, m.manager_name
 FROM departments d CROSS JOIN managers m;
+-- JOIN without ON will also give the same result.
 -- This query will also give the same result.
 SELECT d.department_id, d.department_name, m.manager_id, m.manager_name
 FROM departments d, managers m;

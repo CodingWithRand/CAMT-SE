@@ -81,7 +81,7 @@ create table Checkups (
 -- 4. DATE: Present year, month, and day (the date on calendar), format is YYYY-MM-DD
 -- 5. TEXT: Normal string, no max size capped
 -- 6. BOOLEAN / BOOL
--- 7. DECIMAL or DEC(number_of_digit_before_dot, number_of_digit_after_dot): E.g. DEC(5, 3) will allow 10000.023, but not 343554.3211
+-- 7. DECIMAL or DEC(number_of_digit_before_dot, number_of_digit_after_dot): E.g. DEC(5, 3) will allow 10.023, but not 344.3211
 -- 8. TIMESTAMP: DATE + TIME (hh:mm:ss)
 
 -- Alter Table -> Change the table structure

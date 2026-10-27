@@ -304,3 +304,6 @@ Then list your functional dependencies before splitting the tables.
 1. [Part 1](./Finals%20SQL.sql)
 2. [Part 2](./Finals%20SQL2.sql)
 3. [Practice Question in Part 2 Answers](./SQL%20Practice%20Answers.md)
+
+## PHP
+Go read [here.](https://claude.ai/artifact/Pa5Ko2dvP3XTxvSfjeDMrM#php)
