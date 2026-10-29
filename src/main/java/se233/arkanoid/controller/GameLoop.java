@@ -74,6 +74,16 @@ public class GameLoop implements Runnable {
 //            if (upPressed) {
 //                gameCharacter.jump();
 //            }
+                boolean allDestructibleCleared = gameStage.getCurrentObstacles().stream()
+                        .noneMatch(brick -> brick.getHp() > 0);
+
+                if (allDestructibleCleared && !gameStage.getCurrentObstacles().isEmpty()) {
+                    logger.info("All destructible bricks cleared! Triggering next stage transition.");
+                    GameLoop.pauseStage();
+                    javafx.application.Platform.runLater(() -> {
+                        gameStage.fireEvent(new se233.arkanoid.event.StageChange(se233.arkanoid.event.StageChange.NEXT_STAGE));
+                    });
+                }
         }
     }
 

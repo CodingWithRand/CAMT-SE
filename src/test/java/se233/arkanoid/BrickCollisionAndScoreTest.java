@@ -75,7 +75,7 @@ class BrickCollisionAndScoreTest {
         assertEquals(0, PlayerData.getCurrentScore());
 
         // 2. Act
-        boolean collisionDetected = ball.checkBrickCollisions(obstacles, removedQueue);
+        boolean collisionDetected = ball.checkBrickCollisions(obstacles, removedQueue,4);
 
         assertTrue(collisionDetected, "Ball should detect intersection with the brick");
         assertTrue(removedQueue.contains(brick), "Destroyed brick should be added to the removal queue");

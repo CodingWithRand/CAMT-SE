@@ -210,7 +210,9 @@ public class GameCharacter extends Pane {
     public int getCharacterWidth() {
         return characterWidth;
     }
-
+    public int getCharacterHeight() {
+        return characterHeight;
+    }
     public int getY() {
         return y;
     }

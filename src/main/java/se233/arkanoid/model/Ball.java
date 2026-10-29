@@ -60,23 +60,18 @@ public class Ball extends GameMoveableObject {
 
     @Override
     public boolean checkBrickCollisions(List<Brick> bricks,
-                                        List<se233.arkanoid.model.StageData.Brick> removedQueue,
+                                        List<Brick> removedQueue,
                                         long time) {
-        long currentTimeMs = System.currentTimeMillis();
 
-        // Clear last hit brick after cooldown period expires
-        if (lastHitBrick != null && (currentTimeMs - lastHitTimeMs > COLLISION_COOLDOWN_MS)) {
+        // Clear the lockout ONLY when the ball has physically moved completely away from the last hit brick
+        if (lastHitBrick != null && !this.getBoundsInParent().intersects(lastHitBrick.getBoundsInParent())) {
             lastHitBrick = null;
         }
+
         for (Brick brick : bricks) {
-            // Skip bricks already queued for removal
             if (removedQueue.contains(brick)) continue;
 
-            // Check intersection using local bounds relative to parent
-//            javafx.geometry.Bounds ballBounds = this.getBoundsInParent();
-//            javafx.geometry.Bounds brickBounds = brick.getBoundsInParent();
-
-            // SKIP collision check if this brick was hit recently
+            // Ignore this brick if it's currently locked out from a recent hit
             if (brick == lastHitBrick) continue;
 
             if (this.getBoundsInParent().intersects(brick.getBoundsInParent())) {
@@ -84,63 +79,32 @@ public class Ball extends GameMoveableObject {
                 logger.info("Ball collided with brick. Destroyed: {}, Remaining HP: {}", isDestroyed, brick.getHp());
 
                 if (isDestroyed) {
-                    // Award points safely on FX thread
                     javafx.application.Platform.runLater(() -> {
                         int points = brick.getType().getScoreValue();
                         PlayerData.setCurrentScore(PlayerData.getCurrentScore() + points);
                         logger.info("Brick destroyed! Awarded {} points. Total Score: {}", points, PlayerData.getCurrentScore());
                     });
-                    // Queue for safe batch removal later in the loop cycle
                     removedQueue.add(brick);
                 } else {
-                    // Register cooldown ONLY if brick survived and remains on screen
+                    // Lock out this specific brick so it can't re-trigger until the ball moves away
                     lastHitBrick = brick;
-                    lastHitTimeMs = currentTimeMs;
                 }
 
-//                // Reverse vertical velocity (bounce)
-                yVelocity = -yVelocity;
-                return true; // Collision handled
-//                 --- RESOLVE OVERLAP AND BOUNCE DIRECTION ---
-//                double ballMinX = ballBounds.getMinX();
-//                double ballMaxX = ballBounds.getMaxX();
-//                double ballMinY = ballBounds.getMinY();
-//                double ballMaxY = ballBounds.getMaxY();
-//
-//                double brickMinX = brickBounds.getMinX();
-//                double brickMaxX = brickBounds.getMaxX();
-//                double brickMinY = brickBounds.getMinY();
-//                double brickMaxY = brickBounds.getMaxY();
-//
-//                // Calculate overlap depths on each side
-//                double overlapLeft   = ballMaxX - brickMinX;
-//                double overlapRight  = brickMaxX - ballMinX;
-//                double overlapTop    = ballMaxY - brickMinY;
-//                double overlapBottom = brickMaxY - ballMinY;
-//
-//                // Find minimum overlap axis
-//                double minOverlapX = Math.min(overlapLeft, overlapRight);
-//                double minOverlapY = Math.min(overlapTop, overlapBottom);
-//
-//                if (minOverlapX < minOverlapY) {
-//                    // Horizontal Collision (Hit Side of Brick)
-//                    if (overlapLeft < overlapRight) {
-//                        this.x = (int) (brickMinX - this.characterWidth); // Push Left
-//                    } else {
-//                        this.x = (int) (brickMaxX);                       // Push Right
-//                    }
-//                    xVelocity = -xVelocity;
-//                } else {
-//                    // Vertical Collision (Hit Top or Bottom of Brick)
-//                    if (overlapTop < overlapBottom) {
-//                        this.y = (int) (brickMinY - this.characterHeight); // Push Top
-//                    } else {
-//                        this.y = (int) (brickMaxY);                        // Push Bottom
-//                    }
-//                    yVelocity = -yVelocity;
-//                }
+                // --- ITERATIVE ESCAPE LOOP ---
+                int safetyGuard = 0;
+                while (this.getBoundsInParent().intersects(brick.getBoundsInParent()) && safetyGuard < 30) {
+                    this.x -= (int) Math.signum(xVelocity);
+                    this.y -= (int) Math.signum(yVelocity);
+                    this.setTranslateX(this.x);
+                    this.setTranslateY(this.y);
+                    safetyGuard++;
+                }
 
-//                return true; // Collision handled
+                // Invert velocities to bounce away cleanly
+                xVelocity = -xVelocity;
+                yVelocity = -yVelocity;
+
+                return true;
             }
         }
         return false;

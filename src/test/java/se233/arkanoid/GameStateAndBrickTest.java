@@ -50,27 +50,30 @@ class GameStateAndBrickTest {
 
     @Test
     void testLifeGainAndLoseEvents() {
+        // Explicitly set starting lives to 2 for this test
+
         Platform.runLater(() -> {
             GameplayArea area = new GameplayArea();
+            PlayerData.setLifeCount(2);
 
-            // Gain extra life (e.g., eating a life power-up)
+            // Gain extra life -> 2 + 1 = 3
             area.fireEvent(new Life(Life.GAIN));
             assertEquals(3, PlayerData.getLifeCount(), "Life count should increase to 3 on GAIN");
 
-            // Lose lives down to zero
+            // Lose first life -> 3 - 1 = 2
             area.fireEvent(new Life(Life.LOSE));
-            assertEquals(2, PlayerData.getLifeCount());
+            assertEquals(2, PlayerData.getLifeCount(), "Life count should decrease to 2 after losing a life");
 
+            // Lose remaining lives down to 0
             area.fireEvent(new Life(Life.LOSE));
             area.fireEvent(new Life(Life.LOSE));
             assertEquals(0, PlayerData.getLifeCount(), "Life count should hit 0 on death");
 
-            // Verify no IndexOutOfBoundsException or negative lives on extra death events
+            // Verify no negative lives on extra death events
             assertDoesNotThrow(() -> area.fireEvent(new Life(Life.LOSE)), "Excess LOSE events should handle gracefully");
             assertEquals(0, PlayerData.getLifeCount(), "Life count should clamp at 0");
         });
     }
-
     // --- 2. BRICK HIT & HP TESTS ---
 
     @Test

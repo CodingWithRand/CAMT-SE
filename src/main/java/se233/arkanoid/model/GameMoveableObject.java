@@ -98,8 +98,11 @@ public abstract class GameMoveableObject extends Pane {
     public int getCharacterWidth() {
         return characterWidth;
     }
-
+    public int getCharacterHeight() {
+        return characterHeight;
+    }
     public int getScore() {
         return score;
     }
+
 }
