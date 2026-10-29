@@ -45,4 +45,18 @@ public class PlayerData {
     public static void setLifeCount(int lives) {
         lifeCount = lives;
     }
+    public static void checkAndUpdateHighScore() {
+        if (getCurrentScore() > getHighScore()) {
+            setHighScore(getCurrentScore());
+            saveHighScoreToFile();
+        }
+    }
+
+    public static void saveHighScoreToFile() {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.File("player-data"))) {
+            writer.println("highScore=" + getHighScore());
+        } catch (java.io.FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

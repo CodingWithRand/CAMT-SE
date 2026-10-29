@@ -80,13 +80,19 @@ public class GameplayArea extends Pane {
             getChildren().add(lifeIcon);
         });
 
-        this.addEventHandler(Life.LOSE, e -> {
-            PlayerData.setLifeCount(PlayerData.getLifeCount() - 1);
-            if (!lifeIcons.isEmpty()) {
-            getChildren().remove(lifeIcons.getLast());
-            lifeIcons.removeLast();}
-        });
 
+        this.addEventHandler(Life.LOSE, e -> {
+            javafx.application.Platform.runLater(() -> {
+                // Only decrement and remove icons if lives and icons actually remain
+                if (PlayerData.getLifeCount() > 0 && !lifeIcons.isEmpty()) {
+                    PlayerData.setLifeCount(PlayerData.getLifeCount() - 1);
+
+                    // Safely remove the last icon element without index underflow
+                    ImageView lifeIcon = lifeIcons.remove(lifeIcons.size() - 1);
+                    getChildren().remove(lifeIcon);
+                }
+            });
+        });
         for(int i = 0; i<PlayerData.getLifeCount(); i++) {
             ImageView lifeIcon = new ImageView();
             lifeIcon.setImage(new Image(getClass().getResourceAsStream("/se233/arkanoid/assets/Fields.png")));

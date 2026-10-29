@@ -4,12 +4,17 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import se233.arkanoid.event.Life;
 import se233.arkanoid.model.StageData.Brick;
 import se233.arkanoid.view.GameplayArea;
 
 import java.util.List;
 
 public class GameMoveableObject extends Pane {
+    private static final Logger logger = LogManager.getLogger(GameMoveableObject.class);
+
     private Image characterImg;
     protected ImageView imageView;
     private int x;
@@ -29,7 +34,7 @@ public class GameMoveableObject extends Pane {
     boolean isFalling = true;
     boolean canJump = false;
     boolean isJumping = false;
-
+    private boolean isOutOfBounds = false;
     public GameMoveableObject(
             int x, int y,
             String imgName,
@@ -55,21 +60,23 @@ public class GameMoveableObject extends Pane {
 
     // Continuous movement for both X and Y axes based on current velocities
     public void move() {
+        if (isOutOfBounds) return;
         x += xVelocity;
         y += yVelocity;
         setTranslateX(x);
         setTranslateY(y);
         checkReachGameWall();
     }
+
     public boolean checkPaddleCollision(GameCharacter paddle) {
         // Check if the ball's bounding box intersects with the paddle's bounding box
         if (this.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
+            logger.info("Ball collided with paddle at X: {}, Y: {}", x, y);
 
             // 1. Reflect Y velocity upwards (ensure it's negative so it moves up)
             yVelocity = -Math.abs(yVelocity);
 
             // 2. Optional Classic Arkanoid Mechanic: Add "English" (angle adjustment)
-            // based on where the ball hits the paddle relative to its center
             double paddleCenterX = paddle.getX() + (paddle.getCharacterWidth() / 2.0);
             double ballCenterX = this.getX() + (this.getCharacterWidth() / 2.0);
             double hitOffset = (ballCenterX - paddleCenterX) / (paddle.getCharacterWidth() / 2.0);
@@ -84,19 +91,22 @@ public class GameMoveableObject extends Pane {
         }
         return false;
     }
-    public boolean checkBrickCollisions(List<se233.arkanoid.model.StageData.Brick> bricks,
-                                        List<se233.arkanoid.model.StageData.Brick> removedQueue) {
-        for (se233.arkanoid.model.StageData.Brick brick : bricks) {
+
+    public boolean checkBrickCollisions(List<Brick> bricks, List<Brick> removedQueue) {
+        for (Brick brick : bricks) {
             // Skip bricks already queued for removal
             if (removedQueue.contains(brick)) continue;
 
             if (this.getBoundsInParent().intersects(brick.getBoundsInParent())) {
                 boolean isDestroyed = brick.takeHit();
+                logger.info("Ball collided with brick. Destroyed: {}, Remaining HP: {}", isDestroyed, brick.getHp());
 
                 if (isDestroyed) {
-                    // Award points
+                    // Award points safely on FX thread
                     javafx.application.Platform.runLater(() -> {
-                        PlayerData.setCurrentScore(PlayerData.getCurrentScore() + brick.getType().getScoreValue());
+                        int points = brick.getType().getScoreValue();
+                        PlayerData.setCurrentScore(PlayerData.getCurrentScore() + points);
+                        logger.info("Brick destroyed! Awarded {} points. Total Score: {}", points, PlayerData.getCurrentScore());
                     });
                     // Queue for safe batch removal later in the loop cycle
                     removedQueue.add(brick);
@@ -117,28 +127,52 @@ public class GameMoveableObject extends Pane {
         // Bounce off left wall
         if (x <= wallpadding) {
             x = wallpadding;
-            xVelocity = -xVelocity; // Reverse X direction (bounce)
+            xVelocity = -xVelocity;
+            logger.debug("Ball bounced off left wall.");
         }
-        // Bounce off right wall
+        // Bounce off right wall (fixed subtraction syntax)
         else if (x + renderedCharWidth >= GameplayArea.GPAREA_WIDTH - wallpadding) {
             x = GameplayArea.GPAREA_WIDTH - renderedCharWidth - wallpadding;
-            xVelocity = -xVelocity; // Reverse X direction (bounce)
+            xVelocity = -xVelocity;
+            logger.debug("Ball bounced off right wall.");
         }
 
-        // Top wall bounce check (if ball reaches top of play area)
+        // Top wall bounce check
         if (y <= wallpadding) {
             y = wallpadding;
-            yVelocity = -yVelocity; // Reverse Y direction (bounce)
+            yVelocity = -yVelocity;
+            logger.debug("Ball bounced off top wall.");
+        }
+
+        // Bottom boundary check (Missed paddle / Out of bounds)
+        if (y >= GameplayArea.GPAREA_HEIGHT) {
+            isOutOfBounds = true;
+            yVelocity = 0;
+            xVelocity = 0;
+            logger.warn("Ball missed the paddle and went out of bounds at Y: {}", y);
+            javafx.application.Platform.runLater(() -> {
+                this.fireEvent(new Life(Life.LOSE));
+
+                if (PlayerData.getLifeCount() > 0) {
+                    logger.info("Player lost a life. Remaining lives: {}. Respawning ball.", PlayerData.getLifeCount());
+                    respawn();
+                } else {
+                    logger.info("Game Over! Lives depleted. Saving high score.");
+                    PlayerData.checkAndUpdateHighScore();
+                }
+            });
         }
     }
 
     public void respawn() {
+        this.isOutOfBounds=false;
         this.x = this.startX;
         this.y = this.startY;
         this.setTranslateX(x);
         this.setTranslateY(y);
         this.xVelocity = 3;
         this.yVelocity = -3;
+        logger.info("Ball respawned at default position X: {}, Y: {}", startX, startY);
     }
 
     public int getX() {

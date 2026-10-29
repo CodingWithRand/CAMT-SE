@@ -8,6 +8,15 @@ public class Brick extends Pane {
 
     private final BrickType type;
     private final ImageView imageView;
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
     private int hp;
 
     public Brick(BrickType type, Image spriteSheet, double displayWidth, double displayHeight) {
