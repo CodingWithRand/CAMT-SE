@@ -10,6 +10,7 @@ import se233.arkanoid.model.Ball;
 import se233.arkanoid.model.PlayerData;
 import se233.arkanoid.model.StageData.Brick;
 import se233.arkanoid.model.StageData.BrickType;
+import se233.arkanoid.model.Vaus;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -60,7 +61,9 @@ class BrickCollisionAndScoreTest {
     @Test
     void testBrickCollisionAndScoreIncrement() throws InterruptedException {
         // 1. Arrange
-        Ball ball = new Ball();
+        List<Vaus> paddles = new ArrayList<>();
+        paddles.add(new Vaus());
+        Ball ball = new Ball(paddles);
         ball.setTranslateX(100);
         ball.setTranslateY(100);
 

@@ -178,8 +178,8 @@ public class GameCharacter extends Pane {
     public void respawn() {
         this.x = this.startX;
         this.y = this.startY;
-        this.imageView.setFitWidth(this.characterWidth);
-        this.imageView.setFitHeight(this.characterHeight);
+//        this.imageView.setFitWidth(this.characterWidth);
+//        this.imageView.setFitHeight(this.characterHeight);
         this.isMoveLeft = false;
         this.isMoveRight = false;
         this.isFalling = true;

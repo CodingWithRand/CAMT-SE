@@ -12,6 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import se233.arkanoid.view.GameplayArea?>
+<?import javafx.scene.control.Button?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="448.0" style="-fx-background-color: #150030;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se233.arkanoid.view.Stage">
    <children>
       <ImageView fx:id="stageBgImg" fitHeight="523.0" fitWidth="448.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
@@ -54,6 +55,31 @@
             </HBox>
          </children>
       </VBox>
-      <GameplayArea fx:id="gameplayArea" layoutX="15.0" layoutY="83.0" prefHeight="467.0" prefWidth="418.0" />
+      <GameplayArea focusTraversable="true" fx:id="gameplayArea" layoutX="15.0" layoutY="83.0" prefHeight="467.0" prefWidth="418.0" />
+      <VBox fx:id="gameOverModal"
+             visible="false"
+             mouseTransparent="true"
+             alignment="CENTER"
+             spacing="20"
+             style="-fx-background-color: rgba(0, 0, 0, 0.75);"
+             prefWidth="448"
+             prefHeight="548">
+         <children>
+            <Label fx:id="endTitle" text="GAME OVER" textFill="red">
+               <font>
+                  <Font name="Monospaced Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="finalScoreLabel" text="FINAL SCORE: 0" textFill="white">
+               <font>
+                  <Font name="Monospaced Regular" size="36.0" />
+               </font>
+            </Label>
+
+            <Label fx:id="restartBtn" text="RESTART" textFill="#888888" />
+            <Label fx:id="backToMenu" text="MAIN MENU" textFill="#888888" />
+         </children>
+      </VBox>
+
    </children>
 </AnchorPane>

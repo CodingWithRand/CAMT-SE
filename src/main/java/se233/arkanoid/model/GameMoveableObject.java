@@ -1,5 +1,6 @@
 package se233.arkanoid.model;
 
+import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,29 +13,28 @@ import se233.arkanoid.view.GameplayArea;
 
 import java.util.List;
 
-public class GameMoveableObject extends Pane {
-    private static final Logger logger = LogManager.getLogger(GameMoveableObject.class);
-
+public abstract class GameMoveableObject extends Pane {
+    protected static final Logger logger = LogManager.getLogger(GameMoveableObject.class);
     private Image characterImg;
     protected ImageView imageView;
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
     private int startX;
     private int startY;
-    private int characterWidth;
-    private int characterHeight;
+    protected int characterWidth;
+    protected int characterHeight;
     private int score = 0;
 
     // Ball physics velocities (can be positive or negative for directions)
-    int xVelocity = 3;
-    int yVelocity = -3;
-    int xMaxVelocity = 7;
-    int yMaxVelocity = 7;
+    protected int xVelocity = 0;
+    protected int yVelocity = 0;
+    protected int xMaxVelocity = 7;
+    protected int yMaxVelocity = 7;
 
     boolean isFalling = true;
     boolean canJump = false;
     boolean isJumping = false;
-    private boolean isOutOfBounds = false;
+    protected boolean isOutOfBounds = false;
     public GameMoveableObject(
             int x, int y,
             String imgName,
@@ -63,106 +63,18 @@ public class GameMoveableObject extends Pane {
         if (isOutOfBounds) return;
         x += xVelocity;
         y += yVelocity;
-        setTranslateX(x);
-        setTranslateY(y);
+        Platform.runLater(() -> {
+            setTranslateX(x);
+            setTranslateY(y);
+        });
         checkReachGameWall();
     }
 
-    public boolean checkPaddleCollision(GameCharacter paddle) {
-        // Check if the ball's bounding box intersects with the paddle's bounding box
-        if (this.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
-            logger.info("Ball collided with paddle at X: {}, Y: {}", x, y);
+    public abstract boolean checkPaddleCollision(GameCharacter paddle);
 
-            // 1. Reflect Y velocity upwards (ensure it's negative so it moves up)
-            yVelocity = -Math.abs(yVelocity);
+    public abstract boolean checkBrickCollisions(List<Brick> bricks, List<Brick> removedQueue, long time);
 
-            // 2. Optional Classic Arkanoid Mechanic: Add "English" (angle adjustment)
-            double paddleCenterX = paddle.getX() + (paddle.getCharacterWidth() / 2.0);
-            double ballCenterX = this.getX() + (this.getCharacterWidth() / 2.0);
-            double hitOffset = (ballCenterX - paddleCenterX) / (paddle.getCharacterWidth() / 2.0);
-
-            // Adjust xVelocity slightly based on the hit offset for directional steering
-            xVelocity += (int) (hitOffset * 2);
-
-            // Clamp max velocities so it doesn't get out of hand
-            xVelocity = Math.max(-xMaxVelocity, Math.min(xMaxVelocity, xVelocity));
-
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkBrickCollisions(List<Brick> bricks, List<Brick> removedQueue) {
-        for (Brick brick : bricks) {
-            // Skip bricks already queued for removal
-            if (removedQueue.contains(brick)) continue;
-
-            if (this.getBoundsInParent().intersects(brick.getBoundsInParent())) {
-                boolean isDestroyed = brick.takeHit();
-                logger.info("Ball collided with brick. Destroyed: {}, Remaining HP: {}", isDestroyed, brick.getHp());
-
-                if (isDestroyed) {
-                    // Award points safely on FX thread
-                    javafx.application.Platform.runLater(() -> {
-                        int points = brick.getType().getScoreValue();
-                        PlayerData.setCurrentScore(PlayerData.getCurrentScore() + points);
-                        logger.info("Brick destroyed! Awarded {} points. Total Score: {}", points, PlayerData.getCurrentScore());
-                    });
-                    // Queue for safe batch removal later in the loop cycle
-                    removedQueue.add(brick);
-                }
-
-                // Reverse vertical velocity (bounce)
-                yVelocity = -yVelocity;
-                return true; // Collision handled
-            }
-        }
-        return false;
-    }
-
-    public void checkReachGameWall() {
-        int renderedCharWidth = getWidth() != 0 ? (int) getWidth() : (int) (getCharacterWidth() * 1.2);
-        int wallpadding = 4; // Match your game arena wall padding
-
-        // Bounce off left wall
-        if (x <= wallpadding) {
-            x = wallpadding;
-            xVelocity = -xVelocity;
-            logger.debug("Ball bounced off left wall.");
-        }
-        // Bounce off right wall (fixed subtraction syntax)
-        else if (x + renderedCharWidth >= GameplayArea.GPAREA_WIDTH - wallpadding) {
-            x = GameplayArea.GPAREA_WIDTH - renderedCharWidth - wallpadding;
-            xVelocity = -xVelocity;
-            logger.debug("Ball bounced off right wall.");
-        }
-
-        // Top wall bounce check
-        if (y <= wallpadding) {
-            y = wallpadding;
-            yVelocity = -yVelocity;
-            logger.debug("Ball bounced off top wall.");
-        }
-
-        // Bottom boundary check (Missed paddle / Out of bounds)
-        if (y >= GameplayArea.GPAREA_HEIGHT) {
-            isOutOfBounds = true;
-            yVelocity = 0;
-            xVelocity = 0;
-            logger.warn("Ball missed the paddle and went out of bounds at Y: {}", y);
-            javafx.application.Platform.runLater(() -> {
-                this.fireEvent(new Life(Life.LOSE));
-
-                if (PlayerData.getLifeCount() > 0) {
-                    logger.info("Player lost a life. Remaining lives: {}. Respawning ball.", PlayerData.getLifeCount());
-                    respawn();
-                } else {
-                    logger.info("Game Over! Lives depleted. Saving high score.");
-                    PlayerData.checkAndUpdateHighScore();
-                }
-            });
-        }
-    }
+    public abstract void checkReachGameWall();
 
     public void respawn() {
         this.isOutOfBounds=false;
@@ -170,8 +82,8 @@ public class GameMoveableObject extends Pane {
         this.y = this.startY;
         this.setTranslateX(x);
         this.setTranslateY(y);
-        this.xVelocity = 3;
-        this.yVelocity = -3;
+        this.xVelocity = 0;
+        this.yVelocity = 0;
         logger.info("Ball respawned at default position X: {}, Y: {}", startX, startY);
     }
 

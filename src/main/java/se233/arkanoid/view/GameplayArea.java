@@ -1,11 +1,13 @@
 package se233.arkanoid.view;
 
+import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import se233.arkanoid.controller.GameLoop;
 import se233.arkanoid.event.Life;
 import se233.arkanoid.event.StageChange;
 import se233.arkanoid.model.*;
@@ -33,10 +35,6 @@ public class GameplayArea extends Pane {
 
     private List<ImageView> lifeIcons;
 
-    public Ball getBall() {
-        return ball;
-    }
-
     private Ball ball;
 
     public GameplayArea() {
@@ -47,7 +45,7 @@ public class GameplayArea extends Pane {
         gameCharacterList.add(new Vaus());
 //        scoreList = new ArrayList<>();
         keys = new Keys();
-        ball=new Ball();
+        ball=new Ball(gameCharacterList);
 //        gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Background.png"));
 //        scoreList.add(new Score(30, GROUND + 30));
 //        scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
@@ -55,16 +53,16 @@ public class GameplayArea extends Pane {
 
         this.addEventHandler(StageChange.NEXT_STAGE, e -> {
             if (!currentObstacles.isEmpty()) {
-            getChildren().removeAll(currentObstacles);
-            currentObstacles.clear();
+                getChildren().removeAll(currentObstacles);
+                currentObstacles.clear();
             }
             PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
-            stageSetup();
+            Platform.runLater(this::stageSetup);
         });
         this.addEventHandler(StageChange.PREV_STAGE, e -> {
             getChildren().removeAll(currentObstacles);
             PlayerData.setCurrentStage(PlayerData.getCurrentStage() - 1);
-            stageSetup();
+            Platform.runLater(this::stageSetup);
         });
 
         this.addEventHandler(Life.GAIN, e -> {
@@ -85,25 +83,16 @@ public class GameplayArea extends Pane {
             javafx.application.Platform.runLater(() -> {
                 // Only decrement and remove icons if lives and icons actually remain
                 if (PlayerData.getLifeCount() > 0 && !lifeIcons.isEmpty()) {
+                    this.setMouseTransparent(false);
+                    GameLoop.pauseStage();
                     PlayerData.setLifeCount(PlayerData.getLifeCount() - 1);
 
                     // Safely remove the last icon element without index underflow
-                    ImageView lifeIcon = lifeIcons.remove(lifeIcons.size() - 1);
+                    ImageView lifeIcon = lifeIcons.removeLast();
                     getChildren().remove(lifeIcon);
                 }
             });
         });
-        for(int i = 0; i<PlayerData.getLifeCount(); i++) {
-            ImageView lifeIcon = new ImageView();
-            lifeIcon.setImage(new Image(getClass().getResourceAsStream("/se233/arkanoid/assets/Fields.png")));
-            lifeIcon.setViewport(new Rectangle2D(8, 240, 16, 8));
-            lifeIcon.setTranslateX(i * 32);
-            lifeIcon.setTranslateY(GPAREA_HEIGHT - 8);
-            lifeIcon.setScaleX(2);
-            lifeIcon.setScaleY(2);
-            lifeIcons.add(lifeIcon);
-        }
-        getChildren().addAll(lifeIcons);
 
         this.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -127,6 +116,13 @@ public class GameplayArea extends Pane {
             }
         });
 
+        this.setOnMouseClicked(e -> {
+            GameLoop.startStage();
+            Platform.runLater(() -> ball.nudge());
+            this.setMouseTransparent(true);
+            e.consume();
+        });
+
         getChildren().addAll(gameCharacterList);
         getChildren().addAll(ball);
 //        getChildren().addAll(scoreList);
@@ -138,6 +134,20 @@ public class GameplayArea extends Pane {
         Image brickSpriteSheet = new Image(
                 getClass().getResourceAsStream("/se233/arkanoid/assets/Blocks & Backgrounds.png")
         );
+
+        getChildren().removeAll(lifeIcons);
+        lifeIcons.clear();
+        for(int i = 0; i<PlayerData.getLifeCount(); i++) {
+            ImageView lifeIcon = new ImageView();
+            lifeIcon.setImage(new Image(getClass().getResourceAsStream("/se233/arkanoid/assets/Fields.png")));
+            lifeIcon.setViewport(new Rectangle2D(8, 240, 16, 8));
+            lifeIcon.setTranslateX(i * 32);
+            lifeIcon.setTranslateY(GPAREA_HEIGHT - 8);
+            lifeIcon.setScaleX(2);
+            lifeIcon.setScaleY(2);
+            lifeIcons.add(lifeIcon);
+        }
+        getChildren().addAll(lifeIcons);
 
         // Load Stage 1
         currentObstacles = StageBuilder.buildStage(brickSpriteSheet);
@@ -156,6 +166,10 @@ public class GameplayArea extends Pane {
     public void removeDestroyedBricks(List<se233.arkanoid.model.StageData.Brick> bricksToRemove) {
         if (bricksToRemove.isEmpty()) return;
 
+        for(Brick brickToRemove: bricksToRemove) {
+            brickToRemove.setVisible(false);
+        }
+
         javafx.application.Platform.runLater(() -> {
             // Remove all destroyed brick nodes from the JavaFX scene graph in one batch
             getChildren().removeAll(bricksToRemove);
@@ -163,4 +177,6 @@ public class GameplayArea extends Pane {
             currentObstacles.removeAll(bricksToRemove);
         });
     }
+
+    public Ball getBall() { return ball; }
 }
