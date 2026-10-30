@@ -5,10 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se233.arkanoid.model.Ball;
-import se233.arkanoid.model.GameCharacter;
-import se233.arkanoid.model.GameMoveableObject;
-import se233.arkanoid.model.PlayerData;
+import se233.arkanoid.model.*;
 import se233.arkanoid.model.StageData.Brick;
 import se233.arkanoid.view.GameplayArea;
 import se233.arkanoid.view.Stage;
@@ -22,7 +19,8 @@ public class GameLoop implements Runnable {
     private VBox gameOverModal;
     private int frameRate;
     private float interval;
-    private static boolean running;
+    private static volatile boolean running = false;
+    private static Thread gameThread = null;
     private static boolean started;
     public GameLoop(GameplayArea gameStage, VBox gameOverModal) {
         this.gameStage = gameStage;
@@ -32,58 +30,63 @@ public class GameLoop implements Runnable {
         running = true;
     }
     private void update(List<GameCharacter> gameCharacterList, long time) {
-
+        Ball ball = gameStage.getBall();
         for (GameCharacter gameCharacter : gameCharacterList) {
             boolean leftPressed = gameStage.getKeys().isPressed(gameCharacter.getLeftKey());
             boolean rightPressed = gameStage.getKeys().isPressed(gameCharacter.getRightKey());
             boolean upPressed = gameStage.getKeys().isPressed(gameCharacter.getUpKey());
 
-            if (started) {
-                if (leftPressed && rightPressed) {
-                    gameCharacter.stop();
-                } else if (leftPressed) {
-    //                gameCharacter.getImageView().tick();
-                    logger.info("Going left");
-                    gameCharacter.moveLeft();
-                } else if (rightPressed) {
-    //                gameCharacter.getImageView().tick();
-                    logger.info("Going right");
-                    gameCharacter.moveRight();
-                } else {
-                    gameCharacter.stop();
-                }}
+            if (leftPressed && rightPressed) {
+                gameCharacter.stop();
+            } else if (leftPressed) {
+//                gameCharacter.getImageView().tick();
+                logger.info("Going left");
+                gameCharacter.moveLeft();
+                if (!started) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
+            } else if (rightPressed) {
+//                gameCharacter.getImageView().tick();
+                logger.info("Going right");
+                gameCharacter.moveRight();
+                if (!started) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
+
+            } else {
+                gameCharacter.stop();
             }
-            Ball ball = gameStage.getBall();
-            if (ball != null) {
-                ball.move();
+        }
 
-                for (GameCharacter paddle : gameCharacterList) {
-                    ball.checkPaddleCollision(paddle);
-                }
+        if (ball != null) {
+            ball.move();
 
-                // Create a frame-local queue for bricks destroyed during this tick
-                List<Brick> bricksToRemove = new java.util.ArrayList<>();
+            for (GameCharacter paddle : gameCharacterList) {
+                ball.checkPaddleCollision(paddle);
+            }
 
-                // Check collisions and collect destroyed bricks
-                ball.checkBrickCollisions(gameStage.getCurrentObstacles(), bricksToRemove, time);
+            // Create a frame-local queue for bricks destroyed during this tick
+            List<Brick> bricksToRemove = new java.util.ArrayList<>();
 
-                // Batch remove destroyed bricks cleanly
-                if (!bricksToRemove.isEmpty()) {
-                    gameStage.removeDestroyedBricks(bricksToRemove);
-                }
+            // Check collisions and collect destroyed bricks
+            ball.checkBrickCollisions(gameStage.getCurrentObstacles(), bricksToRemove, time);
+
+            // Batch remove destroyed bricks cleanly
+            if (!bricksToRemove.isEmpty()) {
+                gameStage.removeDestroyedBricks(bricksToRemove);
+            }
 //            if (upPressed) {
 //                gameCharacter.jump();
 //            }
-                boolean allDestructibleCleared = gameStage.getCurrentObstacles().stream()
-                        .noneMatch(brick -> brick.getHp() > 0);
+            boolean allDestructibleCleared = gameStage.getCurrentObstacles().stream()
+                    .noneMatch(brick -> brick.getHp() > 0);
 
-                if (allDestructibleCleared && !gameStage.getCurrentObstacles().isEmpty()) {
-                    logger.info("All destructible bricks cleared! Triggering next stage transition.");
-                    GameLoop.pauseStage();
-                    javafx.application.Platform.runLater(() -> {
-                        gameStage.fireEvent(new se233.arkanoid.event.StageChange(se233.arkanoid.event.StageChange.NEXT_STAGE));
-                    });
-                }
+            if (allDestructibleCleared && !gameStage.getCurrentObstacles().isEmpty()) {
+                logger.info("All destructible bricks cleared! Triggering next stage transition.");
+                GameLoop.pauseStage();
+                javafx.application.Platform.runLater(() -> {
+                    gameCharacterList.forEach(GameCharacter::respawn);
+                    gameStage.setMouseTransparent(false);
+                    ball.respawn();
+                    gameStage.fireEvent(new se233.arkanoid.event.StageChange(se233.arkanoid.event.StageChange.NEXT_STAGE));
+                });
+            }
         }
     }
 
@@ -95,9 +98,17 @@ public class GameLoop implements Runnable {
     }
     public static void gameOver() {
         running = false;
+        if (gameThread != null && gameThread.isAlive()) {
+            gameThread.interrupt(); // Wakes up Thread.sleep immediately
+            gameThread = null;
+        }
     }
-    public static void restart() {
+    public static void restart(GameLoop loopInstance) {
+        gameOver(); // Ensure any existing thread is dead first
+
         running = true;
+        gameThread = new Thread(loopInstance);
+        gameThread.start();
     }
 //    private void updateScore(List<Score> scoreList, List<GameCharacter> gameCharacterList) {
 //        javafx.application.Platform.runLater(() -> {
@@ -117,13 +128,19 @@ public class GameLoop implements Runnable {
                 try {
                     Thread.sleep((long) (interval - time));
                 } catch (InterruptedException e) {
+                    running = false;
+                    Thread.currentThread().interrupt();
                     e.printStackTrace();
+                    break;
                 }
             } else {
                 try {
                     Thread.sleep((long) (interval - (interval % time)));
                 } catch (InterruptedException e) {
+                    running = false;
+                    Thread.currentThread().interrupt();
                     e.printStackTrace();
+                    break;
                 }
             }
         }

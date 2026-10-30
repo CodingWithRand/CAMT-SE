@@ -6,7 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import se233.arkanoid.controller.GameLoop;
 import se233.arkanoid.event.Life;
 import se233.arkanoid.event.StageChange;
@@ -14,6 +16,7 @@ import se233.arkanoid.model.*;
 import se233.arkanoid.model.StageData.Brick;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameplayArea extends Pane {
@@ -57,11 +60,19 @@ public class GameplayArea extends Pane {
                 currentObstacles.clear();
             }
             PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
+            ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
             Platform.runLater(this::stageSetup);
+
+            Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate());
+
+            VBox upgradeModal = (VBox) getScene().lookup("#upgradeModal");
+            upgradeModal.setVisible(true);
+            upgradeModal.setMouseTransparent(false);
         });
         this.addEventHandler(StageChange.PREV_STAGE, e -> {
             getChildren().removeAll(currentObstacles);
             PlayerData.setCurrentStage(PlayerData.getCurrentStage() - 1);
+            ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
             Platform.runLater(this::stageSetup);
         });
 
@@ -112,6 +123,8 @@ public class GameplayArea extends Pane {
                     }else if(e.getCode() == KeyCode.G) {
                         this.fireEvent(new Life(Life.GAIN));
                     }
+                    // secret shortcut key
+                    else if(e.getCode() == KeyCode.ESCAPE) System.exit(0);
                 });
             }
         });
@@ -135,6 +148,8 @@ public class GameplayArea extends Pane {
                 getClass().getResourceAsStream("/se233/arkanoid/assets/Blocks & Backgrounds.png")
         );
 
+        getChildren().removeAll(currentObstacles);
+        currentObstacles.clear();
         getChildren().removeAll(lifeIcons);
         lifeIcons.clear();
         for(int i = 0; i<PlayerData.getLifeCount(); i++) {

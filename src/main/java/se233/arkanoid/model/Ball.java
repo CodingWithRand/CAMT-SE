@@ -1,5 +1,6 @@
 package se233.arkanoid.model;
 
+import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se233.arkanoid.controller.GameLoop;
@@ -29,11 +30,20 @@ public class Ball extends GameMoveableObject {
         this.paddles = paddles;
     }
 
+    public void moveAlong(int paddleNum) {
+        Vaus paddle = (Vaus) paddles.get(paddleNum);
+        x = paddle.getX();
+        Platform.runLater(() -> {
+            setTranslateX(paddle.getX());
+        });
+        checkReachGameWall();
+    }
+
     @Override
     public boolean checkPaddleCollision(GameCharacter paddle) {
         // Check if the ball's bounding box intersects with the paddle's bounding box
         if (this.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
-            logger.info("Ball collided with paddle at X: {}, Y: {}", x, y);
+            logger.debug("Ball collided with paddle at X: {}, Y: {}", x, y);
 
             // 1. Reflect Y velocity upwards (ensure it's negative so it moves up)
             yVelocity = -Math.abs(yVelocity);
@@ -122,13 +132,13 @@ public class Ball extends GameMoveableObject {
         if (x <= wallpadding) {
             x = wallpadding;
             xVelocity = -xVelocity;
-            logger.debug("Ball bounced off left wall.");
+            logger.info("Ball bounced off left wall.");
         }
         // Bounce off right wall (fixed subtraction syntax)
         else if (x + renderedCharWidth >= GameplayArea.GPAREA_WIDTH - wallpadding) {
             x = GameplayArea.GPAREA_WIDTH - renderedCharWidth - wallpadding;
             xVelocity = -xVelocity;
-            logger.debug("Ball bounced off right wall.");
+            logger.info("Ball bounced off right wall.");
         }
 
         // Top wall bounce check

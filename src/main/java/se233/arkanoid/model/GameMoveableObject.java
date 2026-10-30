@@ -116,7 +116,7 @@ public abstract class GameMoveableObject extends Pane {
         this.setTranslateY(y);
         this.xVelocity = 0;
         this.yVelocity = 0;
-        logger.info("Ball respawned at default position X: {}, Y: {}", startX, startY);
+        logger.debug("Ball respawned at default position X: {}, Y: {}", startX, startY);
     }
 
     public int getX() {

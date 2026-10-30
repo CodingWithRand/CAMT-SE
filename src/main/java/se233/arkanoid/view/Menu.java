@@ -33,6 +33,14 @@ public class Menu {
     private Label exitBtn;
     @FXML
     private StackPane topLevel;
+    @FXML
+    private StackPane highScoreModal;
+    @FXML
+    private Label highScoreTitle;
+    @FXML
+    private Label highScoreLabel;
+    @FXML
+    private Label backToMenu;
 
     @FXML
     public void initialize() {
@@ -48,6 +56,15 @@ public class Menu {
             startBtn.setFont(retroFont);
             highScoreBtn.setFont(retroFont);
             exitBtn.setFont(retroFont);
+            highScoreTitle.setFont(Font.loadFont(
+                    getClass().getResourceAsStream("/se233/arkanoid/font/PressStart2P-Regular.ttf"), 24
+            ));
+            highScoreLabel.setFont(Font.loadFont(
+                    getClass().getResourceAsStream("/se233/arkanoid/font/PressStart2P-Regular.ttf"), 16
+            ));
+            backToMenu.setFont(Font.loadFont(
+                    getClass().getResourceAsStream("/se233/arkanoid/font/PressStart2P-Regular.ttf"), 16
+            ));
         }
 
         File savedHighScore = new File("player-data");
@@ -96,6 +113,17 @@ public class Menu {
             });
             menuItems[iMenu].setOnMouseClicked(e -> executeMenuItem(iMenu));
         });
+
+        backToMenu.setOnMouseClicked(e -> {
+            highScoreModal.setVisible(false);
+            highScoreModal.setMouseTransparent(true);
+        });
+        backToMenu.setOnMouseEntered(e -> {
+            backToMenu.setStyle("-fx-text-fill: #00FFCC; -fx-effect: dropshadow(three-pass-box, #00FFCC, 10, 0, 0, 0);");
+        });
+        backToMenu.setOnMouseExited(e -> {
+            backToMenu.setStyle("-fx-text-fill: #888888; -fx-effect: null;");
+        });
     }
 
     private void updateSelection() {
@@ -113,7 +141,7 @@ public class Menu {
     private void executeMenuItem(int index) {
         switch (index) {
             case 0 -> startGame();
-            case 1 -> System.out.println(PlayerData.getHighScore());
+            case 1 -> openHighScore();
             case 2 -> System.exit(0);
         }
     }
@@ -133,5 +161,11 @@ public class Menu {
             logger.error("Fail to load stage scene");
             e.printStackTrace();
         }
+    }
+
+    private void openHighScore() {
+        highScoreLabel.setText("YOUR HIGHEST SCORE\n\n" + PlayerData.getHighScore());
+        highScoreModal.setVisible(true);
+        highScoreModal.setMouseTransparent(false);
     }
 }

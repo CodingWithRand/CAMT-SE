@@ -32,6 +32,28 @@
          <Insets />
       </opaqueInsets>
     </VBox>
+    <StackPane fx:id="highScoreModal"
+          visible="false"
+          mouseTransparent="true"
+          alignment="CENTER"
+          style="-fx-background-color: rgba(0, 0, 0, 0.75);">
+        <children>
+            <VBox alignment="CENTER" spacing="20.0" scaleX="0.8" scaleY="0.8" style="-fx-spacing: 20; -fx-background-color: #050510; -fx-padding: 40; -fx-border-color: #00FFCC; -fx-border-width: 4;">
+                <Label fx:id="highScoreTitle" text="YOUR STATS" textFill="red">
+                    <font>
+                        <Font name="Monospaced Regular" size="36.0" />
+                    </font>
+                </Label>
+                <Label fx:id="highScoreLabel" textAlignment="CENTER" text="HIGHEST SCORE: 0" textFill="white">
+                    <font>
+                        <Font name="Monospaced Regular" size="36.0" />
+                    </font>
+                </Label>
+
+                <Label fx:id="backToMenu" text="BACK TO MENU" textFill="#888888" />
+            </VBox>
+        </children>
+    </StackPane>
    <opaqueInsets>
       <Insets />
    </opaqueInsets>

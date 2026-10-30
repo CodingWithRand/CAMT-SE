@@ -27,9 +27,9 @@ class GameCharacterTest {
     @BeforeEach
     void setUp() {
         try {
-            Platform.runLater(() -> {
+//            Platform.runLater(() -> {
                 paddle = new Vaus();
-            });
+//            });
             Thread.sleep(100);
         } catch (InterruptedException ignored) {}
     }

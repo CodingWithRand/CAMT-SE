@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import se233.arkanoid.event.Life;
 import se233.arkanoid.view.GameplayArea;
 
-public class UpgradeManager {
+public record UpgradeManager() {
 
     /**
      * 1. Increase paddle size (switches Vaus to wider sprite & increases hit box)

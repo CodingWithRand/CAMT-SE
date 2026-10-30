@@ -44,7 +44,7 @@ class BallTest {
                     @Override
                     public boolean checkPaddleCollision(GameCharacter paddle) {
                         if (this.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
-                            testLogger.info("Ball collided with paddle at X: {}, Y: {}", x, y);
+                            testLogger.debug("Ball collided with paddle at X: {}, Y: {}", x, y);
                             yVelocity = -Math.abs(yVelocity);
                             double paddleCenterX = paddle.getX() + (paddle.getCharacterWidth() / 2.0);
                             double ballCenterX = this.getX() + (this.getCharacterWidth() / 2.0);
