@@ -102,7 +102,7 @@ public class GameplayArea extends Pane {
                 // mock up test the following
                 // next/prev stage
                 // gain/lose life
-                getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+                this.setOnKeyPressed( e -> {
                     if(e.getCode() == KeyCode.N) {
                         this.fireEvent(new StageChange(StageChange.NEXT_STAGE));
                     }else if(e.getCode() == KeyCode.P) {
@@ -165,7 +165,8 @@ public class GameplayArea extends Pane {
     }
     public void removeDestroyedBricks(List<se233.arkanoid.model.StageData.Brick> bricksToRemove) {
         if (bricksToRemove.isEmpty()) return;
-
+        // Remove them from the active obstacle list(i think this fixed the index bug)
+        currentObstacles.removeAll(bricksToRemove);
         for(Brick brickToRemove: bricksToRemove) {
             brickToRemove.setVisible(false);
         }
@@ -173,8 +174,8 @@ public class GameplayArea extends Pane {
         javafx.application.Platform.runLater(() -> {
             // Remove all destroyed brick nodes from the JavaFX scene graph in one batch
             getChildren().removeAll(bricksToRemove);
-            // Remove them from the active obstacle list
-            currentObstacles.removeAll(bricksToRemove);
+
+
         });
     }
 

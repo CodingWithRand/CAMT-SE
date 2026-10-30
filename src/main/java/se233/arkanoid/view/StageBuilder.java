@@ -24,8 +24,10 @@ public class StageBuilder {
 
     public static List<Brick> buildStage(Image spriteSheet) {
         List<Brick> bricks = new ArrayList<>();
-        int[][] stageData = Map.STAGE[PlayerData.getCurrentStage() - 1];
+        int stageIndex = (PlayerData.getCurrentStage() - 1) % Map.STAGE.length;
+        if (stageIndex < 0) stageIndex = 0;
 
+        int[][] stageData = Map.STAGE[stageIndex];
         for (int row = 0; row < stageData.length; row++) {
             for (int col = 0; col < stageData[row].length; col++) {
                 int brickId = stageData[row][col];
