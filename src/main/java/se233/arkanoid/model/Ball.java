@@ -57,6 +57,8 @@ public class Ball extends GameMoveableObject {
     private Brick lastHitBrick = null;
     private long lastHitTimeMs = 0;
     private final long COLLISION_COOLDOWN_MS = 1000;
+    private boolean isPiercing = false;
+
 
     @Override
     public boolean checkBrickCollisions(List<Brick> bricks,
@@ -89,21 +91,22 @@ public class Ball extends GameMoveableObject {
                     // Lock out this specific brick so it can't re-trigger until the ball moves away
                     lastHitBrick = brick;
                 }
+                // --- PIERCING vs NORMAL BOUNCE PHYSICS ---
+                if (!isPiercing || brick.getHp() == -1) {
+                    // --- ITERATIVE ESCAPE LOOP ---
+                    int safetyGuard = 0;
+                    while (this.getBoundsInParent().intersects(brick.getBoundsInParent()) && safetyGuard < 30) {
+                        this.x -= (int) Math.signum(xVelocity);
+                        this.y -= (int) Math.signum(yVelocity);
+                        this.setTranslateX(this.x);
+                        this.setTranslateY(this.y);
+                        safetyGuard++;
+                    }
 
-                // --- ITERATIVE ESCAPE LOOP ---
-                int safetyGuard = 0;
-                while (this.getBoundsInParent().intersects(brick.getBoundsInParent()) && safetyGuard < 30) {
-                    this.x -= (int) Math.signum(xVelocity);
-                    this.y -= (int) Math.signum(yVelocity);
-                    this.setTranslateX(this.x);
-                    this.setTranslateY(this.y);
-                    safetyGuard++;
+                    // Invert velocities to bounce away cleanly
+                    xVelocity = -xVelocity;
+                    yVelocity = -yVelocity;
                 }
-
-                // Invert velocities to bounce away cleanly
-                xVelocity = -xVelocity;
-                yVelocity = -yVelocity;
-
                 return true;
             }
         }
@@ -160,4 +163,6 @@ public class Ball extends GameMoveableObject {
     public void nudge() {
         this.yVelocity = -3;
     }
+    public boolean isPiercing() { return isPiercing; }
+    public void setPiercing(boolean piercing) { this.isPiercing = piercing; }
 }

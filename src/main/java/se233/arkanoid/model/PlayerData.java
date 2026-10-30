@@ -9,7 +9,15 @@ public class PlayerData {
     private static int highScore;
     private static int currentStage;
     private static int lifeCount;
+    private static double scoreMultiplier = 1.0;
 
+    public static double getScoreMultiplier() {
+        return scoreMultiplier;
+    }
+
+    public static void setScoreMultiplier(double multiplier) {
+        scoreMultiplier = multiplier;
+    }
     public static int getCurrentScore() {
         return currentScore.get();
     }
@@ -51,7 +59,11 @@ public class PlayerData {
             saveHighScoreToFile();
         }
     }
+    public static void resetState() {
 
+        lifeCount = 3;
+        scoreMultiplier = 1.0;
+    }
     public static void saveHighScoreToFile() {
         try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.File("player-data"))) {
             writer.println("highScore=" + getHighScore());

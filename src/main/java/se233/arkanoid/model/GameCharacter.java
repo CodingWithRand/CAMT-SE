@@ -12,12 +12,17 @@ import java.util.concurrent.TimeUnit;
 
 public class GameCharacter extends Pane {
     private Image characterImg;
-    private ImageView imageView;
+    ImageView imageView;
 //    private AnimatedSprite imageView;
     private int x;
     private int y;
     private int startX;
     private int startY;
+
+    public void setCharacterWidth(int characterWidth) {
+        this.characterWidth = characterWidth;
+    }
+
     private int characterWidth;
     private int characterHeight;
     private int score = 0;
@@ -35,6 +40,14 @@ public class GameCharacter extends Pane {
     boolean isFalling = true;
     boolean canJump = false;
     boolean isJumping = false;
+
+    public int getxMaxVelocity() {
+        return xMaxVelocity;
+    }
+
+    public void setxMaxVelocity(int xMaxVelocity) {
+        this.xMaxVelocity = xMaxVelocity;
+    }
 
     public GameCharacter(
             /*int id,*/

@@ -31,6 +31,38 @@ public abstract class GameMoveableObject extends Pane {
     protected int xMaxVelocity = 7;
     protected int yMaxVelocity = 7;
 
+    public int getxVelocity() {
+        return xVelocity;
+    }
+
+    public void setxVelocity(int xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public int getyMaxVelocity() {
+        return yMaxVelocity;
+    }
+
+    public void setyMaxVelocity(int yMaxVelocity) {
+        this.yMaxVelocity = yMaxVelocity;
+    }
+
+    public int getxMaxVelocity() {
+        return xMaxVelocity;
+    }
+
+    public void setxMaxVelocity(int xMaxVelocity) {
+        this.xMaxVelocity = xMaxVelocity;
+    }
+
+    public int getyVelocity() {
+        return yVelocity;
+    }
+
+    public void setyVelocity(int yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
     boolean isFalling = true;
     boolean canJump = false;
     boolean isJumping = false;

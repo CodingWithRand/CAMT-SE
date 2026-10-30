@@ -9,7 +9,7 @@ public class Vaus extends GameCharacter {
     private long lastFrameTime;
     private final int idleAnimationFrameRate = 5;
     private final float frameInterval = 1000.0f / idleAnimationFrameRate;
-
+    private boolean isExpanded = false;
     public Vaus() {
         super(
                 GameplayArea.GPAREA_WIDTH / 2 - 16,
@@ -24,6 +24,20 @@ public class Vaus extends GameCharacter {
         );
         this.setScaleX(2);
         this.setScaleY(2);
+    }
+    public void setExpanded(boolean expanded) {
+        this.isExpanded = expanded;
+        if (expanded) {
+            this.setCharacterWidth(48); // Increase logical collision width
+            this.imageView.setViewport(new Rectangle2D(64, 0, 48, 8)); // Crop wider sprite
+        } else {
+            this.setCharacterWidth(32);
+            this.imageView.setViewport(new Rectangle2D(32, 0, 32, 8));
+        }
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
     }
 
     public void fire() {
