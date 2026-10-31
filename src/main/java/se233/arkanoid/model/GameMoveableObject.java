@@ -66,6 +66,15 @@ public abstract class GameMoveableObject extends Pane {
     boolean isFalling = true;
     boolean canJump = false;
     boolean isJumping = false;
+
+    public boolean isOutOfBounds() {
+        return isOutOfBounds;
+    }
+
+    public void setOutOfBounds(boolean outOfBounds) {
+        isOutOfBounds = outOfBounds;
+    }
+
     protected boolean isOutOfBounds = false;
     public GameMoveableObject(
             int x, int y,

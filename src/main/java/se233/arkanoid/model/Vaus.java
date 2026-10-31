@@ -96,13 +96,17 @@ public class Vaus extends GameCharacter {
         return isArmed;
     }
 
+
     public void fire(GameplayArea gameplayArea) {
-        if(!isArmed) return;
+        if (!isArmed) return;
+
         Platform.runLater(() -> {
-            gameplayArea.getChildren().addAll(
-                    new Bullet(this.getX() + 4, this.getY() - 16),
-                    new Bullet(this.getX() + 28, this.getY() - 16)
-            );
+            Bullet b1 = new Bullet((int) this.getX() + 5, (int) this.getY() - 10);
+            Bullet b2 = new Bullet((int) this.getX() + (int) this.getCharacterWidth() - 15, (int) this.getY() - 10);
+
+            gameplayArea.getChildren().addAll(b1, b2);
+            gameplayArea.getActiveBullets().add(b1);
+            gameplayArea.getActiveBullets().add(b2);
         });
     }
 

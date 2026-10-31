@@ -39,7 +39,11 @@ public class GameplayArea extends Pane {
     private List<ImageView> lifeIcons;
 
     private Ball ball;
+    private List<Bullet> activeBullets = new ArrayList<>();
 
+    public List<Bullet> getActiveBullets() {
+        return activeBullets;
+    }
     public GameplayArea() {
         super();
         gameCharacterList = new ArrayList<>();

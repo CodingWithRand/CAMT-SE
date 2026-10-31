@@ -103,10 +103,5 @@ public record UpgradeManager() {
     public static void armedWithBullets(GameplayArea gameplayArea) {
         gameplayArea.getGameCharacterList().forEach(character -> ((Vaus) character).setIsArmed(true));
     }
+
 }
-/**
-button.setOnAction(e -> {
-      UpgradeManager.applyIncreasePaddleSize(gameplayArea);
-closeUpgradeModalAndResumeGame();
-});
- */

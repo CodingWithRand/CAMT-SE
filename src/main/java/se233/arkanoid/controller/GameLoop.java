@@ -11,6 +11,7 @@ import se233.arkanoid.view.GameplayArea;
 import se233.arkanoid.view.Stage;
 //import se233.chapter5part1.view.Score;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameLoop implements Runnable {
@@ -55,7 +56,24 @@ public class GameLoop implements Runnable {
                 gameCharacter.stop();
             }
         }
+        List<Bullet> bulletsToRemove = new ArrayList<>();
+        for (Bullet bullet : gameStage.getActiveBullets()) {
+            bullet.move();
+            bullet.checkReachGameWall();
 
+            List<Brick> brickHitQueue = new ArrayList<>();
+            bullet.checkBrickCollisions(gameStage.getCurrentObstacles(), brickHitQueue, time);
+
+            if (!brickHitQueue.isEmpty()) {
+                gameStage.removeDestroyedBricks(brickHitQueue);
+            }
+
+            if (bullet.isOutOfBounds()) {
+                bulletsToRemove.add(bullet);
+                Platform.runLater(() -> gameStage.getChildren().remove(bullet));
+            }
+        }
+        gameStage.getActiveBullets().removeAll(bulletsToRemove);
         if (ball != null) {
             ball.move();
 

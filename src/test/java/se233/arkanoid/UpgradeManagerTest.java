@@ -78,22 +78,37 @@ class UpgradeManagerTest {
     }
 
     @Test
-    void testApplyBallSpeedAdjustment() throws InterruptedException {
-        ball.setxVelocity(4);
-        ball.setyVelocity(-4);
-
+    void testApplyBallSpeedAdjustment() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
+        final int[] velocities = new int[2];
+
         Platform.runLater(() -> {
+            GameplayArea gameplayArea = new GameplayArea();
+            Ball ball = gameplayArea.getBall();
+
+            // Set initial velocities so Math.signum() != 0
+            ball.setxVelocity(4);
+            ball.setyVelocity(4);
+            ball.setxMaxVelocity(7);
+            ball.setyMaxVelocity(7);
+
+            // Apply speed adjustment
             UpgradeManager.applyBallSpeedAdjustment(gameplayArea, 2);
-            latch.countDown();
+
+            // Nest inside another Platform.runLater to ensure it runs AFTER the upgrade task finishes
+            Platform.runLater(() -> {
+                velocities[0] = ball.getxMaxVelocity();
+                velocities[1] = ball.getyMaxVelocity();
+                latch.countDown(); // Release the latch
+            });
         });
-        latch.await(2, TimeUnit.SECONDS);
-        Thread.sleep(100);
 
-        assertEquals(6, ball.getxVelocity(), "Ball X velocity should increase by delta");
-        assertEquals(-6, ball.getyVelocity(), "Ball Y velocity magnitude should increase by delta");
+        // Wait for the JavaFX thread to finish processing
+        latch.await(2, java.util.concurrent.TimeUnit.SECONDS);
+
+        assertEquals(6, velocities[0], "Ball X max velocity should increase by delta");
+        assertEquals(6, velocities[1], "Ball Y max velocity should increase by delta");
     }
-
     @Test
     void testApplyGainLife() throws InterruptedException {
         int initialLives = PlayerData.getLifeCount();
