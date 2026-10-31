@@ -18,6 +18,7 @@ public record UpgradeManager() {
             gameplayArea.getGameCharacterList().forEach(character -> {
                 if (character instanceof Vaus vaus) {
                     vaus.setExpanded(true);
+                    vaus.setIsArmed(false);
                 }
             });
         });
@@ -41,12 +42,26 @@ public record UpgradeManager() {
         Platform.runLater(() -> {
             Ball ball = gameplayArea.getBall();
             if (ball != null) {
-                ball.setxMaxVelocity(ball.getxVelocity() + (int) Math.signum(ball.getxVelocity()) * speedDelta);
-                ball.setyMaxVelocity(ball.getyVelocity() + (int) Math.signum(ball.getyVelocity()) * speedDelta);
+                // Directly accelerate current velocities without touching max velocity caps
+                int vx = ball.getxVelocity();
+                int vy = ball.getyVelocity();
+
+                // If ball hasn't been nudged/launched yet, give it a default upward trajectory
+                if (vx == 0 && vy == 0) {
+                    ball.setxVelocity(2);
+                    ball.setyVelocity(-4);
+                    return;
+                }
+
+                // Add speed delta while preserving exact directional sign (+ or -)
+                int newVx = (vx > 0) ? vx + speedDelta : vx - speedDelta;
+                int newVy = (vy > 0) ? vy + speedDelta : vy - speedDelta;
+
+                ball.setxVelocity(newVx);
+                ball.setyVelocity(newVy);
             }
         });
     }
-
     /**
      * 4. Gain an additional life
      */
@@ -101,7 +116,10 @@ public record UpgradeManager() {
     }
 
     public static void armedWithBullets(GameplayArea gameplayArea) {
-        gameplayArea.getGameCharacterList().forEach(character -> ((Vaus) character).setIsArmed(true));
+        gameplayArea.getGameCharacterList().forEach(character -> {if (character instanceof Vaus vaus) {
+            vaus.setIsArmed(true);
+            vaus.setExpanded(false); // Disable expansion so laser sprite sheet takes priority
+        }});
     }
 
 }

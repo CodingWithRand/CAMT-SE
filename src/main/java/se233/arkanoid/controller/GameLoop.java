@@ -43,12 +43,12 @@ public class GameLoop implements Runnable {
 //                gameCharacter.getImageView().tick();
                 logger.info("Going left");
                 gameCharacter.moveLeft();
-                if (!started) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
+                if (!started && ball.getyVelocity() == 0) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
             } else if (rightPressed) {
 //                gameCharacter.getImageView().tick();
                 logger.info("Going right");
                 gameCharacter.moveRight();
-                if (!started) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
+                if (!started && ball.getyVelocity() == 0) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
             } else if (upPressed) {
                 logger.info("Firing bullet");
                 ((Vaus) gameCharacter).fire(gameStage);

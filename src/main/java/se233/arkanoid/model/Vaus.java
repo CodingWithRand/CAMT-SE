@@ -96,10 +96,15 @@ public class Vaus extends GameCharacter {
         return isArmed;
     }
 
-
+    private long lastFireTime = 0;
+    private static final long FIRE_COOLDOWN_NS = 250_000_000L;
     public void fire(GameplayArea gameplayArea) {
         if (!isArmed) return;
-
+        long now = System.nanoTime();
+        if (now - lastFireTime < FIRE_COOLDOWN_NS) {
+            return; // Throttles firing so it shoots smooth, rhythmic laser bursts instead of a solid visual wall
+        }
+        lastFireTime = now;
         Platform.runLater(() -> {
             Bullet b1 = new Bullet((int) this.getX() + 5, (int) this.getY() - 10);
             Bullet b2 = new Bullet((int) this.getX() + (int) this.getCharacterWidth() - 15, (int) this.getY() - 10);

@@ -19,7 +19,7 @@ public class Bullet extends GameMoveableObject {
                 5, 19,
                 0, 12 // xVelocity = 0 so it shoots straight up, yVelocity = speed
         );
-        this.yVelocity = -12; // Ensure it moves upward immediately
+        this.yVelocity = -8; // Ensure it moves upward immediately
         this.setScaleX(1.5);
         this.setScaleY(1.5);
     }
