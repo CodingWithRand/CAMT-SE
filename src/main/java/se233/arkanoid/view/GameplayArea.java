@@ -63,11 +63,16 @@ public class GameplayArea extends Pane {
             ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
             Platform.runLater(this::stageSetup);
 
-            Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate());
+            // Re-roll upgrade text templates if needed
+            Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate().assignedDescTo());
 
+            // POP UP THE UPGRADE MODAL HERE
             VBox upgradeModal = (VBox) getScene().lookup("#upgradeModal");
-            upgradeModal.setVisible(true);
-            upgradeModal.setMouseTransparent(false);
+            if (upgradeModal != null) {
+                upgradeModal.setVisible(true);
+                upgradeModal.setMouseTransparent(false);
+                upgradeModal.toFront();
+            }
         });
         this.addEventHandler(StageChange.PREV_STAGE, e -> {
             getChildren().removeAll(currentObstacles);
@@ -182,13 +187,21 @@ public class GameplayArea extends Pane {
         if (bricksToRemove.isEmpty()) return;
         // Remove them from the active obstacle list(i think this fixed the index bug)
         currentObstacles.removeAll(bricksToRemove);
-        for(Brick brickToRemove: bricksToRemove) {
-            brickToRemove.setVisible(false);
-        }
+//        for(Brick brickToRemove: bricksToRemove) {
+//            brickToRemove.setVisible(false);
+//        }
 
         javafx.application.Platform.runLater(() -> {
             // Remove all destroyed brick nodes from the JavaFX scene graph in one batch
-            getChildren().removeAll(bricksToRemove);
+            for (Brick brickToRemove : bricksToRemove) {
+                if (brickToRemove != null) {
+                    brickToRemove.setVisible(false);
+                    // Only remove if it's actually still a child to prevent index out of bounds
+                    if (getChildren().contains(brickToRemove)) {
+                        getChildren().remove(brickToRemove);
+                    }
+                }
+            }
 
 
         });

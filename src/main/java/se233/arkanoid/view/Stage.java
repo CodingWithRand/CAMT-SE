@@ -168,9 +168,27 @@ public class Stage {
             gameOverMenuItems[iMenu].setOnMouseClicked(e -> executeMenuItem(iMenu));
         });
 
-        // 3 upgrades for now
+// 3 upgrades selection handling
         IntStream.range(0, 3).forEach(ui -> {
-            upgradeButtonItems[ui].setOnMouseClicked(e -> upgrades[ui].execute(gameplayArea));
+            upgradeButtonItems[ui].setOnMouseClicked(e -> {
+                // 1. Execute the selected upgrade safely
+                upgrades[ui].execute(gameplayArea);
+
+                // 2. Hide the upgrade modal & make it mouse-transparent again
+                upgradeModal.setVisible(false);
+                upgradeModal.setMouseTransparent(true);
+
+                // 3. Re-roll random upgrades for the future
+                upgrades = new Upgrade[]{
+                        new Upgrade(upgradeDesc1).randU().genUDescTemplate().assignedDescTo(),
+                        new Upgrade(upgradeDesc2).randU().genUDescTemplate().assignedDescTo(),
+                        new Upgrade(upgradeDesc3).randU().genUDescTemplate().assignedDescTo()
+                };
+
+                // 4. Resume gameplay and focus back on the board
+                GameLoop.startStage();
+                gameplayArea.requestFocus();
+            });
             upgradeButtonItems[ui].setOnMouseEntered(e -> upgradeButtonItems[ui].setOpacity(0.5));
             upgradeButtonItems[ui].setOnMouseExited(e -> upgradeButtonItems[ui].setOpacity(1));
         });

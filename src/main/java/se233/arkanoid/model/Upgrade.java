@@ -18,7 +18,7 @@ public class Upgrade {
         PIERCING_BALL,
         NX_SCORE
     }
-
+    private static final Random random = new Random();
     private static int typesNum = 6;
     private String uDesc;
     private UpgradeType uType;
@@ -29,7 +29,7 @@ public class Upgrade {
     }
 
     public Upgrade randU() {
-        Random random = new Random(System.currentTimeMillis());
+
         this.uType = UpgradeType.values()[random.nextInt(typesNum)];
         return this;
     }
@@ -52,12 +52,15 @@ public class Upgrade {
     }
 
     public void execute(Object... args) {
+        if (args == null || args.length == 0) return;
+
         GameplayArea gpA = (GameplayArea) args[0];
-        Integer speedDelta = (Integer) args[1];
+        Integer speedDelta = (args.length > 1 && args[1] instanceof Integer) ? (Integer) args[1] : 3;
+
         switch (uType) {
             case PADDLE_SIZE -> UpgradeManager.applyIncreasePaddleSize(gpA);
             case PADDLE_SPEED -> UpgradeManager.applyIncreasePaddleSpeed(gpA);
-            case BALL_SPEED -> UpgradeManager.applyBallSpeedAdjustment(gpA, speedDelta == null ? 3 : Math.abs(speedDelta));
+            case BALL_SPEED -> UpgradeManager.applyBallSpeedAdjustment(gpA, Math.abs(speedDelta));
             case GAIN_LIFE -> UpgradeManager.applyGainLife(gpA);
             case PIERCING_BALL -> UpgradeManager.applyPiercingBall(gpA);
             case NX_SCORE -> UpgradeManager.applyScoreMultiplier();
