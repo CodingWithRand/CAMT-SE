@@ -59,6 +59,11 @@ public class GameplayArea extends Pane {
                 getChildren().removeAll(currentObstacles);
                 currentObstacles.clear();
             }
+            Platform.runLater(() -> {
+                GameLoop.pauseStage();
+                ball.respawn();
+                gameCharacterList.forEach(GameCharacter::respawn);
+            });
             PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
             ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
             Platform.runLater(this::stageSetup);
@@ -72,6 +77,7 @@ public class GameplayArea extends Pane {
                 upgradeModal.setVisible(true);
                 upgradeModal.setMouseTransparent(false);
                 upgradeModal.toFront();
+                upgradeModal.requestFocus();
             }
         });
         this.addEventHandler(StageChange.PREV_STAGE, e -> {

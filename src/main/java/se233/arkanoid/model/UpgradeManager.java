@@ -6,6 +6,10 @@ import se233.arkanoid.view.GameplayArea;
 
 public record UpgradeManager() {
 
+    private static final int nonUpgradeLifeCount = 2;
+    private static final int nonUpgradeBallMaxVelocity = 7;
+    private static final int nonUpgradePaddleMaxVelocity = 7;
+
     /**
      * 1. Increase paddle size (switches Vaus to wider sprite & increases hit box)
      */
@@ -31,14 +35,14 @@ public record UpgradeManager() {
     }
 
     /**
-     * 3. Adjust ball speed
+     * 3. Adjust ball speed (I change to maxVelocity, cuz at the start, the ball velocity is 0.)
      */
     public static void applyBallSpeedAdjustment(GameplayArea gameplayArea, int speedDelta) {
         Platform.runLater(() -> {
             Ball ball = gameplayArea.getBall();
             if (ball != null) {
-                ball.setxVelocity(ball.getxVelocity() + (int) Math.signum(ball.getxVelocity()) * speedDelta);
-                ball.setyVelocity(ball.getyVelocity() + (int) Math.signum(ball.getyVelocity()) * speedDelta);
+                ball.setxMaxVelocity(ball.getxVelocity() + (int) Math.signum(ball.getxVelocity()) * speedDelta);
+                ball.setyMaxVelocity(ball.getyVelocity() + (int) Math.signum(ball.getyVelocity()) * speedDelta);
             }
         });
     }
@@ -69,6 +73,35 @@ public record UpgradeManager() {
      */
     public static void applyScoreMultiplier() {
         PlayerData.setScoreMultiplier(PlayerData.getScoreMultiplier() + 0.5);
+    }
+
+    public static void revertUpgrade(GameplayArea gameplayArea) {
+        Platform.runLater(() -> {
+            gameplayArea.getGameCharacterList().forEach(character -> {
+                // 1
+                if (character instanceof Vaus vaus) {
+                    vaus.setExpanded(false);
+                }
+                // 2
+                character.setxMaxVelocity(nonUpgradePaddleMaxVelocity); // Increase top speed by 3
+            });
+            Ball ball = gameplayArea.getBall();
+            // 4
+            while (PlayerData.getLifeCount() > nonUpgradeLifeCount) gameplayArea.fireEvent(new Life(Life.LOSE));
+            if (ball != null) {
+                // 3
+                ball.setxMaxVelocity(nonUpgradeBallMaxVelocity);
+                ball.setyMaxVelocity(nonUpgradeBallMaxVelocity);
+                // 5
+                ball.setPiercing(false);
+            }
+        });
+        // 6
+        PlayerData.setScoreMultiplier(1);
+    }
+
+    public static void armedWithBullets(GameplayArea gameplayArea) {
+        gameplayArea.getGameCharacterList().forEach(character -> ((Vaus) character).setIsArmed(true));
     }
 }
 /**

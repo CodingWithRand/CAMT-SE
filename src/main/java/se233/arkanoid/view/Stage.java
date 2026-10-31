@@ -14,9 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se233.arkanoid.controller.DrawingLoop;
 import se233.arkanoid.controller.GameLoop;
-import se233.arkanoid.model.GameCharacter;
-import se233.arkanoid.model.PlayerData;
-import se233.arkanoid.model.Upgrade;
+import se233.arkanoid.model.*;
 
 import java.io.IOException;
 import java.util.stream.IntStream;
@@ -189,6 +187,12 @@ public class Stage {
                 GameLoop.startStage();
                 gameplayArea.requestFocus();
             });
+            upgradeButtonItems[ui].setOnMouseClicked(e -> {
+                upgradeModal.setVisible(false);
+                upgradeModal.setMouseTransparent(true);
+                gameplayArea.setMouseTransparent(false);
+                upgrades[ui].execute(gameplayArea);
+            });
             upgradeButtonItems[ui].setOnMouseEntered(e -> upgradeButtonItems[ui].setOpacity(0.5));
             upgradeButtonItems[ui].setOnMouseExited(e -> upgradeButtonItems[ui].setOpacity(1));
         });
@@ -239,12 +243,17 @@ public class Stage {
             gameOverModal.setMouseTransparent(true);
             gameOverModal.toBack();
             gameplayArea.stageSetup();
-            for(GameCharacter gameCharacter: gameplayArea.getGameCharacterList()) gameCharacter.respawn();
+            for(GameCharacter gameCharacter: gameplayArea.getGameCharacterList()) {
+                ((Vaus) gameCharacter).setIsArmed(false);
+                gameCharacter.respawn();
+            }
             gameplayArea.getBall().respawn();
             gameplayArea.setMouseTransparent(false);
             gameplayArea.requestFocus();
+            UpgradeManager.revertUpgrade(gameplayArea);
         });
 
+        ((javafx.stage.Stage) gameplayArea.getScene().getWindow()).setTitle("Stage - 1");
         GameLoop.restart(gameLoop);
     }
 

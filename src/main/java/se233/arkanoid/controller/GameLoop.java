@@ -48,7 +48,9 @@ public class GameLoop implements Runnable {
                 logger.info("Going right");
                 gameCharacter.moveRight();
                 if (!started) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
-
+            } else if (upPressed) {
+                logger.info("Firing bullet");
+                ((Vaus) gameCharacter).fire(gameStage);
             } else {
                 gameCharacter.stop();
             }
@@ -76,6 +78,10 @@ public class GameLoop implements Runnable {
 //            }
             boolean allDestructibleCleared = gameStage.getCurrentObstacles().stream()
                     .noneMatch(brick -> brick.getHp() > 0);
+//            System.out.println(allDestructibleCleared + " " + gameStage.getCurrentObstacles().isEmpty());
+
+//            gameStage.getCurrentObstacles().forEach(b -> System.out.print(b.getHp() + " "));
+//            System.out.println();
 
             if (allDestructibleCleared && !gameStage.getCurrentObstacles().isEmpty()) {
                 logger.info("All destructible bricks cleared! Triggering next stage transition.");

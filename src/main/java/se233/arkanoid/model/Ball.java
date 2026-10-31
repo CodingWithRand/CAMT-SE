@@ -69,7 +69,6 @@ public class Ball extends GameMoveableObject {
     private final long COLLISION_COOLDOWN_MS = 1000;
     private boolean isPiercing = false;
 
-
     @Override
     public boolean checkBrickCollisions(List<Brick> bricks,
                                         List<Brick> removedQueue,
