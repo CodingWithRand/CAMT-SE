@@ -49,20 +49,25 @@ public class GameLoop implements Runnable {
                 logger.info("Going right");
                 gameCharacter.moveRight();
                 if (!started && ball.getyVelocity() == 0) ball.moveAlong(0); // lazy fix for now (if this game ever has multiplayer, until then...)
-            } else if (upPressed) {
-                logger.info("Firing bullet");
-                ((Vaus) gameCharacter).fire(gameStage);
             } else {
                 gameCharacter.stop();
             }
+
+            if (upPressed) {
+                logger.info("Try firing bullet");
+                ((Vaus) gameCharacter).fire(gameStage);
+            }
         }
+        List<Brick> nonZeroBrick = gameStage.getCurrentObstacles().stream()
+                .filter(b -> b.getHp() != 0)
+                .toList();
         List<Bullet> bulletsToRemove = new ArrayList<>();
         for (Bullet bullet : gameStage.getActiveBullets()) {
             bullet.move();
             bullet.checkReachGameWall();
 
             List<Brick> brickHitQueue = new ArrayList<>();
-            bullet.checkBrickCollisions(gameStage.getCurrentObstacles(), brickHitQueue, time);
+            bullet.checkBrickCollisions(nonZeroBrick, brickHitQueue, time);
 
             if (!brickHitQueue.isEmpty()) {
                 gameStage.removeDestroyedBricks(brickHitQueue);
@@ -85,7 +90,7 @@ public class GameLoop implements Runnable {
             List<Brick> bricksToRemove = new java.util.ArrayList<>();
 
             // Check collisions and collect destroyed bricks
-            ball.checkBrickCollisions(gameStage.getCurrentObstacles(), bricksToRemove, time);
+            ball.checkBrickCollisions(nonZeroBrick, bricksToRemove, time);
 
             // Batch remove destroyed bricks cleanly
             if (!bricksToRemove.isEmpty()) {

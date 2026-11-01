@@ -91,7 +91,7 @@ public class Ball extends GameMoveableObject {
 
                 if (isDestroyed) {
                     javafx.application.Platform.runLater(() -> {
-                        int points = brick.getType().getScoreValue();
+                        int points = (int) (brick.getType().getScoreValue() * PlayerData.getScoreMultiplier());
                         PlayerData.setCurrentScore(PlayerData.getCurrentScore() + points);
                         logger.info("Brick destroyed! Awarded {} points. Total Score: {}", points, PlayerData.getCurrentScore());
                     });
@@ -161,9 +161,8 @@ public class Ball extends GameMoveableObject {
                     paddles.forEach(GameCharacter::respawn);
                     respawn();
                 } else {
-                    logger.info("Game Over! Lives depleted. Saving high score.");
+                    logger.info("Game Over! Lives depleted.");
                     GameLoop.gameOver();
-                    PlayerData.checkAndUpdateHighScore();
                 }
             });
         }

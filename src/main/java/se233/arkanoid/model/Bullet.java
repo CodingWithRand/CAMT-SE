@@ -20,8 +20,8 @@ public class Bullet extends GameMoveableObject {
                 0, 12 // xVelocity = 0 so it shoots straight up, yVelocity = speed
         );
         this.yVelocity = -8; // Ensure it moves upward immediately
-        this.setScaleX(1.5);
-        this.setScaleY(1.5);
+        this.setScaleX(2);
+        this.setScaleY(2);
     }
 
     @Override
@@ -39,13 +39,13 @@ public class Bullet extends GameMoveableObject {
 
             if (this.getBoundsInParent().intersects(brick.getBoundsInParent())) {
                 // Gold / unbreakable bricks absorb bullets without taking damage or destroying
+                boolean isDestroyed = brick.takeHit();
                 if (brick.getHp() < 0) {
                     logger.info("Bullet hit unbreakable/gold brick. Disappearing.");
                     this.isOutOfBounds = true; // Mark for removal
                     return true;
                 }
 
-                boolean isDestroyed = brick.takeHit();
                 logger.info("Bullet collided with brick. Destroyed: {}, Remaining HP: {}", isDestroyed, brick.getHp());
 
                 if (isDestroyed) {

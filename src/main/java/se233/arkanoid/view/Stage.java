@@ -100,6 +100,8 @@ public class Stage {
         highestScore.setText(Integer.toString(PlayerData.getHighScore()));
 
         thisGameScore.textProperty().bind(PlayerData.currentScoreProperty().asString());
+        highestScore.textProperty().bind(PlayerData.currentHighScoreProperty().asString());
+
         gameplayArea.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if(newScene != null) {
                 gameplayArea.getScene().windowProperty().addListener((obsWindow, oldWindow, newWindow) -> {
@@ -113,7 +115,10 @@ public class Stage {
                     }
                 });
                 gameplayArea.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                    if(event.getCode() == KeyCode.R) restart();
+                    if(event.getCode() == KeyCode.R) {
+                        GameLoop.gameOver();
+                        restart();
+                    }
                     else gameplayArea.getKeys().add(event.getCode());
                 });
                 gameplayArea.getScene().addEventFilter(KeyEvent.KEY_RELEASED, event ->  gameplayArea.getKeys().remove(event.getCode()));
@@ -186,6 +191,7 @@ public class Stage {
                 // 4. Resume gameplay and focus back on the board
                 GameLoop.startStage();
                 gameplayArea.requestFocus();
+                gameplayArea.setMouseTransparent(false);
             });
             upgradeButtonItems[ui].setOnMouseClicked(e -> {
                 upgradeModal.setVisible(false);
@@ -235,9 +241,7 @@ public class Stage {
     }
 
     private void restart() {
-        PlayerData.setLifeCount(2);
-        PlayerData.setCurrentStage(1);
-        PlayerData.setCurrentScore(0);
+        PlayerData.resetState();
         Platform.runLater(() -> {
             gameOverModal.setVisible(false);
             gameOverModal.setMouseTransparent(true);
@@ -255,6 +259,7 @@ public class Stage {
 
         ((javafx.stage.Stage) gameplayArea.getScene().getWindow()).setTitle("Stage - 1");
         GameLoop.restart(gameLoop);
+        GameLoop.pauseStage();
     }
 
     public static Upgrade[] getUpgrades() { return upgrades; }

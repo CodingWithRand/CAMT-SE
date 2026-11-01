@@ -5,6 +5,8 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se233.arkanoid.view.GameplayArea;
 
 import javafx.util.Duration;
@@ -15,6 +17,7 @@ public class Vaus extends GameCharacter {
     private final int idleAnimationFrameRate = 5;
     private final float frameInterval = 1000.0f / idleAnimationFrameRate;
     private boolean isExpanded = false;
+    private static Logger logger = LogManager.getLogger(Vaus.class);
 
     private boolean isArmed = false;
     private boolean armedTransitioning = false;
@@ -99,7 +102,10 @@ public class Vaus extends GameCharacter {
     private long lastFireTime = 0;
     private static final long FIRE_COOLDOWN_NS = 250_000_000L;
     public void fire(GameplayArea gameplayArea) {
-        if (!isArmed) return;
+        if (!isArmed) {
+            logger.info("Not equipped with weapon");
+            return;
+        }
         long now = System.nanoTime();
         if (now - lastFireTime < FIRE_COOLDOWN_NS) {
             return; // Throttles firing so it shoots smooth, rhythmic laser bursts instead of a solid visual wall
@@ -107,7 +113,7 @@ public class Vaus extends GameCharacter {
         lastFireTime = now;
         Platform.runLater(() -> {
             Bullet b1 = new Bullet((int) this.getX() + 5, (int) this.getY() - 10);
-            Bullet b2 = new Bullet((int) this.getX() + (int) this.getCharacterWidth() - 15, (int) this.getY() - 10);
+            Bullet b2 = new Bullet((int) this.getX() + (int) this.getCharacterWidth() - 5, (int) this.getY() - 10);
 
             gameplayArea.getChildren().addAll(b1, b2);
             gameplayArea.getActiveBullets().add(b1);

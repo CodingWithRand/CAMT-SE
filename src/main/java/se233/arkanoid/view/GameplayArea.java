@@ -75,6 +75,8 @@ public class GameplayArea extends Pane {
             // Re-roll upgrade text templates if needed
             Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate().assignedDescTo());
 
+            this.setMouseTransparent(true);
+
             // POP UP THE UPGRADE MODAL HERE
             VBox upgradeModal = (VBox) getScene().lookup("#upgradeModal");
             if (upgradeModal != null) {
@@ -196,7 +198,9 @@ public class GameplayArea extends Pane {
     public void removeDestroyedBricks(List<se233.arkanoid.model.StageData.Brick> bricksToRemove) {
         if (bricksToRemove.isEmpty()) return;
         // Remove them from the active obstacle list(i think this fixed the index bug)
-        currentObstacles.removeAll(bricksToRemove);
+        // don't need to remove it from the data completely, just keep setting it to 0.
+//        currentObstacles.removeAll(bricksToRemove);
+
 //        for(Brick brickToRemove: bricksToRemove) {
 //            brickToRemove.setVisible(false);
 //        }

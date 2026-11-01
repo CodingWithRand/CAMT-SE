@@ -10,6 +10,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se233.arkanoid.controller.GameLoop;
 import se233.arkanoid.model.PlayerData;
 
 import java.io.File;
@@ -151,8 +152,8 @@ public class Menu {
             logger.info("Starting a new game...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/se233/arkanoid/stage.fxml"));
 
-            PlayerData.setCurrentStage(1); // always start at first stage every run.
-            PlayerData.setLifeCount(2);
+            PlayerData.resetState();
+            GameLoop.pauseStage();
 
             Stage stage = (Stage) topLevel.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));
