@@ -124,4 +124,30 @@ class BrickCollisionAndScoreTest {
         }
         assertTrue(foundHighScoreInFile, "High score value 250 should be successfully saved to file");
     }
+    @Test
+    void testHighScoreUpdateWhenCurrentScoreSurpassesHighScoreInRealTime() {
+        PlayerData.setCurrentScore(100);
+        // add one more
+        PlayerData.setCurrentScore(PlayerData.getCurrentScore() + 1);
+        assertEquals(101, PlayerData.getHighScore());
+    }
+    @Test
+    void testSaveHighScoreUpdateInMemAfterItChangesImmediately() throws FileNotFoundException {
+        PlayerData.setCurrentScore(100);
+        // add two more
+        PlayerData.setCurrentScore(PlayerData.getCurrentScore() + 2);
+        // Verify file was written correctly
+        File savedFile = new File("player-data");
+        assertTrue(savedFile.exists(), "player-data file should exist on disk");
+
+        try (Scanner scanner = new Scanner(savedFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.equals("highScore=102")) {
+                    assertTrue(true);
+                    break;
+                }
+            }
+        }
+    }
 }

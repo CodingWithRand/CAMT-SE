@@ -243,21 +243,20 @@ public class Stage {
     private void restart() {
         PlayerData.resetState();
         Platform.runLater(() -> {
-            gameOverModal.setVisible(false);
-            gameOverModal.setMouseTransparent(true);
-            gameOverModal.toBack();
-            gameplayArea.stageSetup();
-            for(GameCharacter gameCharacter: gameplayArea.getGameCharacterList()) {
-                ((Vaus) gameCharacter).setIsArmed(false);
-                gameCharacter.respawn();
+            if (gameplayArea.getScene() != null && gameplayArea.getScene().getWindow() instanceof javafx.stage.Stage stage) {
+                gameOverModal.setVisible(false);
+                gameOverModal.setMouseTransparent(true);
+                gameOverModal.toBack();
+                gameplayArea.setMouseTransparent(false);
+                gameplayArea.requestFocus();
+                gameplayArea.stageSetup();
+                ((javafx.stage.Stage) gameplayArea.getScene().getWindow()).setTitle("Stage - 1");
             }
+            for(GameCharacter gameCharacter: gameplayArea.getGameCharacterList()) gameCharacter.respawn();
             gameplayArea.getBall().respawn();
-            gameplayArea.setMouseTransparent(false);
-            gameplayArea.requestFocus();
             UpgradeManager.revertUpgrade(gameplayArea);
         });
 
-        ((javafx.stage.Stage) gameplayArea.getScene().getWindow()).setTitle("Stage - 1");
         GameLoop.restart(gameLoop);
         GameLoop.pauseStage();
     }

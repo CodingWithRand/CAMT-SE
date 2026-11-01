@@ -96,13 +96,18 @@ public record UpgradeManager() {
                 // 1
                 if (character instanceof Vaus vaus) {
                     vaus.setExpanded(false);
+                    // 7
+                    vaus.setIsArmed(false);
                 }
                 // 2
                 character.setxMaxVelocity(nonUpgradePaddleMaxVelocity); // Increase top speed by 3
             });
             Ball ball = gameplayArea.getBall();
             // 4
-            while (PlayerData.getLifeCount() > nonUpgradeLifeCount) gameplayArea.fireEvent(new Life(Life.LOSE));
+            for (int i = 0; i < PlayerData.getLifeCount() - nonUpgradeLifeCount; i++) {
+                gameplayArea.fireEvent(new Life(Life.LOSE));
+            }
+//            while (PlayerData.getLifeCount() > nonUpgradeLifeCount) gameplayArea.fireEvent(new Life(Life.LOSE));
             if (ball != null) {
                 // 3
                 ball.setxMaxVelocity(nonUpgradeBallMaxVelocity);

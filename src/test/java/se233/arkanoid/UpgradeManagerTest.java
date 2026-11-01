@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testfx.util.WaitForAsyncUtils;
 import se233.arkanoid.model.Ball;
 import se233.arkanoid.model.PlayerData;
 import se233.arkanoid.model.UpgradeManager;
@@ -27,6 +28,9 @@ class UpgradeManagerTest {
         // Initialize JavaFX toolkit safely for headless/unit test execution
         try {
             Platform.startup(() -> {});
+            System.setProperty("testfx.robot", "glass");
+            System.setProperty("testfx.headless", "true");
+            System.setProperty("prism.order", "sw");
         } catch (IllegalStateException e) {
             // Toolkit already initialized
         }
@@ -146,5 +150,43 @@ class UpgradeManagerTest {
         UpgradeManager.applyScoreMultiplier();
 
         assertEquals(1.5, PlayerData.getScoreMultiplier(), 0.001, "Score multiplier should increase by 0.5");
+    }
+
+    @Test
+    void testArmedThePaddle() {
+        assertFalse(vaus.isArmed());
+        UpgradeManager.armedWithBullets(gameplayArea);
+        assertTrue(vaus.isArmed());
+    }
+
+    @Test
+    void upgradeRevertSuccessfully_meanAllStatesAreBackToDefault() {
+        // apply every upgrade possible
+        Platform.runLater(() -> {
+            UpgradeManager.applyScoreMultiplier();
+            UpgradeManager.applyGainLife(gameplayArea);
+            UpgradeManager.applyPiercingBall(gameplayArea);
+            UpgradeManager.applyBallSpeedAdjustment(gameplayArea, 10);
+            UpgradeManager.applyIncreasePaddleSize(gameplayArea);
+            UpgradeManager.armedWithBullets(gameplayArea);
+            UpgradeManager.applyIncreasePaddleSpeed(gameplayArea);
+        });
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        //revert
+        Platform.runLater(() -> UpgradeManager.revertUpgrade(gameplayArea));
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertTrue(
+                !vaus.isArmed() &&
+                !vaus.isExpanded() &&
+                vaus.getxMaxVelocity() == 7 &&
+                (ball.getxMaxVelocity() == 7 && ball.getyMaxVelocity() == 7) &&
+                !ball.isPiercing() &&
+                PlayerData.getScoreMultiplier() == 1 &&
+                PlayerData.getLifeCount() == 2
+        );
     }
 }

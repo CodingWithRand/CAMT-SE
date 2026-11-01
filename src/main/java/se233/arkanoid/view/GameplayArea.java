@@ -67,23 +67,28 @@ public class GameplayArea extends Pane {
                 GameLoop.pauseStage();
                 ball.respawn();
                 gameCharacterList.forEach(GameCharacter::respawn);
+                PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
+                if (getScene() != null && getScene().getWindow() instanceof javafx.stage.Stage stage) {
+                    ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
+                    Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate().assignedDescTo());
+                }
             });
-            PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
-            ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
             Platform.runLater(this::stageSetup);
 
             // Re-roll upgrade text templates if needed
-            Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate().assignedDescTo());
 
             this.setMouseTransparent(true);
-
-            // POP UP THE UPGRADE MODAL HERE
-            VBox upgradeModal = (VBox) getScene().lookup("#upgradeModal");
-            if (upgradeModal != null) {
-                upgradeModal.setVisible(true);
-                upgradeModal.setMouseTransparent(false);
-                upgradeModal.toFront();
-                upgradeModal.requestFocus();
+            if (getScene() != null && getScene().getWindow() instanceof javafx.stage.Stage stage) {
+                Platform.runLater(() -> {
+                    // POP UP THE UPGRADE MODAL HERE
+                    VBox upgradeModal = (VBox) getScene().lookup("#upgradeModal");
+                    if (upgradeModal != null) {
+                        upgradeModal.setVisible(true);
+                        upgradeModal.setMouseTransparent(false);
+                        upgradeModal.toFront();
+                        upgradeModal.requestFocus();
+                    }
+                });
             }
         });
         this.addEventHandler(StageChange.PREV_STAGE, e -> {

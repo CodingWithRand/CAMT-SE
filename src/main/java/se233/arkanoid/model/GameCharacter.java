@@ -241,4 +241,12 @@ public class GameCharacter extends Pane {
     public boolean isJumping() {
         return isJumping;
     }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
 }

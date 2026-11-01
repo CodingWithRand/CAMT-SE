@@ -146,4 +146,11 @@ public abstract class GameMoveableObject extends Pane {
         return score;
     }
 
+    public int getStartX() {
+        return startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
 }
