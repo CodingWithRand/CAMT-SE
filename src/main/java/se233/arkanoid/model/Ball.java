@@ -31,6 +31,9 @@ public class Ball extends GameMoveableObject {
     }
 
     public void moveAlong(int paddleNum) {
+        if (yVelocity != 0) {
+            return;
+        }
         Vaus paddle = (Vaus) paddles.get(paddleNum);
         x = paddle.getX();
         Platform.runLater(() -> {

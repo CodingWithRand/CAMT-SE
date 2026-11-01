@@ -15,6 +15,8 @@ import se233.arkanoid.view.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,7 +93,6 @@ class GameLoopTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        ((Vaus) paddle).fire(new GameplayArea());
         WaitForAsyncUtils.waitForFxEvents();
 
         assertTrue((boolean) ReflectionHelper.getField(paddle, "isMoveLeft"));
@@ -161,13 +162,72 @@ class GameLoopTest {
         );
         assertTrue(
                 PlayerData.getCurrentScore() == 0 &&
-                PlayerData.getCurrentStage() == 1 &&
-                (gpA.getBall().getX() == gpA.getBall().getStartX() && gpA.getBall().getY() == gpA.getBall().getStartY()) &&
-                (
-                        gpA.getGameCharacterList().get(0).getX() == gpA.getGameCharacterList().get(0).getStartX() &&
-                        gpA.getGameCharacterList().get(0).getY() == gpA.getGameCharacterList().get(0).getStartY()
-                )
+                        PlayerData.getCurrentStage() == 1 &&
+                        (gpA.getBall().getX() == gpA.getBall().getStartX() && gpA.getBall().getY() == gpA.getBall().getStartY()) &&
+                        (
+                                gpA.getGameCharacterList().get(0).getX() == gpA.getGameCharacterList().get(0).getStartX() &&
+                                        gpA.getGameCharacterList().get(0).getY() == gpA.getGameCharacterList().get(0).getStartY()
+                        )
         );
         assertTrue(gameRunning && !isGameStarted);
+    }
+
+    @Test
+    void testBallMovesAlongWithPaddleBeforeStart() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        final boolean[] isSynced = new boolean[1];
+
+        Platform.runLater(() -> {
+            GameplayArea gameplayArea = new GameplayArea();
+            Ball ball = gameplayArea.getBall();
+
+            List<? extends GameCharacter> paddles = gameplayArea.getGameCharacterList();
+            if (paddles != null && !paddles.isEmpty()) {
+                Vaus paddle = (Vaus) paddles.get(0);
+
+                // Pass integer 175 instead of Double 175.0
+                ReflectionHelper.setField(paddle, "x", 175);
+                ball.moveAlong(0);
+
+                isSynced[0] = (ball.getX() == paddle.getX());
+            }
+            latch.countDown();
+        });
+
+        latch.await(2, TimeUnit.SECONDS);
+        assertTrue(isSynced[0], "Ball should track the paddle position precisely before the game starts.");
+    }
+
+    @Test
+    void testBallDoesNotFollowPaddleAfterLaunch() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        final double[] coordinates = new double[2];
+
+        Platform.runLater(() -> {
+            GameplayArea gameplayArea = new GameplayArea();
+            Ball ball = gameplayArea.getBall();
+            List<? extends GameCharacter> paddles = gameplayArea.getGameCharacterList();
+
+            if (paddles != null && !paddles.isEmpty()) {
+                Vaus paddle = (Vaus) paddles.get(0);
+
+                // Pass integer 200
+                ReflectionHelper.setField(paddle, "x", 200);
+                ball.moveAlong(0);
+                coordinates[0] = ball.getX();
+
+                ball.nudge();
+                // Pass integer 350
+                ReflectionHelper.setField(paddle, "x", 350);
+                ball.moveAlong(0);
+                coordinates[1] = ball.getX();
+            }
+            latch.countDown();
+        });
+
+        latch.await(2, TimeUnit.SECONDS);
+
+        assertEquals(coordinates[0], coordinates[1], 0.01,
+                "Ball X position must remain independent of the paddle once launched into mid-air.");
     }
 }
