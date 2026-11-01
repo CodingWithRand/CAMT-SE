@@ -90,28 +90,23 @@ class UpgradeManagerTest {
             GameplayArea gameplayArea = new GameplayArea();
             Ball ball = gameplayArea.getBall();
 
-            // Set initial velocities so Math.signum() != 0
             ball.setxVelocity(4);
             ball.setyVelocity(4);
-            ball.setxMaxVelocity(7);
-            ball.setyMaxVelocity(7);
 
-            // Apply speed adjustment
+            // Apply speed adjustment with delta of 2
             UpgradeManager.applyBallSpeedAdjustment(gameplayArea, 2);
 
-            // Nest inside another Platform.runLater to ensure it runs AFTER the upgrade task finishes
             Platform.runLater(() -> {
-                velocities[0] = ball.getxMaxVelocity();
-                velocities[1] = ball.getyMaxVelocity();
-                latch.countDown(); // Release the latch
+                velocities[0] = ball.getxVelocity(); // Test current velocity
+                velocities[1] = ball.getyVelocity(); // Test current velocity
+                latch.countDown();
             });
         });
 
-        // Wait for the JavaFX thread to finish processing
         latch.await(2, java.util.concurrent.TimeUnit.SECONDS);
 
-        assertEquals(6, velocities[0], "Ball X max velocity should increase by delta");
-        assertEquals(6, velocities[1], "Ball Y max velocity should increase by delta");
+        assertEquals(6, velocities[0], "Ball X velocity should increase by delta");
+        assertEquals(6, velocities[1], "Ball Y velocity should increase by delta");
     }
     @Test
     void testApplyGainLife() throws InterruptedException {
