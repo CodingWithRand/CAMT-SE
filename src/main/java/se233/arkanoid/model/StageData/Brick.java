@@ -42,10 +42,10 @@ public class Brick extends Pane {
             animateHit();
             return false; // Unbreakable
         }
-        if (isBeingHit) return false;
+        //if (isBeingHit) return false;
         hp--;
-        if (hp > 0) animateHit();
-        if (hp < 0) hp = 0;
+        if (hp > 0) {animateHit(); return false;}
+        if (hp < 0) {hp = 0;}
         return hp == 0; // Returns true if destroyed
     }
 
