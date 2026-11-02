@@ -2,6 +2,7 @@ package se233.arkanoid.view;
 
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -14,6 +15,7 @@ import se233.arkanoid.event.Life;
 import se233.arkanoid.event.StageChange;
 import se233.arkanoid.model.*;
 import se233.arkanoid.model.StageData.Brick;
+import se233.arkanoid.model.StageData.Map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,11 +65,32 @@ public class GameplayArea extends Pane {
                 getChildren().removeAll(currentObstacles);
                 currentObstacles.clear();
             }
+            if (PlayerData.getCurrentStage() == Map.STAGE.length) {
+                if (getScene() != null && getScene().getWindow() instanceof javafx.stage.Stage stage) {
+                    Platform.runLater(() -> {
+                        GameLoop.gameOver();
+                        VBox gameOverModal = (VBox) getScene().lookup("#gameOverModal");
+                        Label endTitle = (Label) getScene().lookup("#endTitle");
+                        Label finalScore = (Label) getScene().lookup("#finalScoreLabel");
+                        endTitle.setText("YOU WIN!");
+                        endTitle.setStyle("-fx-text-fill: yellow");
+                        finalScore.setText("FINAL SCORE: " + PlayerData.getCurrentScore());
+                        if (gameOverModal != null) {
+                            gameOverModal.setVisible(true);
+                            gameOverModal.setMouseTransparent(false);
+                            gameOverModal.toFront();
+                            gameOverModal.requestFocus();
+                        }
+                    });
+                }
+                return;
+            }
+
+            PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
             Platform.runLater(() -> {
                 GameLoop.pauseStage();
                 ball.respawn();
                 gameCharacterList.forEach(GameCharacter::respawn);
-                PlayerData.setCurrentStage(PlayerData.getCurrentStage() + 1);
                 if (getScene() != null && getScene().getWindow() instanceof javafx.stage.Stage stage) {
                     ((javafx.stage.Stage) this.getScene().getWindow()).setTitle("Stage - " + PlayerData.getCurrentStage());
                     Arrays.stream(Stage.getUpgrades()).forEach(u -> u.randU().genUDescTemplate().assignedDescTo());

@@ -241,12 +241,17 @@ public class Stage {
     }
 
     private void restart() {
-        PlayerData.resetState();
         Platform.runLater(() -> {
+            UpgradeManager.revertUpgrade(gameplayArea);
+            PlayerData.resetState();
+            GameLoop.restart(gameLoop);
+            GameLoop.pauseStage();
             if (gameplayArea.getScene() != null && gameplayArea.getScene().getWindow() instanceof javafx.stage.Stage stage) {
                 gameOverModal.setVisible(false);
                 gameOverModal.setMouseTransparent(true);
                 gameOverModal.toBack();
+                endTitle.setText("GAME OVER");
+                endTitle.setStyle("-fx-text-fill: red");
                 gameplayArea.setMouseTransparent(false);
                 gameplayArea.requestFocus();
                 gameplayArea.stageSetup();
@@ -254,11 +259,7 @@ public class Stage {
             }
             for(GameCharacter gameCharacter: gameplayArea.getGameCharacterList()) gameCharacter.respawn();
             gameplayArea.getBall().respawn();
-            UpgradeManager.revertUpgrade(gameplayArea);
         });
-
-        GameLoop.restart(gameLoop);
-        GameLoop.pauseStage();
     }
 
     public static Upgrade[] getUpgrades() { return upgrades; }

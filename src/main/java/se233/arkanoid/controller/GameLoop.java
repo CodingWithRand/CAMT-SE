@@ -159,6 +159,7 @@ public class GameLoop implements Runnable {
                 } catch (InterruptedException e) {
                     running = false;
                     Thread.currentThread().interrupt();
+                    logger.debug("Killing thread");
                     e.printStackTrace();
                     break;
                 }
@@ -173,11 +174,16 @@ public class GameLoop implements Runnable {
                 }
             }
         }
-        Platform.runLater(() -> {
-            gameOverModal.setVisible(true);
-            gameOverModal.setMouseTransparent(false);
-            gameOverModal.toFront();
-            ((Label) gameOverModal.getScene().lookup("#finalScoreLabel")).setText("FINAL SCORE: " + PlayerData.getCurrentScore());
-        });
+        // Only show modal if the thread stopped because of actual game over,
+        // NOT because it was interrupted during a restart reset!
+        logger.debug("{} {}", PlayerData.getLifeCount(), !Thread.currentThread().isInterrupted());
+        if (PlayerData.getLifeCount() <= 0) {
+            Platform.runLater(() -> {
+                gameOverModal.setVisible(true);
+                gameOverModal.setMouseTransparent(false);
+                gameOverModal.toFront();
+                ((Label) gameOverModal.getScene().lookup("#finalScoreLabel")).setText("FINAL SCORE: " + PlayerData.getCurrentScore());
+            });
+        }
     }
 }

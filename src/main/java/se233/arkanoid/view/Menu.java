@@ -153,6 +153,7 @@ public class Menu {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/se233/arkanoid/stage.fxml"));
 
             PlayerData.resetState();
+//            GameLoop.restart();
             GameLoop.pauseStage();
 
             Stage stage = (Stage) topLevel.getScene().getWindow();
