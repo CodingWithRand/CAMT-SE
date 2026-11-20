@@ -1,6 +1,6 @@
 [submodule "Lab1.1"]
 	path = Lab1.1
-	url = https://github.com/CodingWithRand/CAMT-SE.git
+	url = https://github.com/CodingWithRand/DEVOP-Lab1.1.git
 [submodule "Lab1.2"]
 	path = Lab1.2
-	url = https://github.com/CodingWithRand/CAMT-SE.git
+	url = https://github.com/CodingWithRand/DEVOP-Lab1.2.git
