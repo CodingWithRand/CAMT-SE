@@ -4,3 +4,9 @@
 [submodule "Lab1.2"]
 	path = Lab1.2
 	url = https://github.com/CodingWithRand/DEVOP-Lab1.2.git
+[submodule "Lab2.2"]
+	path = Lab2.2
+	url = https://github.com/CodingWithRand/DEVOP-Lab-2.2.git
+[submodule "Lab3"]
+	path = Lab3
+	url = https://pikul-cmu.github.io/234-Basic-DevOps-2026-lab2/
